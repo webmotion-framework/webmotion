@@ -43,15 +43,15 @@
     </contributors>
     
     <scm>
-        <connection>scm:svn:svn://svn.debux.org/trunk/webmotion</connection>
-        <developerConnection>scm:svn:svn://svn.debux.org/trunk/webmotion</developerConnection>
+        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server</connection>
+        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
         <tag>HEAD</tag>
         <url>http://webmotion.debux.org</url>
     </scm>
     
     <issueManagement>
         <system>TRAC</system>
-        <url>http://debox-tv.debux.org/report</url>
+        <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
     
     <properties>
