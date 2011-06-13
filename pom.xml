@@ -50,7 +50,7 @@
     </scm>
     
     <issueManagement>
-        <system>TRAC</system>
+        <system>REDMINE</system>
         <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
     
