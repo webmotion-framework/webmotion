@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.debux</groupId>
     <artifactId>webmotion</artifactId>
   
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Webmotion in action</name>
   
     <inceptionYear>2011</inceptionYear>
@@ -43,17 +42,32 @@
     </contributors>
     
     <scm>
-        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server</connection>
-        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
-        <tag>HEAD</tag>
-        <url>http://webmotion.debux.org</url>
+        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags/webmotion-1.0</connection>
+        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags/webmotion-1.0</developerConnection>
+        <tag>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags</tag>
+        <url>http://webmotion.debux.org/tags/webmotion-1.0</url>
     </scm>
     
     <issueManagement>
-        <system>REDMINE</system>
+        <system>redmine</system>
         <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
     
+    <distributionManagement>
+        <repository>
+            <id>debux-repo</id>
+            <url>scp://maven@debux.org:2222/var/www/maven/repo</url>
+        </repository>
+        <snapshotRepository>
+            <id>debux-snapshot</id>
+            <url>scp://maven@debux.org:2222/var/www/maven/snapshot</url>
+        </snapshotRepository>
+        <site>
+            <id>website</id>
+            <url>scp://maven@debux.org:2222/var/lib/redmine/project-site</url>
+        </site>
+    </distributionManagement>
+
     <properties>
         <!-- Config general -->
         <maven.compiler.source>1.6</maven.compiler.source>
