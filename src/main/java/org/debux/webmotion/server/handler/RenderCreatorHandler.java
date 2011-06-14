@@ -290,9 +290,11 @@ public class RenderCreatorHandler implements WebMotionHandler {
             ExecutorAction executorAction = (ExecutorAction) executor;
             
             String packageActions = config.getPackageActions();
+            String packageFilters = config.getPackageFilters();
             String packageErrors = config.getPackageErrors();
             subPackageName = executorAction.getClazz().getName();
             subPackageName = subPackageName.replace(packageActions, "");
+            subPackageName = subPackageName.replace(packageFilters, "");
             subPackageName = subPackageName.replace(packageErrors, "");
             subPackageName = subPackageName.replaceAll("\\.", "/");
             
