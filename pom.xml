@@ -45,15 +45,30 @@
     <scm>
         <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server</connection>
         <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
-        <tag>HEAD</tag>
+        <tag>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags</tag>
         <url>http://webmotion.debux.org</url>
     </scm>
     
     <issueManagement>
-        <system>REDMINE</system>
+        <system>redmine</system>
         <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
     
+    <distributionManagement>
+        <repository>
+            <id>debux-repo</id>
+            <url>scp://debux.org/var/www/maven/repo</url>
+        </repository>
+        <snapshotRepository>
+            <id>debux-snapshot</id>
+            <url>scp://debux.org/var/www/maven/snapshot</url>
+        </snapshotRepository>
+        <site>
+            <id>website</id>
+            <url>scp://debux.org/var/lib/redmine/project-site</url>
+        </site>
+    </distributionManagement>
+
     <properties>
         <!-- Config general -->
         <maven.compiler.source>1.6</maven.compiler.source>
