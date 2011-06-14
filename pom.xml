@@ -7,11 +7,12 @@
     <packaging>jar</packaging>
     <version>1.1-SNAPSHOT</version>
     <name>Webmotion in action</name>
-  
+    <url>webmotion.debux.org</url>
+      
     <inceptionYear>2011</inceptionYear>
     <organization>
         <name>Debux</name>
-        <url>webmotion.debux.org</url>
+        <url>www.debux.org</url>
     </organization>
     
     <developers>
@@ -42,9 +43,9 @@
     </contributors>
     
     <scm>
+        <url>http://projects.debux.org/projects/webmotion</url>
         <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server</connection>
         <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
-        <url>http://webmotion.debux.org</url>
     </scm>
     
     <issueManagement>
@@ -63,10 +64,35 @@
         </snapshotRepository>
         <site>
             <id>website</id>
-            <url>scp://maven@debux.org:2222/var/lib/redmine/project-site</url>
+            <url>scp://maven@debux.org:2222/var/lib/redmine/public/project-site/${project.artifactId}</url>
         </site>
     </distributionManagement>
 
+    <mailingLists>
+        <mailingList>
+            <name>webmotion</name>
+            <subscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion
+            </subscribe>
+            <unsubscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion
+            </unsubscribe>
+            <post>webmotion@lists.debux.org</post>
+            <archive>http://lists.debux.org/pipermail/webmotion</archive>
+        </mailingList>
+        <mailingList>
+            <name>webmotion-commit</name>
+            <subscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion-commit
+            </subscribe>
+            <unsubscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion-commit
+            </unsubscribe>
+            <post>webmotion-commit@lists.debux.org</post>
+            <archive>http://lists.debux.org/pipermail/webmotion-commit</archive>
+        </mailingList>
+    </mailingLists>
+    
     <properties>
         <!-- Config general -->
         <maven.compiler.source>1.6</maven.compiler.source>
@@ -211,8 +237,32 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
   
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                
+                <configuration>
+                    <charset>${project.reporting.outputEncoding}</charset>
+                    <links>
+                        <link>http://download.oracle.com/javase/6/docs/api</link>
+                    </links>
+                </configuration>
+                
+                <reportSets>
+                    <reportSet>
+                        <id>default</id>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+    
 </project>
