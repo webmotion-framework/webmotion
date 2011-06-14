@@ -57,15 +57,15 @@
     <distributionManagement>
         <repository>
             <id>debux-repo</id>
-            <url>scp://debux.org/var/www/maven/repo</url>
+            <url>scp://maven@debux.org:2222/var/www/maven/repo</url>
         </repository>
         <snapshotRepository>
             <id>debux-snapshot</id>
-            <url>scp://debux.org/var/www/maven/snapshot</url>
+            <url>scp://maven@debux.org:2222/var/www/maven/snapshot</url>
         </snapshotRepository>
         <site>
             <id>website</id>
-            <url>scp://debux.org/var/lib/redmine/project-site</url>
+            <url>scp://maven@debux.org:2222/var/lib/redmine/project-site</url>
         </site>
     </distributionManagement>
 
