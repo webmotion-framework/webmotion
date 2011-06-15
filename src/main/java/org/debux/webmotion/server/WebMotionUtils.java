@@ -97,7 +97,31 @@ public class WebMotionUtils {
             builder.append(className.substring(0, packageIndex + 1));
         }
         
-        builder.append(Character.toTitleCase(className.charAt(packageIndex + 1)));
+        builder.append(Character.toUpperCase(className.charAt(packageIndex + 1)));
+        builder.append(className.substring(packageIndex + 2));
+
+        className = builder.toString();
+        return className;
+    }
+    
+    /**
+     * Uncapitalizes a full qualified class name.
+     * Example:
+     * <code>WebMotionUtils.unCapitalizeClass("org.webmotion.MyClass")</code> will return 
+     * <code>"org.webmotion.myClass"</code>
+     * @param className The class name to uncapitalize.
+     * @return A uncapitalized representation for the given <code>className</code> class name.
+     */
+    public static String unCapitalizeClass(String className) {
+        StringBuilder builder = new StringBuilder(className.length());
+        
+        // Search the class name in package
+        int packageIndex = className.lastIndexOf(".");
+        if(packageIndex != -1) {
+            builder.append(className.substring(0, packageIndex + 1));
+        }
+        
+        builder.append(Character.toLowerCase(className.charAt(packageIndex + 1)));
         builder.append(className.substring(packageIndex + 2));
 
         className = builder.toString();

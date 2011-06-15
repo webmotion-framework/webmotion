@@ -42,6 +42,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.ExecutorAction;
@@ -173,14 +174,10 @@ public class RenderCreatorHandler implements WebMotionHandler {
         String servletPath = request.getServletPath();
         String url = request.getRequestURL().toString();
 
-        int packageIndex = content.lastIndexOf(".");
         String path = StringUtils.substringBefore(url, servletPath)
                 + servletPath
-                + "/" 
-                + content.substring(0, packageIndex)
-                + "/" 
-                + content.substring(packageIndex + 1)
-                .toLowerCase();
+                + "/"
+                + WebMotionUtils.unCapitalizeClass(content).replaceAll("\\.", "/");
         
         path = addModel(call, path);
         response.sendRedirect(path);
@@ -292,11 +289,11 @@ public class RenderCreatorHandler implements WebMotionHandler {
             String packageActions = config.getPackageActions();
             String packageFilters = config.getPackageFilters();
             String packageErrors = config.getPackageErrors();
+            
             subPackageName = executorAction.getClazz().getName();
             subPackageName = subPackageName.replace(packageActions, "");
             subPackageName = subPackageName.replace(packageFilters, "");
             subPackageName = subPackageName.replace(packageErrors, "");
-            subPackageName = subPackageName.replaceAll("\\.", "/");
             
             Render render = call.getRender();
             pageName = render.getContent();
@@ -312,13 +309,15 @@ public class RenderCreatorHandler implements WebMotionHandler {
                 action = errorRule.getAction();
             }
             
-            subPackageName = action.getClassName()
-                    .replaceAll("\\.", "/");
+            subPackageName = action.getClassName();
             pageName = action.getMethodName() 
                     + action.getType().replace(Action.TYPE_VIEW, "");
         }
         
-        String path = "/" + packageName + "/" + subPackageName.toLowerCase() + "/" + pageName;
+        subPackageName = WebMotionUtils.unCapitalizeClass(subPackageName);
+        subPackageName = subPackageName.replaceAll("\\.", "/");
+        
+        String path = "/" + packageName + "/" + subPackageName + "/" + pageName;
         log.info("path = " + path);
         return path;
     }
