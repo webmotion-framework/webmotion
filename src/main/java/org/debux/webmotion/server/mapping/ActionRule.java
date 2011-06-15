@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 public class ActionRule {
 
     protected static Pattern patternParam = Pattern.compile("^(\\p{Alnum}*)=\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
+    protected static Pattern patternStaticParam = Pattern.compile("^(\\p{Alnum}*)=(\\p{Alnum}*)$");
     protected static Pattern patternUrl = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     protected String method;
@@ -95,18 +96,23 @@ public class ActionRule {
             URLPattern expression = new URLPattern();
             rule.add(expression);
 
-            Matcher matcherParam = patternParam.matcher(value);
             Matcher matcherUrl = patternUrl.matcher(value);
+            Matcher matcherParam = patternParam.matcher(value);
+            Matcher matcherStaticParam = patternStaticParam.matcher(value);
 
             String pattern = null;
-            if(matcherParam.find()) {
+            if(matcherUrl.find()) {
+                expression.setName(matcherUrl.group(1));
+                pattern = matcherUrl.group(3);
+
+            } else if(matcherParam.find()) {
                 expression.setParam(matcherParam.group(1));
                 expression.setName(matcherParam.group(2));
                 pattern = matcherParam.group(4);
-
-            } else if(matcherUrl.find()) {
-                expression.setName(matcherUrl.group(1));
-                pattern = matcherUrl.group(3);
+                
+            } else if(matcherStaticParam.find()) {
+                expression.setParam(matcherStaticParam.group(1));
+                pattern = matcherStaticParam.group(2);
 
             } else {
                 pattern = value;

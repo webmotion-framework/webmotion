@@ -33,6 +33,8 @@ import java.util.regex.Pattern;
  * {name}
  * ?param={name:pattern}
  * &param={name:pattern}
+ * ?param=pattern
+ * &param=pattern
  * 
  * @author julien
  */

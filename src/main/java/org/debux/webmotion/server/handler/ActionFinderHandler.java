@@ -105,7 +105,6 @@ public class ActionFinderHandler implements WebMotionHandler {
             URLPattern expression = expressions[position];
 
             log.info("param " + expression.getParam());
-            log.info("name " + expression.getName());
             log.info("pattern " + expression.getPattern());
 
             String[] values = null;
