@@ -75,7 +75,7 @@ public class FilterRule {
      * @param rulePattern 
      */
     public void extractPattern(String rulePattern) {
-        String regex = rulePattern.replaceAll("\\*", ".*");
+        String regex = rulePattern.replaceAll("\\*", "[^/]*");
         regex = "^" + regex + "$";
         pattern = Pattern.compile(regex);
     }
