@@ -49,7 +49,15 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorInstanceCreatorHandler.class);
 
-    protected static SingletonFactory factory = new SingletonFactory();
+    protected SingletonFactory factory = new SingletonFactory();
+
+    public ExecutorInstanceCreatorHandler() {
+        factory = new SingletonFactory();
+    }
+
+    public ExecutorInstanceCreatorHandler(SingletonFactory factory) {
+        this.factory = factory;
+    }
     
     @Override
     public void handle(Mapping mapping, Call call) {
