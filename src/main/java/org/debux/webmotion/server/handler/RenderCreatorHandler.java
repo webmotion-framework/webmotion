@@ -318,8 +318,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
                     + action.getType().replace(Action.TYPE_VIEW, "");
         }
         
-        String path = "/" + packageName + "/" + subPackageName + "/" + pageName;
-        path = path.toLowerCase();
+        String path = "/" + packageName + "/" + subPackageName.toLowerCase() + "/" + pageName;
         log.info("path = " + path);
         return path;
     }
