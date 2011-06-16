@@ -90,7 +90,7 @@ public class ActionRule {
      * @param rulePattern 
      */
     public void extractURLPattern(String rulePattern) {
-        String[] splitRule = rulePattern.split("/|\\?|&");
+        String[] splitRule = rulePattern.split("/(?!$|\\?)|\\?|&");
         rule = new ArrayList<URLPattern>();
         for (String value : splitRule) {
             URLPattern expression = new URLPattern();
