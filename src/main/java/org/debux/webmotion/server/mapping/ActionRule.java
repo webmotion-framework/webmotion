@@ -25,11 +25,15 @@
 package org.debux.webmotion.server.mapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a action for an url. The action is executed when the url matched 
@@ -39,14 +43,22 @@ import java.util.regex.Pattern;
  */
 public class ActionRule {
 
+    private static final Logger log = LoggerFactory.getLogger(ActionRule.class);
+    
     protected static Pattern patternParam = Pattern.compile("^(\\p{Alnum}*)=\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
-    protected static Pattern patternStaticParam = Pattern.compile("^(\\p{Alnum}*)=(\\p{Alnum}*)$");
-    protected static Pattern patternUrl = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
+    protected static Pattern patternStaticParam = Pattern.compile("^((\\p{Alnum}*)=)?(\\p{Alnum}*)$");
+    protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     protected String method;
-    protected List<URLPattern> rule;
+    protected List<URLPattern> ruleUrl;
+    protected List<URLPattern> ruleParameters;
     protected Action action;
     protected Map<String, String[]> defaultParameters = new LinkedHashMap<String, String[]>();
+
+    public ActionRule() {
+        ruleUrl = new ArrayList<URLPattern>();
+        ruleParameters = new ArrayList<URLPattern>();
+    }
 
     public Action getAction() {
         return action;
@@ -64,12 +76,20 @@ public class ActionRule {
         this.method = method;
     }
 
-    public List<URLPattern> getRule() {
-        return rule;
+    public List<URLPattern> getRuleParameters() {
+        return ruleParameters;
     }
 
-    public void setRule(List<URLPattern> rule) {
-        this.rule = rule;
+    public void setRuleParameters(List<URLPattern> ruleParameters) {
+        this.ruleParameters = ruleParameters;
+    }
+
+    public List<URLPattern> getRuleUrl() {
+        return ruleUrl;
+    }
+
+    public void setRuleUrl(List<URLPattern> ruleUrl) {
+        this.ruleUrl = ruleUrl;
     }
 
     public Map<String, String[]> getDefaultParameters() {
@@ -87,41 +107,81 @@ public class ActionRule {
 
     /**
      * Extract the url pattern
-     * @param rulePattern 
+     * @param url 
      */
-    public void extractURLPattern(String rulePattern) {
-        String[] splitRule = rulePattern.split("/(?!$|\\?)|\\?|&");
-        rule = new ArrayList<URLPattern>();
-        for (String value : splitRule) {
-            URLPattern expression = new URLPattern();
-            rule.add(expression);
+    public void extractURLPattern(String urlPattern) {
+        log.info("urlPattern = " + urlPattern);
+        
+        String baseUrl = StringUtils.substringBefore(urlPattern, "?");
+        if(!baseUrl.isEmpty()) {
+            
+            String[] splitBaseUrl = baseUrl.split("/");
+            log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
 
-            Matcher matcherUrl = patternUrl.matcher(value);
-            Matcher matcherParam = patternParam.matcher(value);
-            Matcher matcherStaticParam = patternStaticParam.matcher(value);
-
-            String pattern = null;
-            if(matcherUrl.find()) {
-                expression.setName(matcherUrl.group(1));
-                pattern = matcherUrl.group(3);
-
-            } else if(matcherParam.find()) {
-                expression.setParam(matcherParam.group(1));
-                expression.setName(matcherParam.group(2));
-                pattern = matcherParam.group(4);
-                
-            } else if(matcherStaticParam.find()) {
-                expression.setParam(matcherStaticParam.group(1));
-                pattern = matcherStaticParam.group(2);
-
-            } else {
-                pattern = value;
+            for (int index = 0; index < splitBaseUrl.length; index++) {
+                String item = splitBaseUrl[index];
+                URLPattern expression = extractExpression(item);
+                ruleUrl.add(expression);
             }
 
-            if(pattern != null && !pattern.isEmpty()) {
-                expression.setPattern(Pattern.compile("^" + pattern + "$"));
+            if(baseUrl.endsWith("/")) {
+                URLPattern expression = new URLPattern();
+                expression.setPattern(Pattern.compile("^/$"));
             }
         }
+        
+        String queryString = StringUtils.substringAfter(urlPattern, "?");
+        if(!queryString.isEmpty()) {
+            
+            String[] splitQueryString = queryString.split("&");
+            log.info("splitQueryString = " + Arrays.toString(splitQueryString));
+
+            for (int index = 0; index < splitQueryString.length; index++) {
+                String item = splitQueryString[index];
+                URLPattern expression = extractExpression(item);
+                ruleParameters.add(expression);
+            }
+        }
+    }
+
+    /**
+     * Extract a fragment of url patern
+     * @param value the fragment
+     * @return memory representation
+     */
+    protected URLPattern extractExpression(String value) {
+        URLPattern expression = new URLPattern();
+
+        Matcher matcherPath = patternPath.matcher(value);
+        Matcher matcherParam = patternParam.matcher(value);
+        Matcher matcherStaticParam = patternStaticParam.matcher(value);
+
+        String pattern = null;
+        if(matcherPath.find()) {
+            expression.setName(matcherPath.group(1));
+            pattern = matcherPath.group(3);
+            
+        } else if(matcherParam.find()) {
+            expression.setParam(matcherParam.group(1));
+            log.info("matcherParam.group(1) = " + matcherParam.group(1));
+            expression.setName(matcherParam.group(2));
+            log.info("matcherParam.group(2) = " + matcherParam.group(2));
+            pattern = matcherParam.group(4);
+            log.info("matcherParam.group(4) = " + matcherParam.group(4));
+            
+        } else if(matcherStaticParam.find()) {
+            expression.setParam(matcherStaticParam.group(2));
+            pattern = matcherStaticParam.group(3);
+
+        } else {
+            pattern = value;
+        }
+
+        if(pattern != null && !pattern.isEmpty()) {
+            expression.setPattern(Pattern.compile("^" + pattern + "$"));
+        }
+        
+        return expression;
     }
 
     /**

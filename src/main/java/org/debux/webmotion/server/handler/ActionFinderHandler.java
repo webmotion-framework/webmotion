@@ -66,7 +66,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         
         String url = context.getUrl();
         log.info("url = " + url);
-        String[] path = url.split("/(?!$)");
+        String[] path = url.split("/");
         Map<String, Object> parameters = call.getExtractParameters();
         String method = context.getMethod();
         
@@ -90,68 +90,72 @@ public class ActionFinderHandler implements WebMotionHandler {
     
     // Check url
     public boolean checkUrl(ActionRule actionRule, String[] path, Map<String, Object> parameters) {
-        List<URLPattern> rule = actionRule.getRule();
-        URLPattern[] expressions = rule.toArray(new URLPattern[0]);
+        int position;
+        
+        // Test url
+        List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+        URLPattern[] expressions = ruleUrl.toArray(new URLPattern[0]);
 
-        // Match root i.e. "/"
-        if(rule.isEmpty() && path.length == 0) {
-            return true;
+        for (position = 0; position < expressions.length; position ++) {
+            URLPattern expression = expressions[position];
+
+            String[] values = null;
+            if(position < path.length) {
+                values = new String[]{path[position]};
+            }
+            
+            boolean matchValues = matchValues(expression, values);
+            log.info("Path " + Arrays.toString(values) + " for pattern " + expression.getPattern() + " match ? " + matchValues);
+            if(!matchValues) {
+                return false;
+            }
+        }
+
+        // All path math in rule
+        if(position < path.length - 1) {
+            return false;
         }
         
-        boolean matchUrl = true;
-        
-        int pathSize = 0;
-        for (int position = 0; position < expressions.length; position ++) {
+        // Test parameters
+        List<URLPattern> ruleParameters = actionRule.getRuleParameters();
+        expressions = ruleParameters.toArray(new URLPattern[0]);
+
+        for (position = 0; position < expressions.length; position ++) {
             URLPattern expression = expressions[position];
 
             log.info("param " + expression.getParam());
-            log.info("pattern " + expression.getPattern());
-
-            String[] values = null;
             String param = expression.getParam();
-            if(param == null) {
-                if(position < path.length) {
-                    values = new String[]{path[position]};
-                }
-                pathSize = position;
-
-            } else {                    
-                Object parameterValue = parameters.get(param);
-                if(!(parameterValue instanceof File)) {
-                    values = (String[]) parameterValue;
-                }
+            String[] values = null;
+            Object parameterValue = parameters.get(param);
+            if(!(parameterValue instanceof File)) {
+                values = (String[]) parameterValue;
             }
-            log.info("value " + Arrays.toString(values));
-
-            if(values != null) {
-                Pattern pattern = expression.getPattern();
-                if(pattern != null) {
-                    
-                    boolean found = true;
-                    for (String value : values) {
-                        Matcher matcher = pattern.matcher(value);
-                        found &= matcher.find();
-                        log.info("matcher " + found);
-                    }
-                    
-                    if(!found) {
-                        matchUrl = false;
-                        break;
-                    }
-                }
-
-            } else {
-                matchUrl = false;
-                break;
+            
+            boolean matchValues = matchValues(expression, values);
+            log.info("Param " + param + " for value " + parameterValue + " match ? " + matchValues);
+            if(!matchValues) {
+                return false;
             }
         }
 
-        // All path math in rule without parameters
-        if(pathSize < path.length - 1) {
-            return false;
-        }
-
-        return matchUrl;
+        return true;
     }
     
+    public boolean matchValues(URLPattern expression, String[] values) {
+        if(values != null) {
+            boolean found = true;
+            
+            Pattern pattern = expression.getPattern();
+            if(pattern != null) {
+                for (String value : values) {
+                    Matcher matcher = pattern.matcher(value);
+                    found &= matcher.find();
+                }
+            }
+            
+            return found;
+        }
+        
+        return false;
+    }
 }
