@@ -66,7 +66,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         
         String url = context.getUrl();
         log.info("url = " + url);
-        String[] path = url.split("/");
+        String[] path = url.split("/(?!$)");
         Map<String, Object> parameters = call.getExtractParameters();
         String method = context.getMethod();
         
