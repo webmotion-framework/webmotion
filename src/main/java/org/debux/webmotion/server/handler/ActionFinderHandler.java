@@ -101,26 +101,29 @@ public class ActionFinderHandler implements WebMotionHandler {
         List<URLPattern> ruleUrl = actionRule.getRuleUrl();
         URLPattern[] expressions = ruleUrl.toArray(new URLPattern[0]);
 
+        // All path math in rule
+        if(expressions.length != path.length) {
+            return false;
+        }
+        
         for (position = 0; position < expressions.length; position ++) {
             URLPattern expression = expressions[position];
-
-            String[] values = null;
-            if(position < path.length) {
-                values = new String[]{path[position]};
-            }
+            Pattern pattern = expression.getPattern();
+            String name = expression.getName();
             
+            String value = path[position];
+            if(!value.isEmpty() && pattern == null && name == null) {
+                return false;
+            }
+                
+            String[] values = new String[]{value};
             boolean matchValues = matchValues(expression, values);
-            log.info("Path " + Arrays.toString(values) + " for pattern " + expression.getPattern() + " match ? " + matchValues);
+            log.info("Path " + Arrays.toString(values) + " for pattern " + pattern + " match ? " + matchValues);
             if(!matchValues) {
                 return false;
             }
         }
 
-        // All path math in rule
-        if(position < path.length) {
-            return false;
-        }
-        
         // Test parameters
         List<URLPattern> ruleParameters = actionRule.getRuleParameters();
         expressions = ruleParameters.toArray(new URLPattern[0]);
@@ -147,20 +150,20 @@ public class ActionFinderHandler implements WebMotionHandler {
     }
     
     public boolean matchValues(URLPattern expression, String[] values) {
-        if(values != null) {
-            boolean found = true;
-            
-            Pattern pattern = expression.getPattern();
-            if(pattern != null) {
-                for (String value : values) {
-                    Matcher matcher = pattern.matcher(value);
-                    found &= matcher.find();
-                }
-            }
-            
-            return found;
+        if(values == null) {
+            return false;
         }
         
-        return false;
+        boolean found = true;
+
+        Pattern pattern = expression.getPattern();
+        if(pattern != null) {
+            for (String value : values) {
+                Matcher matcher = pattern.matcher(value);
+                found &= matcher.find();
+            }
+        }
+
+        return found;
     }
 }

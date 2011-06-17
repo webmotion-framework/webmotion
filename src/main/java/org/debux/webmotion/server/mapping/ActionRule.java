@@ -119,7 +119,7 @@ public class ActionRule {
             log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
 
             for(String item : splitBaseUrl) {
-                URLPattern expression = extractExpression(item);
+                URLPattern expression = extractExpression(item, false);
                 ruleUrl.add(expression);
             }
         }
@@ -131,7 +131,7 @@ public class ActionRule {
             log.info("splitQueryString = " + Arrays.toString(splitQueryString));
 
             for(String item : splitQueryString) {
-                URLPattern expression = extractExpression(item);
+                URLPattern expression = extractExpression(item, true);
                 ruleParameters.add(expression);
             }
         }
@@ -142,7 +142,7 @@ public class ActionRule {
      * @param value the fragment
      * @return memory representation
      */
-    protected URLPattern extractExpression(String value) {
+    protected URLPattern extractExpression(String value, boolean isParam) {
         URLPattern expression = new URLPattern();
 
         Matcher matcherPath = patternPath.matcher(value);
@@ -163,6 +163,9 @@ public class ActionRule {
             expression.setParam(matcherStaticParam.group(1));
             pattern = matcherStaticParam.group(2);
 
+        } else if (isParam) {
+            expression.setParam(value);
+            
         } else {
             pattern = value;
         }
