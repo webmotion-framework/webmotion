@@ -46,7 +46,7 @@ public class ActionRule {
     private static final Logger log = LoggerFactory.getLogger(ActionRule.class);
     
     protected static Pattern patternParam = Pattern.compile("^(\\p{Alnum}*)=\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
-    protected static Pattern patternStaticParam = Pattern.compile("^((\\p{Alnum}*)=)?(\\p{Alnum}*)$");
+    protected static Pattern patternStaticParam = Pattern.compile("^(\\p{Alnum}*)=(\\p{Alnum}*)$");
     protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     protected String method;
@@ -160,8 +160,8 @@ public class ActionRule {
             pattern = matcherParam.group(4);
             
         } else if(matcherStaticParam.find()) {
-            expression.setParam(matcherStaticParam.group(2));
-            pattern = matcherStaticParam.group(3);
+            expression.setParam(matcherStaticParam.group(1));
+            pattern = matcherStaticParam.group(2);
 
         } else {
             pattern = value;
