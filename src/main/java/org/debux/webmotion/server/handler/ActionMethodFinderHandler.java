@@ -64,16 +64,22 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
 
         } else {
             String className = action.getClassName();
+            String packageSuffix = "";
             // Is dynamic name
-            if(className.startsWith("{") && className.endsWith("}")) {
-                String paramName = className.substring(1, className.length() - 1);
+            int openingEmbrace = className.indexOf('{');
+            int closingEmbrace = className.indexOf('}');
+            if(openingEmbrace != -1 && openingEmbrace < closingEmbrace) {
+                // Extract static package suffix from user-defined mapping
+                packageSuffix = className.substring(0, openingEmbrace);
+                // Extract and get dynamic class name
+                String paramName = className.substring(openingEmbrace + 1, closingEmbrace);
                 className = (String) parameters.get(paramName);
                 className = WebMotionUtils.capitalizeClass(className);
             }
 
             Config config = mapping.getConfig();
             String packageName = config.getPackageActions();
-            String fullQualifiedName = packageName + "." + className;
+            String fullQualifiedName = packageName + "." + packageSuffix + className;
             
             try {
                 Class<WebMotionAction> clazz = (Class<WebMotionAction>) Class.forName(fullQualifiedName);
