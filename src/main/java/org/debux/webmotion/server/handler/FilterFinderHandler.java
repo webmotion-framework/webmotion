@@ -54,12 +54,15 @@ public class FilterFinderHandler implements WebMotionHandler {
         
         HttpContext context = call.getContext();
         String url = context.getUrl();
-        String method = context.getMethod();
-        for (FilterRule filterRule : filterRules) {
+        if(url != null) {
             
-            if(checkMethod(filterRule, method) &&
-                    checkUrl(filterRule, url)) {
-                selection.add(filterRule);
+            String method = context.getMethod();
+            for (FilterRule filterRule : filterRules) {
+
+                if(checkMethod(filterRule, method) &&
+                        checkUrl(filterRule, url)) {
+                    selection.add(filterRule);
+                }
             }
         }
     }

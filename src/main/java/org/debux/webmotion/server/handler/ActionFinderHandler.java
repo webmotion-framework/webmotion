@@ -35,6 +35,7 @@ import org.debux.webmotion.server.mapping.URLPattern;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.slf4j.Logger;
@@ -65,17 +66,21 @@ public class ActionFinderHandler implements WebMotionHandler {
         HttpContext context = call.getContext();
         
         String url = context.getUrl();
-        log.info("url = " + url);
-        String[] path = url.split("/");
-        Map<String, Object> parameters = call.getExtractParameters();
-        String method = context.getMethod();
-        
-        List<ActionRule> actionRules = mapping.getActionRules();
-        for (ActionRule actionRule : actionRules) {
+        if(url != null) {
             
-            if(checkMethod(actionRule, method) 
-                    && checkUrl(actionRule, path, parameters)) {
-                return actionRule;
+            log.info("url = " + url);
+            String[] path = StringUtils.splitPreserveAllTokens(url, "/");
+            log.info("path = " + Arrays.toString(path));
+            Map<String, Object> parameters = call.getExtractParameters();
+            String method = context.getMethod();
+
+            List<ActionRule> actionRules = mapping.getActionRules();
+            for (ActionRule actionRule : actionRules) {
+
+                if(checkMethod(actionRule, method) 
+                        && checkUrl(actionRule, path, parameters)) {
+                    return actionRule;
+                }
             }
         }
         
@@ -112,7 +117,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         }
 
         // All path math in rule
-        if(position < path.length - 1) {
+        if(position < path.length) {
             return false;
         }
         

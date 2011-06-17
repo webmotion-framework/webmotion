@@ -115,29 +115,22 @@ public class ActionRule {
         String baseUrl = StringUtils.substringBefore(urlPattern, "?");
         if(!baseUrl.isEmpty()) {
             
-            String[] splitBaseUrl = baseUrl.split("/");
+            String[] splitBaseUrl = StringUtils.splitPreserveAllTokens(baseUrl, "/");
             log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
 
-            for (int index = 0; index < splitBaseUrl.length; index++) {
-                String item = splitBaseUrl[index];
+            for(String item : splitBaseUrl) {
                 URLPattern expression = extractExpression(item);
                 ruleUrl.add(expression);
-            }
-
-            if(baseUrl.endsWith("/")) {
-                URLPattern expression = new URLPattern();
-                expression.setPattern(Pattern.compile("^/$"));
             }
         }
         
         String queryString = StringUtils.substringAfter(urlPattern, "?");
         if(!queryString.isEmpty()) {
             
-            String[] splitQueryString = queryString.split("&");
+            String[] splitQueryString = StringUtils.splitPreserveAllTokens(queryString, "&");
             log.info("splitQueryString = " + Arrays.toString(splitQueryString));
 
-            for (int index = 0; index < splitQueryString.length; index++) {
-                String item = splitQueryString[index];
+            for(String item : splitQueryString) {
                 URLPattern expression = extractExpression(item);
                 ruleParameters.add(expression);
             }
@@ -163,11 +156,8 @@ public class ActionRule {
             
         } else if(matcherParam.find()) {
             expression.setParam(matcherParam.group(1));
-            log.info("matcherParam.group(1) = " + matcherParam.group(1));
             expression.setName(matcherParam.group(2));
-            log.info("matcherParam.group(2) = " + matcherParam.group(2));
             pattern = matcherParam.group(4);
-            log.info("matcherParam.group(4) = " + matcherParam.group(4));
             
         } else if(matcherStaticParam.find()) {
             expression.setParam(matcherStaticParam.group(2));

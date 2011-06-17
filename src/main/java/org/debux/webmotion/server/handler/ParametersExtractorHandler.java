@@ -32,6 +32,7 @@ import org.debux.webmotion.server.mapping.URLPattern;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
@@ -91,31 +92,30 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         // Retrieve the good name for parameters give in mapping
         HttpContext context = call.getContext();
         String url = context.getUrl();
-        String[] path = url.split("/");
+        String[] path = StringUtils.splitPreserveAllTokens(url, "/");
         
-        List<URLPattern> rules = new ArrayList<URLPattern>();
-        rules.addAll(actionRule.getRuleUrl());
-        rules.addAll(actionRule.getRuleParameters());
-        URLPattern[] expressions = rules.toArray(new URLPattern[0]);
-
-        for (int position = 0; position < expressions.length; position ++) {
-            URLPattern expression = expressions[position];
-            
+        List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+        int position = 0;
+        for (URLPattern expression : ruleUrl) {
             String name = expression.getName();
-            if(name != null && !name.isEmpty()) {
-                
-                String param = expression.getParam();
-                if(param == null) {
-                    result.put(name, path[position]);
-
-                } else {
-                    Object values = parameters.get(param);
-                    if(values != null) {
-                        result.put(name, values);
-                    }
+            
+            if(!StringUtils.isEmpty(name)) {
+                result.put(name, path[position]);
+            }
+            position ++;
+        }
+        
+        List<URLPattern> ruleParameters = actionRule.getRuleParameters();
+        for (URLPattern expression : ruleParameters) {
+            String name = expression.getName();
+            String param = expression.getParam();
+            
+            if(!StringUtils.isEmpty(name)) {
+                Object values = parameters.get(param);
+                if(values != null) {
+                    result.put(name, values);
                 }
             }
         }
     }
-
 }
