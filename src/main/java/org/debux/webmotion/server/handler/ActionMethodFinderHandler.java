@@ -24,12 +24,14 @@
  */
 package org.debux.webmotion.server.handler;
 
+import java.util.regex.Matcher;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
@@ -51,6 +53,8 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ActionMethodFinderHandler.class);
 
+    protected static Pattern pattern = Pattern.compile("\\{(\\p{Alnum}*)\\}");
+    
     @Override
     public void handle(Mapping mapping, Call call) {
         Map<String, Object> parameters = call.getAliasParameters();
@@ -63,33 +67,20 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
             call.setExecutor(executor);
 
         } else {
+            
             String className = action.getClassName();
-            String packageSuffix = "";
-            // Is dynamic name
-            int openingEmbrace = className.indexOf('{');
-            int closingEmbrace = className.indexOf('}');
-            if(openingEmbrace != -1 && openingEmbrace < closingEmbrace) {
-                // Extract static package suffix from user-defined mapping
-                packageSuffix = className.substring(0, openingEmbrace);
-                // Extract and get dynamic class name
-                String paramName = className.substring(openingEmbrace + 1, closingEmbrace);
-                className = (String) parameters.get(paramName);
-                className = WebMotionUtils.capitalizeClass(className);
-            }
+            className = replaceDynamicName(className, parameters);
+            className = WebMotionUtils.capitalizeClass(className);
 
             Config config = mapping.getConfig();
             String packageName = config.getPackageActions();
-            String fullQualifiedName = packageName + "." + packageSuffix + className;
+            String fullQualifiedName = packageName + "." + className;
             
             try {
                 Class<WebMotionAction> clazz = (Class<WebMotionAction>) Class.forName(fullQualifiedName);
 
                 String methodName = action.getMethodName();
-                // Is dynamic name
-                if(methodName.startsWith("{") && methodName.endsWith("}")) {
-                    String paramName = methodName.substring(1, methodName.length() - 1);
-                    methodName = (String) parameters.get(paramName);
-                }
+                methodName = replaceDynamicName(methodName, parameters);
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
 
                 ExecutorAction executor = new ExecutorAction();
@@ -101,6 +92,23 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
                 throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
             }
         }
+    }
+
+    /**
+     * Replace all parameters like {paramName} by real value in request parameters
+     * @param name class name or method name
+     * @param parameters request parameters
+     * @return name with parameter values
+     */
+    protected String replaceDynamicName(String name, Map<String, Object> parameters) {
+        Matcher matcher = pattern.matcher(name);
+        while (matcher.find()) {
+            String paramName = matcher.group(1);
+            String value = (String) parameters.get(paramName);
+            
+            name = name.replace("{" + paramName + "}", value);
+        }
+        return name;
     }
 
 }
