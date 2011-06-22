@@ -61,7 +61,7 @@ public class ErrorRule {
     }
 
     /**
-     * Extract the action
+     * Extract the action to execute
      * @param ruleAction 
      */
     public void extractAction(String ruleAction) {
@@ -79,6 +79,7 @@ public class ErrorRule {
         int packageSeparatorIndex = value.lastIndexOf(".");
         action.setClassName(value.substring(0, packageSeparatorIndex));
         action.setMethodName(value.substring(packageSeparatorIndex + 1));
+        action.setFullName(value);
     }
 
 }

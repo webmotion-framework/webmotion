@@ -44,7 +44,7 @@ import java.util.TreeSet;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.ExecutorAction;
+import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -92,8 +92,8 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
     
     @Override
     public void handle(Mapping mapping, Call call) {
-            List<ExecutorAction> executors = call.getExecutors();
-            for (ExecutorAction executor : executors) {
+            List<Executor> executors = call.getExecutors();
+            for (Executor executor : executors) {
 
                 Method executorMethod = executor.getMethod();
                 String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);

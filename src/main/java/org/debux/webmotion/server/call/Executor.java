@@ -24,17 +24,23 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.debux.webmotion.server.WebMotionContextable;
 
 /**
- * Information used to execute the user request on reflection java. If the 
- * action is directly display a view only the parameters is necessary otherwise 
- * @see ExecutorAction.
+ * Information used to execute the user request on reflection java. The executor 
+ * contains information on method to execute. It is used to call method for 
+ * error, action and filter.
  * 
  * @author julien
  */
 public class Executor {
+
+    protected Class<? extends  WebMotionContextable> clazz;
+    protected Method method;
+    protected WebMotionContextable instance;
 
     protected Map<String, Object> parameters;
 
@@ -50,4 +56,28 @@ public class Executor {
         this.parameters = parameters;
     }
     
+    public WebMotionContextable getInstance() {
+        return instance;
+    }
+
+    public void setInstance(WebMotionContextable instance) {
+        this.instance = instance;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public Class<? extends WebMotionContextable> getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class<? extends WebMotionContextable> clazz) {
+        this.clazz = clazz;
+    }
+
 }

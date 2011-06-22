@@ -194,8 +194,11 @@ public class ActionRule {
         }
         
         int packageSeparatorIndex = value.lastIndexOf(".");
-        action.setClassName(value.substring(0, packageSeparatorIndex));
-        action.setMethodName(value.substring(packageSeparatorIndex + 1));
+        if(packageSeparatorIndex != -1) {
+            action.setClassName(value.substring(0, packageSeparatorIndex));
+            action.setMethodName(value.substring(packageSeparatorIndex + 1));
+        }
+        action.setFullName(value);
     }
 
     /**

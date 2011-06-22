@@ -32,7 +32,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.call.ExecutorAction;
+import org.debux.webmotion.server.call.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +79,7 @@ public class ErrorFinderHandler implements WebMotionHandler {
             }              
         }
 
-        List<ExecutorAction> filters = new ArrayList<ExecutorAction>(0);
+        List<Executor> filters = new ArrayList<Executor>(0);
         call.setFilters(filters);
     }
     

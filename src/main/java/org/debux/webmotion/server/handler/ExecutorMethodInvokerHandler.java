@@ -35,7 +35,6 @@ import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.ExecutorAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +50,9 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        Iterator<ExecutorAction> filters = call.getApplyFilters();
+        Iterator<Executor> filters = call.getApplyFilters();
         
+        // Process action and filters
         Render render = call.getRender();
         if(render == null) {
             if(filters.hasNext()) {
@@ -61,41 +61,38 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 processAction(mapping, call);
             }
         }
+        
+        // Process just filters because the call contains already the render
+        Executor executor = call.getExecutor();
+        if(executor == null && render == null) {
+            if(filters.hasNext()) {
+                processFilter(mapping, call);
+            }
+        }
     }
 
     public void processAction(Mapping mapping, Call call) {
         Executor executor = call.getExecutor();
+        try {
+            WebMotionContextable actionInstance = executor.getInstance();
+            Map<String, Object> parameters = executor.getParameters();
 
-        if(executor instanceof ExecutorAction) {
-            ExecutorAction action = (ExecutorAction) executor;
+            Method actionMethod = executor.getMethod();
+            Object[] toArray = parameters.values().toArray();
+            Render render = (Render) actionMethod.invoke(actionInstance, toArray);
 
-            try {
-                WebMotionContextable actionInstance = action.getInstance();
-                Map<String, Object> parameters = action.getParameters();
-
-                Method actionMethod = action.getMethod();
-                Object[] toArray = parameters.values().toArray();
-                Render render = (Render) actionMethod.invoke(actionInstance, toArray);
-
-                call.setRender(render);
-
-            } catch (Exception ex) {
-                throw new WebMotionException("Error during invoke method for filter " 
-                        + action.getClazz().getName() 
-                        + " on method " + action.getMethod().getName(), ex);
-            }
-
-        } else {
-            Map<String, Object> model = call.getAliasParameters();
-
-            Render render = new Render(null, Render.MIME_VIEW, Render.DEFAULT_ENCODING, model);
             call.setRender(render);
+
+        } catch (Exception ex) {
+            throw new WebMotionException("Error during invoke method for filter " 
+                    + executor.getClazz().getName() 
+                    + " on method " + executor.getMethod().getName(), ex);
         }
     }
     
     public void processFilter(Mapping mapping, Call call) {
-        Iterator<ExecutorAction> filters = call.getApplyFilters();
-        ExecutorAction executor = filters.next();
+        Iterator<Executor> filters = call.getApplyFilters();
+        Executor executor = filters.next();
             
         try {
             WebMotionFilter filterInstance = (WebMotionFilter) executor.getInstance();

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.ExecutorAction;
+import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -64,8 +64,8 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
         Config config = mapping.getConfig();
         String mode = config.getMode();
 
-        List<ExecutorAction> executors = call.getExecutors();
-        for (ExecutorAction executor : executors) {
+        List<Executor> executors = call.getExecutors();
+        for (Executor executor : executors) {
 
             Class<? extends WebMotionContextable> actionClass = executor.getClazz();
 

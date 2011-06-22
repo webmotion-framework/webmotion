@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
+import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ErrorFinderHandler;
 import org.debux.webmotion.server.handler.ErrorMethodFinderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
@@ -61,6 +62,7 @@ public class WebMotionErrorManager implements WebMotionHandler {
         handlers = new ArrayList<WebMotionHandler>();
         handlers.add(new ParametersMultipartHandler());
         handlers.add(new ErrorFinderHandler());
+        handlers.add(new ActionExecuteRenderHandler());
         handlers.add(new ErrorMethodFinderHandler());
         handlers.add(new ExecutorInstanceCreatorHandler());
         handlers.add(new ExecutorMethodInvokerHandler());

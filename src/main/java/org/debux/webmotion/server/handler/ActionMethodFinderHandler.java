@@ -26,6 +26,7 @@ package org.debux.webmotion.server.handler;
 
 import java.util.regex.Matcher;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.Render;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
@@ -37,15 +38,13 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.ExecutorAction;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Find the action class reprensent by name given in mapping. If it directly 
- * mapped on view, the executor not contains any information on class or method 
- * to execute.
+ * mapped on view or url, the executor is null but the render is informed.
  * 
  * @author julien
  */
@@ -57,17 +56,15 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
     
     @Override
     public void handle(Mapping mapping, Call call) {
-        Map<String, Object> parameters = call.getAliasParameters();
-
-        ActionRule actionRule = call.getActionRule();
-        Action action = actionRule.getAction();
-
-        if(action.isView()) {
-            Executor executor = new Executor();
-            call.setExecutor(executor);
-
-        } else {
+        // Test if it directly mapped on view or url
+        Render render = call.getRender();
+        if(render == null) {
             
+            Map<String, Object> parameters = call.getAliasParameters();
+
+            ActionRule actionRule = call.getActionRule();
+            Action action = actionRule.getAction();
+
             String className = action.getClassName();
             className = replaceDynamicName(className, parameters);
             className = WebMotionUtils.capitalizeClass(className);
@@ -75,7 +72,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
             Config config = mapping.getConfig();
             String packageName = config.getPackageActions();
             String fullQualifiedName = packageName + "." + className;
-            
+
             try {
                 Class<WebMotionAction> clazz = (Class<WebMotionAction>) Class.forName(fullQualifiedName);
 
@@ -83,11 +80,11 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
                 methodName = replaceDynamicName(methodName, parameters);
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
 
-                ExecutorAction executor = new ExecutorAction();
+                Executor executor = new Executor();
                 executor.setClazz(clazz);
                 executor.setMethod(method);
                 call.setExecutor(executor);
-                
+
             } catch (ClassNotFoundException clnfe) {
                 throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
             }
