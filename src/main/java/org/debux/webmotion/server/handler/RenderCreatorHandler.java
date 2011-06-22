@@ -147,8 +147,8 @@ public class RenderCreatorHandler implements WebMotionHandler {
         String contentType = responseWrapper.getContentType();
         response.setContentType(contentType);
 
-        ServletOutputStream out = context.getOut();
-        byte[] include = responseWrapper.getContent();
+        PrintWriter out = context.getOut();
+        String include = responseWrapper.getContent();
         out.write(include);
     }
 
@@ -193,7 +193,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
 //        String mineType = render.getMimeType();
 //        response.setContentType(mineType);
 
-        ServletOutputStream out = context.getOut();
+        PrintWriter out = context.getOut();
         out.print(content);
     }
 
@@ -221,7 +221,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         XStream xstream = new XStream();
         String xml = xstream.toXML(object);
         
-        ServletOutputStream out = context.getOut();
+        PrintWriter out = context.getOut();
         out.print(xml);
         
         String mineType = render.getMimeType().toString();
@@ -244,7 +244,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         Gson gson = new Gson();
         String json = gson.toJson(object);
         
-        ServletOutputStream out = context.getOut();
+        PrintWriter out = context.getOut();
         out.print(json);
         
         String mineType = render.getMimeType().toString();
@@ -267,7 +267,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         Gson gson = new Gson();
         String json = gson.toJson(object);
         
-        ServletOutputStream out = context.getOut();
+        PrintWriter out = context.getOut();
         out.print(content + "(" + json + ");");
         
         String mineType = render.getMimeType().toString();
@@ -396,8 +396,8 @@ public class RenderCreatorHandler implements WebMotionHandler {
             stream.flush();
         }
         
-        public byte[] getContent() {
-            return stream.toByteArray();
+        public String getContent() {
+            return stream.toString();
         }
     }
 

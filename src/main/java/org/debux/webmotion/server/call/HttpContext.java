@@ -25,8 +25,8 @@
 package org.debux.webmotion.server.call;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,6 +55,24 @@ public class HttpContext {
     public static final String HEADER_IF_MODIFIED_SINCE = "If-Modified-Since";
     public static final String HEADER_USER_AGENT = "User-Agent";
     
+    public static final String ATTRIBUTE_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
+    public static final String ATTRIBUTE_ERROR_MESSAGE = "javax.servlet.error.message";
+    public static final String ATTRIBUTE_ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
+    public static final String ATTRIBUTE_ERROR_EXCEPTION = "javax.servlet.error.exception";
+    public static final String ATTRIBUTE_ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
+    
+    public static final String ATTRIBUTE_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+    public static final String ATTRIBUTE_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
+    public static final String ATTRIBUTE_INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
+    public static final String ATTRIBUTE_INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
+    public static final String ATTRIBUTE_INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
+    
+    public static final String ATTRIBUTE_FORWARD_REQUEST_URI = "javax.servlet.forward.request_uri";
+    public static final String ATTRIBUTE_FORWARD_CONTEXT_PATH = "javax.servlet.forward.context_path";
+    public static final String ATTRIBUTE_FORWARD_SERVLET_PATH = "javax.servlet.forward.servlet_path";
+    public static final String ATTRIBUTE_FORWARD_PATH_INFO = "javax.servlet.forward.path_info";
+    public static final String ATTRIBUTE_FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
+    
     /** Current HTTP request. */
     protected HttpServletRequest request;
     
@@ -68,11 +86,11 @@ public class HttpContext {
      * Error data is utility to get information on error in attributes.
      */
     public class ErrorData {
-        protected Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        protected String message = (String) request.getAttribute("javax.servlet.error.message");
-        protected Class<?> exceptionType = (Class) request.getAttribute("javax.servlet.error.exception_type");
-        protected Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception");
-        protected String requestUri = (String) request.getAttribute("javax.servlet.error.request_uri");
+        protected Integer statusCode = (Integer) request.getAttribute(ATTRIBUTE_ERROR_STATUS_CODE);
+        protected String message = (String) request.getAttribute(ATTRIBUTE_ERROR_MESSAGE);
+        protected Class<?> exceptionType = (Class) request.getAttribute(ATTRIBUTE_ERROR_EXCEPTION_TYPE);
+        protected Throwable exception = (Throwable) request.getAttribute(ATTRIBUTE_ERROR_EXCEPTION);
+        protected String requestUri = (String) request.getAttribute(ATTRIBUTE_ERROR_REQUEST_URI);
         
         public boolean isError() {
             return statusCode != null;
@@ -128,15 +146,22 @@ public class HttpContext {
     }
     
     public String getUrl() {
-        return request.getPathInfo();
+        String pathInfo = request.getPathInfo();
+        if(pathInfo == null) {
+            pathInfo = (String) request.getAttribute(ATTRIBUTE_INCLUDE_PATH_INFO);
+        }
+        if(pathInfo == null) {
+            pathInfo = (String) request.getAttribute(ATTRIBUTE_FORWARD_PATH_INFO);
+        }
+        return pathInfo;
     }
     
     public String getMethod() {
         return request.getMethod();
     }
     
-    public ServletOutputStream getOut() throws IOException {
-        return response.getOutputStream();
+    public PrintWriter getOut() throws IOException {
+        return response.getWriter();
     }
 
     public Map<String, String[]> getParameters() {
