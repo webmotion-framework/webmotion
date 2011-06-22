@@ -45,13 +45,9 @@ import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.ExecutorAction;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.call.Render;
 import org.slf4j.Logger;
@@ -278,44 +274,26 @@ public class RenderCreatorHandler implements WebMotionHandler {
         Config config = mapping.getConfig();
         String packageName = config.getPackageViews().replaceAll("\\.", "/");
         
-        String subPackageName;
-        String pageName;
+        String subPackageName = "";
+        String pageName = "";
         
         Executor executor = call.getExecutor();
-        // Classic action to execute
-        if(executor instanceof ExecutorAction) {
-            ExecutorAction executorAction = (ExecutorAction) executor;
-            
+        if(executor != null) {
             String packageActions = config.getPackageActions();
             String packageFilters = config.getPackageFilters();
             String packageErrors = config.getPackageErrors();
-            
-            subPackageName = executorAction.getClazz().getName();
+
+            subPackageName = executor.getClazz().getName();
             subPackageName = subPackageName.replace(packageActions, "");
             subPackageName = subPackageName.replace(packageFilters, "");
             subPackageName = subPackageName.replace(packageErrors, "");
             
-            Render render = call.getRender();
-            pageName = render.getContent();
-            
-        // Direct view to display
-        } else {
-            ActionRule actionRule = call.getActionRule();
-            Action action;
-            if(actionRule != null) {
-                action = actionRule.getAction();
-            } else {
-                ErrorRule errorRule = call.getErrorRule();
-                action = errorRule.getAction();
-            }
-            
-            subPackageName = action.getClassName();
-            pageName = action.getMethodName() 
-                    + action.getType().replace(Action.TYPE_VIEW, "");
+            subPackageName = WebMotionUtils.unCapitalizeClass(subPackageName);
+            subPackageName = subPackageName.replaceAll("\\.", "/");
         }
-        
-        subPackageName = WebMotionUtils.unCapitalizeClass(subPackageName);
-        subPackageName = subPackageName.replaceAll("\\.", "/");
+
+        Render render = call.getRender();
+        pageName = render.getContent();
         
         String path = "/" + packageName + "/" + subPackageName + "/" + pageName;
         log.info("path = " + path);

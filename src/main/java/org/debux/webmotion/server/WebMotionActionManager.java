@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
+import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
 import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
@@ -66,6 +67,7 @@ public class WebMotionActionManager implements WebMotionHandler {
         handlers.add(new ActionFinderHandler());
         handlers.add(new ParametersExtractorHandler());
         handlers.add(new FilterMethodFinderHandler());
+        handlers.add(new ActionExecuteRenderHandler());
         handlers.add(new ActionMethodFinderHandler());
         handlers.add(new ExecutorInstanceCreatorHandler());
         handlers.add(new ExecutorParametersConvertorHandler());

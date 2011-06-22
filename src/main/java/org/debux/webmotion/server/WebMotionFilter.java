@@ -27,7 +27,6 @@ package org.debux.webmotion.server;
 import java.util.Map;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.ExecutorAction;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
@@ -78,9 +77,8 @@ public class WebMotionFilter extends WebMotionAction {
     public Map<String, Object> getParameters() {
         Call call = WebMotionFilter.call.get();
         Executor executor = call.getExecutor();
-        if(executor instanceof ExecutorAction) {
-            ExecutorAction action = (ExecutorAction) executor;
-            Map<String, Object> parameters = action.getParameters();
+        if(executor != null) {
+            Map<String, Object> parameters = executor.getParameters();
             return parameters;
         } else {
             return null;
@@ -93,14 +91,10 @@ public class WebMotionFilter extends WebMotionAction {
      * 
      * @return current action
      */
-    public ExecutorAction getAction() {
+    public Executor getAction() {
         Call call = WebMotionFilter.call.get();
         Executor executor = call.getExecutor();
-        if(executor instanceof ExecutorAction) {
-            return (ExecutorAction) executor;
-        } else {
-            return null;
-        }
+        return executor;
     }
     
 }

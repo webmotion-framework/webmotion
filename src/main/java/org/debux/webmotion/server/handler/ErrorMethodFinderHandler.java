@@ -33,7 +33,7 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.ExecutorAction;
+import org.debux.webmotion.server.call.Render;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.slf4j.Logger;
@@ -41,8 +41,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Find the error class reprensent by name given in mapping. If it directly 
- * mapped on view, the executor not contains any information on class or method 
- * to execute.
+ * mapped on view or url, tthe executor is null but the render is informed.
  *
  * @author julien
  */
@@ -52,30 +51,29 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        ErrorRule errorRule = call.getErrorRule();
-        Action action = errorRule.getAction();
+        // Test if it directly mapped on view or url
+        Render render = call.getRender();
+        if(render == null) {
+            
+            ErrorRule errorRule = call.getErrorRule();
+            Action action = errorRule.getAction();
 
-        if(action.isView()) {
-            Executor executor = new Executor();
-            call.setExecutor(executor);
-
-        } else {
             String className = action.getClassName();
             Config config = mapping.getConfig();
             String packageName = config.getPackageErrors();
             String fullQualifiedName = packageName + "." + className;
-            
+
             try {
                 Class<WebMotionAction> clazz = (Class<WebMotionAction>) Class.forName(fullQualifiedName);
 
                 String methodName = action.getMethodName();
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
 
-                ExecutorAction executor = new ExecutorAction();
+                Executor executor = new Executor();
                 executor.setClazz(clazz);
                 executor.setMethod(method);
                 call.setExecutor(executor);
-                
+
             } catch (ClassNotFoundException clnfe) {
                 throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
             }

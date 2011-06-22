@@ -67,10 +67,10 @@ public class Call {
     protected Executor executor;
 
     /** Information to execute the filters. */
-    protected List<ExecutorAction> filters;
+    protected List<Executor> filters;
     
     /** Current filters executed. */
-    protected Iterator<ExecutorAction> applyFilters;
+    protected Iterator<Executor> applyFilters;
     
     /** The final render for user. */
     protected Render render;
@@ -136,11 +136,11 @@ public class Call {
         this.errorRule = errorRule;
     }
 
-    public List<ExecutorAction> getFilters() {
+    public List<Executor> getFilters() {
         return filters;
     }
 
-    public void setFilters(List<ExecutorAction> filters) {
+    public void setFilters(List<Executor> filters) {
         this.filters = filters;
     }
 
@@ -152,17 +152,17 @@ public class Call {
         this.filterRules = filterRules;
     }
 
-    public Iterator<ExecutorAction> getApplyFilters() {
+    public Iterator<Executor> getApplyFilters() {
         if(applyFilters == null) {
             this.applyFilters = filters.iterator();
         }
         return applyFilters;
     }
     
-    public List<ExecutorAction> getExecutors() {
-        List<ExecutorAction> result = new ArrayList<ExecutorAction>(filters.size() + 1);
-        if(executor instanceof ExecutorAction) {
-            result.add((ExecutorAction) executor);
+    public List<Executor> getExecutors() {
+        List<Executor> result = new ArrayList<Executor>(filters.size() + 1);
+        if(executor != null) {
+            result.add(executor);
         }
         result.addAll(filters);
         return result;

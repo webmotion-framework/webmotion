@@ -36,7 +36,7 @@ import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.call.ExecutorAction;
+import org.debux.webmotion.server.call.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         List<FilterRule> filterRules = call.getFilterRules();
-        List<ExecutorAction> filters = new ArrayList<ExecutorAction>(filterRules.size());
+        List<Executor> filters = new ArrayList<Executor>(filterRules.size());
         call.setFilters(filters);
 
         for (FilterRule filterRule : filterRules) {
@@ -69,7 +69,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
                 String methodName = action.getMethodName();
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
 
-                ExecutorAction executor = new ExecutorAction();
+                Executor executor = new Executor();
                 executor.setClazz(clazz);
                 executor.setMethod(method);
                 filters.add(executor);

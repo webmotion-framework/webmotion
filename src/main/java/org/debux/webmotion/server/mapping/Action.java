@@ -33,10 +33,12 @@ public class Action {
 
     public static String TYPE_ACTION = "action";
     public static String TYPE_VIEW = "view";
+    public static String TYPE_URL = "url";
     
     protected String type;
     protected String className;
     protected String methodName;
+    protected String fullName;
 
     public String getType() {
         return type;
@@ -61,12 +63,34 @@ public class Action {
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
+    /**
+     * @return true if the action is directly a action
+     */
+    public boolean isAction() {
+        return type == null || type.toLowerCase().startsWith(TYPE_ACTION);
+    }
     
     /**
      * @return true if the action is directly a view
      */
     public boolean isView() {
         return type != null && type.toLowerCase().startsWith(TYPE_VIEW);
+    }
+    
+    /**
+     * @return true if the action is directly a url
+     */
+    public boolean isUrl() {
+        return type != null && type.toLowerCase().startsWith(TYPE_URL);
     }
     
 }
