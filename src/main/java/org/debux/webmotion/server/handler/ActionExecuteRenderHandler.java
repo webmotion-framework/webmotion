@@ -25,6 +25,7 @@
 package org.debux.webmotion.server.handler;
 
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.util.Map;
@@ -71,6 +72,10 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
             
         } else if(action.isUrl()) {
             String url = action.getFullName();
+            if(url.startsWith("/")) {
+                HttpContext context = call.getContext();
+                url = context.getBaseUrl() + url;
+            }
             
             Render render = new Render(url, Render.MIME_URL, Render.DEFAULT_ENCODING, model);
             call.setRender(render);

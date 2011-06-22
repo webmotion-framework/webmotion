@@ -31,6 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Contains servlet elements i.e. the request and the response. Moreover the 
@@ -154,6 +155,14 @@ public class HttpContext {
             pathInfo = (String) request.getAttribute(ATTRIBUTE_FORWARD_PATH_INFO);
         }
         return pathInfo;
+    }
+    
+    public String getBaseUrl() {
+        String url = request.getRequestURL().toString();
+        String servletPath = request.getServletPath();
+
+        String path = StringUtils.substringBefore(url, servletPath) + servletPath;
+        return path;
     }
     
     public String getMethod() {

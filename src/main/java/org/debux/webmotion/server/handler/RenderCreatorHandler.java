@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -167,12 +166,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        String servletPath = request.getServletPath();
-        String url = request.getRequestURL().toString();
-
-        String path = StringUtils.substringBefore(url, servletPath)
-                + servletPath
-                + "/"
+        String path = context.getBaseUrl() + "/"
                 + WebMotionUtils.unCapitalizeClass(content).replaceAll("\\.", "/");
         
         path = addModel(call, path);
