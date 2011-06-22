@@ -5,7 +5,7 @@
     <artifactId>webmotion</artifactId>
   
     <packaging>jar</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>Webmotion in action</name>
     <url>webmotion.debux.org</url>
       
@@ -43,9 +43,9 @@
     </contributors>
     
     <scm>
-        <url>http://projects.debux.org/projects/webmotion</url>
-        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server</connection>
-        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
+        <url>http://projects.debux.org/projects/webmotion/tags/webmotion-1.2</url>
+        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags/webmotion-1.2</connection>
+        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-server/tags/webmotion-1.2</developerConnection>
     </scm>
     
     <issueManagement>
