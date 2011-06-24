@@ -24,7 +24,9 @@
  */
 package org.debux.webmotion.wiki;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionAction;
@@ -40,27 +42,46 @@ public class Wiki extends WebMotionAction {
 
     private static final Logger log = LoggerFactory.getLogger(Wiki.class);
 
-    public Render main(String nameSpace, String pageName) {
+    public Render display(String nameSpace, String pageName) {
         log.info("name space = " + nameSpace + ", page name = " + pageName);
-        String url = pageName;
+        
+        String url = "/deploy/include/";
         if(nameSpace != null) {
-            url = nameSpace + "/" + url;
+            url += nameSpace + "/" + pageName;
+        } else {
+            url += pageName;
         }
         
-        return renderView("wiki.jsp", 
-                "url", url);
+        return renderView("wiki.jsp", "url", url);
     }
 
-    public Render display(String nameSpace, String pageName) throws IOException {
+    public Render include(String nameSpace, final String pageName) throws IOException {
         log.info("name space = " + nameSpace + ", page name = " + pageName);
-        String path = "/workspace/projets/debux/webmotion/src/wikimotion/src/main/webapp/data";
+        String path = "/workspace/projects/wikimotion/src/main/webapp/data";
         if(nameSpace != null) {
             path += "/" + nameSpace;
         }
-        path += "/" + pageName + ".html";
-        FileInputStream file = new FileInputStream(path);
-        String content = IOUtils.toString(file);
-        return renderContent(content, "text/html");
+        
+        File directory = new File(path);
+        File[] files = directory.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                int lastIndexOf = name.lastIndexOf('.');
+                if(lastIndexOf != -1) {
+                    String value = name.substring(0, lastIndexOf);
+                    return value.equals(pageName);
+                }                    
+                return false;
+            }
+        });
+        
+        if(files.length == 1) {
+            File page = files[0];
+            String content = IOUtils.toString(new FileInputStream(page));
+            return renderContent(content, "text/html");
+            
+        } else {
+            throw new RuntimeException("Page not found " + nameSpace + ":" + pageName);
+        }
     }
     
 }

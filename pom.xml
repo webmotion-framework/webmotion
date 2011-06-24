@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.debux</groupId>
             <artifactId>webmotion</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         
         <!-- Servlet -->
@@ -40,6 +40,12 @@
             <scope>provided</scope>
         </dependency>
         
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

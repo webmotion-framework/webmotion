@@ -23,12 +23,14 @@
   #L%
   -->
 <!DOCTYPE html>
-<html lang="fr">
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
 
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
-        <link rel="stylesheet" href="/webmotion-test/css/simple.css" type="text/css"  media="screen">
+        <link rel="stylesheet" href="/wikimotion/css/simple.css" type="text/css"  media="screen">
     </head>
 
     <body>
@@ -36,20 +38,17 @@
         <header>
             <div class="logo">WikiMotion</div>
             <nav>
-                <jsp:include page="/deploy/display/menu" />
+                <jsp:include page="/deploy/include/menu" />
             </nav>
         </header>
 
-        <%
-            String url = "/deploy/display/" + (String) request.getAttribute("url");
-        %>
         <div class="content">
-            <jsp:include page="<%=url%>" />
+            <jsp:include page="${requestScope.url}" />
         </div>
 
         <footer>
             <nav>
-                <jsp:include page="/deploy/display/menu" />
+                <jsp:include page="/deploy/include/menu" />
             </nav>
             <div>Powerd by WikiMotion and WebMotion</div>
         </footer>

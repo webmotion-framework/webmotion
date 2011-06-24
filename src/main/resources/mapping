@@ -14,8 +14,8 @@ package.errors=org.debux.webmotion.wiki.errors
 
 [actions]
 #<method>   <url>                                           <action>
+*           /include/{pageName}                             Wiki.include
+*           /include/{nameSpace}/{pageName}                 Wiki.include
+
 *           /display/{pageName}                             Wiki.display
 *           /display/{nameSpace}/{pageName}                 Wiki.display
-
-*           /wiki/{pageName}                                Wiki.main
-*           /wiki/{nameSpace}/{pageName}                    Wiki.main
