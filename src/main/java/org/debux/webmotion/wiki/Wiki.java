@@ -25,10 +25,7 @@
 package org.debux.webmotion.wiki;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.call.Render;
 import org.slf4j.Logger;
@@ -55,9 +52,9 @@ public class Wiki extends WebMotionAction {
         return renderView("wiki.jsp", "url", url);
     }
 
-    public Render include(String nameSpace, final String pageName) throws IOException {
+    public Render include(String nameSpace, final String pageName) throws Exception {
         log.info("name space = " + nameSpace + ", page name = " + pageName);
-        String path = "/workspace/projects/wikimotion/src/main/webapp/data";
+        String path = "/workspace/projets/debux/webmotion/src/wikimotion/src/main/webapp/data";
         if(nameSpace != null) {
             path += "/" + nameSpace;
         }
@@ -76,7 +73,7 @@ public class Wiki extends WebMotionAction {
         
         if(files.length == 1) {
             File page = files[0];
-            String content = IOUtils.toString(new FileInputStream(page));
+            String content = generate(page);
             return renderContent(content, "text/html");
             
         } else {
@@ -84,4 +81,14 @@ public class Wiki extends WebMotionAction {
         }
     }
     
+    protected String generate(File page) throws Exception {
+        String pageName = page.getName();
+        int lastIndexOf = pageName.lastIndexOf('.') + 1;
+        String extension = pageName.substring(lastIndexOf);
+        
+        Generator generator = Generator.valueOf(extension.toUpperCase());
+        
+        String generated = generator.generate(page);
+        return generated;
+    }
 }
