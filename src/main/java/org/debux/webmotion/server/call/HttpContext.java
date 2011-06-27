@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
+import sun.util.logging.resources.logging;
 
 /**
  * Contains servlet elements i.e. the request and the response. Moreover the 
@@ -61,6 +62,7 @@ public class HttpContext {
     public static final String ATTRIBUTE_ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
     public static final String ATTRIBUTE_ERROR_EXCEPTION = "javax.servlet.error.exception";
     public static final String ATTRIBUTE_ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
+    public static final String ATTRIBUTE_ERROR_JSP_EXCEPTION = "javax.servlet.jsp.jspException";
     
     public static final String ATTRIBUTE_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
     public static final String ATTRIBUTE_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
@@ -91,10 +93,11 @@ public class HttpContext {
         protected String message = (String) request.getAttribute(ATTRIBUTE_ERROR_MESSAGE);
         protected Class<?> exceptionType = (Class) request.getAttribute(ATTRIBUTE_ERROR_EXCEPTION_TYPE);
         protected Throwable exception = (Throwable) request.getAttribute(ATTRIBUTE_ERROR_EXCEPTION);
+        protected Throwable jspException = (Throwable) request.getAttribute(ATTRIBUTE_ERROR_JSP_EXCEPTION);
         protected String requestUri = (String) request.getAttribute(ATTRIBUTE_ERROR_REQUEST_URI);
         
         public boolean isError() {
-            return statusCode != null;
+            return getUrl().contains("/error");
         }
         
         public boolean isException() {
@@ -102,6 +105,9 @@ public class HttpContext {
         }
 
         public Throwable getException() {
+            if(jspException != null) {
+                return jspException;
+            }
             return exception;
         }
 

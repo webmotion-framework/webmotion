@@ -65,6 +65,7 @@ public class ErrorFinderHandler implements WebMotionHandler {
 
             } else {
                 Throwable exception = errorData.getException();
+                log.error("Error is ", exception);
                 try {
                     Class<?> errorClass = Class.forName(error);
 
