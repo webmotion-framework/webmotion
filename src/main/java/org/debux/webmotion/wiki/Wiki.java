@@ -83,6 +83,10 @@ public class Wiki extends WebMotionAction {
         }
     }
     
+    public Render pageNotFound() throws Exception {
+        return renderView("admin.jsp");
+    }
+    
     protected String generate(File page) throws Exception {
         String pageName = page.getName();
         int lastIndexOf = pageName.lastIndexOf('.') + 1;

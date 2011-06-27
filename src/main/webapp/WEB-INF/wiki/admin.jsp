@@ -23,7 +23,7 @@
   #L%
   -->
 <!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" errorPage="/deploy/error" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 
@@ -43,12 +43,11 @@
         </header>
 
         <div class="content">
-            <jsp:include page="${requestScope.url}" />
+            <a href="">Create new page</a>
         </div>
 
         <footer>
             <nav>
-                <jsp:include page="/deploy/include/menu" />
             </nav>
             <div>Powerd by WikiMotion and WebMotion</div>
         </footer>
