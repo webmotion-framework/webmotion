@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
-import sun.util.logging.resources.logging;
 
 /**
  * Contains servlet elements i.e. the request and the response. Moreover the 
