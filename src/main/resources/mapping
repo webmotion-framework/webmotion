@@ -1,5 +1,5 @@
 [config]
-package.views=
+package.views=WEB-INF
 package.filters=org.debux.webmotion.wiki.filters
 package.actions=org.debux.webmotion.wiki
 package.errors=org.debux.webmotion.wiki.errors

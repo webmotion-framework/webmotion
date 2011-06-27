@@ -26,6 +26,7 @@ package org.debux.webmotion.wiki;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.URI;
 import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.call.Render;
 import org.slf4j.Logger;
@@ -54,12 +55,13 @@ public class Wiki extends WebMotionAction {
 
     public Render include(String nameSpace, final String pageName) throws Exception {
         log.info("name space = " + nameSpace + ", page name = " + pageName);
-        String path = "/workspace/projets/debux/webmotion/src/wikimotion/src/main/webapp/data";
+        String path = "../data";
         if(nameSpace != null) {
             path += "/" + nameSpace;
         }
+        URI resource = getClass().getClassLoader().getResource(path).toURI();
         
-        File directory = new File(path);
+        File directory = new File(resource);
         File[] files = directory.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 int lastIndexOf = name.lastIndexOf('.');
@@ -77,7 +79,7 @@ public class Wiki extends WebMotionAction {
             return renderContent(content, "text/html");
             
         } else {
-            throw new RuntimeException("Page not found " + nameSpace + ":" + pageName);
+            throw new PageNotFound("Page not found " + nameSpace + ":" + pageName);
         }
     }
     

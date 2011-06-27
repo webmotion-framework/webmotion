@@ -1,0 +1,265 @@
+% Tout ce qui est compris entre le caractère % et une fin de ligne est un
+% commentaire ignoré par LaTeX
+
+% Un fichier LaTeX commence par une commande \documentclass qui déclare le type
+% de document
+
+\documentclass{article}
+
+% Ici, et jusqu'au \begin{document} ci-dessous, c'est le préambule : on y met
+% les déclarations de style, les définitions de macros, etc.
+
+%%%% Personnalisation du style défaut
+
+% Fichiers de style utilisés ; les déclarations se font au moyen de la commande
+% \usepackage
+
+\usepackage{fullpage} % Agrandit les dimensions du texte (hauteur, largeur,
+                      % etc.) par rapport à celles par défaut. Attention
+                      % ce package ne se trouve pas dans toutes les
+                      % distributions LaTeX
+
+\usepackage[french]{babel} % Pour adopter les règles de typographie française
+
+\usepackage[T1]{fontenc} % Pour que LaTeX comprenne les caractères accentués ;
+                         % norme iso-8859, cela risque de ne pas marcher avec
+                         % des fichiers créés sous windows
+
+\usepackage{amsmath} % Les bibliothèques LaTeX de l'American
+                     % Mathematical Society sont pleines de macros
+                     % intéressantes (voire indispensables).
+
+%%%% Déclaration d'environnements
+
+% Les définitions, théorèmes et autres lemmes, corollaires, propositions,
+% exemples, se déclarent au moyen de \newtheorem
+
+\newtheorem{de}{Définition}[subsection] % les définitions et les théorèmes sont
+\newtheorem{theo}{Théorème}[section]    % numérotés par section
+\newtheorem{prop}[theo]{Proposition}    % Les propositions ont le même compteur
+                                        % que les théorèmes
+
+%%%% Notations
+
+% Ici l'on définit les notations que l'on utilisera, au moyen de la macro
+% \newcommand
+
+\newcommand{\ordmult}{\mathop{.}} % \ordmult est l'opérateur de multiplication
+                                  % d'ordinaux
+
+% Voici une notation qui prend des paramètres
+
+\newcommand{\expo}[2]{#1^{#2}}
+
+%%%% déclarations pour le titre
+
+\author{Laurent Regnier\\
+        Université de la Méditerranée
+        \and 
+        Roland Reinger\\
+        Institut Énarretidem
+}
+
+\title{Suites de Goodstein et hydre de Lerne\\
+       \small TER de maîtrise}
+%\date{}
+
+%%%% fin du préambule, on passe au contenu : tout le texte entre
+%%%% \begin{document} et \end{document} 
+
+\begin{document}
+\maketitle
+
+% Un petit résumé
+\begin{abstract}
+  Dans ce rapport on va montrer qu'aussi surprenant que cela puisse paraître,
+  toute suite de Goodstein est ultimement stationnaire et qu'Hercule finit par
+  vaincre l'hydre.
+\end{abstract}
+
+% Les commandes de sectionnement (\chapter, \section, \subsection, \etc.)
+% sont automatiquement numérotés, et permettent de produire facilement
+% une table des matières au moyen de :
+\tableofcontents
+
+\section{Introduction}
+On va parler de suites de Goodstein et d'hydre de Lerne. En particulier on
+exposera l'intéressant théorème~\ref{theo-ordinaux} % la commande \ref répond
+                                                    % à la commande \label
+                                                    % (voir plus bas)
+qui contient l'équation~\ref{eq-zero}.  Mais à dire vrai c'est surtout un
+prétexte pour donner quelques exemples d'utilisation de \LaTeX. Par exemple
+comment fait on pour créer un nouveau paragraphe~?
+
+C'est très simple, on saute une ligne. Cela termine le paragraphe courant et
+en commence un nouveau. En \LaTeX{} un blanc est égal à    plusieurs   blancs~;
+les blancs en début de ligne sont totalement ignorés, de même que les blancs
+suivant un nom de macro% ici on insère une note en bas de page
+\footnote{C'est pour cette raison que dans le source \LaTeX{} de ce
+  fichier les utilisations de la macro \texttt{$\backslash$LaTeX},
+  ainsi que d'autres macros sans arguments sont (presque) toujours
+  suivies d'un groupe vide \texttt{\{\}}.%
+}~;
+un saut de ligne est équivalent à un blanc à la règle ci-dessus près~: deux (ou
+plus) sauts de lignes consécutifs ouvrent un nouveau paragraphe.
+
+Enfin tous les caractères suivant un \% et sur la même ligne, 
+\emph{y compris le caractère de fin de ligne} s% il n'y aura pas de blanc entre
+                                               % ce 's' et le 'o' suivant car
+                                               % toutes les fins de lignes sont
+                                               % commentées et les blancs en
+                                               % début de ligne sont
+                                               % ignorés.
+                                               % Voici le 'o' maintenant
+o% 
+n%
+t %
+ignorés.
+
+\subsection{Caractères accentués}
+Une question intéressante~: comment taper des caractères accentués si on n'a
+pas un clavier français~? On peut configurer un clavier américain pour obtenir
+les caractères accentués mais ça n'est pas toujours simple.
+
+Une autre solution en \LaTeX{} est d'obtenir les accents au moyen de
+commandes~: la commande \verb|\'| produit un accent aigu sur la lettre qui
+suit, si on tape par exemple \verb|\'elite|, on obtient <<~\'elite~>>. De même
+les commandes \verb|\`| et \verb|\^| produisent respectivement un accent grave
+et un accent circonflexe (comme dans p\^eche et m\`eche) ; pour obtenir un c
+cédille on tape \verb|\c{c}| (fa\c{c}on). Remarquons que ces commandes
+fonctionnent quelque soit la lettre que l'on accentue, par exemple on peut
+facilement faire \`A ou \~n, voire \'P (P accent aigu) ou \c{O} (O cédille).
+
+Jeu~: deviner quelle commande produit le tréma.
+
+\section{Définitions}
+\subsection{Ensemble bien ordonné}
+
+% Utilisation de l'environnement défini dans le préambule
+
+\begin{de}
+Un ensemble $X$ muni d'une relation d'ordre $<$ est \emph{bien ordonné} si~:
+\begin{itemize}
+\item la relation $<$ est totale~;
+\item toute partie non vide de $X$ a un plus petit élément.
+\end{itemize}
+\end{de}
+
+\subsection{Ordinaux}
+\begin{de}\label{def-ordinaux} % La commande \label peut se mettre dans
+                               % tout contexte numéroté par LaTeX (ici
+                               % l'environnement définition)
+Un \emph{ordinal} est un ensemble bien ordonné par la relation $\in$.
+\end{de}
+
+\subsection{Arithmétique ordinale}
+\begin{theo}\label{theo-ordinaux}
+Les opérations ordinales vérifient les propriétés suivantes~:
+\begin{eqnarray}
+  \alpha + 0                     &=& \alpha\label{eq-zero}\\
+  (\alpha + \beta)\ordmult\gamma &=& \alpha\ordmult\gamma +
+                                     \beta\ordmult\gamma\\
+  \alpha^{\beta + 1}             &=& \alpha^\beta\ordmult\alpha
+\end{eqnarray}
+\end{theo}
+
+\subsection{Exemple de suite de Goostein}
+\begin{displaymath}
+  \begin{array}{|c|c|c|} % trois colonnes centrées débutant, séparées et
+                         % finissant par des lignes verticales
+    \hline  % une ligne horizontale pour commencer le tableau
+    j & G_i & i\\ % une ligne ; les colonnes sont séparées par &, la ligne est
+                  %terminée par \\
+    \hline
+    \multicolumn{3}{c}{\strut}\\ % une ligne d'une seule colonne (centrée)
+                                 % à la place de trois. La commande \strut
+                                 % insère une espace vertical correspondant à
+                                 % une ligne
+    \hline
+    2 & 100 & 2\\
+    \hline
+    3 & 100 & 3\\
+    \hline
+  \end{array}
+  \qquad % insère une espace de deux quadratins entre les deux tableaux
+  \begin{array}{|c|c|c|}
+    \hline
+    j & G_i & i\\
+    \hline
+    \multicolumn{3}{c}{\strut}\\
+    \hline
+    2 & 100 & 2\\
+    \hline
+    3 & 100 & 3\\
+    \hline
+  \end{array}
+\end{displaymath}
+
+\section{Quelques théorèmes qui n'ont rien à voir}
+
+\begin{theo}
+  La formule d'Euler~:
+  \begin{equation}
+    \expo e{2i\pi}=1 % on utilise la macro définie dans le préambule
+  \end{equation}
+\end{theo}
+
+\begin{prop}
+  La somme des $n$ premiers entiers est~:
+  \begin{displaymath}
+    \sum_{i=1}^ni = \frac{n(n+1)}2
+  \end{displaymath}
+\end{prop}
+% \ref et \pageref permettent de référencer une définition, un théorème ou une
+% équation nommé par \label.
+Cette propriété est fausse dans le cas des ordinaux (voir
+définition~\ref{def-ordinaux}, page~\pageref{def-ordinaux}).
+
+\begin{theo}[Nombre d'or]
+  Le développement en fraction continue du nombre d'or est~:
+  \begin{equation*} % L'environnement equation numérote
+                    % l'équation. L'étoile spécifie de ne pas mettre
+                    % de numéro
+    \varphi = \cfrac 1{1+\cfrac 1{1 + \cfrac 1{1 + \dotsb}}}
+  \end{equation*}
+\end{theo}
+
+\begin{theo}\label{theo-log2}
+  La fonction $\log_2$ définie par
+  \begin{displaymath}
+    \log_2 x = \frac{\log x}{\log 2}
+  \end{displaymath}
+  est l'inverse (à droite) de la fonction <<~2 puissance~>>~/
+  \begin{displaymath}
+    2^x = e^{x\log 2}
+  \end{displaymath}
+\end{theo}
+
+En effet on a le calcul suivant~:
+% eqnarray est un environnement utile pour aligner des équations. On peut aussi
+% utiliser gather pour mettre des formules les unes sous les autres. Comme
+% avant l'étoile signifie que l'on ne veut pas numéroter les équations.
+\begin{eqnarray*}
+ 2^{\log_2 x} &=& e^{\log 2\frac{\log x}{\log 2}}\\
+              &=& e^{\log x}\\
+              &=& x
+\end{eqnarray*}
+
+Et voici un dernier petit calcul pour la route, afin de montrer l'usage de
+l'environnement \texttt{align}. % \texttt{texte} formatte le texte en police
+                                % 'typewriter', c'est à dire à chasse fixe
+Ce calcul démontre que dans un anneau commutatif, $0$ (l'élément neutre de
+l'addition) est absorbant pour la multiplication~:
+% align est un environnement plus souple que eqnarray pour aligner des
+% équations ; en particulier le nombre de colonnes n'est pas limité.
+\begin{align*}
+  0x  &= 0x + 0            & \text{car $0$ est élément neutre de $+$}\\
+      &= 0x + (0x + (-0x)) & \text{car $-0x$ est l'opposé de $0x$ pour $+$}\\
+      &= (0x + 0x) + (-0x) & \text{par associativité de $+$}\\
+      &= (0 + 0)x + (-0x)  & \text{par distributivité}\\
+      &= 0x + (-0x)        & \text{car $0$ est neutre, donc $0+0=0$}\\
+      &= 0                 & \text{car $-0x$ est l'opposé de $0x$}
+\end{align*}
+\end{document}
+
+C'est fini ! Tout ce qui vient après \end{document} est ignoré par LaTeX
