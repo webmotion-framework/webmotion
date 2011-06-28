@@ -25,6 +25,21 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     
+    <repositories>
+        <repository>
+            <id>nuiton.snapshot</id>
+            <name>NuitonSnapshotRepository</name>
+            <url>http://maven.nuiton.org/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>    
+    
     <dependencies>
         <dependency>
             <groupId>org.debux</groupId>
