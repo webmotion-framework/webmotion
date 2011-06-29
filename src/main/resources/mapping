@@ -9,14 +9,21 @@ package.errors=org.debux.webmotion.wiki
 #request.encoding=UTF-8
 
 [errors]
-org.debux.webmotion.wiki.PageNotFound                       Wiki.pageNotFound
+org.debux.webmotion.wiki.PageNotFound                        view.jsp:wiki.edit
+#code:404                                                    Wiki.pageNotFound
+#code:500                                                    Wiki.pageNotFound
 
 [filters]
 
 [actions]
-#<method>   <url>                                           <action>
+*           /display/{pageName}                             Wiki.display
+*           /display/{nameSpace}/{pageName}                 Wiki.display
+
 *           /include/{pageName}                             Wiki.include
 *           /include/{nameSpace}/{pageName}                 Wiki.include
 
-*           /display/{pageName}                             Wiki.display
-*           /display/{nameSpace}/{pageName}                 Wiki.display
+*           /edit/{pageName}                                Wiki.edit
+*           /edit/{nameSpace}/{pageName}                    Wiki.edit
+
+*           /content/{pageName}                             Wiki.content
+*           /content/{nameSpace}/{pageName}                 Wiki.content
