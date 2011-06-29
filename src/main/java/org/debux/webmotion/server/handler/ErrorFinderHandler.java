@@ -79,7 +79,12 @@ public class ErrorFinderHandler implements WebMotionHandler {
                 }
             }              
         }
-
+        
+        ErrorRule errorRule = call.getErrorRule();
+        if(errorRule == null) {
+            throw new WebMotionException("Not mapping found for error");
+        }
+        
         List<Executor> filters = new ArrayList<Executor>(0);
         call.setFilters(filters);
     }
