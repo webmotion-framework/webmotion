@@ -25,8 +25,10 @@
 package org.debux.webmotion.wiki;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.net.URI;
+import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.call.Render;
 import org.slf4j.Logger;
@@ -54,6 +56,52 @@ public class Wiki extends WebMotionAction {
     }
 
     public Render include(String nameSpace, final String pageName) throws Exception {
+        File file = getFilePage(nameSpace, pageName);
+        if(file != null) {
+            String content = generate(file);
+            return renderContent(content, "text/html");
+            
+        } else {
+            throw new PageNotFound("Page not found " + nameSpace + ":" + pageName);
+        }
+    }
+    
+    protected String generate(File page) throws Exception {
+        String pageName = page.getName();
+        int lastIndexOf = pageName.lastIndexOf('.') + 1;
+        String extension = pageName.substring(lastIndexOf);
+        
+        Generator generator = Generator.valueOf(extension.toUpperCase());
+        
+        String generated = generator.generate(page);
+        return generated;
+    }
+    
+    public Render edit(String nameSpace, String pageName) {
+        log.info("name space = " + nameSpace + ", page name = " + pageName);
+        
+        String url = "/deploy/content/";
+        if(nameSpace != null) {
+            url += nameSpace + "/" + pageName;
+        } else {
+            url += pageName;
+        }
+        
+        return renderView("edit.jsp", "url", url);
+    }
+
+    public Render content(String nameSpace, final String pageName) throws Exception {
+        File file = getFilePage(nameSpace, pageName);
+        if(file != null) {
+            String content = IOUtils.toString(new FileInputStream(file));
+            return renderContent(content, "text/html");
+            
+        } else {
+            return renderContent("", "text/html");
+        }
+    }
+    
+    public File getFilePage(String nameSpace, final String pageName) throws Exception {
         log.info("name space = " + nameSpace + ", page name = " + pageName);
         String path = "../data";
         if(nameSpace != null) {
@@ -75,26 +123,9 @@ public class Wiki extends WebMotionAction {
         
         if(files.length == 1) {
             File page = files[0];
-            String content = generate(page);
-            return renderContent(content, "text/html");
-            
-        } else {
-            throw new PageNotFound("Page not found " + nameSpace + ":" + pageName);
+            return page;
         }
-    }
-    
-    public Render pageNotFound() throws Exception {
-        return renderView("admin.jsp");
-    }
-    
-    protected String generate(File page) throws Exception {
-        String pageName = page.getName();
-        int lastIndexOf = pageName.lastIndexOf('.') + 1;
-        String extension = pageName.substring(lastIndexOf);
         
-        Generator generator = Generator.valueOf(extension.toUpperCase());
-        
-        String generated = generator.generate(page);
-        return generated;
+        return null;
     }
 }
