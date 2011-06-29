@@ -49,13 +49,13 @@ public class ErrorFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         ErrorData errorData = call.getErrorData();
+        Integer statusCode = errorData.getStatusCode();
+        Throwable exception = errorData.getException();
 
         List<ErrorRule> errorRules = mapping.getErrorRules();
         for (ErrorRule errorRule : errorRules) {
-
             String error = errorRule.getError();
 
-            Integer statusCode = errorData.getStatusCode();
             String code = statusCode.toString();
             if(error.startsWith("code:")) {
                 if(error.equals("code:" + code)) {
@@ -64,8 +64,6 @@ public class ErrorFinderHandler implements WebMotionHandler {
                 }
 
             } else {
-                Throwable exception = errorData.getException();
-                log.error("Error is ", exception);
                 try {
                     Class<?> errorClass = Class.forName(error);
 
@@ -82,7 +80,7 @@ public class ErrorFinderHandler implements WebMotionHandler {
         
         ErrorRule errorRule = call.getErrorRule();
         if(errorRule == null) {
-            throw new WebMotionException("Not mapping found for error");
+            throw new WebMotionException("Not mapping found for error", exception);
         }
         
         List<Executor> filters = new ArrayList<Executor>(0);

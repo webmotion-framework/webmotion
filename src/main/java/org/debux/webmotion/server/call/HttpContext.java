@@ -100,7 +100,7 @@ public class HttpContext {
         }
         
         public boolean isException() {
-            return exceptionType != null;
+            return exceptionType != null || jspException != null;
         }
 
         public Throwable getException() {
