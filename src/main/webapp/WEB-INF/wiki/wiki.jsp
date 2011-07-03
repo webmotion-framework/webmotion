@@ -30,7 +30,8 @@
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
-        <link rel="stylesheet" href="/wikimotion/css/simple.css" type="text/css"  media="screen">
+        <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' rel='stylesheet' type='text/css'>
     </head>
 
     <body>

@@ -30,7 +30,8 @@
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
-        <link rel="stylesheet" href="/wikimotion/css/simple.css" type="text/css"  media="screen">
+        <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="/wikimotion/js/codemirror/codemirror.js"></script>
         <link rel="stylesheet" href="/wikimotion/js/codemirror/codemirror.css">
         <link rel="stylesheet" href="/wikimotion/js/codemirror/default.css">
@@ -46,23 +47,41 @@
         </header>
 
         <div class="content">
-            <div id="selector">
-                <select id="mode">
-                    <option value="htmlmixed">HTML</option>
-                    <option value="rst">Rst</option>
-                    <option value="stex">LaTex</option>
-                </select>
-                <span onclick="createEditor();">Create page</span>
-            </div>
+            <form action="/wikimotion/deploy/save" method="POST">
+                <div id="selector">
+                    <select id="mode">
+                        <option value="htmlmixed">HTML</option>
+                        <option value="rst">Rst</option>
+                        <option value="stex">LaTex</option>
+                    </select>
+                    <span onclick="createEditor();">Create page</span>
+                </div>
+
+                <textarea id="code" name="content" style="display: none"><jsp:include page="${requestScope.url}" /></textarea>
+                
+                <div>
+                    <label for="nameSpace">Name space : </label>
+                    <input name="nameSpace" value="${requestScope.nameSpace}"/>
+                </div>
+                <div>
+                    <label for="pageName">Page name : </label>
+                    <input name="pageName" value="${requestScope.pageName}"/>
+                </div>
+                
+                <button type="submit" value="save">Save</button>
+                <button type="button" value="preview">Preview</button>
+            </form>
             
-            <textarea id="code" style="display: none">
-<jsp:include page="${requestScope.url}" />
-            </textarea>
             <script type="text/javascript">
                 
                 var selector = document.getElementById("selector");
                 var mode = document.getElementById("mode");
                 var code = document.getElementById("code");
+                
+                if(code.value != "") {
+                    createEditor();
+                    mode.value = "stex";
+                }
                 
                 function createEditor() {
                     var editor = CodeMirror.fromTextArea(

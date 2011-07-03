@@ -27,3 +27,5 @@ org.debux.webmotion.wiki.PageNotFound                        view.jsp:wiki.edit
 
 *           /content/{pageName}                             Wiki.content
 *           /content/{nameSpace}/{pageName}                 Wiki.content
+
+POST        /save                                           Wiki.save

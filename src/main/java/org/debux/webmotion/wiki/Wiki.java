@@ -26,6 +26,7 @@ package org.debux.webmotion.wiki;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.net.URI;
 import org.apache.commons.io.IOUtils;
@@ -55,14 +56,14 @@ public class Wiki extends WebMotionAction {
         return renderView("wiki.jsp", "url", url);
     }
 
-    public Render include(String nameSpace, final String pageName) throws Exception {
+    public Render include(String nameSpace, String pageName) throws Exception {
         File file = getFilePage(nameSpace, pageName);
         if(file != null) {
             String content = generate(file);
             return renderContent(content, "text/html");
             
         } else {
-            throw new PageNotFound("Page not found " + nameSpace + ":" + pageName);
+            return edit(nameSpace, pageName);
         }
     }
     
@@ -87,10 +88,13 @@ public class Wiki extends WebMotionAction {
             url += pageName;
         }
         
-        return renderView("edit.jsp", "url", url);
+        return renderView("edit.jsp", 
+                            "url", url,
+                            "nameSpace", nameSpace,
+                            "pageName", pageName);
     }
 
-    public Render content(String nameSpace, final String pageName) throws Exception {
+    public Render content(String nameSpace, String pageName) throws Exception {
         File file = getFilePage(nameSpace, pageName);
         if(file != null) {
             String content = IOUtils.toString(new FileInputStream(file));
@@ -99,6 +103,19 @@ public class Wiki extends WebMotionAction {
         } else {
             return renderContent("", "text/html");
         }
+    }
+    
+    public Render save(String nameSpace, String pageName, String content) throws Exception {
+        File file = getFilePage(nameSpace, pageName);
+        if(!file.exists()) {
+            if(nameSpace != null && !nameSpace.isEmpty()) {
+                file.getParentFile().mkdir();
+            }
+            file.createNewFile();
+        }
+        IOUtils.write(content, new FileOutputStream(file));
+        
+        return renderAction("display/" + nameSpace + "/" + pageName);
     }
     
     public File getFilePage(String nameSpace, final String pageName) throws Exception {
