@@ -27,7 +27,7 @@ body {
     background-image: url(../img/header.png);
     background-repeat: repeat-x;
     color: #878787;
-    font-family:  'Droid Sans';
+    font-family: 'Droid Sans';
     font-size: 12px;
 }
 
@@ -133,42 +133,32 @@ footer a {
 h1, h1 a{
     border-bottom: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #494949;
+    border-bottom-color: #666;
     color: #494949;
 }
 
 h2, h2 a {
     border-bottom: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #494949;
+    border-bottom-color: #666;
     color: #494949;
 }
 
 h3, h3 a {
     border-bottom: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #494949;
+    border-bottom-color: #666;
     color: #494949;
 }
 
 h4, h4 a {
-    border-bottom: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #494949;
     color: #494949;
 }
 
 h5, h5 a {
-    border-bottom: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #494949;
     color: #494949;
 }
 
 h6, h6 a {
-    border-bottom: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #494949;
     color: #494949;
 }
-
