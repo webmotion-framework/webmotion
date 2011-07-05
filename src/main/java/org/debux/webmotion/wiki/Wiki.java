@@ -24,14 +24,9 @@
  */
 package org.debux.webmotion.wiki;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.net.URI;
-import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionAction;
 import org.debux.webmotion.server.call.Render;
+import org.debux.webmotion.wiki.service.WikiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,9 +38,17 @@ public class Wiki extends WebMotionAction {
 
     private static final Logger log = LoggerFactory.getLogger(Wiki.class);
 
+    protected WikiService service;
+
+    public Wiki() {
+        this(new WikiService());
+    }
+    
+    public Wiki(WikiService service) {
+        this.service = service;
+    }
+    
     public Render display(String nameSpace, String pageName) {
-        log.info("name space = " + nameSpace + ", page name = " + pageName);
-        
         String url = "/deploy/include/";
         if(nameSpace != null) {
             url += nameSpace + "/" + pageName;
@@ -57,30 +60,15 @@ public class Wiki extends WebMotionAction {
     }
 
     public Render include(String nameSpace, String pageName) throws Exception {
-        File file = getFilePage(nameSpace, pageName);
-        if(file != null) {
-            String content = generate(file);
+        String content = service.evalContent(nameSpace, pageName);
+        if(content != null) {
             return renderContent(content, "text/html");
-            
         } else {
             return edit(nameSpace, pageName);
         }
     }
     
-    protected String generate(File page) throws Exception {
-        String pageName = page.getName();
-        int lastIndexOf = pageName.lastIndexOf('.') + 1;
-        String extension = pageName.substring(lastIndexOf);
-        
-        Generator generator = Generator.valueOf(extension.toUpperCase());
-        
-        String generated = generator.generate(page);
-        return generated;
-    }
-    
-    public Render edit(String nameSpace, String pageName) {
-        log.info("name space = " + nameSpace + ", page name = " + pageName);
-        
+    public Render edit(String nameSpace, String pageName) throws Exception {
         String url = "/deploy/content/";
         if(nameSpace != null) {
             url += nameSpace + "/" + pageName;
@@ -88,61 +76,33 @@ public class Wiki extends WebMotionAction {
             url += pageName;
         }
         
+        
+        String type = service.getType(nameSpace, pageName);
+        
         return renderView("edit.jsp", 
                             "url", url,
                             "nameSpace", nameSpace,
-                            "pageName", pageName);
+                            "pageName", pageName,
+                            "type", type);
     }
 
     public Render content(String nameSpace, String pageName) throws Exception {
-        File file = getFilePage(nameSpace, pageName);
-        if(file != null) {
-            String content = IOUtils.toString(new FileInputStream(file));
-            return renderContent(content, "text/html");
-            
+        String content = service.getContent(nameSpace, pageName);
+        
+        if(content != null) {
+            return renderContent(content, "text/plain");
         } else {
-            return renderContent("", "text/html");
+            return renderContent("", "text/plain");
         }
     }
     
-    public Render save(String nameSpace, String pageName, String content) throws Exception {
-        File file = getFilePage(nameSpace, pageName);
-        if(!file.exists()) {
-            if(nameSpace != null && !nameSpace.isEmpty()) {
-                file.getParentFile().mkdir();
-            }
-            file.createNewFile();
+    public Render save(String nameSpace, String pageName, String type, String content) throws Exception {
+        service.save(nameSpace, pageName, type, content);
+        if(nameSpace == null) {
+            return renderAction("display/" + pageName);
+        } else {
+            return renderAction("display/" + nameSpace + "/" + pageName);
         }
-        IOUtils.write(content, new FileOutputStream(file));
-        
-        return renderAction("display/" + nameSpace + "/" + pageName);
     }
     
-    public File getFilePage(String nameSpace, final String pageName) throws Exception {
-        log.info("name space = " + nameSpace + ", page name = " + pageName);
-        String path = "../data";
-        if(nameSpace != null) {
-            path += "/" + nameSpace;
-        }
-        URI resource = getClass().getClassLoader().getResource(path).toURI();
-        
-        File directory = new File(resource);
-        File[] files = directory.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                int lastIndexOf = name.lastIndexOf('.');
-                if(lastIndexOf != -1) {
-                    String value = name.substring(0, lastIndexOf);
-                    return value.equals(pageName);
-                }                    
-                return false;
-            }
-        });
-        
-        if(files.length == 1) {
-            File page = files[0];
-            return page;
-        }
-        
-        return null;
-    }
 }

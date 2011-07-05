@@ -22,12 +22,11 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.wiki;
+package org.debux.webmotion.wiki.service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.nuiton.jrst.JRST;
 import org.slf4j.Logger;

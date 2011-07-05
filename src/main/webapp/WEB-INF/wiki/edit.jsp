@@ -49,45 +49,54 @@
         <div class="content">
             <form action="/wikimotion/deploy/save" method="POST">
                 <div id="selector">
-                    <select id="mode">
-                        <option value="htmlmixed">HTML</option>
+                    <select id="select" name="type">
+                        <option value="html">HTML</option>
                         <option value="rst">Rst</option>
-                        <option value="stex">LaTex</option>
+                        <option value="tex">LaTex</option>
                     </select>
-                    <span onclick="createEditor();">Create page</span>
+                    <button type="button" value="create" onclick="createEditor(modes[select.value]);">Create page</button>
                 </div>
 
-                <textarea id="code" name="content" style="display: none"><jsp:include page="${requestScope.url}" /></textarea>
-                
-                <div>
-                    <label for="nameSpace">Name space : </label>
-                    <input name="nameSpace" value="${requestScope.nameSpace}"/>
+                <div id="edit" style="display: none;">
+                    <textarea id="content" name="content" style="display: none"><jsp:include page="${requestScope.url}" /></textarea>
+
+                    <div>
+                        <label for="nameSpace">Name space : </label>
+                        <input name="nameSpace" value="${requestScope.nameSpace}"/>
+                    </div>
+                    <div>
+                        <label for="pageName">Page name : </label>
+                        <input name="pageName" value="${requestScope.pageName}"/>
+                    </div>
+
+                    <button type="submit" value="save">Save</button>
+                    <button type="button" value="preview">Preview</button>
                 </div>
-                <div>
-                    <label for="pageName">Page name : </label>
-                    <input name="pageName" value="${requestScope.pageName}"/>
-                </div>
-                
-                <button type="submit" value="save">Save</button>
-                <button type="button" value="preview">Preview</button>
             </form>
             
             <script type="text/javascript">
+                var modes = {
+                    html : "htmlmixed",
+                    rst : "rst",
+                    tex : "stex"
+                };
                 
                 var selector = document.getElementById("selector");
-                var mode = document.getElementById("mode");
-                var code = document.getElementById("code");
+                var edit = document.getElementById("edit");
                 
-                if(code.value != "") {
-                    createEditor();
-                    mode.value = "stex";
+                var select = document.getElementById("select");
+                var content = document.getElementById("content");
+                
+                if(content.value != "") {
+                    createEditor(modes["${requestScope.type}"]);
                 }
                 
-                function createEditor() {
+                function createEditor(type) {
+                    edit.style.display = "block";
                     var editor = CodeMirror.fromTextArea(
-                                    code, {
+                                    content, {
                                         lineNumbers: true,
-                                        mode : mode.value
+                                        mode : type
                                     }
                                  );
                                     
