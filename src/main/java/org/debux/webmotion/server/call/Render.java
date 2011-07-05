@@ -66,13 +66,13 @@ public class Render {
     }
     
     protected String content;
-    protected MimeType mine;
+    protected MimeType mimeType;
     protected String encoding;
     protected Map<String, Object> model;
 
-    public Render(String content, MimeType mine, String encoding, Map<String, Object> model) {
+    public Render(String content, MimeType mimeType, String encoding, Map<String, Object> model) {
         this.content = content;
-        this.mine = mine;
+        this.mimeType = mimeType;
         this.encoding = encoding;
         this.model = model;
     }
@@ -98,7 +98,7 @@ public class Render {
     }
 
     public MimeType getMimeType() {
-        return mine;
+        return mimeType;
     }
     
     public Map<String, Object> getModel() {
@@ -108,5 +108,5 @@ public class Render {
     public void setModel(Map<String, Object> model) {
         this.model = model;
     }
-
+    
 }
