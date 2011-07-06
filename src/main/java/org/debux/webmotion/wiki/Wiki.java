@@ -49,11 +49,9 @@ public class Wiki extends WebMotionAction {
     }
     
     public Render display(String nameSpace, String pageName) {
-        String url = "/deploy/include/";
+        String url = pageName;
         if(nameSpace != null) {
-            url += nameSpace + "/" + pageName;
-        } else {
-            url += pageName;
+            url = nameSpace + "/" + url;
         }
         
         return renderView("wiki.jsp", "url", url);
@@ -74,13 +72,10 @@ public class Wiki extends WebMotionAction {
     }
     
     public Render edit(String nameSpace, String pageName) throws Exception {
-        String url = "/deploy/content/";
+        String url = pageName;
         if(nameSpace != null) {
-            url += nameSpace + "/" + pageName;
-        } else {
-            url += pageName;
+            url = nameSpace + "/" + url;
         }
-        
         
         String type = service.getType(nameSpace, pageName);
         

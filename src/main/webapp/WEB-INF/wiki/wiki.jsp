@@ -30,6 +30,9 @@
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
+        
+        <script type="text/javascript" src="/wikimotion/js/generated_toc.js"></script>
+
         <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
         <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' rel='stylesheet' type='text/css'>
     </head>
@@ -43,10 +46,19 @@
             </nav>
         </header>
 
-        <div class="content">
-            <jsp:include page="${requestScope.url}" />
+        <div id="main">
+            <div id="main_toc">
+                <h1>Menu</h1>
+                <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
+                <div class="action">
+                    <button value="edit" onclick="window.location='/wikimotion/deploy/edit/${requestScope.url}'">Edit page</button>
+                </div>
+            </div>
+            <div id="main_content">
+                <jsp:include page="/deploy/include/${requestScope.url}" />
+            </div>
         </div>
-
+        
         <footer>
             <nav>
                 <jsp:include page="/deploy/include/menu" />
