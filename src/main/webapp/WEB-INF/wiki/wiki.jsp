@@ -48,7 +48,7 @@
 
         <div id="main">
             <div id="main_toc">
-                <h1>Menu</h1>
+                <h2>Table Of Contents</h2>
                 <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
                 <div class="action">
                     <button value="edit" onclick="window.location='/wikimotion/deploy/edit/${requestScope.url}'">Edit page</button>
