@@ -30,9 +30,12 @@
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
+        
+        <script type="text/javascript" src="/wikimotion/js/codemirror.js"></script>
+        <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
+        
         <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' rel='stylesheet' type='text/css'>
-        <script type="text/javascript" src="/wikimotion/js/codemirror/codemirror.js"></script>
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' type='text/css'>
         <link rel="stylesheet" href="/wikimotion/js/codemirror/codemirror.css">
         <link rel="stylesheet" href="/wikimotion/js/codemirror/default.css">
     </head>
@@ -54,7 +57,7 @@
                         <option value="rst">Rst</option>
                         <option value="tex">LaTex</option>
                     </select>
-                    <button type="button" value="create" onclick="createEditor(modes[select.value]);">Create page</button>
+                    <button type="button" value="create" onclick="createEditor(modes[$('select').value]);">Create page</button>
                 </div>
 
                 <div id="edit" style="display: none;">
@@ -70,7 +73,7 @@
                     </div>
 
                     <button type="submit" value="save">Save</button>
-                    <button type="button" value="preview">Preview</button>
+                    <button type="button" value="preview" onclick="preview();">Preview</button>
                 </div>
             </form>
             
@@ -81,29 +84,44 @@
                     tex : "stex"
                 };
                 
-                var selector = document.getElementById("selector");
-                var edit = document.getElementById("edit");
-                
-                var select = document.getElementById("select");
-                var content = document.getElementById("content");
-                
-                if(content.value != "") {
+                if($("content").value != "") {
                     createEditor(modes["${requestScope.type}"]);
                 }
                 
                 function createEditor(type) {
-                    edit.style.display = "block";
-                    var editor = CodeMirror.fromTextArea(
+                    $("edit").style.display = "block";
+                    editor = CodeMirror.fromTextArea(
                                     content, {
                                         lineNumbers: true,
                                         mode : type
                                     }
                                  );
                                     
-                    selector.style.display = "none";
+                    $("selector").style.display = "none";
+                }
+                
+                function preview() {
+                    var type = "${requestScope.type}";
+                    if(type == "") {
+                        type = $('select').value;
+                    }
+                    
+                    new Ajax.Request('/wikimotion/deploy/preview',
+                        {
+                            method:'post',
+                            parameters: {type: type, content: editor.getValue()},
+                            onSuccess: function(transport) {
+                                var response = transport.responseText || "no response text";
+                                $("preview").innerHTML = response;
+                            },
+                            onFailure: function() {
+                                $("preview").innerHTML = "Something went wrong...";
+                            }
+                        });
                 }
             </script>
             
+            <div id="preview"></div>
         </div>
 
         <footer>

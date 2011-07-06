@@ -55,11 +55,16 @@ public class WikiService {
     public String generate(File page) throws Exception {
         String pageName = page.getName();
         int lastIndexOf = pageName.lastIndexOf('.') + 1;
-        String extension = pageName.substring(lastIndexOf);
+        String type = pageName.substring(lastIndexOf);
         
-        Generator generator = Generator.valueOf(extension.toUpperCase());
-        
+        Generator generator = Generator.valueOf(type.toUpperCase());
         String generated = generator.generate(page);
+        return generated;
+    }
+    
+    public String generate(String type, String content) throws Exception {
+        Generator generator = Generator.valueOf(type.toUpperCase());
+        String generated = generator.generate(content);
         return generated;
     }
     
@@ -114,7 +119,7 @@ public class WikiService {
             String type = fileName.substring(fileName.lastIndexOf(".") + 1);
             return type;
         }
-        return "html";
+        return "";
     }
     
     public File findPage(String nameSpace, final String pageName) throws Exception {

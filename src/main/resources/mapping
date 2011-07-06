@@ -29,3 +29,4 @@ org.debux.webmotion.wiki.PageNotFound                        view.jsp:wiki.edit
 *           /content/{nameSpace}/{pageName}                 Wiki.content
 
 POST        /save                                           Wiki.save
+POST        /preview?type={type}&content={content}          Wiki.preview

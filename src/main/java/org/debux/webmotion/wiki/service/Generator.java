@@ -43,11 +43,20 @@ public enum Generator {
             String content = getContent(file);
             return content;
         }
+                
+        public String generate(String content) {
+            return content;
+        }
     },
     
     RST {
         public String generate(File file) throws IOException {
             String content = getContent(file);
+            String result = generate(content);
+            return result;
+        }
+                
+        public String generate(String content) {
             String result = "Can't generate HTML from RST";
             try {
                 result = JRST.generate(JRST.TYPE_HTML_INNER_BODY, content);
@@ -68,11 +77,21 @@ public enum Generator {
             String result = IOUtils.toString(process.getInputStream());
             return result;
         }
+        
+        public String generate(String content) throws IOException {
+            Runtime runtime = Runtime.getRuntime();
+            String[] command = {"/bin/sh", "-c", "echo \"" + content + "\" | tth -u -r"};
+            Process process = runtime.exec(command);
+            
+            String result = IOUtils.toString(process.getInputStream());
+            return result;
+        }
     };
     
     private static final Logger log = LoggerFactory.getLogger(Generator.class);
     
     public abstract String generate(File file) throws IOException;
+    public abstract String generate(String content) throws IOException;
     
     protected String getContent(File file) throws IOException {
         String content = IOUtils.toString(new FileInputStream(file));

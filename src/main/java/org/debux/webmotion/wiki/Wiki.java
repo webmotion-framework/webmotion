@@ -68,6 +68,11 @@ public class Wiki extends WebMotionAction {
         }
     }
     
+    public Render preview(String type, String content) throws Exception {
+        String generated = service.generate(type, content);
+        return renderContent(generated, "text/html");
+    }
+    
     public Render edit(String nameSpace, String pageName) throws Exception {
         String url = "/deploy/content/";
         if(nameSpace != null) {
