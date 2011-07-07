@@ -116,7 +116,7 @@ generated_toc = {
 //    status = generated_toc.readCookie("generated_toc_display");
 //    if (status && status == "open") {
       display_initially = "block";
-      toggle_initially = "Hide table of contents";
+//      toggle_initially = "Hide table of contents";
 //    } else {
 //      display_initially = "none";
 //      toggle_initially = "Show table of contents";
