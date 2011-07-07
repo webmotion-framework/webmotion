@@ -60,6 +60,7 @@
         </header>
 
         <div id="main_content">
+            <h1>Edit page</h1>
             <form action="/wikimotion/deploy/save" method="POST">
                 <div id="selector">
                     <select id="select" name="type">
@@ -84,9 +85,12 @@
 
                     <button type="submit" value="save">Save</button>
                     <button type="button" value="preview" onclick="preview();">Preview</button>
+                    <button type="button" value="cancel" onclick="history.back();">Cancel</button>
                 </div>
             </form>
 
+            <div id="preview"></div>
+            
             <script type="text/javascript">
                 var modes = {
                     html : "htmlmixed",
@@ -94,6 +98,8 @@
                     tex : "stex"
                 };
 
+                $("preview").style.display = "none";
+                
                 if($("content").value != "") {
                     createEditor(modes["${requestScope.type}"]);
                 }
@@ -109,13 +115,15 @@
 
                     $("selector").style.display = "none";
                 }
-
+                
                 function preview() {
                     var type = "${requestScope.type}";
                     if(type == "") {
                         type = $('select').value;
                     }
-
+                    
+                    $("preview").style.display = "block";
+                    
                     new Ajax.Request('/wikimotion/deploy/preview',
                         {
                             method:'post',
@@ -130,8 +138,6 @@
                         });
                 }
             </script>
-
-            <div id="preview"></div>
         </div>
 
         <footer>
