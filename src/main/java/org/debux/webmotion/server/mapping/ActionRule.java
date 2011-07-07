@@ -45,8 +45,10 @@ public class ActionRule {
 
     private static final Logger log = LoggerFactory.getLogger(ActionRule.class);
     
-    protected static Pattern patternParam = Pattern.compile("^(\\p{Alnum}*)=\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
-    protected static Pattern patternStaticParam = Pattern.compile("^(\\p{Alnum}*)=(\\p{Alnum}*)$");
+    /** Allowed characted are all alphanumeric characters, all punctuation characters exception following: <pre>!*'();:@&=+$,/?#[]</pre> */
+    protected static final String ALLOWED_CHARACTERS = "[\\p{Alnum}\\p{Punct}&&[^!\\*'\\(\\);:@&=+$,\\/\\?#\\[\\]]]";
+    protected static Pattern patternParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}$");
+    protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
     protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     protected String method;
