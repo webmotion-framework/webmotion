@@ -31,6 +31,7 @@
         <meta charset="utf-8">
         <title>WikiMotion</title>
         
+        <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
         <script type="text/javascript" src="/wikimotion/js/generated_toc.js"></script>
 
         <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
