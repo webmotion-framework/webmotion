@@ -103,12 +103,40 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                                <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                                <filtering>true</filtering>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
     
     <profiles>        
         <profile>
+            <id>dev-mode</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <user.file>${basedir}/src/main/webapp/WEB-INF/META-INF/user.xml</user.file>
+            </properties>
+        </profile>
+        
+        <profile>
             <id>prod-mode</id>
+            <properties>
+                <user.file>conf/tomcat-user.xml</user.file>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
