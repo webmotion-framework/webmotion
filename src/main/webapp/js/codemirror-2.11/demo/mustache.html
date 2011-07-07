@@ -1,0 +1,81 @@
+<!--
+  #%L
+  Webmotion in wiki
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!doctype html>
+<html>
+  <head>
+    <title>CodeMirror 2: Overlay Parser Demo</title>
+    <link rel="stylesheet" href="../lib/codemirror.css">
+    <script src="../lib/codemirror.js"></script>
+    <script src="../lib/overlay.js"></script>
+    <link rel="stylesheet" href="../theme/default.css">
+    <script src="../mode/xml/xml.js"></script>
+    <link rel="stylesheet" href="../css/docs.css">
+
+    <style type="text/css">
+      .CodeMirror {border: 1px solid black;}
+      .mustache {color: #0ca;}
+    </style>
+  </head>
+  <body>
+    <h1>CodeMirror 2: Overlay Parser Demo</h1>
+
+    <form><textarea id="code" name="code">
+<html>
+  <body>
+    <h1>{{title}}</h1>
+    <p>These are links to {{things}}:</p>
+    <ul>{{#links}}
+      <li><a href="{{url}}">{{text}}</a></li>
+    {{/links}}</ul>
+  </body>
+</html>
+</textarea></form>
+
+    <script>
+CodeMirror.defineMode("mustache", function(config, parserConfig) {
+  var mustacheOverlay = {
+    token: function(stream, state) {
+      if (stream.match("{{")) {
+        while ((ch = stream.next()) != null)
+          if (ch == "}" && stream.next() == "}") break;
+        return "mustache";
+      }
+      while (stream.next() != null && !stream.match("{{", false)) {}
+      return null;
+    }
+  };
+  return CodeMirror.overlayParser(CodeMirror.getMode(config, parserConfig.backdrop || "text/html"), mustacheOverlay);
+});
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {mode: "mustache"});
+</script>
+
+    <p>Demonstration of a mode that parses HTML, highlighting
+    the <a href="http://mustache.github.com/">Mustache</a> templating
+    directives inside of it by using the code
+    in <a href="../lib/overlay.js"><code>overlay.js</code></a>. View
+    source to see the 15 lines of code needed to accomplish this.</p>
+
+  </body>
+</html>

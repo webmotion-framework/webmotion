@@ -31,13 +31,23 @@
         <meta charset="utf-8">
         <title>WikiMotion</title>
         
-        <script type="text/javascript" src="/wikimotion/js/codemirror.js"></script>
         <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
         
+        <link rel="stylesheet" href="/wikimotion/js/codemirror-2.11/lib/codemirror.css">
+        <script src="/wikimotion/js/codemirror-2.11/lib/codemirror.js"></script>
+    
+        <script src="/wikimotion/js/codemirror-2.11/mode/xml/xml.js"></script>
+        <script src="/wikimotion/js/codemirror-2.11/mode/javascript/javascript.js"></script>
+        <script src="/wikimotion/js/codemirror-2.11/mode/css/css.js"></script>
+        <script src="/wikimotion/js/codemirror-2.11/mode/htmlmixed/htmlmixed.js"></script>
+        <script src="/wikimotion/js/codemirror-2.11/mode/stex/stex.js"></script>
+        <script src="/wikimotion/js/codemirror-2.11/mode/rst/rst.js"></script>
+        <link rel="stylesheet" href="/wikimotion/js/codemirror-2.11/mode/rst/rst.css">
+
+        <link rel="stylesheet" href="/wikimotion/js/codemirror-2.11/theme/default.css">
+
         <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' type='text/css'>
-        <link rel="stylesheet" href="/wikimotion/js/codemirror/codemirror.css">
-        <link rel="stylesheet" href="/wikimotion/js/codemirror/default.css">
     </head>
 
     <body>
