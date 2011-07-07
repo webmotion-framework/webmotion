@@ -46,7 +46,7 @@
             </nav>
         </header>
 
-        <div id="main">
+        <div id="main_content">
             <div id="main_toc">
                 <h2>Table Of Contents</h2>
                 <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
@@ -54,9 +54,8 @@
                     <button value="edit" onclick="window.location='/wikimotion/deploy/edit/${requestScope.url}'">Edit page</button>
                 </div>
             </div>
-            <div id="main_content">
-                <jsp:include page="/deploy/include/${requestScope.url}" />
-            </div>
+
+            <jsp:include page="/deploy/include/${requestScope.url}" />
         </div>
         
         <footer>

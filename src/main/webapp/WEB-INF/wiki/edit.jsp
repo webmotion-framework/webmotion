@@ -49,83 +49,79 @@
             </nav>
         </header>
 
-        <div id="main">
-            <div id="main_toc">
-            </div>
-            <div id="main_content">
-                <form action="/wikimotion/deploy/save" method="POST">
-                    <div id="selector">
-                        <select id="select" name="type">
-                            <option value="html">HTML</option>
-                            <option value="rst">Rst</option>
-                            <option value="tex">LaTex</option>
-                        </select>
-                        <button type="button" value="create" onclick="createEditor(modes[$('select').value]);">Create page</button>
+        <div id="main_content">
+            <form action="/wikimotion/deploy/save" method="POST">
+                <div id="selector">
+                    <select id="select" name="type">
+                        <option value="html">HTML</option>
+                        <option value="rst">Rst</option>
+                        <option value="tex">LaTex</option>
+                    </select>
+                    <button type="button" value="create" onclick="createEditor(modes[$('select').value]);">Create page</button>
+                </div>
+
+                <div id="edit" style="display: none;">
+                    <textarea id="content" name="content" style="display: none"><jsp:include page="/deploy/content/${requestScope.url}" /></textarea>
+
+                    <div>
+                        <label for="nameSpace">Name space : </label>
+                        <input name="nameSpace" value="${requestScope.nameSpace}"/>
+                    </div>
+                    <div>
+                        <label for="pageName">Page name : </label>
+                        <input name="pageName" value="${requestScope.pageName}"/>
                     </div>
 
-                    <div id="edit" style="display: none;">
-                        <textarea id="content" name="content" style="display: none"><jsp:include page="/deploy/content/${requestScope.url}" /></textarea>
+                    <button type="submit" value="save">Save</button>
+                    <button type="button" value="preview" onclick="preview();">Preview</button>
+                </div>
+            </form>
 
-                        <div>
-                            <label for="nameSpace">Name space : </label>
-                            <input name="nameSpace" value="${requestScope.nameSpace}"/>
-                        </div>
-                        <div>
-                            <label for="pageName">Page name : </label>
-                            <input name="pageName" value="${requestScope.pageName}"/>
-                        </div>
+            <script type="text/javascript">
+                var modes = {
+                    html : "htmlmixed",
+                    rst : "rst",
+                    tex : "stex"
+                };
 
-                        <button type="submit" value="save">Save</button>
-                        <button type="button" value="preview" onclick="preview();">Preview</button>
-                    </div>
-                </form>
+                if($("content").value != "") {
+                    createEditor(modes["${requestScope.type}"]);
+                }
 
-                <script type="text/javascript">
-                    var modes = {
-                        html : "htmlmixed",
-                        rst : "rst",
-                        tex : "stex"
-                    };
+                function createEditor(type) {
+                    $("edit").style.display = "block";
+                    editor = CodeMirror.fromTextArea(
+                                    content, {
+                                        lineNumbers: true,
+                                        mode : type
+                                    }
+                                 );
 
-                    if($("content").value != "") {
-                        createEditor(modes["${requestScope.type}"]);
+                    $("selector").style.display = "none";
+                }
+
+                function preview() {
+                    var type = "${requestScope.type}";
+                    if(type == "") {
+                        type = $('select').value;
                     }
 
-                    function createEditor(type) {
-                        $("edit").style.display = "block";
-                        editor = CodeMirror.fromTextArea(
-                                        content, {
-                                            lineNumbers: true,
-                                            mode : type
-                                        }
-                                     );
+                    new Ajax.Request('/wikimotion/deploy/preview',
+                        {
+                            method:'post',
+                            parameters: {type: type, content: editor.getValue()},
+                            onSuccess: function(transport) {
+                                var response = transport.responseText || "no response text";
+                                $("preview").innerHTML = response;
+                            },
+                            onFailure: function() {
+                                $("preview").innerHTML = "Something went wrong...";
+                            }
+                        });
+                }
+            </script>
 
-                        $("selector").style.display = "none";
-                    }
-
-                    function preview() {
-                        var type = "${requestScope.type}";
-                        if(type == "") {
-                            type = $('select').value;
-                        }
-
-                        new Ajax.Request('/wikimotion/deploy/preview',
-                            {
-                                method:'post',
-                                parameters: {type: type, content: editor.getValue()},
-                                onSuccess: function(transport) {
-                                    var response = transport.responseText || "no response text";
-                                    $("preview").innerHTML = response;
-                                },
-                                onFailure: function() {
-                                    $("preview").innerHTML = "Something went wrong...";
-                                }
-                            });
-                    }
-                </script>
-
-                <div id="preview"></div>
-            </div>
+            <div id="preview"></div>
         </div>
 
         <footer>
