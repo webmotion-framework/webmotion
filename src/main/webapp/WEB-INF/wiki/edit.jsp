@@ -110,7 +110,7 @@
             function createEditor(type) {
                 $("edit").style.display = "block";
                 editor = CodeMirror.fromTextArea(
-                                content, {
+                                $("content"), {
                                     lineNumbers: true,
                                     mode : type
                                 }
