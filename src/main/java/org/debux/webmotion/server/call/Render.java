@@ -44,10 +44,14 @@ public class Render {
     public static MimeType MIME_REFERER      = new MimeType();
     public static MimeType MIME_ACTION       = new MimeType();
     public static MimeType MIME_URL          = new MimeType();
+    public static MimeType MIME_ERROR        = new MimeType();
     public static MimeType MIME_JSON         = new MimeType("application/javascript");
     public static MimeType MIME_JSONP        = new MimeType("application/json");
     public static MimeType MIME_XML          = new MimeType("application/xml");
     
+    /**
+     * The class represents the default mime type for the model or the content.
+     */
     public static class MimeType {
         protected String mimeType;
 
@@ -65,11 +69,35 @@ public class Render {
                 
     }
     
+    /**
+     * Content of response, it is the page name or url or direct the content.
+     */
     protected String content;
+    
+    /**
+     * Mime type for content
+     */
     protected MimeType mimeType;
+    
+    /**
+     * Encoding for content
+     */
     protected String encoding;
+    
+    /**
+     * Information pass in the request or the object to serialize
+     */
     protected Map<String, Object> model;
 
+    /**
+     * Contructor pass the direct the content with a specific mime type 
+     * predefined.
+     * 
+     * @param content string represents the content
+     * @param mimeType mime type for content
+     * @param encoding encoding for content
+     * @param model 
+     */
     public Render(String content, MimeType mimeType, String encoding, Map<String, Object> model) {
         this.content = content;
         this.mimeType = mimeType;
@@ -77,6 +105,14 @@ public class Render {
         this.model = model;
     }
     
+    /**
+     * Contructor pass the direct the content with a http mime type.
+     * 
+     * @param content string represents the content
+     * @param mimeType mime type for content
+     * @param encoding encoding for content
+     * @param model 
+     */
     public Render(String content, String mineType, String encoding, Map<String, Object> model) {
         this(content, new MimeType(mineType), encoding, model);
     }
