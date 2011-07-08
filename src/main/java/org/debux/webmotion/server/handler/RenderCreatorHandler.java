@@ -83,6 +83,9 @@ public class RenderCreatorHandler implements WebMotionHandler {
             } else if(Render.MIME_ACTION.equals(mine)) {
                 renderAction(mapping, call);
                 
+            } else if(Render.MIME_ERROR.equals(mine)) {
+                renderError(mapping, call);
+                
             } else if(Render.MIME_URL.equals(mine)) {
                 renderUrl(mapping, call);
                 
@@ -185,6 +188,18 @@ public class RenderCreatorHandler implements WebMotionHandler {
 
         PrintWriter out = context.getOut();
         out.print(content);
+    }
+
+    protected void renderError(Mapping mapping, Call call) throws IOException, ServletException {
+        Render render = call.getRender();
+        String content = render.getContent();
+        HttpContext context = call.getContext();
+        HttpServletResponse response = context.getResponse();
+        HttpServletRequest request = context.getRequest();
+        
+        Map<String, Object> model = render.getModel();
+        Integer code = (Integer) model.get(HttpContext.ATTRIBUTE_ERROR_STATUS_CODE);
+        response.sendError(code, content);
     }
 
     protected void renderUrl(Mapping mapping, Call call) throws IOException, ServletException {

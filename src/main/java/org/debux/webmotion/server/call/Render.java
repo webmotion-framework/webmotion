@@ -66,7 +66,6 @@ public class Render {
         public String toString() {
             return mimeType;
         }
-                
     }
     
     /**

@@ -96,7 +96,8 @@ public class HttpContext {
         protected String requestUri = (String) request.getAttribute(ATTRIBUTE_ERROR_REQUEST_URI);
         
         public boolean isError() {
-            return getUrl().contains("/error");
+            String url = getUrl();
+            return url.startsWith("/error");
         }
         
         public boolean isException() {

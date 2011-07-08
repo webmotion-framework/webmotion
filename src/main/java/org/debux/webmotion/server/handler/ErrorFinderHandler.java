@@ -49,15 +49,19 @@ public class ErrorFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         ErrorData errorData = call.getErrorData();
-        Integer statusCode = errorData.getStatusCode();
         Throwable exception = errorData.getException();
 
+        Integer statusCode = errorData.getStatusCode();
+        if(statusCode == null) {
+            throw new WebMotionException("It is not possible to call directly error servlet", exception);
+        }
+                
         List<ErrorRule> errorRules = mapping.getErrorRules();
         for (ErrorRule errorRule : errorRules) {
             String error = errorRule.getError();
 
-            String code = statusCode.toString();
             if(error.startsWith("code:")) {
+                String code = statusCode.toString();
                 if(error.equals("code:" + code)) {
                     call.setErrorRule(errorRule);
                     break;

@@ -26,6 +26,7 @@ package org.debux.webmotion.server;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.Render;
 
 /**
@@ -134,6 +135,18 @@ public class WebMotionAction extends WebMotionContextable {
         return new Render(url, Render.MIME_URL, Render.DEFAULT_ENCODING, null);
     }
 
+    /**
+     * Send a error code to user (404, 500, ...) @HttpServletResponse.SC_* to 
+     * get all the code values.
+     * 
+     * @param code code http like 404 or 500
+     * @param message message to display
+     * @return render represents the next step for user
+     */
+    public Render renderError(Integer code, String message) {
+        return new Render(message, Render.MIME_ERROR, Render.DEFAULT_ENCODING, toMap(HttpContext.ATTRIBUTE_ERROR_STATUS_CODE, code));
+    }
+    
     /**
      * Serialize the model to XML.
      * 
