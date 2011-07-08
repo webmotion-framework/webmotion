@@ -46,16 +46,16 @@ public class Config {
     public static String MODE = "mode";
     
     /** The package name where the view is searched */
-    protected String packageViews;
+    protected String packageViews = "";
     
     /** The package name where the action is searched */
-    protected String packageActions;
+    protected String packageActions = "";
     
     /** The package name where the filter is searched */
-    protected String packageFilters;
+    protected String packageFilters = "";
     
     /** The package name where the error is searched */
-    protected String packageErrors;
+    protected String packageErrors = "";
     
     /** Force the encoding in parameter */
     protected String requestEncoding = "UTF-8";
