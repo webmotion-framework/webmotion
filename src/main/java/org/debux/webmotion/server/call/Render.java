@@ -90,8 +90,7 @@ public class Render {
     protected Map<String, Object> model;
 
     /**
-     * Contructor pass the direct the content with a specific mime type 
-     * predefined.
+     * Contructor pass direct the content with a specific mime type predefined.
      * 
      * @param content string represents the content
      * @param mimeType mime type for content
@@ -106,7 +105,7 @@ public class Render {
     }
     
     /**
-     * Contructor pass the direct the content with a http mime type.
+     * Contructor pass direct the content with a http mime type.
      * 
      * @param content string represents the content
      * @param mimeType mime type for content
