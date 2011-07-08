@@ -199,6 +199,7 @@ public class HttpContext {
     public void addFlashMessage(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(10); // 10s
+        cookie.setPath("/");
         response.addCookie(cookie);
     }
     
