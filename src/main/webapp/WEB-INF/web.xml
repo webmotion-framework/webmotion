@@ -34,7 +34,7 @@
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Edition access</web-resource-name>
-            <url-pattern>/upload</url-pattern>
+            <url-pattern>/deploy/upload</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>edit</role-name>
