@@ -23,7 +23,7 @@
   #L%
   -->
 <!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" errorPage="/deploy/error" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 
@@ -32,10 +32,9 @@
         <title>WikiMotion</title>
         
         <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
-        <script type="text/javascript" src="/wikimotion/js/generated_toc.js"></script>
-
+        
         <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' rel='stylesheet' type='text/css'>
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' type='text/css'>
     </head>
 
     <body>
@@ -48,20 +47,28 @@
         </header>
 
         <div id="main">
-            <div id="main_toc">
-                <h2>Table Of Contents</h2>
-                <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
-                <div class="action">
-                    <button value="edit" onclick="window.location='/wikimotion/deploy/edit/${requestScope.url}'">Edit page</button>
-                    <button value="upload" onclick="window.location='/wikimotion/deploy/upload'">Upload media</button>
-                </div>
-            </div>
-            
             <div id="main_content">
-                <jsp:include page="/deploy/include/${requestScope.url}" />
+                <h1>Edit page</h1>
+                <form action="/wikimotion/deploy/upload" method="POST" enctype="multipart/form-data">
+                    <div>
+                        <label for="file">File : </label>
+                        <input id="file" name="file" type="file" value="" onchange="$('mediaName').value=$('file').value"/>
+                    </div>
+                    <div>
+                        <label for="nameSpace">Name space : </label>
+                        <input name="nameSpace" value=""/>
+                    </div>
+                    <div>
+                        <label for="mediaName">Media name : </label>
+                        <input id="mediaName" name="mediaName" value=""/>
+                    </div>
+                    
+                    <button type="submit" value="upload">Upload</button>
+                    <button type="button" value="cancel" onclick="history.back();">Cancel</button>
+                </form>
             </div>
         </div>
-        
+
         <footer>
             <nav>
                 <jsp:include page="/deploy/include/menu" />

@@ -9,24 +9,30 @@ package.errors=org.debux.webmotion.wiki
 #request.encoding=UTF-8
 
 [errors]
-org.debux.webmotion.wiki.PageNotFound                        view.jsp:wiki.edit
+#org.debux.webmotion.wiki.PageNotFound                        view.jsp:wiki.edit
 #code:404                                                    Wiki.pageNotFound
 #code:500                                                    Wiki.pageNotFound
 
 [filters]
+# nothing
 
 [actions]
-*           /display/{pageName}                             Wiki.display
-*           /display/{nameSpace}/{pageName}                 Wiki.display
+GET           /display/{pageName}                             Wiki.display
+GET           /display/{nameSpace}/{pageName}                 Wiki.display
 
-*           /include/{pageName}                             Wiki.include
-*           /include/{nameSpace}/{pageName}                 Wiki.include
+GET           /include/{pageName}                             Wiki.include
+GET           /include/{nameSpace}/{pageName}                 Wiki.include
 
-*           /edit/{pageName}                                Wiki.edit
-*           /edit/{nameSpace}/{pageName}                    Wiki.edit
+GET           /edit/{pageName}                                Wiki.edit
+GET           /edit/{nameSpace}/{pageName}                    Wiki.edit
 
-*           /content/{pageName}                             Wiki.content
-*           /content/{nameSpace}/{pageName}                 Wiki.content
+GET           /content/{pageName}                             Wiki.content
+GET           /content/{nameSpace}/{pageName}                 Wiki.content
 
-POST        /save                                           Wiki.save
-POST        /preview?type={type}&content={content}          Wiki.preview
+POST          /save                                           Wiki.save
+POST          /preview?type={type}&content={content}          Wiki.preview
+
+GET           /media/{mediaName}                              Wiki.media
+GET           /media/{nameSpace}/{mediaName}                  Wiki.media
+GET           /upload                                         view.jsp:wiki.upload
+POST          /upload                                         Wiki.upload

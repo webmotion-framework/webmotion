@@ -90,9 +90,7 @@ public class WikiService {
     public File createPage(String nameSpace, String pageName, String type) throws Exception {
         File file = getPage(nameSpace, pageName, type);
         if(!file.exists()) {
-            if(nameSpace != null) {
-                file.getParentFile().mkdir();
-            }
+            file.getParentFile().mkdir();
             file.createNewFile();
         }
         return file;
@@ -154,7 +152,7 @@ public class WikiService {
     }
 
     protected String getPagePath() {
-        String path = "../data";
+        String path = "../data/page";
         return path;
     }
 
