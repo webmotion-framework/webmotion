@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -39,6 +40,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -70,32 +72,34 @@ public class RenderCreatorHandler implements WebMotionHandler {
                 return;
             }
             
-            Render.MimeType mine = render.getMimeType();
-            if(Render.MIME_VIEW.equals(mine)) {
+            if(render instanceof Render.RenderView) {
                 renderView(mapping, call);
                 
-            } else if(Render.MIME_TEMPLATE.equals(mine)) {
+            } else if(render instanceof Render.RenderTemplate) {
                 renderTemplate(mapping, call);
                 
-            } else if(Render.MIME_REFERER.equals(mine)) {
+            } else if(render instanceof Render.RenderReferer) {
                 renderReferer(mapping, call);
                 
-            } else if(Render.MIME_ACTION.equals(mine)) {
+            } else if(render instanceof Render.RenderStream) {
+                renderStream(mapping, call);
+                
+            } else if(render instanceof Render.RenderAction) {
                 renderAction(mapping, call);
                 
-            } else if(Render.MIME_ERROR.equals(mine)) {
+            } else if(render instanceof Render.RenderError) {
                 renderError(mapping, call);
                 
-            } else if(Render.MIME_URL.equals(mine)) {
+            } else if(render instanceof Render.RenderUrl) {
                 renderUrl(mapping, call);
                 
-            } else if(Render.MIME_XML.equals(mine)) {
+            } else if(render instanceof Render.RenderXml) {
                 renderXml(mapping, call);
                 
-            } else if(Render.MIME_JSON.equals(mine)) {
+            } else if(render instanceof Render.RenderJson) {
                 renderJson(mapping, call);
                 
-            } else if(Render.MIME_JSONP.equals(mine)) {
+            } else if(render instanceof Render.RenderJsonP) {
                 renderJsonP(mapping, call);
                 
             } else {
@@ -119,27 +123,34 @@ public class RenderCreatorHandler implements WebMotionHandler {
     }
 
     protected void renderView(Mapping mapping, Call call) throws IOException, ServletException {
+        Render.RenderView render = (Render.RenderView) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        addModel(call);
+        Map<String, Object> model = render.getModel();
+        addModel(call, model);
         
-        String path = getActionPath(mapping, call);
+        String view = render.getView();
+        String path = getActionPath(mapping, call, view);
+        
         request.getRequestDispatcher(path).forward(request, response);
     }
 
     protected void renderTemplate(Mapping mapping, Call call) throws IOException, ServletException {
+        Render.RenderTemplate render = (Render.RenderTemplate) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        addModel(call);
+        Map<String, Object> model = render.getModel();
+        addModel(call, model);
 
         ServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request);
         ResponseWrapper responseWrapper = new ResponseWrapper(response);
         
-        String path = getActionPath(mapping, call);
+        String view = render.getView();
+        String path = getActionPath(mapping, call, view);
         request.getRequestDispatcher(path).include(requestWrapper, responseWrapper);
         
         String contentType = responseWrapper.getContentType();
@@ -151,69 +162,95 @@ public class RenderCreatorHandler implements WebMotionHandler {
     }
 
     protected void renderReferer(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderReferer render = (Render.RenderReferer) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
         String path = context.getHeader(HttpContext.HEADER_REFERER);
-        path = addModel(call, path);
+        Map<String, Object> model = render.getModel();
+        path = addModel(call, path, model);
+        
         response.sendRedirect(path);
     }
     
     protected void renderAction(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderAction render = (Render.RenderAction) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
+        String content = render.getAction();
         String path = context.getBaseUrl() + "/"
                 + WebMotionUtils.unCapitalizeClass(content).replaceAll("\\.", "/");
         
-        path = addModel(call, path);
+        Map<String, Object> model = render.getModel();
+        path = addModel(call, path, model);
+        
         response.sendRedirect(path);
     }
 
     protected void renderContent(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderContent render = (Render.RenderContent) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-//        String mineType = render.getMimeType();
-//        response.setContentType(mineType);
+        String mineType = render.getMimeType();
+        if(mineType != null) {
+            response.setContentType(mineType);
+        }
+        
+        String encoding = render.getEncoding();
+        response.setCharacterEncoding(encoding);
 
+        String content = render.getContent();
         PrintWriter out = context.getOut();
         out.print(content);
     }
 
-    protected void renderError(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+    protected void renderStream(Mapping mapping, Call call) throws IOException, ServletException {
+        Render.RenderStream render = (Render.RenderStream) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        Map<String, Object> model = render.getModel();
-        Integer code = (Integer) model.get(HttpContext.ATTRIBUTE_ERROR_STATUS_CODE);
-        response.sendError(code, content);
+        String mineType = render.getMimeType();
+        if(mineType != null) {
+            response.setContentType(mineType);
+        }
+        
+        String encoding = render.getEncoding();
+        response.setCharacterEncoding(encoding);
+
+        InputStream inputStream = render.getStream();
+        ServletOutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(inputStream, outputStream);
+    }
+
+    protected void renderError(Mapping mapping, Call call) throws IOException, ServletException {
+        Render.RenderError render = (Render.RenderError) call.getRender();
+        HttpContext context = call.getContext();
+        HttpServletResponse response = context.getResponse();
+        HttpServletRequest request = context.getRequest();
+        
+        String message = render.getMessage();
+        int code = render.getCode();
+        response.sendError(code, message);
     }
 
     protected void renderUrl(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderUrl render = (Render.RenderUrl) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        response.sendRedirect(content);
+        String url = render.getUrl();
+        response.sendRedirect(url);
     }
 
     protected void renderXml(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
+        Render.RenderXml render = (Render.RenderXml) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         
@@ -229,13 +266,11 @@ public class RenderCreatorHandler implements WebMotionHandler {
         PrintWriter out = context.getOut();
         out.print(xml);
         
-        String mineType = render.getMimeType().toString();
-        response.setContentType(mineType);
+        response.setContentType("application/xml");
     }
 
     protected void renderJson(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderJson render = (Render.RenderJson) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
@@ -252,13 +287,11 @@ public class RenderCreatorHandler implements WebMotionHandler {
         PrintWriter out = context.getOut();
         out.print(json);
         
-        String mineType = render.getMimeType().toString();
-        response.setContentType(mineType);
+        response.setContentType("application/json");
     }
 
     protected void renderJsonP(Mapping mapping, Call call) throws IOException, ServletException {
-        Render render = call.getRender();
-        String content = render.getContent();
+        Render.RenderJsonP render = (Render.RenderJsonP) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
@@ -273,19 +306,17 @@ public class RenderCreatorHandler implements WebMotionHandler {
         String json = gson.toJson(object);
         
         PrintWriter out = context.getOut();
-        out.print(content + "(" + json + ");");
+        String callback = render.getCallback();
+        out.print(callback + "(" + json + ");");
         
-        String mineType = render.getMimeType().toString();
-        response.setContentType(mineType);
+        response.setContentType("application/javascript");
     }
     
-    protected String getActionPath(Mapping mapping, Call call) {
+    protected String getActionPath(Mapping mapping, Call call, String view) {
         Config config = mapping.getConfig();
         String packageName = config.getPackageViews().replaceAll("\\.", "/");
         
         String subPackageName = "";
-        String pageName = "";
-        
         Executor executor = call.getExecutor();
         if(executor != null) {
             String packageActions = config.getPackageActions();
@@ -301,10 +332,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
             subPackageName = subPackageName.replaceAll("\\.", "/");
         }
 
-        Render render = call.getRender();
-        pageName = render.getContent();
-        
-        String path = "/" + packageName + "/" + subPackageName + "/" + pageName;
+        String path = "/" + packageName + "/" + subPackageName + "/" + view;
         log.info("path = " + path);
         return path;
     }
@@ -314,12 +342,10 @@ public class RenderCreatorHandler implements WebMotionHandler {
      * @param render
      * @param request 
      */
-    protected void addModel(Call call) {
+    protected void addModel(Call call, Map<String, Object> model) {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
-        Render render = call.getRender();
         
-        Map<String, Object> model = render.getModel();
         if(model != null) {
             for (Map.Entry<String, Object> entry : model.entrySet()) {
                 String key = entry.getKey();
@@ -335,10 +361,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
      * @param url
      * @return 
      */
-    protected String addModel(Call call, String url) {
-        Render render = call.getRender();
-        
-        Map<String, Object> model = render.getModel();
+    protected String addModel(Call call, String url, Map<String, Object> model) {
         if(model != null) {
 
             String separator = "?";
@@ -356,7 +379,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         }
         return url;
     }
-    
+
     /**
      * Wrap response to get content. Use to manage template with AJAX call.
      */

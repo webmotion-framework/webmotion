@@ -24,9 +24,9 @@
  */
 package org.debux.webmotion.server;
 
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.Render;
 
 /**
@@ -46,30 +46,52 @@ public class WebMotionAction extends WebMotionContextable {
     }
 
     /**
-     * Can send any content, specifying the mime-type. For example return a
-     * file content.
+     * Can send any content, specifying the mime-type.
      * 
      * @param content String representation of the content, put directly in content of HTTP response
-     * @param type The content mime-type.
+     * @param mimeType The content mime-type.
      * @param encoding The content encoding.
-     * @param model data to use, either just one object, either key/value pairs
      * @return render represents the next step for user
      */
-    public Render renderContent(String content, String type, String encoding, Object ... model) {
-        return new Render(content, type, encoding, toMap(model));
+    public Render renderContent(String content, String mimeType, String encoding) {
+        return new Render.RenderContent(content, mimeType, encoding);
     }
 
     /**
-     * Can send any content, specifying the mime-type. For example return an 
-     * file content. The encoding for response is UTF-8  by default.
+     * Can send any content, specifying the mime-type. The encoding for response
+     * is UTF-8  by default.
      * 
      * @param content String representation of the content, put directly in content of HTTP response
-     * @param type The content mime-type.
-     * @param model data to use, either just one object, either key/value pairs
+     * @param mimeType The content mime-type.
      * @return render represents the next step for user
      */
-    public Render renderContent(String content, String type, Object ... model) {
-        return new Render(content, type, Render.DEFAULT_ENCODING, toMap(model));
+    public Render renderContent(String content, String mimeType) {
+        return new Render.RenderContent(content, mimeType);
+    }
+
+    /**
+     * Can send any content, specifying the mime-type. For example return a file
+     * content. 
+     * 
+     * @param stream Stream representation of the content, put directly in content of HTTP response
+     * @param mimeType The content mime-type.
+     * @param encoding The content encoding.
+     * @return render represents the next step for user
+     */
+    public Render renderStream(InputStream stream, String mimeType, String encoding) {
+        return new Render.RenderStream(stream, mimeType, encoding);
+    }
+    
+    /**
+     * Can send any content, specifying the mime-type. The encoding for response
+     * is UTF-8  by default. For example return a file content. 
+     * 
+     * @param stream Stream representation of the content, put directly in content of HTTP response
+     * @param mimeType The content mime-type.
+     * @return render represents the next step for user
+     */
+    public Render renderStream(InputStream stream, String mimeType) {
+        return new Render.RenderStream(stream, mimeType);
     }
     
     /**
@@ -83,7 +105,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderView(String page, Object ... model) {
-        return new Render(page, Render.MIME_VIEW, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderView(page, toMap(model));
     }
 
     /**
@@ -97,7 +119,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderTemplate(String page, Object ... model) {
-        return new Render(page, Render.MIME_TEMPLATE, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderTemplate(page, toMap(model));
     }
 
     /**
@@ -109,7 +131,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render reloadPage(Object ... model) {
-        return new Render(null, Render.MIME_REFERER, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderReferer(toMap(model));
     }
 
     /**
@@ -122,17 +144,18 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderAction(String action, Object ... model) {
-        return new Render(action, Render.MIME_ACTION, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderAction(action, toMap(model));
     }
 
     /**
-     * Redirect the user to an URL.
+     * Redirect the user to an URL. The model is put like parameters in url;
      * 
      * @param url The redirect URL.
+     * @param model data used, either just one object, either key/value pairs.
      * @return render represents the next step for user
      */
-    public Render renderURL(String url) {
-        return new Render(url, Render.MIME_URL, Render.DEFAULT_ENCODING, null);
+    public Render renderURL(String url, Object ... model) {
+        return new Render.RenderUrl(url, toMap(model));
     }
 
     /**
@@ -144,7 +167,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderError(Integer code, String message) {
-        return new Render(message, Render.MIME_ERROR, Render.DEFAULT_ENCODING, toMap(HttpContext.ATTRIBUTE_ERROR_STATUS_CODE, code));
+        return new Render.RenderError(code, message);
     }
     
     /**
@@ -154,7 +177,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderXML(Object ... model) {
-        return new Render(null, Render.MIME_XML, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderXml(toMap(model));
     }
 
     /**
@@ -164,7 +187,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderJSON(Object ... model) {
-        return new Render(null, Render.MIME_JSON, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderJson(toMap(model));
     }
 
     /**
@@ -177,7 +200,7 @@ public class WebMotionAction extends WebMotionContextable {
      * @return render represents the next step for user
      */
     public Render renderJSONP(String callback, Object ... model) {
-        return new Render(callback, Render.MIME_JSONP, Render.DEFAULT_ENCODING, toMap(model));
+        return new Render.RenderJsonP(callback, toMap(model));
     }
     
     /**
