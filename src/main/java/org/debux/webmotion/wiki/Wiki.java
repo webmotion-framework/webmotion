@@ -28,9 +28,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionAction;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.Render;
 import org.debux.webmotion.wiki.service.WikiService;
 import org.slf4j.Logger;
@@ -113,8 +117,13 @@ public class Wiki extends WebMotionAction {
     
     public Render media(String nameSpace, String mediaName) throws Exception {
         File file = getMedia(nameSpace, mediaName);
-        String content = IOUtils.toString(new FileInputStream(file));
-        return renderContent(content, "image/png");
+        
+        HttpContext context = getContext();
+        HttpServletResponse response = context.getResponse();
+        ServletOutputStream outputStream = response.getOutputStream();
+        
+        IOUtils.copy(new FileInputStream(file), outputStream);
+        return null;
     }
     
     public Render upload(String nameSpace, String mediaName, File file) throws Exception {
