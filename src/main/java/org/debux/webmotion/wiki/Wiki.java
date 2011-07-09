@@ -27,8 +27,6 @@ package org.debux.webmotion.wiki;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URI;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -116,38 +114,13 @@ public class Wiki extends WebMotionAction {
     }
     
     public Render media(String nameSpace, String mediaName) throws Exception {
-        File file = getMedia(nameSpace, mediaName);
-        
-        HttpContext context = getContext();
-        HttpServletResponse response = context.getResponse();
-        ServletOutputStream outputStream = response.getOutputStream();
-        
-        IOUtils.copy(new FileInputStream(file), outputStream);
-        return null;
+        File file = service.getMedia(nameSpace, mediaName);
+        return renderStream(new FileInputStream(file), null);
     }
     
     public Render upload(String nameSpace, String mediaName, File file) throws Exception {
-        File upload = getMedia(nameSpace, mediaName);
-        upload.getParentFile().mkdir();
-        upload.createNewFile();
-
-        IOUtils.copy(new FileInputStream(file), new FileOutputStream(upload));
-        
+        service.uploadMedia(nameSpace, mediaName, file);
         return renderAction("display/menu");
-    }
-    
-    protected File getMedia(String nameSpace, String mediaName) throws Exception {
-        String path = "../data/media";
-        URI resource = getClass().getClassLoader().getResource(path).toURI();
-        File data = new File(resource);
-        
-        String name = mediaName;
-        if(nameSpace != null) {
-            name = nameSpace + "/" + name;
-        }
-
-        File page = new File(data, name);
-        return page;
     }
     
 }

@@ -52,8 +52,8 @@
                 <h2>Table Of Contents</h2>
                 <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
                 <div class="action">
-                    <button value="edit" onclick="window.location='/wikimotion/deploy/edit/${requestScope.url}'">Edit page</button>
-                    <button value="upload" onclick="window.location='/wikimotion/deploy/upload'">Upload media</button>
+                    <a href="/wikimotion/deploy/edit/${requestScope.url}"><img src="/wikimotion/img/consulting.png"/></a>
+                    <a href="/wikimotion/deploy/upload"><img src="/wikimotion/img/folder.png"/></a>
                 </div>
             </div>
             

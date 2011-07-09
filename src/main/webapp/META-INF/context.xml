@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   #%L
-  Webmotion in test
+  Webmotion in wiki
   
   $Id$
   $HeadURL$
@@ -23,4 +23,4 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
-<Context antiJARLocking="true" path="/wikimotion" reloadable="true"/>
+<Context antiJARLocking="true" path="/wikimotion"/>

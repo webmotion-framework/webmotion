@@ -156,4 +156,25 @@ public class WikiService {
         return path;
     }
 
+    public void uploadMedia(String nameSpace, String mediaName, File file) throws Exception {
+        File upload = getMedia(nameSpace, mediaName);
+        upload.getParentFile().mkdir();
+        upload.createNewFile();
+
+        IOUtils.copy(new FileInputStream(file), new FileOutputStream(upload));
+    }
+    
+    public File getMedia(String nameSpace, String mediaName) throws Exception {
+        String path = "../data/media";
+        URI resource = getClass().getClassLoader().getResource(path).toURI();
+        File data = new File(resource);
+        
+        String name = mediaName;
+        if(nameSpace != null) {
+            name = nameSpace + "/" + name;
+        }
+
+        File media = new File(data, name);
+        return media;
+    }
 }

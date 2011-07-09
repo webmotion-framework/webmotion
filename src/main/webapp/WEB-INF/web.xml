@@ -32,11 +32,15 @@
             <web-resource-name>Edition access</web-resource-name>
             <url-pattern>/deploy/edit/*</url-pattern>
         </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Edition access</web-resource-name>
+            <url-pattern>/upload</url-pattern>
+        </web-resource-collection>
         <auth-constraint>
             <role-name>edit</role-name>
         </auth-constraint>
     </security-constraint>
-    
+
     <login-config>
         <auth-method>BASIC</auth-method>
     </login-config>

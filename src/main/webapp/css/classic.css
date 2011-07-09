@@ -127,6 +127,10 @@ a {
     color: #3b92b5;
 }
 
+.missing {
+    display: none;
+}
+
 #main {
     padding: 15px;
     background: #ffffff;
