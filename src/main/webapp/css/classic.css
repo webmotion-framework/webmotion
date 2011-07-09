@@ -64,15 +64,25 @@ h6, h6 a {
     color: #494949;
 }
 
-header {
+a {
+    text-decoration: none;
+    color: #3b92b5;
+}
+
+img {
+    border: none;
+}
+
+.missing {
+    display: none;
+}
+
+#header {
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 40px;
     max-width: 1000px;
-}
-
-header nav {
 }
 
 .logo {
@@ -81,33 +91,33 @@ header nav {
     text-shadow: 1px 1px 1px #e4e4e4;
 }
 
-header nav {
+#header .nav {
     height: 40px;
     width: 430px;
     margin-top: 40px;
 }
 
-header ul {
+#header ul {
     padding: 0px;
     margin: 0px 0px 0px -10px;
     list-style-type: none;
 }
 
-header li {
+#header li {
     display: inline;
     height: 40px;
     line-height: 40px;
     padding: 10px;
 }
 
-header a {
+#header a {
     color: #c2c1c1;
     padding: 10px;
     margin:  1px;
     font-size: 14px;
 }
 
-header a:hover {
+#header a:hover {
     color: #ffffff;
     margin:  0px;
     border-radius: 5px;
@@ -120,15 +130,6 @@ header a:hover {
     background: 
       -webkit-gradient(linear, left top, left bottom, 
                        from(#494949), to(#1e1e1e));
-}
-
-a {
-    text-decoration: none;
-    color: #3b92b5;
-}
-
-.missing {
-    display: none;
 }
 
 #main {
@@ -179,7 +180,7 @@ a {
     max-width: 970px;
 }
 
-footer {
+#footer {
     clear: both;
     margin-left: auto;
     margin-right: auto;
@@ -189,20 +190,20 @@ footer {
     color: #9c9c9c;
 }
 
-footer ul {
+#footer ul {
     padding: 0px;
     margin: 0px;
     list-style-type: none;
 }
 
-footer li {
+#footer li {
     display: inline;
     height: 30px;
     line-height: 30px;
     padding: 10px;
 }
 
-footer a {
+#footer a {
     color: #2d2d2d;
 }
 

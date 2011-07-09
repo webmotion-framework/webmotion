@@ -30,6 +30,7 @@
     <head>
         <meta charset="utf-8">
         <title>WikiMotion</title>
+        <link rel="icon" type="image/png" href="/wikimotion/img/collaboration.png" />
         
         <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
         
@@ -52,12 +53,12 @@
 
     <body>
 
-        <header>
+        <div id="header">
             <div class="logo">WikiMotion</div>
-            <nav>
+            <div id="nav">
                 <jsp:include page="/deploy/include/menu" />
-            </nav>
-        </header>
+            </div>
+        </div>
 
         <div id="main">
             <div id="main_content">
@@ -142,12 +143,12 @@
             }
         </script>
 
-        <footer>
-            <nav>
+        <div id="footer">
+            <div id="nav">
                 <jsp:include page="/deploy/include/menu" />
-            </nav>
+            </div>
             <div>Powerd by WikiMotion and WebMotion</div>
-        </footer>
+        </div>
 
     </body>
 
