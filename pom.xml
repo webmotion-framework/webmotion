@@ -148,7 +148,7 @@
             <id>webmotion-mode</id>
             <properties>
                 <site.name>WebMotion</site.name>
-                <user.file>conf/tomcat-user.xml</user.file>
+                <user.file>conf/tomcat-users.xml</user.file>
                 <data.page>/var/www/webmotion/data/page</data.page>
                 <data.media>/var/www/webmotion/data/media</data.media>
             </properties>
