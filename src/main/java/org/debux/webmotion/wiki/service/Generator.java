@@ -51,19 +51,25 @@ public enum Generator {
     
     RST {
         public String generate(File file) throws IOException {
-            String content = getContent(file);
-            String result = generate(content);
+            String template = getClass().getClassLoader().getResource("rst_template.txt").getPath();
+            String[] command = {"/bin/sh", "-c", "rst2html --report=5 --template=" + template + " " + file.getAbsolutePath()};
+            
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec(command);
+            
+            String result = IOUtils.toString(process.getInputStream());
             return result;
         }
                 
-        public String generate(String content) {
-            String result = "Can't generate HTML from RST";
-            try {
-                result = JRST.generate(JRST.TYPE_HTML_INNER_BODY, content);
-            } catch (Exception ex) {
-                log.error("Error during parsing file", ex);
-            }
+        public String generate(String content) throws IOException {
+            String template = getClass().getClassLoader().getResource("rst_template.txt").getPath();
+            String[] command = {"/bin/sh", "-c", "echo \"" + content.replaceAll("\"", "\\\\\"") + "\" | rst2html --template=" + template};
             
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec(command);
+            
+            String result = IOUtils.toString(process.getInputStream());
+            log.error(IOUtils.toString(process.getErrorStream()));
             return result;
         }
     },
@@ -80,7 +86,7 @@ public enum Generator {
         
         public String generate(String content) throws IOException {
             Runtime runtime = Runtime.getRuntime();
-            String[] command = {"/bin/sh", "-c", "echo \"" + content + "\" | tth -u -r"};
+            String[] command = {"/bin/sh", "-c", "echo \"" + content.replaceAll("\"", "\\\\\"") + "\" | tth -u -r"};
             Process process = runtime.exec(command);
             
             String result = IOUtils.toString(process.getInputStream());

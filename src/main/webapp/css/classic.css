@@ -77,6 +77,13 @@ img {
     display: none;
 }
 
+pre {
+    border:  1px solid #dee6ed;
+    padding: 5px;
+    color: #3b92b5;
+    background: #f4f7fb;
+}
+
 #header {
     padding: 5px;
     margin-left: auto;
