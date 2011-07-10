@@ -43,7 +43,7 @@
         <div id="header">
             <div class="logo">WikiMotion</div>
             <div class="nav">
-                <jsp:include page="/deploy/include/menu" />
+                <jsp:include page="/deploy/include/menu_header" />
             </div>
         </div>
 
@@ -77,7 +77,7 @@
 
         <div id="footer">
             <div class="nav">
-                <jsp:include page="/deploy/include/menu" />
+                <jsp:include page="/deploy/include/menu_footer" />
             </div>
             <div>Powerd by WikiMotion and WebMotion</div>
         </div>
