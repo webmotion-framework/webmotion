@@ -54,7 +54,8 @@
     <body>
 
         <div id="header">
-            <div class="logo">WikiMotion</div>
+            <fmt:setBundle basename="config"/>
+            <div class="logo"><fmt:message key="site.name"/></div>
             <div class="nav">
                 <jsp:include page="/deploy/include/menu_header" />
             </div>

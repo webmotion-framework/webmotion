@@ -82,8 +82,13 @@
     </dependencies>
 
     <build>
-        <finalName>wikimotion</finalName>
-        
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.nuiton</groupId>
@@ -124,7 +129,7 @@
     
     <profiles>        
         <profile>
-            <id>dev-mode</id>
+            <id>wikimotion-mode</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -134,6 +139,9 @@
                 <data.page>${basedir}/src/main/webapp/WEB-INF/data/page</data.page>
                 <data.media>${basedir}/src/main/webapp/WEB-INF/data/media</data.media>
             </properties>
+            <build>
+                <finalName>wikimotion</finalName>
+            </build>
         </profile>
         
         <profile>
@@ -144,6 +152,9 @@
                 <data.page>/var/www/webmotion/data/page</data.page>
                 <data.media>/var/www/webmotion/data/media</data.media>
             </properties>
+            <build>
+                <finalName>webmotion-site</finalName>
+            </build>
         </profile>
     </profiles>
     

@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html; charset=UTF-8" errorPage="/deploy/error" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 
     <head>
@@ -42,7 +43,8 @@
     <body>
 
         <div id="header">
-            <div class="logo">WikiMotion</div>
+            <fmt:setBundle basename="config"/>
+            <div class="logo"><fmt:message key="site.name"/></div>
             <div class="nav">
                 <jsp:include page="/deploy/include/menu_header" />
             </div>
