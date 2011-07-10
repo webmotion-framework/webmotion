@@ -53,8 +53,8 @@
                 <h2>Table Of Contents</h2>
                 <div id="generated-toc" class="generate_from_h1 generate_for_main_content"></div>
                 <div class="action">
-                    <a href="/wikimotion/deploy/edit/${requestScope.url}"><img src="/wikimotion/img/consulting.png"/></a>
-                    <a href="/wikimotion/deploy/upload"><img src="/wikimotion/img/folder.png"/></a>
+                    <a href="/wikimotion/deploy/edit/${requestScope.url}"><img src="/wikimotion/img/consulting.png" alt="Modifier cette page" title="Modifier cette page" /></a>
+                    <a href="/wikimotion/deploy/upload"><img src="/wikimotion/img/folder.png" alt="Transférer un média" title="Transférer un média" /></a>
                 </div>
             </div>
             
@@ -67,7 +67,7 @@
             <div class="nav">
                 <jsp:include page="/deploy/include/menu" />
             </div>
-            <div>Powerd by WikiMotion and WebMotion</div>
+            <div>Powered by WikiMotion and WebMotion</div>
         </div>
 
     </body>
