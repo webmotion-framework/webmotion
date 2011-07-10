@@ -24,12 +24,18 @@
  */
 package org.debux.webmotion.wiki.service;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,12 +140,8 @@ public class WikiService {
         File directory = new File(uri);
         File[] files = directory.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                int lastIndexOf = name.lastIndexOf('.');
-                if(lastIndexOf != -1) {
-                    String value = name.substring(0, lastIndexOf);
-                    return value.equals(pageName);
-                }                    
-                return false;
+                String value = removeExtension(name);
+                return value.equals(pageName);
             }
         });
         
@@ -156,6 +158,11 @@ public class WikiService {
         return path;
     }
 
+    protected String getMediaPath() {
+        String path = "../data/media";
+        return path;
+    }
+
     public void uploadMedia(String nameSpace, String mediaName, File file) throws Exception {
         File upload = getMedia(nameSpace, mediaName);
         upload.getParentFile().mkdir();
@@ -165,7 +172,7 @@ public class WikiService {
     }
     
     public File getMedia(String nameSpace, String mediaName) throws Exception {
-        String path = "../data/media";
+        String path = getMediaPath();
         URI resource = getClass().getClassLoader().getResource(path).toURI();
         File data = new File(resource);
         
@@ -177,4 +184,57 @@ public class WikiService {
         File media = new File(data, name);
         return media;
     }
+    
+    public Map<String, List<String>> getSiteMap() throws Exception {
+        return getMap(getPagePath(), true);
+    }
+    
+    public Map<String, List<String>> getMediaMap() throws Exception {
+        return getMap(getMediaPath(), false);
+    }
+    
+    protected Map<String, List<String>> getMap(String path, boolean removeExtension) throws Exception {
+        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        ArrayList<String> filesWithoutDirectory = new ArrayList<String>();
+        result.put(null, filesWithoutDirectory);
+        
+        URL url = getClass().getClassLoader().getResource(path);
+        URI uri = url.toURI();
+        
+        File pages = new File(uri);
+        File[] files = pages.listFiles();
+        for (File file : files) {
+            String fileName = file.getName();
+            
+            if(file.isFile()) {
+                if(removeExtension) {
+                    fileName = removeExtension(fileName);
+                }
+                filesWithoutDirectory.add(fileName);
+                
+            } else {
+                String[] list = file.list();
+                ArrayList<String> filesWithDirectory = new ArrayList<String>(list.length);
+                for (String pageName : list) {
+                    if(removeExtension) {
+                        pageName = removeExtension(pageName);
+                    }
+                    filesWithDirectory.add(pageName);
+                }
+                result.put(fileName, filesWithDirectory);
+            }
+        }
+        
+        return result;
+    }
+    
+    protected String removeExtension(String name) {
+        String value = name;
+        int lastIndexOf = name.lastIndexOf('.');
+        if(lastIndexOf != -1) {
+            value = name.substring(0, lastIndexOf);
+        }
+        return value;
+    }
+    
 }

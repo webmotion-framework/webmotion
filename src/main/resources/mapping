@@ -36,3 +36,6 @@ GET           /media/{mediaName}                              Wiki.media
 GET           /media/{nameSpace}/{mediaName}                  Wiki.media
 GET           /upload                                         view.jsp:wiki.upload
 POST          /upload                                         Wiki.upload
+
+GET           /sitemap                                        Wiki.sitemap
+GET           /mediamap                                       Wiki.mediamap

@@ -26,13 +26,9 @@ package org.debux.webmotion.wiki;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.net.URI;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
+import java.util.List;
+import java.util.Map;
 import org.debux.webmotion.server.WebMotionAction;
-import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.Render;
 import org.debux.webmotion.wiki.service.WikiService;
 import org.slf4j.Logger;
@@ -121,6 +117,20 @@ public class Wiki extends WebMotionAction {
     public Render upload(String nameSpace, String mediaName, File file) throws Exception {
         service.uploadMedia(nameSpace, mediaName, file);
         return renderAction("display/menu");
+    }
+    
+    public Render sitemap() throws Exception {
+        Map<String, List<String>> siteMap = service.getSiteMap();
+        return renderView("map.jsp",
+                "map", siteMap,
+                "action", "display");
+    }
+    
+    public Render mediamap() throws Exception {
+        Map<String, List<String>> mediaMap = service.getMediaMap();
+        return renderView("map.jsp",
+                "map", mediaMap,
+                "action", "media");
     }
     
 }
