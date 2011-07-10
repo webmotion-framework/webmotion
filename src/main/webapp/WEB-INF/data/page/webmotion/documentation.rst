@@ -80,7 +80,7 @@ Dans les paramètres : ::
 
 Il est possible de renommer les paramètres entre la méthode et l'url, ici l'url nous envoie une valeur mais la méthode appelée prendra comme paramètre id. ::
 
-GET         /user?value={id}                                User.find
+ GET         /user?value={id}                                User.find
 
 Les paramètres peuvent être déclarer statiquement : ::
 
@@ -247,9 +247,9 @@ Il existe un rendu un peu particulier qui permet de rester sur la page sur laque
 Mise en production
 ------------------
 
-Il faut enlever le mode reloadable dans le fichier de mapping, et mettre en place [[http://paranamer.codehaus.org|paranamer]] pour qu'il génère la liste des paramètres en static.
+Il faut enlever le mode reloadable dans le fichier de mapping, et mettre en place paranamer (http://paranamer.codehaus.org) pour qu'il génère la liste des paramètres en static.
 
-Sous maven vous pouvez créer un plugin pour cela : ::
+Sous maven vous pouvez créer un profile pour cela : ::
 
  <profiles>        
     <profile>
