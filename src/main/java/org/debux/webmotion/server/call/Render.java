@@ -24,7 +24,9 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.io.InputStream;
 import java.util.Map;
+import org.debux.webmotion.server.WebMotionAction;
 
 /**
  * The render represents result for user request. It contains the necessary 
@@ -39,108 +41,204 @@ public class Render {
 
     public static String DEFAULT_ENCODING = "UTF-8";
     
-    public static MimeType MIME_VIEW         = new MimeType();
-    public static MimeType MIME_TEMPLATE     = new MimeType();
-    public static MimeType MIME_REFERER      = new MimeType();
-    public static MimeType MIME_ACTION       = new MimeType();
-    public static MimeType MIME_URL          = new MimeType();
-    public static MimeType MIME_ERROR        = new MimeType();
-    public static MimeType MIME_JSON         = new MimeType("application/javascript");
-    public static MimeType MIME_JSONP        = new MimeType("application/json");
-    public static MimeType MIME_XML          = new MimeType("application/xml");
-    
-    /**
-     * The class represents the default mime type for the model or the content.
-     */
-    public static class MimeType {
+    public static class RenderContent extends Render {
+        protected String content;
         protected String mimeType;
+        protected String encoding;
 
-        public MimeType() {
-        }
-        
-        public MimeType(String mimeType) {
+        public RenderContent(String content, String mimeType, String encoding) {
+            this.content = content;
             this.mimeType = mimeType;
+            this.encoding = encoding;
         }
 
-        @Override
-        public String toString() {
+        public RenderContent(String content, String mimeType) {
+            this(content, mimeType, DEFAULT_ENCODING);
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getEncoding() {
+            return encoding;
+        }
+
+        public String getMimeType() {
             return mimeType;
         }
     }
     
-    /**
-     * Content of response, it is the page name or url or direct the content.
-     */
-    protected String content;
-    
-    /**
-     * Mime type for content
-     */
-    protected MimeType mimeType;
-    
-    /**
-     * Encoding for content
-     */
-    protected String encoding;
-    
-    /**
-     * Information pass in the request or the object to serialize
-     */
-    protected Map<String, Object> model;
+    public static class RenderStream extends Render {
+        protected InputStream stream;
+        protected String mimeType;
+        protected String encoding;
 
-    /**
-     * Contructor pass direct the content with a specific mime type predefined.
-     * 
-     * @param content string represents the content
-     * @param mimeType mime type for content
-     * @param encoding encoding for content
-     * @param model 
-     */
-    public Render(String content, MimeType mimeType, String encoding, Map<String, Object> model) {
-        this.content = content;
-        this.mimeType = mimeType;
-        this.encoding = encoding;
-        this.model = model;
+        public RenderStream(InputStream stream, String mimeType, String encoding) {
+            this.stream = stream;
+            this.mimeType = mimeType;
+            this.encoding = encoding;
+        }
+
+        public RenderStream(InputStream stream, String mimeType) {
+            this(stream, mimeType, DEFAULT_ENCODING);
+        }
+
+        public String getEncoding() {
+            return encoding;
+        }
+
+        public String getMimeType() {
+            return mimeType;
+        }
+
+        public InputStream getStream() {
+            return stream;
+        }
     }
     
-    /**
-     * Contructor pass direct the content with a http mime type.
-     * 
-     * @param content string represents the content
-     * @param mimeType mime type for content
-     * @param encoding encoding for content
-     * @param model 
-     */
-    public Render(String content, String mineType, String encoding, Map<String, Object> model) {
-        this(content, new MimeType(mineType), encoding, model);
-    }
+    public static class RenderView extends Render {
+        protected String view;
+        protected Map<String, Object> model;
 
-    public String getContent() {
-        return content;
-    }
+        public RenderView(String view, Map<String, Object> model) {
+            this.view = view;
+            this.model = model;
+        }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+        public Map<String, Object> getModel() {
+            return model;
+        }
 
-    public String getEncoding() {
-        return encoding;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    public MimeType getMimeType() {
-        return mimeType;
+        public String getView() {
+            return view;
+        }
     }
     
-    public Map<String, Object> getModel() {
-        return model;
-    }
+    public static class RenderTemplate extends Render {
+        protected String view;
+        protected Map<String, Object> model;
 
-    public void setModel(Map<String, Object> model) {
-        this.model = model;
+        public RenderTemplate(String view, Map<String, Object> model) {
+            this.view = view;
+            this.model = model;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+
+        public String getView() {
+            return view;
+        }
+    }
+    
+    public static class RenderReferer extends Render {
+        protected Map<String, Object> model;
+
+        public RenderReferer(Map<String, Object> model) {
+            this.model = model;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+    }
+    
+    public static class RenderAction extends Render {
+        protected String action;
+        protected Map<String, Object> model;
+
+        public RenderAction(String action, Map<String, Object> model) {
+            this.action = action;
+            this.model = model;
+        }
+
+        public String getAction() {
+            return action;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+    }
+    
+    public static class RenderUrl extends Render {
+        protected String url;
+        protected Map<String, Object> model;
+
+        public RenderUrl(String url, Map<String, Object> model) {
+            this.url = url;
+            this.model = model;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+    }
+    
+    public static class RenderJson extends Render {
+        protected Map<String, Object> model;
+
+        public RenderJson(Map<String, Object> model) {
+            this.model = model;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+    }
+    
+    public static class RenderXml extends Render {
+        protected Map<String, Object> model;
+
+        public RenderXml(Map<String, Object> model) {
+            this.model = model;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+    }
+    
+    public static class RenderJsonP extends Render {
+        protected String callback;
+        protected Map<String, Object> model;
+
+        public RenderJsonP(String callback, Map<String, Object> model) {
+            this.callback = callback;
+            this.model = model;
+        }
+
+        public String getCallback() {
+            return callback;
+        }
+
+        public Map<String, Object> getModel() {
+            return model;
+        }
+    }
+    
+    public static class RenderError extends Render {
+        protected int code;
+        protected String message;
+
+        public RenderError(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
     
 }

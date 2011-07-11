@@ -67,7 +67,7 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
             String pageName = action.getFullName().replaceAll("\\.", "/")
                     + action.getType().replace(Action.TYPE_VIEW, "");
             
-            Render render = new Render(pageName, Render.MIME_VIEW, Render.DEFAULT_ENCODING, model);
+            Render render = new Render.RenderView(pageName, model);
             call.setRender(render);
             
         } else if(action.isUrl()) {
@@ -77,7 +77,7 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
                 url = context.getBaseUrl() + url;
             }
             
-            Render render = new Render(url, Render.MIME_URL, Render.DEFAULT_ENCODING, model);
+            Render render = new Render.RenderUrl(url, model);
             call.setRender(render);
         }
     }
