@@ -103,7 +103,8 @@ generated_toc = {
     for (var i=0; i<nodes.length;i++) {
       if (nodes[i].nodeName.toLowerCase() in headings_to_treat) {
         // if heading has class no-TOC, skip it
-        if ((' ' + nodes[i].className + ' ').indexOf('no-TOC') != -1) {
+        if ((' ' + nodes[i].className + ' ').indexOf('no-TOC') != -1 
+            || (' ' + nodes[i].className + ' ').indexOf('title') != -1) {
           continue;
         }
         headings.push(nodes[i]);

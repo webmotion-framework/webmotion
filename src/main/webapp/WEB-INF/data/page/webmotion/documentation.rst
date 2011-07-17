@@ -32,13 +32,15 @@ Par défaut, vous pouvez utiliser WebMotion juste en important la bibliothèque 
 
 Un fragment en Servlet 3 est utilisable pour installer sans difficultés le projet. Il sera automatiquement chargé si WebMotion se trouve dans le classpath. La servlet WebMotion sera disponible sur l'url suivante <servername>/<web-context>/deploy/.
 
-Vous pouvez utiliser WebMotion avec Maven en ajoutant la dépendance suivante disponible sur le repository : http://debux.org/maven/repo/ : ::
+Vous pouvez utiliser WebMotion avec Maven en ajoutant la dépendance suivante disponible sur le repository : http://debux.org/maven/repo/ :
 
- <dependency>
-   <groupId>org.debux</groupId>
-   <artifactId>webmotion</artifactId>
-   <version>1.0</version>
- </dependency>  
+.. code-block:: xml
+
+    <dependency>
+        <groupId>org.debux</groupId>
+        <artifactId>webmotion</artifactId>
+        <version>1.0</version>
+    </dependency>
 
 Mapping
 -------
@@ -47,10 +49,12 @@ Un seul fichier de configuration est nécessaire pour définir l'ensemble du map
 
 Le fichier est constitué de plusieurs sections :
 
+.. code-block:: ini
+
  [config]
  ...
  [errors]
- ..
+ ...
  [filters]
  ...
  [actions]
@@ -61,23 +65,31 @@ L'ordre des paramètres n’influe pas ni les paramètres inutiles sur la sélec
 Configuration
 ~~~~~~~~~~~~~
 
-La section configuration définit les packages pour récupérer les classes pour les vues, les filtres, les actions et les erreurs. Il est possible de laisser vide le nom d'un package ou de préciser WEB-INF/<package name> pour protéger les vues : ::
+La section configuration définit les packages pour récupérer les classes pour les vues, les filtres, les actions et les erreurs. Il est possible de laisser vide le nom d'un package ou de préciser WEB-INF/<package name> pour protéger les vues :
+
+.. code-block:: ini
 
  package.views=org.debux.sample.views
  package.filters=org.debux.sample.filters
  package.actions=org.debux.sample.actions
  package.errors=org.debux.sample.errors
 
-Il est aussi possible dans cette section de définir le mode de fonctionnement des actions : stateless ou statefull. Il est préférable de garder le mode par défaut, c'est-à-dire stateless. En statefull l'action sera recréée à chaque requête ce qui permet de garder des attributs dans la classe, sinon la même instance sera utilisée. ::
+Il est aussi possible dans cette section de définir le mode de fonctionnement des actions : stateless ou statefull. Il est préférable de garder le mode par défaut, c'est-à-dire stateless. En statefull l'action sera recréée à chaque requête ce qui permet de garder des attributs dans la classe, sinon la même instance sera utilisée.
+
+.. code-block:: ini
 
  mode=stateless
  mode=statefull
 
-Un autre paramètre permet de forcer l'encodage de récupération des paramètres dans la requête HTTP. ::
+Un autre paramètre permet de forcer l'encodage de récupération des paramètres dans la requête HTTP.
+
+.. code-block:: ini
 
  request.encoding=UTF-8
 
-Le paramètre reloadable permet de dire si l'application est rechargeable à chaud, pour cela il faut que le code Java soit compilé avec l'option debug. En production il est conseillé de le passer à <code>false</code> et de configurer paranamer. ::
+Le paramètre reloadable permet de dire si l'application est rechargeable à chaud, pour cela il faut que le code Java soit compilé avec l'option debug. En production il est conseillé de le passer à <code>false</code> et de configurer paranamer.
+
+.. code-block:: ini
 
  reloadable=true
  reloadable=false
@@ -87,66 +99,90 @@ Actions
 
 La section actions permet de définir le lien entre l'url et une méthode d'une classe. Une ligne de mapping d'action est constituée de trois parties séparées par des espaces, la méthode HTTP, l'url, et la classe avec la méthode à exécuter.
 
-Exemple de règle qui permet de mapper l'ensemble des urls sur class avec la method : ::
+Exemple de règle qui permet de mapper l'ensemble des urls sur class avec la method :
+
+.. code-block:: ini
 
  # All match
  *           /{class}/{method}                               {class}.{method}
 
 Les paramètres peuvent être extrait soit dans le path soit dans les paramètres de la requête :
 
-Dans le path : ::
+Dans le path :
+
+::
 
  GET         /user/{id}                                      User.find
 
-Dans les paramètres : ::
+Dans les paramètres :
+
+::
 
  GET         /user?id={id}                                   User.find
 
-Il est possible de renommer les paramètres entre la méthode et l'url, ici l'url nous envoie une valeur mais la méthode appelée prendra comme paramètre id. ::
+Il est possible de renommer les paramètres entre la méthode et l'url, ici l'url nous envoie une valeur mais la méthode appelée prendra comme paramètre id.
+
+::
 
  GET         /user?value={id}                                User.find
 
-Les paramètres peuvent être déclarer statiquement : ::
+Les paramètres peuvent être déclarer statiquement :
+
+::
 
  *           /user/{id}?action=save                          User.save
  *           /user/{id}?action=display                       User.display
 
-Les valeurs dans les paramètres peuvent être filtrées par un pattern. ::
+Les valeurs dans les paramètres peuvent être filtrées par un pattern.
+
+::
 
  *           /{class:Action.*}/{method}                      {class}.{method}
 
-L'ensemble des méthodes sont gérées par le framework se qui permet d'appeler des actions en fonction de la methode HTTP : ::
+L'ensemble des méthodes sont gérées par le framework se qui permet d'appeler des actions en fonction de la methode HTTP :
+
+::
 
  GET         /user/{id}                                      User.find
  POST        /user/{id}                                      User.save
  PUT         /user/{id}                                      User.create
  DELETE      /user/{id}                                      User.delete
 
-Il est possible de passer des paramètres par défaut, il suffit de les mettre juste après l'action, les valeurs sont séparées par des virgules : ::
+Il est possible de passer des paramètres par défaut, il suffit de les mettre juste après l'action, les valeurs sont séparées par des virgules :
+
+::
 
  GET         /user/{id}                                      User.find            id=0
 
 Par défaut une action correspondant à une méthode Java mais il est possible de préciser directement une vue ou une redirection ver une url. Pour cela il faut préfixer l'action par view.<extension>:<package name>.<view name> ou par url:<redirection>.
 
-Expliciter l'action : ::
+Expliciter l'action :
+
+::
 
  GET         /user/{id}                                      action:User.find
 
-Expliciter la vue : ::
+Expliciter la vue :
+
+.. code-block:: ini
 
  # Sur un fichier html
  GET         /index                                          view.html:Main.index
  # Sur un fichier jsp
  GET         /index                                          view.jsp:Main.index
 
-Expliciter la redirection sur une url: ::
+Expliciter la redirection sur une url:
+
+.. code-block:: ini
 
  # Sur un autre site web
  GET         /index                                          url:http://projects.debux.org/projects/webmotion
  # Sur une action dans le mapping
  GET         /index                                          url:/user/find
 
-La méthode associée au mapping de l'url doit se trouver de le paquetage des contrôleurs et hériter de WebmotionAction ::
+La méthode associée au mapping de l'url doit se trouver de le paquetage des contrôleurs et hériter de WebmotionAction :
+
+.. code-block:: java
 
  public class User extends WebMotionAction {
      public Render find(String id) {
@@ -180,7 +216,9 @@ Le framework gére les types suivants sur les méthodes :
 - java.util.List (no default value)
 - Arrays (no default value)
 
-Il est possible d'utiliser des sous paquetages pour les actions et les vues dans le mapping pour cela il suffit d'utiliser une notation pointée : ::
+Il est possible d'utiliser des sous paquetages pour les actions et les vues dans le mapping pour cela il suffit d'utiliser une notation pointée :
+
+.. code-block:: ini
 
  # Sous paquet sub, classe Action et méthode index
  *           /action                                            sub.Action.index
@@ -190,17 +228,22 @@ Il est possible d'utiliser des sous paquetages pour les actions et les vues dans
 Filtres
 ~~~~~~~
 
-Il est possible de mettre en place des filtres sur des urls. La syntaxe des urls est la même que celle des filtres HTTP dans le web.xml. ::
+Il est possible de mettre en place des filtres sur des urls. La syntaxe des urls est la même que celle des filtres HTTP dans le web.xml.
 
+::
 
  *           /*                                              Filters.log
  *           /test/hello/*                                   Filters.param
 
-Un exemple d'utilisation pourrait être la vérification d'un token d'authentification sur les appels : ::
+Un exemple d'utilisation pourrait être la vérification d'un token d'authentification sur les appels :
+
+::
 
  *           /*                                              Filters.auth
 
-Classe associée ::
+Classe associée
+
+.. code-block:: java
 
  public class Filters extends WebMotionFilter {
      public void auth(String token) {
@@ -210,7 +253,9 @@ Classe associée ::
      }
  }
 
-La méthode doProcess permet de continuer l'exécution du thread, si l'appel n'est pas fait aucune action ne sera exécutée. Il est aussi possible de renvoyer un rendu au lieu de faire le doProcess. ::
+La méthode doProcess permet de continuer l'exécution du thread, si l'appel n'est pas fait aucune action ne sera exécutée. Il est aussi possible de renvoyer un rendu au lieu de faire le doProcess.
+
+.. code-block:: java
 
  public class Filters extends WebMotionFilter {
      public Render auth(String token) {
@@ -230,11 +275,15 @@ Erreurs
 
 Il est possible d'ajouter des actions sur les exceptions ou les codes d'erreur HTTP :
 
-Sur exception : ::
+Sur exception :
+
+::
 
  java.lang.NullPointerException                              Error.npe
 
-Sur un code erreur : ::
+Sur un code erreur :
+
+::
 
  code:404                                                    Error.notFound
 
@@ -273,9 +322,11 @@ Mise en production
 
 Il faut enlever le mode reloadable dans le fichier de mapping, et mettre en place paranamer (http://paranamer.codehaus.org) pour qu'il génère la liste des paramètres en static.
 
-Sous maven vous pouvez créer un profile pour cela : ::
+Sous maven vous pouvez créer un profile pour cela :
 
- <profiles>        
+.. code-block:: xml
+
+ <profiles>
     <profile>
         <id>prod-mode</id>
         <build>
@@ -288,8 +339,8 @@ Sous maven vous pouvez créer un profile pour cela : ::
                         <execution>
                             <id>run</id>
                             <configuration>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                <sourceDirectory>\${project.build.sourceDirectory}</sourceDirectory>
+                                <outputDirectory>\${project.build.outputDirectory}</outputDirectory>
                             </configuration>
                             <goals>
                                 <goal>generate</goal>

@@ -30,15 +30,19 @@ Basique
 
 Petit exemple pour commencer et voir la simplicité.
 
-web.xml ::
+web.xml
 
- <web-app version="3.0"
+.. code-block:: xml
+
+  <web-app version="3.0"
     xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" />
 
-mapping ::
+mapping
+
+.. code-block:: ini
 
  [config]
  package.views=org.debux.webmotion.test.views
@@ -51,7 +55,9 @@ mapping ::
  # Appel la méthode add de la classe Calc sur l'url /webmotion-test/deploy/add
  POST          /add                                 Calc.add
 
-Calc.java ::
+Calc.java
+
+.. code-block:: java
 
  package org.debux.webmotion.test.actions;
  
@@ -68,7 +74,9 @@ Calc.java ::
     
  }
 
-index.jsp ::
+index.jsp
+
+.. code-block:: jsp
 
  <html>
     <body>
@@ -82,7 +90,9 @@ index.jsp ::
     </body>
  </html>
 
-result.jsp ::
+result.jsp
+
+.. code-block:: jsp
 
  <html>
     <body>
@@ -95,7 +105,9 @@ AJAX
 
 Exemple d'appel AJAX avec un rendu par template.
 
-mapping ::
+mapping
+
+.. code-block:: ini
 
  [config]
  package.views=org.debux.webmotion.test.views
@@ -105,7 +117,9 @@ mapping ::
  GET           /index                                  Test.index
  GET           /template                               Test.template
 
-Test.java ::
+Test.java
+
+.. code-block:: java
 
  package org.debux.webmotion.test.actions;
 
@@ -124,7 +138,9 @@ Test.java ::
     
  }
 
-index.jsp ::
+index.jsp
+
+.. code-block:: html
 
  <a href="#" onclick="test();">Template</a><br/>
 
@@ -147,7 +163,9 @@ index.jsp ::
     }
  </script>
 
-template.jsp ::
+template.jsp
+
+.. code-block:: jsp
 
  <p>Value = ${key1}</p>
  <p>Value = ${key2}</p>
@@ -158,7 +176,9 @@ Gestion de fichier
 
 Exemple sur l'envoi d'un fichier sur le serveur avec suivi de la progression en AJAX.
 
-mapping ::
+mapping
+
+.. code-block:: ini
 
  [config]
  package.views=org.debux.webmotion.test.views
@@ -167,7 +187,9 @@ mapping ::
  [actions]
  *           /{class}/{method}                               {class}.{method}
 
-Fileupload.java ::
+Fileupload.java
+
+.. code-block:: java
 
  public class Fileupload extends WebMotionAction {
     
@@ -193,7 +215,9 @@ Fileupload.java ::
     
  }
 
-index.html ::
+index.html
+
+.. code-block:: html
 
  <html>
     <body>

@@ -24,6 +24,17 @@
   #L%
   -->
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    
+    <servlet>
+        <servlet-name>sitemaptxt</servlet-name>
+        <jsp-file>/WEB-INF/wiki/sitemaptxt_include.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>sitemaptxt</servlet-name>
+        <url-pattern>/sitemap.txt</url-pattern>
+    </servlet-mapping>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Edition access</web-resource-name>

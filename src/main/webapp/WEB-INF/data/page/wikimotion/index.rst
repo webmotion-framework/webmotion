@@ -34,3 +34,41 @@ Wikimotion est un wiki basé sur WebMotion. Il permet d'utiliser plusieurs types
 .. _html: /wikimotion/deploy/display/wikimotion/example_html
 .. _RST: /wikimotion/deploy/display/wikimotion/example_rst
 .. _LaTex: /wikimotion/deploy/display/wikimotion/example_tex
+
+Ce site est fait avec WebMotion et WikiMotion.
+
+Installation
+------------
+
+Il suffit de récupérer le war disponible à l'adresse suivante http://projects.debux.org/projects/webmotion/files et de le déposer dans le webapps d'un tomcat.
+
+Pour pouvoir utiliser la génération des pages en RST et en Latex, veuillez suivre les instructions suivantes.
+
+Installation LaTex
+~~~~~~~~~~~~~~~~~~
+
+Il faut installer le paquet tth ainsi :
+
+::
+
+ apt-get install tth
+
+Installation RST
+~~~~~~~~~~~~~~~~
+
+Il faut installer les paquets suivants :
+
+::
+
+ apt-get install python-docutils python-pygments
+
+
+Après il faut installer le script rst2html-pygments
+
+::
+
+ wget http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/rst2html-pygments
+ cp rst2html-pygments /usr/bin/rst2html-pygments
+ chmod 755 /usr/bin/rst2html-pygments
+
+Pour plus de renseignement, vous pouvez consulter le site suivant http://docutils.sourceforge.net/sandbox/code-block-directive/docs/syntax-highlight.html.

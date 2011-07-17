@@ -25,17 +25,22 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 
     <head>
         <meta charset="utf-8">
-        <title>WikiMotion</title>
-        <link rel="icon" type="image/png" href="/wikimotion/img/collaboration.png" />
+        <c:if test="${requestScope.action == 'display'}">
+            <title>Site map</title>
+        </c:if>
+        <c:if test="${requestScope.action == 'media'}">
+            <title>Media map</title>
+        </c:if>
+        <link rel="icon" type="image/png" href="<c:url value="/img/collaboration.png"/>" />
                 
-        <script type="text/javascript" src="/wikimotion/js/prototype.js"></script>
+        <script type="text/javascript" src="<c:url value="/js/prototype.js"/>"></script>
         
-        <link rel="stylesheet" href="/wikimotion/css/classic.css" type="text/css"  media="screen">
-        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1' type='text/css'>
+        <link rel="stylesheet" href="<c:url value="/css/classic.css"/>" type="text/css"  media="screen">
     </head>
 
     <body>
@@ -62,13 +67,13 @@
                         <li>${map.key}</li>
                         <ul>
                         <c:forEach var="page" items="${map.value}" >
-                            <li><a href="/wikimotion/deploy/${requestScope.action}/${map.key}/${page}">${page}</a></li>
+                            <li><a href="<c:url value="/deploy/${requestScope.action}/${map.key}/${page}"/>">${page}</a></li>
                         </c:forEach>
                         </ul>
                     </c:if>
                     <c:if test="${map.key == null}">
                         <c:forEach var="page" items="${map.value}" >
-                            <li><a href="/wikimotion/deploy/${requestScope.action}/${page}">${page}</a></li>
+                            <li><a href="<c:url value="/deploy/${requestScope.action}/${page}"/>">${page}</a></li>
                         </c:forEach>
                     </c:if>
                 </c:forEach>

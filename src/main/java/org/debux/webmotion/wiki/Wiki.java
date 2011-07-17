@@ -26,9 +26,13 @@ package org.debux.webmotion.wiki;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionAction;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.Render;
 import org.debux.webmotion.wiki.service.WikiService;
 import org.slf4j.Logger;
@@ -116,13 +120,42 @@ public class Wiki extends WebMotionAction {
     
     public Render upload(String nameSpace, String mediaName, File file) throws Exception {
         service.uploadMedia(nameSpace, mediaName, file);
-        return renderAction("display/menu");
+        return renderAction("display/index");
     }
     
     public Render sitemap() throws Exception {
         Map<String, List<String>> siteMap = service.getSiteMap();
         return renderView("map.jsp",
                 "map", siteMap,
+                "action", "display");
+    }
+    
+    public Render sitemaptxt() throws Exception {
+        List<String> result = new ArrayList<String>();
+        
+        HttpContext context = getContext();
+        HttpServletRequest request = context.getRequest();
+        String url = request.getRequestURL().toString();
+        String servletPath = request.getServletPath();
+        String path = StringUtils.substringBefore(url, servletPath);
+        
+        Map<String, List<String>> siteMap = service.getSiteMap();
+        
+        for (Map.Entry<String, List<String>> entry : siteMap.entrySet()) {
+            String namespace = entry.getKey();
+            List<String> pages = entry.getValue();
+            
+            for (String page : pages) {
+                if(namespace == null) {
+                   result.add(path + "/deploy/display/" + page);
+                } else {
+                   result.add(path + "/deploy/display/" + namespace + "/" + page);
+                }
+            }
+        }
+        
+        return renderView("sitemaptxt.jsp",
+                "map", result,
                 "action", "display");
     }
     

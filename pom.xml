@@ -1,12 +1,11 @@
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.debux</groupId>
   
     <artifactId>wikimotion</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Webmotion in wiki</name>
   
     <inceptionYear>2011</inceptionYear>
@@ -14,6 +13,73 @@
         <name>Debux</name>
         <url>webmotion.debux.org</url>
     </organization>
+    
+    <developers>
+        <developer>
+            <id>julien</id>
+            <name>Julien Ruchaud</name>
+            <email>julien.ruchaud@debux.org</email>
+            <url>http://www.debux.org</url>
+            <organization>Debux</organization>
+            <organizationUrl>http://www.debux.org</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    
+    <scm>
+        <url>http://projects.debux.org/projects/webmotion/tags/wikimotion-1.0</url>
+        <connection>scm:svn:svn://svn.debux.org/webmotion/webmotion-wiki/tags/wikimotion-1.0</connection>
+        <developerConnection>scm:svn:svn://svn.debux.org/webmotion/webmotion-wiki/tags/wikimotion-1.0</developerConnection>
+    </scm>
+    
+    <issueManagement>
+        <system>redmine</system>
+        <url>http://projects.debux.org/projects/webmotion/issues</url>
+    </issueManagement>
+    
+    <distributionManagement>
+        <repository>
+            <id>debux-repo</id>
+            <url>scp://maven@debux.org:2222/var/www/maven/repo</url>
+        </repository>
+        <snapshotRepository>
+            <id>debux-snapshot</id>
+            <url>scp://maven@debux.org:2222/var/www/maven/snapshot</url>
+        </snapshotRepository>
+        <site>
+            <id>website</id>
+            <url>scp://maven@debux.org:2222/var/lib/redmine/public/project-site/${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>webmotion</name>
+            <subscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion
+            </subscribe>
+            <unsubscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion
+            </unsubscribe>
+            <post>webmotion@lists.debux.org</post>
+            <archive>http://lists.debux.org/pipermail/webmotion</archive>
+        </mailingList>
+        <mailingList>
+            <name>webmotion-commit</name>
+            <subscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion-commit
+            </subscribe>
+            <unsubscribe>
+                http://lists.debux.org/mailman/listinfo/webmotion-commit
+            </unsubscribe>
+            <post>webmotion-commit@lists.debux.org</post>
+            <archive>http://lists.debux.org/pipermail/webmotion-commit</archive>
+        </mailingList>
+    </mailingLists>
     
     <properties>
         <!-- Config general -->
@@ -27,15 +93,12 @@
     
     <repositories>
         <repository>
-            <id>nuiton.snapshot</id>
-            <name>NuitonSnapshotRepository</name>
-            <url>http://maven.nuiton.org/snapshot</url>
-            <snapshots>
+            <id>debux.release</id>
+            <name>DebuxReleaseRepository</name>
+            <url>http://debux.org/maven/repo</url>
+            <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
             </releases>
         </repository>
     </repositories>    
@@ -44,7 +107,7 @@
         <dependency>
             <groupId>org.debux</groupId>
             <artifactId>webmotion</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.3</version>
         </dependency>
         
         <!-- Servlet -->
@@ -66,19 +129,12 @@
             <artifactId>commons-io</artifactId>
             <version>2.0.1</version>
         </dependency>
-        
-        <dependency>
-            <groupId>org.nuiton.jrst</groupId>
-            <artifactId>jrst</artifactId>
-            <version>1.3.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>xom</groupId>
             <artifactId>xom</artifactId>
             <version>1.2.5</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -103,6 +159,9 @@
                         <configuration>
                             <licenseName>lgpl_v3</licenseName>
                             <addSvnKeyWords>true</addSvnKeyWords>
+                            <excludes>
+                                <exclude>**/*sitemaptxt.jsp</exclude>
+                            </excludes>
                         </configuration>
                         <phase>process-resources</phase>
                     </execution>

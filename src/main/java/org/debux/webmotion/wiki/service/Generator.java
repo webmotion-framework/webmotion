@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
-import org.nuiton.jrst.JRST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +51,7 @@ public enum Generator {
     RST {
         public String generate(File file) throws IOException {
             String template = getClass().getClassLoader().getResource("rst_template.txt").getPath();
-            String[] command = {"/bin/sh", "-c", "rst2html --report=5 --template=" + template + " " + file.getAbsolutePath()};
+            String[] command = {"/bin/sh", "-c", "rst2html-pygments --report=5 --template=" + template + " " + file.getAbsolutePath()};
             
             Runtime runtime = Runtime.getRuntime();
             Process process = runtime.exec(command);
@@ -63,7 +62,7 @@ public enum Generator {
                 
         public String generate(String content) throws IOException {
             String template = getClass().getClassLoader().getResource("rst_template.txt").getPath();
-            String[] command = {"/bin/sh", "-c", "echo \"" + content.replaceAll("\"", "\\\\\"") + "\" | rst2html --template=" + template};
+            String[] command = {"/bin/sh", "-c", "echo \"" + content.replaceAll("\"", "\\\\\"") + "\" | rst2html-pygments --template=" + template};
             
             Runtime runtime = Runtime.getRuntime();
             Process process = runtime.exec(command);

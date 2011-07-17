@@ -22,6 +22,10 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+
+@import url("http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&v1");
+@import url("pygments-default.css");
+
 body {
     background: #ededed;
     background-image: url(../img/header.png);
@@ -29,6 +33,10 @@ body {
     color: #878787;
     font-family: 'Droid Sans';
     font-size: 12px;
+}
+
+h1.title {
+    font-size: 36px;
 }
 
 h1, h1 a{
