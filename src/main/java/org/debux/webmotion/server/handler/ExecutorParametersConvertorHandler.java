@@ -129,6 +129,10 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
     protected Object convert(Object value, Class<?> type, Type genericType) throws Exception {
         Object result = null;
 
+        if(value == null) {
+            return null;
+        }
+        
         if(genericType == null) {
             genericType = type.getGenericSuperclass();
         }
