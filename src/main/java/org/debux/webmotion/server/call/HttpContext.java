@@ -129,6 +129,12 @@ public class HttpContext {
         
     }
 
+    /**
+     * Default contructor use to create wrapper to test
+     */
+    public HttpContext() {
+    }
+    
     public HttpContext(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;

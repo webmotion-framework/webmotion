@@ -62,7 +62,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         }
     }
     
-    public ActionRule getActionRule(Mapping mapping, Call call) {
+    protected ActionRule getActionRule(Mapping mapping, Call call) {
         HttpContext context = call.getContext();
         
         String url = context.getUrl();
@@ -88,13 +88,13 @@ public class ActionFinderHandler implements WebMotionHandler {
     }
     
     // Check http method
-    public boolean checkMethod(ActionRule actionRule, String method) {
+    protected boolean checkMethod(ActionRule actionRule, String method) {
         String actionMethod = actionRule.getMethod();
         return actionMethod.equals("*") || actionMethod.equals(method);
     }
     
     // Check url
-    public boolean checkUrl(ActionRule actionRule, String[] path, Map<String, Object> parameters) {
+    protected boolean checkUrl(ActionRule actionRule, String[] path, Map<String, Object> parameters) {
         int position;
         
         // Test url
@@ -149,7 +149,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         return true;
     }
     
-    public boolean matchValues(URLPattern expression, String[] values) {
+    protected boolean matchValues(URLPattern expression, String[] values) {
         if(values == null) {
             return false;
         }

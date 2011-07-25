@@ -76,6 +76,12 @@ public class Call {
     protected Render render;
     
     /**
+     * Default contructor use to create wrapper to test
+     */
+    public Call() {
+    }
+    
+    /**
      * Default consturctor on request and response.
      * @param request HTTP request used to get information on user request.
      * @param response HTTP response used to put next render for user.
