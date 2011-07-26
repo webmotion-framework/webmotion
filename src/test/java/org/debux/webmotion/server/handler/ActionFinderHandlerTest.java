@@ -32,10 +32,13 @@ import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.AssertJUnit;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
+ * Test on find url in mapping
+ * 
  * @author julien
  */
 public class ActionFinderHandlerTest {
@@ -124,8 +127,8 @@ public class ActionFinderHandlerTest {
             Call call = new CallWrapper(method, url);
             
             ActionRule actionRule = handler.getActionRule(mapping, call);
-            assert actionRule != null;
-            assert result.endsWith(actionRule.getAction().getFullName());
+            AssertJUnit.assertNotNull(actionRule);
+            AssertJUnit.assertEquals(result, actionRule.getAction().getFullName());
         }
     }
     
