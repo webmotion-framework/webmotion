@@ -67,7 +67,7 @@ public class WebMotionUtils {
      * @throws WebMotionException If not any method corresponding with <code>name</code> 
      * parameter has been found in the <code>clazz</code> class.
      */
-    public static Method getMethod(Class<WebMotionAction> clazz, String name) {
+    public static Method getMethod(Class<?> clazz, String name) {
         Method[] all = clazz.getDeclaredMethods();
 
         for (Method method : all) {
@@ -107,8 +107,8 @@ public class WebMotionUtils {
     /**
      * Uncapitalizes a full qualified class name.
      * Example:
-     * <code>WebMotionUtils.unCapitalizeClass("org.webmotion.MyClass")</code> will return 
-     * <code>"org.webmotion.myClass"</code>
+     * <code>WebMotionUtils.unCapitalizeClass("org.webmotion.Myclass")</code> will return 
+     * <code>"org.webmotion.myclass"</code>
      * @param className The class name to uncapitalize.
      * @return A uncapitalized representation for the given <code>className</code> class name.
      */
