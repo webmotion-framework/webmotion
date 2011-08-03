@@ -59,8 +59,9 @@ section_config_name
 section_config_equal
     : '='
     ;
+
 section_config_value
-    : Letter*
+    : (Letter)+ (('.' | '/') (Letter)*)*
     ;
 
 // Section error
@@ -206,6 +207,8 @@ Letter
     | '\u3400'..'\u3d2d'
     | '\u4e00'..'\u9fff'
     | '\uf900'..'\ufaff'
+    | '-'
+    | '$'
     ;
 
 Digit
@@ -213,9 +216,9 @@ Digit
     ;
 
 Newline
-    : ((' '|'\t')* '\r'? '\n')+ {skip();}
+    : ((' '|'\t')* '\r'? '\n')+
     ;
 
 Blank
-    : (' '|'\t')+ {skip();}
+    : (' '|'\t')+
     ;

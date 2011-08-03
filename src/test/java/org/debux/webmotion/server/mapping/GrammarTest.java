@@ -29,6 +29,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 /**
@@ -51,7 +52,15 @@ public class GrammarTest {
     public void testMain() throws RecognitionException {
         StdErrReporter reporter = new StdErrReporter();
         
-        ANTLRStringStream stream = new ANTLRStringStream("Hqsdqsdo");
+        ANTLRStringStream stream = new ANTLRStringStream(
+                 "[config]\n"
+                + "package.views=tutu.t_ut-u/...\n"
+                + "reloadable=true\n"
+                + " \t\n"
+                + "#test\n"
+                + "[filters]\n"
+                + "*   /    Action.test\n"
+                );
         MappingLanguageLexer lexer = new MappingLanguageLexer(stream);
         lexer.setErrorReporter(reporter);
         
