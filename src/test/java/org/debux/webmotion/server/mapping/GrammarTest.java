@@ -60,7 +60,7 @@ public class GrammarTest {
         
         MappingLanguageParser parser = new MappingLanguageParser(tokens);
         parser.setErrorReporter(reporter);
-        parser.utterance();
+        parser.mapping();
     }
     
 }
