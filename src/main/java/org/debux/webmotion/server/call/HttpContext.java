@@ -26,6 +26,7 @@ package org.debux.webmotion.server.call;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -75,6 +76,10 @@ public class HttpContext {
     public static final String ATTRIBUTE_FORWARD_PATH_INFO = "javax.servlet.forward.path_info";
     public static final String ATTRIBUTE_FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
     
+    public static final String ATTRIBUTE_ERROR_DATA = "errorData";
+    public static final String ATTRIBUTE_FLASH_MESSAGES = "flashMessages";
+    public static final String PREFIX_FLASH_MESSAGES = "flash_";
+    
     /** Current HTTP request. */
     protected HttpServletRequest request;
     
@@ -83,6 +88,9 @@ public class HttpContext {
     
     /** Information on error contained in request. */
     protected ErrorData errorData;
+    
+    /** Contains all message for the user. */
+    protected FlashMessages flashMessages;
     
     /**
      * Error data is utility to get information on error in attributes.
@@ -130,6 +138,42 @@ public class HttpContext {
     }
 
     /**
+     * Utility to store message for the user.
+     */
+    public class FlashMessages {
+        protected Map<String, String> messages;
+
+        public FlashMessages() {
+            messages = new HashMap<String, String>();
+            
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                String value = cookie.getValue();
+                if(name.startsWith(PREFIX_FLASH_MESSAGES)) {
+                    name = name.replaceFirst(PREFIX_FLASH_MESSAGES, "");
+                    messages.put(name, value);
+                }
+            }
+        }
+        
+        public void add(String key, String value) {
+            // Store value if do redirect the request
+            Cookie cookie = new Cookie(PREFIX_FLASH_MESSAGES + key, value);
+            cookie.setMaxAge(10); // 10s
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            
+            // Store value if do forward the request
+            messages.put(key, value);
+        }
+
+        public Map<String, String> getMessages() {
+            return messages;
+        }
+    }
+    
+    /**
      * Default contructor use to create wrapper to test
      */
     public HttpContext() {
@@ -140,6 +184,10 @@ public class HttpContext {
         this.response = response;
         
         this.errorData = new ErrorData();
+        this.flashMessages = new FlashMessages();
+        
+        request.setAttribute(ATTRIBUTE_ERROR_DATA, errorData);
+        request.setAttribute(ATTRIBUTE_FLASH_MESSAGES, flashMessages.getMessages());
     }
 
     public HttpServletRequest getRequest() {
@@ -204,15 +252,12 @@ public class HttpContext {
      * @param value value
      */
     public void addFlashMessage(String key, String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(10); // 10s
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        flashMessages.add(key, value);
     }
     
     /**
      * The value is stored in cookie during 10s with error status.<p>
-     * For example Use JSTL to read value : cookie.error_<key>
+     * For example Use JSTL to read value : flashMessages.error_<key>
      * @param key key
      * @param value value
      */
@@ -222,7 +267,7 @@ public class HttpContext {
     
     /**
      * The value is stored in cookie during 10s with info status.<p>
-     * For example Use JSTL to read value : cookie.info_<key>
+     * For example Use JSTL to read value : flashMessages.info_<key>
      * @param key key
      * @param value value
      */
@@ -232,7 +277,7 @@ public class HttpContext {
     
     /**
      * The value is stored in cookie during 10s with warning status.<p>
-     * For example Use JSTL to read value : cookie.warning_<key>
+     * For example Use JSTL to read value : flashMessages.warning_<key>
      * @param key key
      * @param value value
      */
