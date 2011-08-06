@@ -196,9 +196,9 @@ public class RenderCreatorHandler implements WebMotionHandler {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        String mineType = render.getMimeType();
-        if(mineType != null) {
-            response.setContentType(mineType);
+        String mimeType = render.getMimeType();
+        if(mimeType != null) {
+            response.setContentType(mimeType);
         }
         
         String encoding = render.getEncoding();
@@ -215,9 +215,9 @@ public class RenderCreatorHandler implements WebMotionHandler {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        String mineType = render.getMimeType();
-        if(mineType != null) {
-            response.setContentType(mineType);
+        String mimeType = render.getMimeType();
+        if(mimeType != null) {
+            response.setContentType(mimeType);
         }
         
         String encoding = render.getEncoding();
@@ -246,6 +246,7 @@ public class RenderCreatorHandler implements WebMotionHandler {
         HttpServletRequest request = context.getRequest();
         
         String url = render.getUrl();
+        url = addModel(call, url, render.getModel());
         response.sendRedirect(url);
     }
 

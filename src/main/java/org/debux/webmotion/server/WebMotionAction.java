@@ -148,7 +148,7 @@ public class WebMotionAction extends WebMotionContextable {
     }
 
     /**
-     * Redirect the user to an URL. The model is put like parameters in url;
+     * Redirect the user to an URL. The model is put as parameters in url;
      * 
      * @param url The redirect URL.
      * @param model data used, either just one object, either key/value pairs.
