@@ -147,12 +147,14 @@ public class HttpContext {
             messages = new HashMap<String, String>();
             
             Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                String name = cookie.getName();
-                String value = cookie.getValue();
-                if(name.startsWith(PREFIX_FLASH_MESSAGES)) {
-                    name = name.replaceFirst(PREFIX_FLASH_MESSAGES, "");
-                    messages.put(name, value);
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    String name = cookie.getName();
+                    String value = cookie.getValue();
+                    if (name.startsWith(PREFIX_FLASH_MESSAGES)) {
+                        name = name.replaceFirst(PREFIX_FLASH_MESSAGES, "");
+                        messages.put(name, value);
+                    }
                 }
             }
         }
