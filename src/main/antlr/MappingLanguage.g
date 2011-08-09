@@ -43,7 +43,7 @@ section_config_label
     ;
 
 section_config_rule
-    : section_config_name section_config_equal section_config_value
+    : section_config_name '=' section_config_value
     ;
 
 section_config_name
@@ -56,12 +56,8 @@ section_config_name
     | 'request.encoding'
     ;
 
-section_config_equal
-    : '='
-    ;
-
 section_config_value
-    : (Letter)+ (('.' | '/') (Letter)*)*
+    : ('.' | '/' | Letter)*
     ;
 
 // Section error
@@ -97,7 +93,7 @@ section_filter_label
     ;
 
 section_filter_rule
-    : method Blank section_filter_path Blank action
+    : Method Blank section_filter_path Blank action
     ;
 
 section_filter_path
@@ -115,7 +111,7 @@ section_action_label
     ;
 
 section_action_rule
-    : method Blank section_action_path Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
+    : Method Blank section_action_path Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
     ;
 
 section_action_path
@@ -152,24 +148,10 @@ section_action_default_parameter
 
 // Comment
 comment
-    : '#' Letter* Newline
+    : '#' (Letter | Blank)* Newline
     ;
 
 // Common
-
-method
-    : '*'
-    | 'GET'
-    | 'get'
-    | 'POST'
-    | 'post'
-    | 'HEAD'
-    | 'head'
-    | 'PUT'
-    | 'put'
-    | 'DELETE'
-    | 'delete'
-    ;
 
 action
     : 'action:'? name
@@ -207,8 +189,20 @@ Letter
     | '\u3400'..'\u3d2d'
     | '\u4e00'..'\u9fff'
     | '\uf900'..'\ufaff'
-    | '-'
-    | '$'
+    ;
+
+Method
+    : '*'
+    | 'GET'
+    | 'get'
+    | 'POST'
+    | 'post'
+    | 'HEAD'
+    | 'head'
+    | 'PUT'
+    | 'put'
+    | 'DELETE'
+    | 'delete'
     ;
 
 Digit
