@@ -29,7 +29,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 /**
@@ -53,13 +52,25 @@ public class GrammarTest {
         StdErrReporter reporter = new StdErrReporter();
         
         ANTLRStringStream stream = new ANTLRStringStream(
-                 "[config]\n"
-                + "package.views=tutu.t_ut-u/...\n"
-                + "reloadable=true\n"
-                + " \t\n"
-                + "#test\n"
-                + "[filters]\n"
-                + "*   /    Action.test\n"
+                "[config]\n" +
+                "package.views=org.delux.webmotion.test.views\n" +
+                "package.filters=org.debux.webmotion.test.filters\n" +
+                "package.actions=org.debux.webmotion.test.actions\n" +
+                "package.errors=org.debux.webmotion.test.errors\n" +
+                "\n" +
+                "#reloadable=true\n" +
+                "#mode=statefull/stateless\n" +
+                "#request.encoding=UTF-8\n" +
+                "\n" +
+                "[errors]\n" +
+                "java.lang.NullPointerException                              Error.npeError\n" +
+                "code:404                                                    Error.notFound\n" +
+                "code:500                                                    Error.error\n" +
+                "\n" +
+                "[filters]\n" +
+                "*           /*                                              Filters.log\n" +
+                "*           /test/hello/*                                   Filters.param\n" +
+                "*           /test/*/*                                       Filters.log\n"
                 );
         MappingLanguageLexer lexer = new MappingLanguageLexer(stream);
         lexer.setErrorReporter(reporter);

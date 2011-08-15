@@ -1,5 +1,9 @@
 grammar MappingLanguage;
 
+options {
+    filter=true;
+}
+
 @header {
     package org.debux.webmotion.server.mapping;
 }
@@ -29,7 +33,7 @@ grammar MappingLanguage;
 }
 
 mapping
-    : section_config (section_error | section_filter | section_action | comment)*
+    : section_config (section_error | section_filter | section_action | comment)* EOF
     ;
 
 // Section config
@@ -43,7 +47,7 @@ section_config_label
     ;
 
 section_config_rule
-    : section_config_name '=' section_config_value
+    : section_config_name '=' section_config_value?
     ;
 
 section_config_name
@@ -57,7 +61,7 @@ section_config_name
     ;
 
 section_config_value
-    : ('.' | '/' | Letter)*
+    : ('/' | Letter+) (('.' | '/') Letter+)*
     ;
 
 // Section error
@@ -79,7 +83,7 @@ section_error_exception
     ;
 
 section_error_code
-    : 'code:' | (Digit Digit Digit)
+    : 'code:' (Digit Digit Digit)
     ;
 
 // Section filter
@@ -93,11 +97,11 @@ section_filter_label
     ;
 
 section_filter_rule
-    : Method Blank section_filter_path Blank action
+    : method Blank section_filter_path Blank action
     ;
 
 section_filter_path
-    : ('/' (Letter* | '*'))+
+    : ('/' (Letter+ | '*'))+
     ;
 
 // Section action
@@ -111,7 +115,7 @@ section_action_label
     ;
 
 section_action_rule
-    : Method Blank section_action_path Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
+    : method Blank section_action_path Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
     ;
 
 section_action_path
@@ -148,7 +152,7 @@ section_action_default_parameter
 
 // Comment
 comment
-    : '#' (Letter | Blank)* Newline
+    : '#' .* Newline
     ;
 
 // Common
@@ -175,6 +179,20 @@ pattern
     : (Letter | '?' | '*' | '^' | '$')+
     ;
 
+method
+    : 'GET'
+    | 'get'
+    | 'POST'
+    | 'post'
+    | 'HEAD'
+    | 'head'
+    | 'PUT'
+    | 'put'
+    | 'DELETE'
+    | 'delete'
+    | '*'
+    ;
+
 Letter
     : '\u0024'
     | '\u0041'..'\u005a'
@@ -189,20 +207,6 @@ Letter
     | '\u3400'..'\u3d2d'
     | '\u4e00'..'\u9fff'
     | '\uf900'..'\ufaff'
-    ;
-
-Method
-    : '*'
-    | 'GET'
-    | 'get'
-    | 'POST'
-    | 'post'
-    | 'HEAD'
-    | 'head'
-    | 'PUT'
-    | 'put'
-    | 'DELETE'
-    | 'delete'
     ;
 
 Digit
