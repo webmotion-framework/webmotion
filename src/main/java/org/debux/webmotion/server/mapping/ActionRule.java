@@ -49,7 +49,7 @@ public class ActionRule {
     protected static final String ALLOWED_CHARACTERS = "[\\p{Alnum}\\p{Punct}&&[^!\\*'\\(\\);:@&=+$,\\/\\?#\\[\\]]]";
     protected static Pattern patternParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}$");
     protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
-    protected static Pattern patternPath = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}(" + ALLOWED_CHARACTERS + "*)$");
+    protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     protected String method;
     protected List<URLPattern> ruleUrl;
@@ -120,9 +120,25 @@ public class ActionRule {
             String[] splitBaseUrl = StringUtils.splitPreserveAllTokens(baseUrl, "/");
             log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
 
+            // Need to split again the URI, after splitting URI with '/'
+            // split with braces '{' & '}' to handle cases merging static param & dynamic param
+            // like /my-static-context-{myParam}
             for(String item : splitBaseUrl) {
-                URLPattern expression = extractExpression(item, false);
-                ruleUrl.add(expression);
+                if (!StringUtils.isEmpty(item)) {
+                    List<String> splitItem = split(item, Pattern.compile("[\\{\\}]"));
+                    splitItem = transform(splitItem);
+                    log.info("splitItem = " + splitItem);
+                    for (String smallestPart : splitItem) {
+                        if (!StringUtils.isEmpty(smallestPart)) {
+                            log.info("extractExpression for " + smallestPart);
+                            URLPattern expression = extractExpression(smallestPart, false);
+                            ruleUrl.add(expression);
+                        }
+                    }
+                } else {
+                    URLPattern expression = extractExpression(item, false);
+                    ruleUrl.add(expression);
+                }
             }
         }
         
@@ -137,6 +153,37 @@ public class ActionRule {
                 ruleParameters.add(expression);
             }
         }
+    }
+    
+    protected List<String> transform(List<String> originalList) {
+        List<String> result = new ArrayList<String>();
+
+        for (int i = 0 ; i < originalList.size() ; ) {
+            String string = originalList.get(i);
+            if ("{".equals(string)) {
+                String param = originalList.get(i+1);
+                result.add('{' + param + '}');
+                i += 4;
+            } else {
+                i++;
+                result.add(string);
+            }
+        }
+        
+        return result;
+    }
+    
+    public static List<String> split(String s, Pattern pattern) {
+        Matcher m = pattern.matcher(s);
+        List<String> ret = new ArrayList<String>();
+        int start = 0;
+        while (m.find()) {
+            ret.add(s.substring(start, m.start()));
+            ret.add(m.group());
+            start = m.end();
+        }
+        ret.add(start >= s.length() ? "" : s.substring(start));
+        return ret;
     }
 
     /**

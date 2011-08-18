@@ -84,6 +84,7 @@ public class ActionFinderHandler implements WebMotionHandler {
             }
         }
         
+        log.error("Unable to get action rule for url: " + url);
         return null;
     }
     
@@ -100,7 +101,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         // Test url
         List<URLPattern> ruleUrl = actionRule.getRuleUrl();
         URLPattern[] expressions = ruleUrl.toArray(new URLPattern[0]);
-
+        
         // All path math in rule
         if(expressions.length != path.length) {
             return false;
