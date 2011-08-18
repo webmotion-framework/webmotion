@@ -49,7 +49,7 @@ public class ActionRule {
     protected static final String ALLOWED_CHARACTERS = "[\\p{Alnum}\\p{Punct}&&[^!\\*'\\(\\);:@&=+$,\\/\\?#\\[\\]]]";
     protected static Pattern patternParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}$");
     protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
-    protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
+    protected static Pattern patternPath = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}(" + ALLOWED_CHARACTERS + "*)$");
 
     protected String method;
     protected List<URLPattern> ruleUrl;
