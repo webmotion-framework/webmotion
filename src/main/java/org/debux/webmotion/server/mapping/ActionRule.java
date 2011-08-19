@@ -109,7 +109,7 @@ public class ActionRule {
 
     /**
      * Extract the url pattern
-     * @param url 
+     * @param urlPattern 
      */
     public void extractURLPattern(String urlPattern) {
         log.info("urlPattern = " + urlPattern);
@@ -120,25 +120,9 @@ public class ActionRule {
             String[] splitBaseUrl = StringUtils.splitPreserveAllTokens(baseUrl, "/");
             log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
 
-            // Need to split again the URI, after splitting URI with '/'
-            // split with braces '{' & '}' to handle cases merging static param & dynamic param
-            // like /my-static-context-{myParam}
             for(String item : splitBaseUrl) {
-                if (!StringUtils.isEmpty(item)) {
-                    List<String> splitItem = split(item, Pattern.compile("[\\{\\}]"));
-                    splitItem = transform(splitItem);
-                    log.info("splitItem = " + splitItem);
-                    for (String smallestPart : splitItem) {
-                        if (!StringUtils.isEmpty(smallestPart)) {
-                            log.info("extractExpression for " + smallestPart);
-                            URLPattern expression = extractExpression(smallestPart, false);
-                            ruleUrl.add(expression);
-                        }
-                    }
-                } else {
-                    URLPattern expression = extractExpression(item, false);
-                    ruleUrl.add(expression);
-                }
+                URLPattern expression = extractExpression(item, false);
+                ruleUrl.add(expression);
             }
         }
         
@@ -153,37 +137,6 @@ public class ActionRule {
                 ruleParameters.add(expression);
             }
         }
-    }
-    
-    protected List<String> transform(List<String> originalList) {
-        List<String> result = new ArrayList<String>();
-
-        for (int i = 0 ; i < originalList.size() ; ) {
-            String string = originalList.get(i);
-            if ("{".equals(string)) {
-                String param = originalList.get(i+1);
-                result.add('{' + param + '}');
-                i += 4;
-            } else {
-                i++;
-                result.add(string);
-            }
-        }
-        
-        return result;
-    }
-    
-    public static List<String> split(String s, Pattern pattern) {
-        Matcher m = pattern.matcher(s);
-        List<String> ret = new ArrayList<String>();
-        int start = 0;
-        while (m.find()) {
-            ret.add(s.substring(start, m.start()));
-            ret.add(m.group());
-            start = m.end();
-        }
-        ret.add(start >= s.length() ? "" : s.substring(start));
-        return ret;
     }
 
     /**
@@ -231,7 +184,7 @@ public class ActionRule {
      * @param ruleAction 
      */
     public void extractAction(String ruleAction) {
-        int typeSeparatorIndex = ruleAction.indexOf(":");
+        int typeSeparatorIndex = ruleAction.indexOf(':');
         action = new Action();
         
         String value;
@@ -242,7 +195,7 @@ public class ActionRule {
             value = ruleAction.substring(typeSeparatorIndex + 1);
         }
         
-        int packageSeparatorIndex = value.lastIndexOf(".");
+        int packageSeparatorIndex = value.lastIndexOf('.');
         if(packageSeparatorIndex != -1) {
             action.setClassName(value.substring(0, packageSeparatorIndex));
             action.setMethodName(value.substring(packageSeparatorIndex + 1));
