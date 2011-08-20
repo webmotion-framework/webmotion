@@ -61,7 +61,7 @@ public class GrammarTest {
                 "#reloadable=true\n" +
                 "#mode=statefull/stateless\n" +
                 "#request.encoding=UTF-8\n" +
-                "\n" +
+                "\n" + // line 10
                 "[errors]\n" +
                 "java.lang.NullPointerException                              Error.npeError\n" +
                 "code:404                                                    Error.notFound\n" +
@@ -70,7 +70,37 @@ public class GrammarTest {
                 "[filters]\n" +
                 "*           /*                                              Filters.log\n" +
                 "*           /test/hello/*                                   Filters.param\n" +
-                "*           /test/*/*                                       Filters.log\n"
+                "*           /test/*/*                                       Filters.log\n" +
+                "\n" + // line 20
+                "[actions]\n" +
+                "#<method>   <url>                                           <action>\n" +
+                "GET         /                                               Test.index\n" +
+                "*           /index                                          view.html:test.index\n" +
+                "*           /google                                         url:http://www.google.fr\n" +
+                "*           /info/                                          url:/test/hello/3\n" +
+                "\n" +
+                "*           /include                                        view.jsp:test.include\n" +
+                "\n" +
+                "*           /info/{infoId}                                  Test.all\n" + // line 30
+                "*           /info/{infoId}/                                 Test.run\n" +
+                "*           /run/?param                                     Test.all\n" +
+                "*           /run?param                                      Test.run\n" +
+                "*           /url/run/                                       Test.run\n" +
+                "*           /url/run                                        Test.all\n" +
+                "\n" +
+                "*           /test/run?param=test                            Test.all\n" +
+                "*           /test/run                                       Test.run\n" +
+                "*           /sub                                            sub.Subaction.index\n" +
+                "*           /admin                                          view.jsp:sub.subaction.admin.index\n" + // line 40
+                "\n" +
+                "*           /static                                         Test.hello          value=coco,number=9\n" +
+                "*           /test/hello?who={value:aaaa*}&number={number}   action:Test.hello\n" +
+                "*           /test/{value}/{number}                          Test.hello\n" +
+                "\n" +
+                "*           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}\n" +
+                "\n" +
+                "# All match\n" +
+                "*           /{class}/{method}                               {class}.{method}\n"
                 );
         MappingLanguageLexer lexer = new MappingLanguageLexer(stream);
         lexer.setErrorReporter(reporter);

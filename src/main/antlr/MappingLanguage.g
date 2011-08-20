@@ -33,13 +33,13 @@ options {
 }
 
 mapping
-    : section_config (section_error | section_filter | section_action | comment)* EOF
+    : comment* section_config (section_error | section_filter | section_action)* EOF
     ;
 
 // Section config
 
 section_config
-    : section_config_label Newline (section_config_rule Newline)*
+    : section_config_label Newline ((section_config_rule Newline) | comment)*
     ;
 
 section_config_label
@@ -67,7 +67,7 @@ section_config_value
 // Section error
 
 section_error
-    : section_error_label Newline (section_error_rule Newline)*
+    : section_error_label Newline ((section_error_rule Newline) | comment)*
     ;
 
 section_error_label
@@ -89,7 +89,7 @@ section_error_code
 // Section filter
 
 section_filter
-    : section_filter_label Newline (section_filter_rule Newline)*
+    : section_filter_label Newline ((section_filter_rule Newline) | comment)*
     ;
 
 section_filter_label
@@ -107,7 +107,7 @@ section_filter_path
 // Section action
 
 section_action
-    : section_action_label Newline (section_action_rule Newline)*
+    : section_action_label Newline ((section_action_rule Newline) | comment)*
     ;
 
 section_action_label
@@ -131,7 +131,7 @@ section_action_parameters
     ;
 
 section_action_parameter
-    : Letter+ '=' (section_action_variable | Letter*)
+    : Letter+ ('=' (section_action_variable | Letter*))?
     ;
     
 section_action_dynamic
@@ -147,7 +147,7 @@ section_action_default_parameters
     ;
 
 section_action_default_parameter
-    : Letter+ '=' Letter*
+    : Letter+ '=' .*
     ;
 
 // Comment
@@ -169,9 +169,8 @@ name
     : (Letter)+ ('.' (Letter)+)+
     ;
 
-// TODO: jru 20110803 add other char in url
 url
-    : 'url:' (Letter)*
+    : 'url:' .*
     ;
 
 // TODO: jru 20110803 add other char in pattern
