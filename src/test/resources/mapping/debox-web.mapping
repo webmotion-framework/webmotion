@@ -1,0 +1,50 @@
+[config]
+package.views=WEB-INF/
+package.filters=org.debox.web.filter
+package.actions=org.debox.web.action
+package.errors=org.debox.web.error
+
+#reloadable=true
+#mode=statefull/stateless
+
+[errors]
+#java.lang.NullPointerException                              Error.npeError
+code:404                                                     view.jsp:error.404
+code:500                                                     view.jsp:error.500
+
+[filters]
+GET         /*                                                Media.saveMediaType
+GET         /media/*/*/*/                                     Media.checkAuthenticationData
+GET         /media/*/*/                                       Media.checkAuthenticationData
+
+POST        /contact/                                         Contact.checkParameters
+POST        /inscription/                                     Account.checkRegisterParameters
+POST        /connexion/                                       Account.checkLoginParameters
+GET         /compte/*                                         Account.checkUserAuthentication
+DELETE      /compte/*                                         Account.checkProviderAuthenticationData
+
+[actions]
+GET         /                                                 view.jsp:home.home
+
+GET         /inscription/                                     view.jsp:account.register
+POST        /inscription/                                     Account.register
+
+GET         /connexion/                                       view.jsp:account.login
+POST        /connexion/                                       Account.login
+
+GET         /contact/                                         view.jsp:contact.contact
+POST        /contact/                                         Contact.sendMail
+
+GET         /compte/                                          Account.displayAccount
+DELETE      /compte/{provider}                                Account.deleteProviderAuthentication
+
+GET         /media/{provider}/credentials?action=save&error=access_denied    Media.displayAccessDeniedError
+GET         /media/{provider}/credentials?action=save&code={code}            Media.saveAuthenticationData
+GET         /media/{provider}/credentials?action=save&frob={code}            Media.saveAuthenticationData
+
+GET         /media/{mediaType}/                               Media.getProviders
+GET         /media/{mediaType}/{provider}/                    media.{mediaType}.getRootMedia
+GET         /media/{mediaType}/{provider}/{containerId}/      media.{mediaType}.getContent
+GET         /media/{mediaType}/{provider}/search?q={query}    media.{mediaType}.search
+
+DELETE      /session                                          Session.deleteUserSession

@@ -61,7 +61,7 @@ section_config_name
     ;
 
 section_config_value
-    : ('/' | Letter+) (('.' | '/') Letter+)*
+    : ('/' | Letter+) (('.' Letter+) | ('/' Letter*))*
     ;
 
 // Section error
@@ -101,7 +101,7 @@ section_filter_rule
     ;
 
 section_filter_path
-    : ('/' (Letter+ | '*'))+
+    : ('/' (Letter+ | '*'))+ '/'?
     ;
 
 // Section action
@@ -162,11 +162,11 @@ action
     ;
 
 view
-    : 'view.' (Letter)+ ':' name
+    : 'view.' (Letter | Digit)+ ':' name
     ;
 
 name
-    : (Letter)+ ('.' (Letter)+)+
+    : (Letter | Digit)+ ('.' (Letter | Digit)+)+
     ;
 
 url
@@ -180,15 +180,10 @@ pattern
 
 method
     : 'GET'
-    | 'get'
     | 'POST'
-    | 'post'
     | 'HEAD'
-    | 'head'
     | 'PUT'
-    | 'put'
     | 'DELETE'
-    | 'delete'
     | '*'
     ;
 

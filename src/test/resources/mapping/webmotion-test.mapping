@@ -1,0 +1,49 @@
+[config]
+package.views=org.debux.webmotion.test.views
+package.filters=org.debux.webmotion.test.filters
+package.actions=org.debux.webmotion.test.actions
+package.errors=org.debux.webmotion.test.errors
+
+#reloadable=true
+#mode=statefull/stateless
+#request.encoding=UTF-8
+
+[errors]
+java.lang.NullPointerException                              Error.npeError
+code:404                                                    Error.notFound
+code:500                                                    Error.error
+
+[filters]
+*           /*                                              Filters.log
+*           /test/hello/*                                   Filters.param
+*           /test/*/*                                       Filters.log
+
+[actions]
+#<method>   <url>                                           <action>
+*           /                                               Test.index
+*           /index                                          view.html:test.index
+*           /google                                         url:http://www.google.fr
+*           /info/                                          url:/test/hello/3
+
+*           /include                                        view.jsp:test.include
+
+*           /info/{infoId}                                  Test.all
+*           /info/{infoId}/                                 Test.run
+*           /run/?param                                     Test.all
+*           /run?param                                      Test.run
+*           /url/run/                                       Test.run
+*           /url/run                                        Test.all
+
+*           /test/run?param=test                            Test.all
+*           /test/run                                       Test.run
+*           /sub                                            sub.Subaction.index
+*           /admin                                          view.jsp:sub.subaction.admin.index
+
+*           /static                                         Test.hello          value=coco,number=9
+*           /test/hello?who={value:aaaa*}&number={number}   action:Test.hello
+*           /test/{value}/{number}                          Test.hello
+
+*           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}
+
+# All match
+*           /{class}/{method}                               {class}.{method}

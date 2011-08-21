@@ -24,11 +24,14 @@
  */
 package org.debux.webmotion.server.mapping;
 
-import org.antlr.runtime.ANTLRStringStream;
+import java.io.IOException;
+import java.net.URL;
+import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
@@ -47,70 +50,42 @@ public class GrammarTest {
         }
     }
     
-    @Test
-    public void testMain() throws RecognitionException {
-        StdErrReporter reporter = new StdErrReporter();
+    @Factory
+    public Object[] testFactory() {
+        return new Object[] {
+            new RunGrammar("mapping/webmotion-test.mapping"),
+            new RunGrammar("mapping/debox-web.mapping")
+        };
+    }
+    
+    public class RunGrammar {
         
-        ANTLRStringStream stream = new ANTLRStringStream(
-                "[config]\n" +
-                "package.views=org.delux.webmotion.test.views\n" +
-                "package.filters=org.debux.webmotion.test.filters\n" +
-                "package.actions=org.debux.webmotion.test.actions\n" +
-                "package.errors=org.debux.webmotion.test.errors\n" +
-                "\n" +
-                "#reloadable=true\n" +
-                "#mode=statefull/stateless\n" +
-                "#request.encoding=UTF-8\n" +
-                "\n" + // line 10
-                "[errors]\n" +
-                "java.lang.NullPointerException                              Error.npeError\n" +
-                "code:404                                                    Error.notFound\n" +
-                "code:500                                                    Error.error\n" +
-                "\n" +
-                "[filters]\n" +
-                "*           /*                                              Filters.log\n" +
-                "*           /test/hello/*                                   Filters.param\n" +
-                "*           /test/*/*                                       Filters.log\n" +
-                "\n" + // line 20
-                "[actions]\n" +
-                "#<method>   <url>                                           <action>\n" +
-                "GET         /                                               Test.index\n" +
-                "*           /index                                          view.html:test.index\n" +
-                "*           /google                                         url:http://www.google.fr\n" +
-                "*           /info/                                          url:/test/hello/3\n" +
-                "\n" +
-                "*           /include                                        view.jsp:test.include\n" +
-                "\n" +
-                "*           /info/{infoId}                                  Test.all\n" + // line 30
-                "*           /info/{infoId}/                                 Test.run\n" +
-                "*           /run/?param                                     Test.all\n" +
-                "*           /run?param                                      Test.run\n" +
-                "*           /url/run/                                       Test.run\n" +
-                "*           /url/run                                        Test.all\n" +
-                "\n" +
-                "*           /test/run?param=test                            Test.all\n" +
-                "*           /test/run                                       Test.run\n" +
-                "*           /sub                                            sub.Subaction.index\n" +
-                "*           /admin                                          view.jsp:sub.subaction.admin.index\n" + // line 40
-                "\n" +
-                "*           /static                                         Test.hello          value=coco,number=9\n" +
-                "*           /test/hello?who={value:aaaa*}&number={number}   action:Test.hello\n" +
-                "*           /test/{value}/{number}                          Test.hello\n" +
-                "\n" +
-                "*           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}\n" +
-                "\n" +
-                "# All match\n" +
-                "*           /{class}/{method}                               {class}.{method}\n"
-                );
-        MappingLanguageLexer lexer = new MappingLanguageLexer(stream);
-        lexer.setErrorReporter(reporter);
+        protected String fileName;
+
+        public RunGrammar(String fileName) {
+            this.fileName = fileName;
+        }
         
-       	CommonTokenStream tokens = new CommonTokenStream();
-        tokens.setTokenSource(lexer);
+        @Test
+        public void testParser() throws RecognitionException, IOException {
+            StdErrReporter reporter = new StdErrReporter();
+            
+            ClassLoader classLoader = GrammarTest.class.getClassLoader();
+            URL resource = classLoader.getResource(fileName);
+            String path = resource.getPath();
+            ANTLRFileStream stream = new ANTLRFileStream(path);
+            
+            MappingLanguageLexer lexer = new MappingLanguageLexer(stream);
+            lexer.setErrorReporter(reporter);
+
+            CommonTokenStream tokens = new CommonTokenStream();
+            tokens.setTokenSource(lexer);
+
+            MappingLanguageParser parser = new MappingLanguageParser(tokens);
+            parser.setErrorReporter(reporter);
+            parser.mapping();
+        }
         
-        MappingLanguageParser parser = new MappingLanguageParser(tokens);
-        parser.setErrorReporter(reporter);
-        parser.mapping();
     }
     
 }
