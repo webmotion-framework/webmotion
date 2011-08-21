@@ -47,7 +47,7 @@ section_config_label
     ;
 
 section_config_rule
-    : section_config_name '=' section_config_value?
+    : section_config_name '=' .*
     ;
 
 section_config_name
@@ -58,10 +58,6 @@ section_config_name
     | 'reloadable'
     | 'mode'
     | 'request.encoding'
-    ;
-
-section_config_value
-    : ('/' | Letter+) (('.' Letter+) | ('/' Letter*))*
     ;
 
 // Section error
@@ -75,15 +71,11 @@ section_error_label
     ;
 
 section_error_rule
-    : (section_error_exception | section_error_code) Blank (view | url | action)
-    ;
-
-section_error_exception
-    : Letter+ ('.' (Letter)+)*
+    : (full_name | section_error_code) Blank (view | url | action)
     ;
 
 section_error_code
-    : 'code:' (Digit Digit Digit)
+    : 'code:' Digit Digit Digit
     ;
 
 // Section filter
@@ -101,7 +93,7 @@ section_filter_rule
     ;
 
 section_filter_path
-    : ('/' (Letter+ | '*'))+ '/'?
+    : ('/' (simple_name | '*'))+ '/'?
     ;
 
 // Section action
@@ -119,11 +111,11 @@ section_action_rule
     ;
 
 section_action_path
-    : ('/' (Letter* | section_action_variable))+ ('?' section_action_parameters)?
+    : ('/' (simple_name | section_action_variable)? )+ ('?' section_action_parameters)?
     ;
 
 section_action_variable
-    : '{' Letter+ (':' pattern)? '}'
+    : '{' simple_name (':' pattern)? '}'
     ;
 
 section_action_parameters
@@ -131,7 +123,7 @@ section_action_parameters
     ;
 
 section_action_parameter
-    : Letter+ ('=' (section_action_variable | Letter*))?
+    : simple_name ('=' (section_action_variable | simple_name)? )?
     ;
     
 section_action_dynamic
@@ -139,7 +131,7 @@ section_action_dynamic
     ;
 
 section_action_dynamic_variable
-    : ('{' Letter+ '}' | Letter)+
+    : ('{' simple_name '}' | Letter | Digit)+
     ;
 
 section_action_default_parameters
@@ -147,7 +139,7 @@ section_action_default_parameters
     ;
 
 section_action_default_parameter
-    : Letter+ '=' .*
+    : simple_name '=' .*
     ;
 
 // Comment
@@ -158,15 +150,11 @@ comment
 // Common
 
 action
-    : 'action:'? name
+    : 'action:'? full_name
     ;
 
 view
-    : 'view.' (Letter | Digit)+ ':' name
-    ;
-
-name
-    : (Letter | Digit)+ ('.' (Letter | Digit)+)+
+    : 'view.' simple_name ':' full_name
     ;
 
 url
@@ -175,7 +163,7 @@ url
 
 // TODO: jru 20110803 add other char in pattern
 pattern
-    : (Letter | '?' | '*' | '^' | '$')+
+    : (Letter | Digit | '?' | '*' | '^' | '$')+
     ;
 
 method
@@ -185,6 +173,14 @@ method
     | 'PUT'
     | 'DELETE'
     | '*'
+    ;
+
+simple_name
+    : (Letter | Digit)+
+    ;
+
+full_name
+    : simple_name ('.' simple_name)*
     ;
 
 Letter
