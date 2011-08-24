@@ -200,7 +200,7 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr-runtime</artifactId>
-            <version>3.0.1</version>
+            <version>3.4</version>
         </dependency>
                     
     </dependencies>
@@ -258,14 +258,19 @@
             </plugin>
             
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
-                <version>1.0</version>
+                <version>3.4</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>antlr</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirectory>src/main/antlr3</sourceDirectory>
+                <verbose>true</verbose>
+
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
