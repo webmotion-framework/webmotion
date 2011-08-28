@@ -85,7 +85,7 @@ section_filter_rule
     ;
 
 section_filter_path
-    : (SLASH (simple_name | ASTERISK))+ SLASH?
+    : (SLASH (path_name | ASTERISK))+ SLASH?
     ;
 
 // Section action
@@ -101,7 +101,7 @@ section_action_rule
     ;
 
 section_action_path
-    : (SLASH (simple_name | section_action_variable)? )+ section_action_path_parameters?
+    : (SLASH (path_name | section_action_variable)? )+ section_action_path_parameters?
     ;
 
 section_action_variable
@@ -186,6 +186,11 @@ method
     | ASTERISK
     ;
 
+path_name
+    : (Letter | Digit | HYPHEN)+
+    -> DOLAR[$text]
+    ;
+
 simple_name
     : (Letter | Digit)+
     -> DOLAR[$text]
@@ -197,6 +202,6 @@ full_name
     ;
 
 dummy
-    : HYPHEN | BACKSLASH
+    : BACKSLASH
     -> DOLAR[$text]
     ;
