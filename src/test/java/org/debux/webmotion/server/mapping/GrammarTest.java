@@ -29,10 +29,14 @@ import java.net.URL;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTree;
+import org.debux.webmotion.server.mapping.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
+import org.antlr.runtime.tree.DOTTreeGenerator;
+import org.antlr.stringtemplate.StringTemplate;
 
 /**
  * Test on extract mapping.
@@ -83,7 +87,11 @@ public class GrammarTest {
 
             MappingLanguageParser parser = new MappingLanguageParser(tokens);
             parser.setErrorReporter(reporter);
-            parser.mapping();
+            mapping_return mapping = parser.mapping();
+            CommonTree tree = mapping.tree;
+            DOTTreeGenerator gen = new DOTTreeGenerator();
+            StringTemplate st = gen.toDOT(tree);
+            log.info(st.toString());
         }
         
     }
