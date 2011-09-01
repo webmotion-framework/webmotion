@@ -44,7 +44,7 @@ METHOD_DELETE:'DELETE';
 
 HYPHEN:'-';
 SLASH:'/';
-BACKSLASH:'\\';
+//BACKSLASH:'\\';
 EQUALS:'=';
 ASTERISK:'*';
 COMMA:',';

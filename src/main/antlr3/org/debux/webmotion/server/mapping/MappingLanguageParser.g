@@ -37,7 +37,7 @@ section_config
 
 section_config_rule
     : section_config_name section_config_value
-    -> ^(SECTION_CONFIG section_config_name section_config_value)
+    -> ^(SECTION_CONFIG ^(section_config_name section_config_value))
     ;
 
 section_config_value
@@ -64,12 +64,17 @@ section_error
 
 section_error_rule
     : (full_name | section_error_code) Blank (view | url | action)
-    -> ^(SECTION_ERRORS full_name* section_error_code* view* url* action*)
+    -> ^(SECTION_ERRORS ^(DOLAR["EXCEPTION"] full_name)* section_error_code* view* url* action*)
     ;
 
 section_error_code
-    : CODE Digit Digit Digit
-    -> SECTION_ERRORS[$text]
+    : CODE section_error_code_value
+    -> ^(DOLAR["CODE"] section_error_code_value)
+    ;
+
+section_error_code_value
+    : Digit Digit Digit
+    -> DOLAR[$text]
     ;
 
 // Section filter
@@ -81,7 +86,7 @@ section_filter
 
 section_filter_rule
     : method Blank section_filter_path Blank action
-    -> ^(SECTION_FILTERS method ^(DOLAR["PATH"] section_filter_path) action)
+    -> ^(SECTION_FILTERS ^(DOLAR["METHOD"] method) ^(DOLAR["PATH"] section_filter_path) action)
     ;
 
 section_filter_path
@@ -96,17 +101,22 @@ section_action
     ;
 
 section_action_rule
-    : method Blank section_action_path Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
-    -> ^(SECTION_ACTIONS method ^(DOLAR["PATH"] section_action_path) view* url* section_action_dynamic* section_action_default_parameters*)
+    : method Blank section_action_path section_action_path_parameters? Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
+    -> ^(SECTION_ACTIONS ^(DOLAR["METHOD"] method) section_action_path section_action_path_parameters* view* url* section_action_dynamic* section_action_default_parameters*)
     ;
 
 section_action_path
-    : (SLASH (path_name | section_action_variable)? )+ section_action_path_parameters?
+    : section_action_path_value+
+    -> ^(DOLAR["PATH"] section_action_path_value*)
+    ;
+
+section_action_path_value
+    : SLASH (path_name | section_action_variable)?
     ;
 
 section_action_variable
     : LEFT_CURLY_BRACE simple_name (COLON pattern)? RIGHT_CURLY_BRACE
-    -> ^(DOLAR["VARIABLE"] simple_name pattern*)
+    -> ^(DOLAR["VARIABLE"] simple_name) ^(DOLAR["PATERN"] pattern)*
     ;
 
 section_action_path_parameters
@@ -125,8 +135,13 @@ section_action_parameter
     ;
     
 section_action_dynamic
-    : ACTION? f=section_action_dynamic_variable (PERIOD n=section_action_dynamic_variable)+
-    -> ^(DOLAR["ACTION"] $f (PERIOD $n)+)
+    : ACTION? section_action_dynamic_variable section_action_dynamic_name+
+    -> ^(DOLAR["ACTION"] section_action_dynamic_variable section_action_dynamic_name+)
+    ;
+
+section_action_dynamic_name
+    : PERIOD section_action_dynamic_variable
+    -> PERIOD section_action_dynamic_variable
     ;
 
 section_action_dynamic_variable
@@ -136,12 +151,12 @@ section_action_dynamic_variable
 
 section_action_default_parameters
     :  (section_action_default_parameter (COMMA section_action_default_parameter)*)?
-    -> section_action_default_parameter*
+    -> ^(DOLAR["DEFAULT_PARAMETERS"] section_action_default_parameter*)
     ;
 
 section_action_default_parameter
     : simple_name section_action_default_parameter_value
-    -> ^(DOLAR["DEFAULT_PARAMETERS"] simple_name section_action_default_parameter_value)
+    -> ^(simple_name section_action_default_parameter_value)
     ;
 
 section_action_default_parameter_value
@@ -197,11 +212,11 @@ simple_name
     ;
 
 full_name
-    : f=simple_name (PERIOD n=simple_name)*
-    -> $f (PERIOD $n)*
+    : simple_name full_name_value*
+    -> simple_name full_name_value*
     ;
 
-dummy
-    : BACKSLASH
-    -> DOLAR[$text]
+full_name_value
+    : PERIOD simple_name
+    -> PERIOD simple_name
     ;
