@@ -29,7 +29,6 @@ import java.net.URL;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.debux.webmotion.server.mapping.MappingLanguageParser.mapping_return;
@@ -38,11 +37,9 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 import org.antlr.runtime.tree.DOTTreeGenerator;
-import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.tree.TreeVisitor;
 import org.antlr.runtime.tree.TreeVisitorAction;
 import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.tool.GrammarAST;
 
 /**
  * Test on extract mapping.
