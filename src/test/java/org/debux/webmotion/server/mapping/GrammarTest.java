@@ -29,14 +29,20 @@ import java.net.URL;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.debux.webmotion.server.mapping.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 import org.antlr.runtime.tree.DOTTreeGenerator;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.tree.TreeVisitor;
+import org.antlr.runtime.tree.TreeVisitorAction;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.tool.GrammarAST;
 
 /**
  * Test on extract mapping.
@@ -89,11 +95,42 @@ public class GrammarTest {
             parser.setErrorReporter(reporter);
             mapping_return mapping = parser.mapping();
             CommonTree tree = mapping.tree;
+            printTree(tree, 0);
+            
             DOTTreeGenerator gen = new DOTTreeGenerator();
             StringTemplate st = gen.toDOT(tree);
             log.info(st.toString());
+            
+            TreeVisitor treeVisitor = new TreeVisitor(new CommonTreeAdaptor());
+            TreeVisitorAction visitorAction = new TreeVisitorAction() {
+                @Override
+                public Object pre(Object o) {
+                    CommonTree tree = (CommonTree) o;
+                    log.info(tree.getText());
+                    return o;
+                }
+
+                @Override
+                public Object post(Object o) {
+                    return o;
+                }
+            };
+            treeVisitor.visit(tree, visitorAction);
         }
         
+    }
+    
+    public void printTree(CommonTree t, int indent) {
+        if (t != null) {
+            StringBuffer sb = new StringBuffer(indent);
+            for (int i = 0; i < indent; i++) {
+                sb = sb.append("   ");
+            }
+            for (int i = 0; i < t.getChildCount(); i++) {
+                log.info(sb.toString() + t.getChild(i).toString());
+                printTree((CommonTree) t.getChild(i), indent + 1);
+            }
+        }
     }
     
 }
