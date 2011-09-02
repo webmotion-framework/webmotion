@@ -50,7 +50,7 @@ public class GrammarTest {
 
     private static final Logger log = LoggerFactory.getLogger(GrammarTest.class);
 
-    public class StdErrReporter implements ErrorReporter {
+    public class LogErrorReporter implements ErrorReporter {
         @Override
         public void reportError(String error) {
             log.error("Error = " + error);
@@ -75,7 +75,7 @@ public class GrammarTest {
         
         @Test
         public void testParser() throws RecognitionException, IOException {
-            StdErrReporter reporter = new StdErrReporter();
+            ErrorReporter reporter = new LogErrorReporter();
             
             ClassLoader classLoader = GrammarTest.class.getClassLoader();
             URL resource = classLoader.getResource(fileName);

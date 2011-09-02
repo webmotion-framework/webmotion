@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicMappingParser implements MappingParser {
 
-    private static final Logger log = LoggerFactory.getLogger(ActionRule.class);
+    private static final Logger log = LoggerFactory.getLogger(BasicMappingParser.class);
     
     /** Allowed characted are all alphanumeric characters, all punctuation characters exception following: <pre>!*'();:@&=+$,/?#[]</pre> */
     protected static final String ALLOWED_CHARACTERS = "[\\p{Alnum}\\p{Punct}&&[^!\\*'\\(\\);:@&=+$,\\/\\?#\\[\\]]]";

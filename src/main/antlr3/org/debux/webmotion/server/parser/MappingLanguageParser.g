@@ -41,7 +41,7 @@ section_config_rule
 
 section_config_value
     :  EQUALS .*
-    -> DOLAR[$text]
+    -> DOLLAR[$text]
     ;
 
 section_config_name
@@ -63,17 +63,17 @@ section_error
 
 section_error_rule
     : (full_name | section_error_code) Blank (view | url | action)
-    -> ^(SECTION_ERRORS ^(DOLAR["EXCEPTION"] full_name)* section_error_code* view* url* action*)
+    -> ^(SECTION_ERRORS ^(DOLLAR["EXCEPTION"] full_name)* section_error_code* view* url* action*)
     ;
 
 section_error_code
     : CODE section_error_code_value
-    -> ^(DOLAR["CODE"] section_error_code_value)
+    -> ^(DOLLAR["CODE"] section_error_code_value)
     ;
 
 section_error_code_value
     : Digit Digit Digit
-    -> DOLAR[$text]
+    -> DOLLAR[$text]
     ;
 
 // Section filter
@@ -85,7 +85,7 @@ section_filter
 
 section_filter_rule
     : method Blank section_filter_path Blank action
-    -> ^(SECTION_FILTERS ^(DOLAR["METHOD"] method) ^(DOLAR["PATH"] section_filter_path) action)
+    -> ^(SECTION_FILTERS ^(DOLLAR["METHOD"] method) ^(DOLLAR["PATH"] section_filter_path) action)
     ;
 
 section_filter_path
@@ -101,12 +101,12 @@ section_action
 
 section_action_rule
     : method Blank section_action_path section_action_path_parameters? Blank (view | url | section_action_dynamic) (Blank section_action_default_parameters)?
-    -> ^(SECTION_ACTIONS ^(DOLAR["METHOD"] method) section_action_path section_action_path_parameters* view* url* section_action_dynamic* section_action_default_parameters*)
+    -> ^(SECTION_ACTIONS ^(DOLLAR["METHOD"] method) section_action_path section_action_path_parameters* view* url* section_action_dynamic* section_action_default_parameters*)
     ;
 
 section_action_path
     : section_action_path_value+
-    -> ^(DOLAR["PATH"] section_action_path_value*)
+    -> ^(DOLLAR["PATH"] section_action_path_value*)
     ;
 
 section_action_path_value
@@ -115,12 +115,12 @@ section_action_path_value
 
 section_action_variable
     : LEFT_CURLY_BRACE simple_name (COLON pattern)? RIGHT_CURLY_BRACE
-    -> ^(DOLAR["VARIABLE"] simple_name) ^(DOLAR["PATERN"] pattern)*
+    -> ^(DOLLAR["VARIABLE"] simple_name) ^(DOLLAR["PATERN"] pattern)*
     ;
 
 section_action_path_parameters
     : QUESTION_MARK section_action_parameters
-    -> ^(DOLAR["PARAMETERS"] section_action_parameters)
+    -> ^(DOLLAR["PARAMETERS"] section_action_parameters)
     ;
 
 section_action_parameters
@@ -135,22 +135,22 @@ section_action_parameter
     
 section_action_dynamic
     : ACTION? section_action_dynamic_variable section_action_dynamic_name+
-    -> ^(DOLAR["ACTION"] section_action_dynamic_variable section_action_dynamic_name+)
+    -> ^(DOLLAR["ACTION"] section_action_dynamic_variable section_action_dynamic_name+)
     ;
 
 section_action_dynamic_name
-    : PERIOD section_action_dynamic_variable
-    -> PERIOD section_action_dynamic_variable
+    : DOT section_action_dynamic_variable
+    -> DOT section_action_dynamic_variable
     ;
 
 section_action_dynamic_variable
-    : (LEFT_CURLY_BRACE simple_name RIGHT_CURLY_BRACE)+ -> ^(DOLAR["VARIABLE"] simple_name)+
-    | (Letter | Digit)+ -> DOLAR[$text]
+    : (LEFT_CURLY_BRACE simple_name RIGHT_CURLY_BRACE)+ -> ^(DOLLAR["VARIABLE"] simple_name)+
+    | (Letter | Digit)+ -> DOLLAR[$text]
     ;
 
 section_action_default_parameters
     :  (section_action_default_parameter (COMMA section_action_default_parameter)*)?
-    -> ^(DOLAR["DEFAULT_PARAMETERS"] section_action_default_parameter*)
+    -> ^(DOLLAR["DEFAULT_PARAMETERS"] section_action_default_parameter*)
     ;
 
 section_action_default_parameter
@@ -160,7 +160,7 @@ section_action_default_parameter
 
 section_action_default_parameter_value
     : EQUALS .*
-    -> DOLAR[$text]
+    -> DOLLAR[$text]
     ;
 
 // Comment
@@ -172,23 +172,23 @@ comment
 
 action
     : ACTION? full_name
-    -> ^(DOLAR["ACTION"] full_name)
+    -> ^(DOLLAR["ACTION"] full_name)
     ;
 
 view
     : VIEW simple_name COLON full_name
-    -> ^(DOLAR["VIEW"]  simple_name full_name)
+    -> ^(DOLLAR["VIEW"]  simple_name full_name)
     ;
 
 url
     : URL .*
-    -> ^(DOLAR["URL"]  DOLAR[$text])
+    -> ^(DOLLAR["URL"]  DOLLAR[$text])
     ;
 
 // TODO: jru 20110803 add other char in pattern
 pattern
-    : (Letter | Digit | QUESTION_MARK | ASTERISK | CIRCUMFLEX_ACCENT | DOLAR)+
-    -> DOLAR[$text]
+    : (Letter | Digit | QUESTION_MARK | ASTERISK | CIRCUMFLEX_ACCENT | DOLLAR)+
+    -> DOLLAR[$text]
     ;
 
 method
@@ -202,12 +202,12 @@ method
 
 path_name
     : (Letter | Digit | HYPHEN)+
-    -> DOLAR[$text]
+    -> DOLLAR[$text]
     ;
 
 simple_name
     : (Letter | Digit)+
-    -> DOLAR[$text]
+    -> DOLLAR[$text]
     ;
 
 full_name
@@ -216,6 +216,6 @@ full_name
     ;
 
 full_name_value
-    : PERIOD simple_name
-    -> PERIOD simple_name
+    : DOT simple_name
+    -> DOT simple_name
     ;
