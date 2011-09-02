@@ -22,7 +22,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server.mapping;
+package org.debux.webmotion.server.parser;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +31,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
-import org.debux.webmotion.server.mapping.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
@@ -40,6 +39,7 @@ import org.antlr.runtime.tree.DOTTreeGenerator;
 import org.antlr.runtime.tree.TreeVisitor;
 import org.antlr.runtime.tree.TreeVisitorAction;
 import org.antlr.stringtemplate.StringTemplate;
+import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 
 /**
  * Test on extract mapping.
@@ -50,7 +50,7 @@ public class GrammarTest {
 
     private static final Logger log = LoggerFactory.getLogger(GrammarTest.class);
 
-    public class StdErrReporter implements IErrorReporter {
+    public class StdErrReporter implements ErrorReporter {
         @Override
         public void reportError(String error) {
             log.error("Error = " + error);

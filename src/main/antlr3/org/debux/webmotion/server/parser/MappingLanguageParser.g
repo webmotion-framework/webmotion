@@ -6,8 +6,7 @@ options {
 }
 
 @header {
-    package org.debux.webmotion.server.mapping;
-
+    package org.debux.webmotion.server.parser;
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
 }
@@ -15,8 +14,8 @@ options {
 @members {
     private static final Logger log = LoggerFactory.getLogger(MappingLanguageParser.class);
 
-    protected IErrorReporter errorReporter = null;
-    public void setErrorReporter(IErrorReporter errorReporter) {
+    protected ErrorReporter errorReporter = null;
+    public void setErrorReporter(ErrorReporter errorReporter) {
         this.errorReporter = errorReporter;
     }
     public void emitErrorMessage(String msg) {

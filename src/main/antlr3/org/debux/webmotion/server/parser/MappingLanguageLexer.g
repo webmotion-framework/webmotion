@@ -5,12 +5,12 @@ options {
 }
 
 @lexer::header {
-    package org.debux.webmotion.server.mapping;
+    package org.debux.webmotion.server.parser;
 }
 
 @lexer::members {
-    protected IErrorReporter errorReporter = null;
-    public void setErrorReporter(IErrorReporter errorReporter) {
+    protected ErrorReporter errorReporter = null;
+    public void setErrorReporter(ErrorReporter errorReporter) {
         this.errorReporter = errorReporter;
     }
     public void emitErrorMessage(String msg) {
