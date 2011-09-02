@@ -125,14 +125,4 @@ public class Config {
         this.mode = mode;
     }
     
-    /**
-     * Extract the value in line
-     * @param name config name
-     * @param line line contains the config
-     * @return the value in line
-     */
-    public String extractConfig(String name, String line) {
-        String value = line.substring((name + "=").length());
-        return value;
-    }
 }

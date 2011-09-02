@@ -78,45 +78,4 @@ public class Mapping {
         return errorRules;
     }
 
-    /**
-     * Extract in the given line an error rule
-     * @param line one line in mapping
-     */
-    public void extractSectionErrors(String line) {
-        String[] splitRule = line.split(" ");
-        ErrorRule errorRule = new ErrorRule();
-        errorRule.extractError(splitRule[0]);
-        errorRule.extractAction(splitRule[1]);
-        errorRules.add(errorRule);
-    }
-
-    /**
-     * Extract in the given line an filter rule
-     * @param line one line in mapping
-     */
-    public void extractSectionFilters(String line) {
-        String[] splitRule = line.split(" ");
-        FilterRule filterRule = new FilterRule();
-        filterRule.extractMethod(splitRule[0]);
-        filterRule.extractPattern(splitRule[1]);
-        filterRule.extractAction(splitRule[2]);
-        filterRules.add(filterRule);
-    }
-
-    /**
-     * Extract in the given line an action rule
-     * @param line one line in mapping
-     */
-    public void extractSectionActions(String line) {
-        String[] splitRule = line.split(" ");
-        ActionRule actionRule = new ActionRule();
-        actionRule.extractMethod(splitRule[0]);
-        actionRule.extractURLPattern(splitRule[1]);
-        actionRule.extractAction(splitRule[2]);
-        if(splitRule.length >= 4) {
-            actionRule.extractDefaultParameters(splitRule[3]);
-        }
-        actionRules.add(actionRule);
-    }
-
 }

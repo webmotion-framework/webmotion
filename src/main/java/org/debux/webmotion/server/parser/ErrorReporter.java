@@ -22,12 +22,13 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server.mapping;
+package org.debux.webmotion.server.parser;
 
 /**
+ * Report an error during the parsing.
  * 
  * @author jruchaud
  */
-public interface IErrorReporter {
+public interface ErrorReporter {
     void reportError(String error);
 }

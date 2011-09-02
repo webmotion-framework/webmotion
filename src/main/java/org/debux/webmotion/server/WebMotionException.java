@@ -31,6 +31,8 @@ package org.debux.webmotion.server;
  */
 public class WebMotionException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     public WebMotionException(String message, Throwable cause) {
         super(message, cause);
     }

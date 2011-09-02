@@ -52,34 +52,4 @@ public class ErrorRule {
         this.error = error;
     }
 
-    /**
-     * Extract the error
-     * @param ruleException 
-     */
-    public void extractError(String ruleException) {
-        error = ruleException;
-    }
-
-    /**
-     * Extract the action to execute
-     * @param ruleAction 
-     */
-    public void extractAction(String ruleAction) {
-        int typeSeparatorIndex = ruleAction.indexOf(":");
-        action = new Action();
-        
-        String value;
-        if(typeSeparatorIndex == -1) {
-            value = ruleAction;
-        } else {
-            action.setType(ruleAction.substring(0, typeSeparatorIndex));
-            value = ruleAction.substring(typeSeparatorIndex + 1);
-        }
-        
-        int packageSeparatorIndex = value.lastIndexOf(".");
-        action.setClassName(value.substring(0, packageSeparatorIndex));
-        action.setMethodName(value.substring(packageSeparatorIndex + 1));
-        action.setFullName(value);
-    }
-
 }

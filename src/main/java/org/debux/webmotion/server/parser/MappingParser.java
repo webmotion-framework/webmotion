@@ -22,44 +22,26 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server.mapping;
+package org.debux.webmotion.server.parser;
 
-import java.util.regex.Pattern;
+import java.io.InputStream;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * Represents an filter for an url. The action is executed when the url and http
- * method matches. The url syntax likes the servlet filter. 
+ * The interface represents to how parse the mapping file.
  * 
- * @author julien
+ * @author jruchaud
  */
-public class FilterRule {
-
-    protected String method;
-    protected Pattern pattern;
-    protected Action action;
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public Pattern getPattern() {
-        return pattern;
-    }
-
-    public void setPattern(Pattern pattern) {
-        this.pattern = pattern;
-    }
-
+public interface MappingParser {
+    
+    /** The absolute path to the mapping file */
+    public static String MAPPING_FILE_NAME = "/mapping";
+    
+    /**
+     * Parse a mapping file
+     * @param stream mapping file to parse
+     * @return the representation of the file
+     */
+    Mapping parse(InputStream stream);
+    
 }

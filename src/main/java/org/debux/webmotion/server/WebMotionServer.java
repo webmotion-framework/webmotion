@@ -38,6 +38,8 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.parser.BasicMappingParser;
+import org.debux.webmotion.server.parser.MappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,12 +50,6 @@ import org.slf4j.LoggerFactory;
  * 
  * @author jruchaud
  */
-@WebServlet(
-    name ="WebMotionServer",
-    urlPatterns = {
-        "/deploy/*"
-    }
-)
 public class WebMotionServer extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
@@ -70,7 +66,9 @@ public class WebMotionServer extends HttpServlet {
         actionManager = new WebMotionActionManager();
         errorManager = new WebMotionErrorManager();
         
-        readMapping();
+        InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
+        MappingParser parser = new BasicMappingParser();
+        mapping = parser.parse(stream);
     }
 
     @Override
@@ -89,82 +87,6 @@ public class WebMotionServer extends HttpServlet {
             errorManager.handle(mapping, call);
         } else {
             actionManager.handle(mapping, call);
-        }
-    }
-    
-    /**
-     * The mapping is read during initialisation.
-     * 
-     * @throws ServletException 
-     */
-    protected void readMapping() throws ServletException {
-        mapping = new Mapping();
-        Config config = mapping.getConfig();
-        
-        try {
-            InputStream mappings = getClass().getResourceAsStream("/mapping");
-            List<String> rules = IOUtils.readLines(mappings);
-
-            int section = 0;
-            for (String rule : rules) {
-                
-                rule = rule.trim();
-                rule = rule.replaceAll(" +", " ");
-
-                if(rule.startsWith("#") || rule.isEmpty()) {
-                    // Comments
-                } else if(rule.startsWith("[errors")) {
-                    section = 1;
-                } else if(rule.startsWith("[filters")) {
-                    section = 2;
-                } else if(rule.startsWith("[actions")) {
-                    section = 3;
-                } else if(rule.startsWith("[config")) {
-                    section = 4;
-
-                } else if(section == 1) {
-                    // Errors section
-                    mapping.extractSectionErrors(rule);
-
-                } else if(section == 2) {
-                    // Filters section
-                    mapping.extractSectionFilters(rule);
-
-                } else if(section == 3) {
-                    // Actions section
-                    mapping.extractSectionActions(rule);
-
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
-                    String value = config.extractConfig(Config.PACKAGE_VIEWS, rule);
-                    config.setPackageViews(value);
-
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_ACTIONS)) {
-                    String value = config.extractConfig(Config.PACKAGE_ACTIONS, rule);
-                    config.setPackageActions(value);
-                    
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_FILTERS)) {
-                    String value = config.extractConfig(Config.PACKAGE_FILTERS, rule);
-                    config.setPackageFilters(value);
-                    
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_ERRORS)) {
-                    String value = config.extractConfig(Config.PACKAGE_ERRORS, rule);
-                    config.setPackageErrors(value);
-                    
-                } else if(section == 4 && rule.startsWith(Config.REQUEST_ENCODING)) {
-                    String value = config.extractConfig(Config.REQUEST_ENCODING, rule);
-                    config.setRequestEncoding(value);
-                    
-                } else if(section == 4 && rule.startsWith(Config.RELOADABLE)) {
-                    String value = config.extractConfig(Config.RELOADABLE, rule);
-                    config.setReloadable(Boolean.valueOf(value));
-                    
-                } else if(section == 4 && rule.startsWith(Config.MODE)) {
-                    String value = config.extractConfig(Config.MODE, rule);
-                    config.setMode(value);
-                }
-            }
-        } catch(IOException ioe) {
-            throw new ServletException(ioe);
         }
     }
     

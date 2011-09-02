@@ -25,11 +25,13 @@
 package org.debux.webmotion.server.handler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.parser.BasicMappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -106,6 +108,7 @@ public class ActionFinderHandlerTest {
         protected String[] mappingContent;
         
         protected ActionFinderHandler handler;
+        protected BasicMappingParser parser;
 
         public RunHandler(String method, String url, String result, String... mappingContent) {
             this.method = method;
@@ -113,15 +116,19 @@ public class ActionFinderHandlerTest {
             this.result = result;
             this.mappingContent = mappingContent;
             this.handler = new ActionFinderHandler();
+            parser = new BasicMappingParser();
         }
         
         @Test
         public void match() {
             Mapping mapping = new Mapping();
+            List<ActionRule> actionRules = mapping.getActionRules();
             for (String line : mappingContent) {
                 line = line.trim();
                 line = line.replaceAll(" +", " ");
-                mapping.extractSectionActions(line);
+                
+                ActionRule actionRule = parser.extractSectionActions(line);
+                actionRules.add(actionRule);
             }
             
             Call call = new CallWrapper(method, url);
