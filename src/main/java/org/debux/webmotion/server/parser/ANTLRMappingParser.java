@@ -34,10 +34,15 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeVisitor;
 import org.antlr.runtime.tree.TreeVisitorAction;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
@@ -87,15 +92,19 @@ public class ANTLRMappingParser implements MappingParser {
             // Parse
             MappingLanguageParser parser = new MappingLanguageParser(tokens);
             parser.setErrorReporter(reporter);
-            mapping_return mapping = parser.mapping();
+            mapping_return result = parser.mapping();
             
             // Verify parsing errors
             List<String> errors = reporter.getErrors();
             
             // Create mapping
-            CommonTree tree = mapping.tree;
+            CommonTree tree = result.tree;
             TreeVisitor treeVisitor = new TreeVisitor();
+            
+            final Mapping mapping = new Mapping();
             TreeVisitorAction visitorAction = new TreeVisitorAction() {
+                protected String method;
+                        
                 @Override
                 public Object pre(Object t) {
                     CommonTree tree = (CommonTree) t;
@@ -104,14 +113,12 @@ public class ANTLRMappingParser implements MappingParser {
                     int type = token.getType();
                     String text = token.getText();
                     
-                    if(type == MappingLanguageParser.SECTION_CONFIG) {
+                    log.info("Token " + text + " type = " + type);
+                    if(type == MappingLanguageParser.DOLLAR 
+                            && "METHOD".equals(text)) {
                         
-                    } else if(type == MappingLanguageParser.SECTION_FILTERS) {
-                        
-                    } else if(type == MappingLanguageParser.SECTION_ERRORS) {
-                        
-                    } else if(type == MappingLanguageParser.SECTION_ACTIONS) {
-                        
+                        method = tree.getChild(0).getText();
+                        return null;
                     }
                     
                     return t;
@@ -119,10 +126,76 @@ public class ANTLRMappingParser implements MappingParser {
 
                 @Override
                 public Object post(Object t) {
+                    if(t == null) {
+                        return null;
+                    }
+                    
+                    CommonTree tree = (CommonTree) t;
+                    
+                    Token token = tree.getToken();
+                    int type = token.getType();
+                    String text = token.getText();
+                    
+                    if(type == MappingLanguageParser.SECTION_CONFIG) {
+                        Config config = mapping.getConfig();
+                        
+                        Tree nameTree = tree.getChild(0);
+                        String name = nameTree.getText();
+                        
+                        String value = "";
+                        if(nameTree.getChildCount() == 1) {
+                            value = nameTree.getChild(0).getText();
+                        }
+                        
+                        if(Config.MODE.equals(name)) {
+                            config.setMode(name);
+                        } else if(Config.PACKAGE_ACTIONS.equals(name)) {
+                            config.setPackageActions(value);
+                        } else if(Config.PACKAGE_ERRORS.equals(name)) {
+                            config.setPackageErrors(value);
+                        } else if(Config.PACKAGE_FILTERS.equals(name)) {
+                            config.setPackageFilters(value);
+                        } else if(Config.PACKAGE_VIEWS.equals(name)) {
+                            config.setPackageViews(value);
+                        } else if(Config.RELOADABLE.equals(name)) {
+                            config.setReloadable(Boolean.valueOf(name));
+                        } else if(Config.REQUEST_ENCODING.equals(name)) {
+                            config.setRequestEncoding(value);
+                        }
+                        
+                    } else if(type == MappingLanguageParser.SECTION_FILTERS) {
+                        List<FilterRule> filterRules = mapping.getFilterRules();
+                        FilterRule filterRule = new FilterRule();
+                        filterRule.setMethod(method);
+                        filterRules.add(filterRule);
+                        
+                    } else if(type == MappingLanguageParser.SECTION_ERRORS) {
+                        List<ErrorRule> errorRules = mapping.getErrorRules();
+                        ErrorRule errorRule = new ErrorRule();
+                        errorRules.add(errorRule);
+                        
+                    } else if(type == MappingLanguageParser.SECTION_ACTIONS) {
+                        List<ActionRule> actionRules = mapping.getActionRules();
+                        ActionRule actionRule = new ActionRule();
+                        actionRule.setMethod(method);
+                        actionRules.add(actionRule);
+                        method = null;
+                    }
+                    
+                    // Reset current model
+                    if(type == MappingLanguageParser.SECTION_CONFIG ||
+                       type == MappingLanguageParser.SECTION_FILTERS ||
+                       type == MappingLanguageParser.SECTION_ERRORS ||
+                       type == MappingLanguageParser.SECTION_ACTIONS) {
+                        method = null;
+                    }
+                    
                     return t;
                 }
             };
+            
             treeVisitor.visit(tree, visitorAction);
+            return mapping;
 
         } catch (RecognitionException re) {
             throw new WebMotionException("Error to parse the file mapping", re);
@@ -131,7 +204,6 @@ public class ANTLRMappingParser implements MappingParser {
             throw new WebMotionException("Error to read the file mapping", ioe);
         }
         
-        return null;
     }
 
 }
