@@ -41,11 +41,12 @@ public class ActionRule {
     protected List<URLPattern> ruleUrl;
     protected List<URLPattern> ruleParameters;
     protected Action action;
-    protected Map<String, String[]> defaultParameters = new LinkedHashMap<String, String[]>();
+    protected Map<String, String[]> defaultParameters;
 
     public ActionRule() {
         ruleUrl = new ArrayList<URLPattern>();
         ruleParameters = new ArrayList<URLPattern>();
+        defaultParameters = new LinkedHashMap<String, String[]>();
     }
 
     public Action getAction() {

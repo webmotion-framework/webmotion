@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -43,9 +44,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.mapping.Action;
+import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.URLPattern;
 import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,38 +119,43 @@ public class ANTLRMappingParser implements MappingParser {
         
     }
 
-    public interface Visit {
-        public void accept(String value);
+    public class Visit {
+        public void acceptBefore(String value) {
+            
+        }
+        public void acceptAfter(String value) {
+            
+        }
     }
     
     protected Mapping mapping = new Mapping();
-    protected Deque<Object> stack;
+    protected Deque<Object> stack = new LinkedList<Object>();
     
     protected Map<String, Visit> visitors = new HashMap<String, Visit>();
     protected void initVisit() {
         visitors.put("/CONFIG", new Visit() {
             @Override
-            public void accept(String value) {
-                stack = new LinkedList<Object>();
+            public void acceptAfter(String value) {
+                stack.removeLast();
             }
         });
         
         visitors.put("/CONFIG/NAME/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 stack.addLast(value);
             }
         });
         
         visitors.put("/CONFIG/VALUE/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 Config config = mapping.getConfig();
-                String name = (String) stack.pollLast();
+                String name = (String) stack.peekLast();
                 value = value.substring(1);
                 
                 if(Config.MODE.equals(name)) {
-                    config.setMode(name);
+                    config.setMode(value);
                 } else if(Config.PACKAGE_ACTIONS.equals(name)) {
                     config.setPackageActions(value);
                 } else if(Config.PACKAGE_ERRORS.equals(name)) {
@@ -156,7 +165,7 @@ public class ANTLRMappingParser implements MappingParser {
                 } else if(Config.PACKAGE_VIEWS.equals(name)) {
                     config.setPackageViews(value);
                 } else if(Config.RELOADABLE.equals(name)) {
-                    config.setReloadable(Boolean.valueOf(name));
+                    config.setReloadable(Boolean.valueOf(value));
                 } else if(Config.REQUEST_ENCODING.equals(name)) {
                     config.setRequestEncoding(value);
                 }
@@ -165,20 +174,22 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR", new Visit() {
             @Override
-            public void accept(String value) {
-                stack = new LinkedList<Object>();
-                
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = new ErrorRule();
                 stack.addLast(errorRule);
                 
                 List<ErrorRule> errorRules = mapping.getErrorRules();
                 errorRules.add(errorRule);
             }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
         });
         
         visitors.put("/ERROR/CODE/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 errorRule.setError("code:" + value);
             }
@@ -186,7 +197,7 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR/EXCEPTION/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 String error = errorRule.getError();
                 if(error == null) {
@@ -200,7 +211,7 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR/ACTION", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 
                 Action action = new Action();
@@ -209,11 +220,15 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
         });
         
         visitors.put("/ERROR/ACTION/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
                 String fullName = action.getFullName();
                 String className = action.getClassName();
@@ -240,7 +255,7 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR/VIEW", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 
                 Action action = new Action();
@@ -249,11 +264,15 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
         });
         
         visitors.put("/ERROR/VIEW/EXTENSION/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
                 String type = action.getType();
                 action.setType(type + "." + value);
@@ -262,7 +281,7 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR/VIEW/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
                 action.setFullName(value);
             }
@@ -270,7 +289,7 @@ public class ANTLRMappingParser implements MappingParser {
         
         visitors.put("/ERROR/URL", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 
                 Action action = new Action();
@@ -279,18 +298,416 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
         });
         
         visitors.put("/ERROR/URL/*", new Visit() {
             @Override
-            public void accept(String value) {
+            public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
                 value = StringUtils.substringAfter(value, "url:");
                 action.setFullName(value);
             }
         });
+        
+        visitors.put("/FILTER", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = new FilterRule();
+                stack.addLast(filterRule);
+                
+                List<FilterRule> filterRules = mapping.getFilterRules();
+                filterRules.add(filterRule);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/FILTER/METHOD/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                filterRule.setMethod(value);
+            }
+        });
+        
+        visitors.put("/FILTER/PATH/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                value = value.replaceAll("/\\*/", "/[^/]*/");
+                value = value.replaceAll("/\\*", "/.*");
+                
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                Pattern pattern = filterRule.getPattern();
+                if(pattern == null) {
+                    pattern = Pattern.compile(value);
+                } else {
+                    pattern = Pattern.compile(pattern.pattern() + value);
+                }
+                filterRule.setPattern(pattern);
+            }
+        });
+        
+        visitors.put("/FILTER/ACTION", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_ACTION);
+                
+                stack.addLast(action);
+                filterRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/FILTER/ACTION/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                String fullName = action.getFullName();
+                String className = action.getClassName();
+                String methodName = action.getMethodName();
+                
+                if(fullName == null) {
+                    fullName = value;
+                } else {
+                    fullName += value;
+                }
+                action.setFullName(fullName);
+                
+                if(className == null) {
+                    className = methodName;
+                } else {
+                    className += methodName;
+                }
+                
+                action.setClassName(className);
+                methodName = value;
+                action.setMethodName(methodName);
+            }
+        });
+        
+        visitors.put("/FILTER/VIEW", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_VIEW);
+                
+                stack.addLast(action);
+                filterRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/FILTER/VIEW/EXTENSION/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                String type = action.getType();
+                action.setType(type + "." + value);
+            }
+        });
+        
+        visitors.put("/FILTER/VIEW/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                action.setFullName(value);
+            }
+        });
+        
+        visitors.put("/FILTER/URL", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_URL);
+                
+                stack.addLast(action);
+                filterRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/FILTER/URL/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                value = StringUtils.substringAfter(value, "url:");
+                action.setFullName(value);
+            }
+        });
+        
+        visitors.put("/ACTION", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = new ActionRule();
+                stack.addLast(actionRule);
+                
+                List<ActionRule> actionRules = mapping.getActionRules();
+                actionRules.add(actionRule);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/METHOD/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                actionRule.setMethod(value);
+            }
+        });
+        
+        visitors.put("/ACTION/PATH/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                URLPattern fragment = new URLPattern();
+                Pattern pattern = Pattern.compile(value);
+                fragment.setPattern(pattern);
+                
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+                ruleUrl.add(fragment);
+            }
+        });
+        
+        visitors.put("/ACTION/PATH/VARIABLE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                URLPattern fragment = new URLPattern();
+                fragment.setName(value);
+                
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+                ruleUrl.add(fragment);
+            }
+        });
+        
+        visitors.put("/ACTION/ACTION", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_ACTION);
+                
+                stack.addLast(action);
+                actionRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/ACTION/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                String fullName = action.getFullName();
+                String className = action.getClassName();
+                String methodName = action.getMethodName();
+                
+                if(fullName == null) {
+                    fullName = value;
+                } else {
+                    fullName += value;
+                }
+                action.setFullName(fullName);
+                
+                if(className == null) {
+                    className = methodName;
+                } else {
+                    className += methodName;
+                }
+                
+                action.setClassName(className);
+                methodName = value;
+                action.setMethodName(methodName);
+            }
+        });
+
+        visitors.put("/ACTION/ACTION/VARIABLE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                value = "{" + value + "}";
+                
+                Action action = (Action) stack.peekLast();
+                String fullName = action.getFullName();
+                String className = action.getClassName();
+                String methodName = action.getMethodName();
+                
+                if(fullName == null) {
+                    fullName = value;
+                } else {
+                    fullName += value;
+                }
+                action.setFullName(fullName);
+                
+                if(className == null) {
+                    className = methodName;
+                } else {
+                    className += methodName;
+                }
+                
+                action.setClassName(className);
+                methodName = value;
+                action.setMethodName(methodName);
+            }
+        });
+
+        visitors.put("/ACTION/VIEW", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_VIEW);
+                
+                stack.addLast(action);
+                actionRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/VIEW/EXTENSION/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                String type = action.getType();
+                action.setType(type + "." + value);
+            }
+        });
+        
+        visitors.put("/ACTION/VIEW/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                action.setFullName(value);
+            }
+        });
+        
+        visitors.put("/ACTION/URL", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_URL);
+                
+                stack.addLast(action);
+                actionRule.setAction(action);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/URL/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                value = StringUtils.substringAfter(value, "url:");
+                action.setFullName(value);
+            }
+        });
+        
+        visitors.put("/ACTION/DEFAULT_PARAMETERS/PARAMETER", new Visit() {
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/DEFAULT_PARAMETERS/PARAMETER/NAME/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
+                defaultParameters.put(value, null);
+                stack.addLast(value);
+            }
+        });
+        
+        visitors.put("/ACTION/DEFAULT_PARAMETERS/PARAMETER/VALUE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                String key = (String) stack.peekLast();
+                ActionRule actionRule = (ActionRule) stack.getFirst();
+                Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
+                defaultParameters.put(key, new String[]{value});
+            }
+        });
+        
+        visitors.put("/ACTION/PARAMETERS/PARAMETER", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                List<URLPattern> ruleParameters = actionRule.getRuleParameters();
+                
+                URLPattern fragment = new URLPattern();
+                stack.addLast(fragment);
+                ruleParameters.add(fragment);
+            }
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/ACTION/PARAMETERS/PARAMETER/NAME/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                URLPattern fragment = (URLPattern) stack.peekLast();
+                fragment.setParam(value);
+            }
+        });
+        
+        visitors.put("/ACTION/PARAMETERS/PARAMETER/VALUE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                URLPattern fragment = (URLPattern) stack.peekLast();
+                fragment.setName(value);
+            }
+        });
+        
+        
+        visitors.put("/ACTION/PARAMETERS/PARAMETER/PATTERN/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                URLPattern fragment = (URLPattern) stack.peekLast();
+                Pattern pattern = Pattern.compile(value);
+                fragment.setPattern(pattern);
+            }
+        });
     }
-    
+        
     protected TreeVisitorAction visitorAction = new TreeVisitorAction() {
         
         protected String path = "";
@@ -307,16 +724,16 @@ public class ANTLRMappingParser implements MappingParser {
                             && !"$".equals(text)) {
                 path += "/" + text;
                 
-                log.info(">>" + path);
+                log.info("Before " + path);
                 Visit visit = visitors.get(path);
                 if(visit != null) {
-                    visit.accept(null);
+                    visit.acceptBefore(null);
                 }
             } else {
-                log.info(">>" + path + " = " + text);
+                log.info("Before " + path + " = " + text);
                 Visit visit = visitors.get(path + "/*");
                 if(visit != null) {
-                    visit.accept(text);
+                    visit.acceptBefore(text);
                 }
             }
             
@@ -333,7 +750,19 @@ public class ANTLRMappingParser implements MappingParser {
 
             if(type == MappingLanguageParser.DOLLAR 
                             && !"$".equals(text)) {
+                log.info("After " + path);
+                Visit visit = visitors.get(path);
+                if(visit != null) {
+                    visit.acceptAfter(null);
+                }
                 path = StringUtils.substringBeforeLast(path, "/");
+                
+            } else {
+                log.info("After " + path + " = " + text);
+                Visit visit = visitors.get(path + "/*");
+                if(visit != null) {
+                    visit.acceptAfter(text);
+                }
             }
             
             return t;

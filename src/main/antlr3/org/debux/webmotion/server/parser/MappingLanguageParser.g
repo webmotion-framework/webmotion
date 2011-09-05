@@ -155,7 +155,7 @@ section_action_default_parameters
 
 section_action_default_parameter
     : simple_name section_action_default_parameter_value
-    -> ^(simple_name section_action_default_parameter_value)
+    -> ^(DOLLAR["PARAMETER"] ^(DOLLAR["NAME"] simple_name) ^(DOLLAR["VALUE"] section_action_default_parameter_value))
     ;
 
 section_action_default_parameter_value
