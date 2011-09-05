@@ -42,15 +42,16 @@ import org.antlr.runtime.tree.TreeVisitorAction;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Basic implementation of parser with use split and pattern to extract the 
- * mapping.
+ * ANTLR implementation of parser.
  * 
  * @author jruchaud
  */
@@ -123,15 +124,21 @@ public class ANTLRMappingParser implements MappingParser {
     
     protected Map<String, Visit> visitors = new HashMap<String, Visit>();
     protected void initVisit() {
-        visitors.put("/CONFIG/NAME", new Visit() {
+        visitors.put("/CONFIG", new Visit() {
             @Override
             public void accept(String value) {
                 stack = new LinkedList<Object>();
+            }
+        });
+        
+        visitors.put("/CONFIG/NAME/*", new Visit() {
+            @Override
+            public void accept(String value) {
                 stack.addLast(value);
             }
         });
         
-        visitors.put("/CONFIG/VALUE", new Visit() {
+        visitors.put("/CONFIG/VALUE/*", new Visit() {
             @Override
             public void accept(String value) {
                 Config config = mapping.getConfig();
@@ -156,10 +163,132 @@ public class ANTLRMappingParser implements MappingParser {
             }
         });
         
-        visitors.put("/ERROR/CODE", null);
-        visitors.put("/ERROR/EXCEPTION", null);
-        visitors.put("/ERROR/VIEW", null);
-        visitors.put("/ERROR/VIEW/EXTENSION", null);
+        visitors.put("/ERROR", new Visit() {
+            @Override
+            public void accept(String value) {
+                stack = new LinkedList<Object>();
+                
+                ErrorRule errorRule = new ErrorRule();
+                stack.addLast(errorRule);
+                
+                List<ErrorRule> errorRules = mapping.getErrorRules();
+                errorRules.add(errorRule);
+            }
+        });
+        
+        visitors.put("/ERROR/CODE/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                errorRule.setError("code:" + value);
+            }
+        });
+        
+        visitors.put("/ERROR/EXCEPTION/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                String error = errorRule.getError();
+                if(error == null) {
+                    error = value;
+                } else {
+                    error += value;
+                }
+                errorRule.setError(error);
+            }
+        });
+        
+        visitors.put("/ERROR/ACTION", new Visit() {
+            @Override
+            public void accept(String value) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_ACTION);
+                
+                stack.addLast(action);
+                errorRule.setAction(action);
+            }
+        });
+        
+        visitors.put("/ERROR/ACTION/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                Action action = (Action) stack.peekLast();
+                String fullName = action.getFullName();
+                String className = action.getClassName();
+                String methodName = action.getMethodName();
+                
+                if(fullName == null) {
+                    fullName = value;
+                } else {
+                    fullName += value;
+                }
+                action.setFullName(fullName);
+                
+                if(className == null) {
+                    className = methodName;
+                } else {
+                    className += methodName;
+                }
+                
+                action.setClassName(className);
+                methodName = value;
+                action.setMethodName(methodName);
+            }
+        });
+        
+        visitors.put("/ERROR/VIEW", new Visit() {
+            @Override
+            public void accept(String value) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_VIEW);
+                
+                stack.addLast(action);
+                errorRule.setAction(action);
+            }
+        });
+        
+        visitors.put("/ERROR/VIEW/EXTENSION/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                Action action = (Action) stack.peekLast();
+                String type = action.getType();
+                action.setType(type + "." + value);
+            }
+        });
+        
+        visitors.put("/ERROR/VIEW/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                Action action = (Action) stack.peekLast();
+                action.setFullName(value);
+            }
+        });
+        
+        visitors.put("/ERROR/URL", new Visit() {
+            @Override
+            public void accept(String value) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                
+                Action action = new Action();
+                action.setType(Action.TYPE_URL);
+                
+                stack.addLast(action);
+                errorRule.setAction(action);
+            }
+        });
+        
+        visitors.put("/ERROR/URL/*", new Visit() {
+            @Override
+            public void accept(String value) {
+                Action action = (Action) stack.peekLast();
+                value = StringUtils.substringAfter(value, "url:");
+                action.setFullName(value);
+            }
+        });
     }
     
     protected TreeVisitorAction visitorAction = new TreeVisitorAction() {
@@ -178,9 +307,14 @@ public class ANTLRMappingParser implements MappingParser {
                             && !"$".equals(text)) {
                 path += "/" + text;
                 
+                log.info(">>" + path);
+                Visit visit = visitors.get(path);
+                if(visit != null) {
+                    visit.accept(null);
+                }
             } else {
                 log.info(">>" + path + " = " + text);
-                Visit visit = visitors.get(path);
+                Visit visit = visitors.get(path + "/*");
                 if(visit != null) {
                     visit.accept(text);
                 }
