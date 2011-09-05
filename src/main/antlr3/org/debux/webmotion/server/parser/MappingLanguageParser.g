@@ -36,7 +36,7 @@ section_config
 
 section_config_rule
     : section_config_name section_config_value
-    -> ^(DOLLAR["CONFIG"] ^(section_config_name section_config_value))
+    -> ^(DOLLAR["CONFIG"] ^(DOLLAR["NAME"] section_config_name) ^(DOLLAR["VALUE"] section_config_value))
     ;
 
 section_config_value
@@ -130,7 +130,7 @@ section_action_parameters
 
 section_action_parameter
     : name=simple_name (EQUALS (section_action_variable | value=simple_name)? )?
-    -> ^($name section_action_variable* $value*)
+    -> ^(DOLLAR["PARAMETER"] ^(DOLLAR["NAME"] $name) section_action_variable* ^(DOLLAR["VALUE"] $value)?)
     ;
     
 section_action_dynamic
