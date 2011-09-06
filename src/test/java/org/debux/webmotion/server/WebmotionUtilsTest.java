@@ -25,6 +25,9 @@
 package org.debux.webmotion.server;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
@@ -83,6 +86,18 @@ public class WebmotionUtilsTest {
     public void testUnCapitalizeClass() {
         String result = WebMotionUtils.unCapitalizeClass("org.webmotion.Myclass");
         AssertJUnit.assertEquals("org.webmotion.myclass", result);
+    }
+    
+    @Test
+    public void testSplitPath() {
+        List<String> result = WebMotionUtils.splitPath("/");
+        AssertJUnit.assertEquals(1, result.size());
+        
+        result = WebMotionUtils.splitPath("/deploy/test/run");
+        AssertJUnit.assertEquals(6, result.size());
+        
+        result = WebMotionUtils.splitPath("/deploy/test/run/");
+        AssertJUnit.assertEquals(7, result.size());
     }
     
 }

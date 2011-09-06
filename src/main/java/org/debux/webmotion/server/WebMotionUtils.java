@@ -28,6 +28,10 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -126,5 +130,23 @@ public class WebMotionUtils {
 
         className = builder.toString();
         return className;
+    }
+    
+    /**
+     * Cut the path like to list for example is /path/path to {/,path,/path}
+     * @param path path to split
+     * @return list represents the path
+     */
+    public static Pattern splitPathPattern = Pattern.compile("/|[^/$]+");
+    public static List<String> splitPath(String path) {
+        List<String> list = new ArrayList<String>();
+        
+        Matcher matcher = splitPathPattern.matcher(path);
+        while(matcher.find()) {
+            String group = matcher.group();
+            list.add(group);
+        }
+        
+        return list;
     }
 }
