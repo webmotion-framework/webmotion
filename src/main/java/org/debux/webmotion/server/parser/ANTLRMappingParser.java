@@ -234,17 +234,21 @@ public class ANTLRMappingParser implements MappingParser {
                 String className = action.getClassName();
                 String methodName = action.getMethodName();
                 
+                if(value.equals(".")) {
+                    return;
+                }
+                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += value;
+                    fullName += "." + value;
                 }
                 action.setFullName(fullName);
                 
                 if(className == null) {
                     className = methodName;
                 } else {
-                    className += methodName;
+                    className += "." + methodName;
                 }
                 
                 action.setClassName(className);
@@ -378,17 +382,21 @@ public class ANTLRMappingParser implements MappingParser {
                 String className = action.getClassName();
                 String methodName = action.getMethodName();
                 
+                if(value.equals(".")) {
+                    return;
+                }
+                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += value;
+                    fullName += "." + value;
                 }
                 action.setFullName(fullName);
                 
                 if(className == null) {
                     className = methodName;
                 } else {
-                    className += methodName;
+                    className += "." + methodName;
                 }
                 
                 action.setClassName(className);
@@ -483,6 +491,10 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/PATH/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
+                if(value.equals("/")) {
+                    return;
+                }
+                
                 URLPattern fragment = new URLPattern();
                 Pattern pattern = Pattern.compile(value);
                 fragment.setPattern(pattern);
@@ -530,17 +542,21 @@ public class ANTLRMappingParser implements MappingParser {
                 String className = action.getClassName();
                 String methodName = action.getMethodName();
                 
+                if(value.equals(".")) {
+                    return;
+                }
+                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += value;
+                    fullName += "." + value;
                 }
                 action.setFullName(fullName);
                 
                 if(className == null) {
                     className = methodName;
                 } else {
-                    className += methodName;
+                    className += "." + methodName;
                 }
                 
                 action.setClassName(className);
@@ -696,7 +712,6 @@ public class ANTLRMappingParser implements MappingParser {
                 fragment.setName(value);
             }
         });
-        
         
         visitors.put("/ACTION/PARAMETERS/PARAMETER/PATTERN/*", new Visit() {
             @Override
