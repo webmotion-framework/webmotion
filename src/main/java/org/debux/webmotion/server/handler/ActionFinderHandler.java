@@ -35,9 +35,9 @@ import org.debux.webmotion.server.mapping.URLPattern;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +69,8 @@ public class ActionFinderHandler implements WebMotionHandler {
         if(url != null) {
             
             log.info("url = " + url);
-            String[] path = StringUtils.splitPreserveAllTokens(url, "/");
-            log.info("path = " + Arrays.toString(path));
+            List<String> path = WebMotionUtils.splitPath(url);
+            log.info("path = " + path);
             Map<String, Object> parameters = call.getExtractParameters();
             String method = context.getMethod();
 
@@ -95,7 +95,7 @@ public class ActionFinderHandler implements WebMotionHandler {
     }
     
     // Check url
-    protected boolean checkUrl(ActionRule actionRule, String[] path, Map<String, Object> parameters) {
+    protected boolean checkUrl(ActionRule actionRule, List<String> path, Map<String, Object> parameters) {
         int position;
         
         // Test url
@@ -103,7 +103,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         URLPattern[] expressions = ruleUrl.toArray(new URLPattern[0]);
         
         // All path math in rule
-        if(expressions.length != path.length) {
+        if(expressions.length != path.size()) {
             return false;
         }
         
@@ -112,7 +112,7 @@ public class ActionFinderHandler implements WebMotionHandler {
             Pattern pattern = expression.getPattern();
             String name = expression.getName();
             
-            String value = path[position];
+            String value = path.get(position);
             if(!value.isEmpty() && pattern == null && name == null) {
                 return false;
             }

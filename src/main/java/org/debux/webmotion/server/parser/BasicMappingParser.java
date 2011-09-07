@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
@@ -282,8 +283,8 @@ public class BasicMappingParser implements MappingParser {
         String baseUrl = StringUtils.substringBefore(urlPattern, "?");
         if(!baseUrl.isEmpty()) {
             
-            String[] splitBaseUrl = StringUtils.splitPreserveAllTokens(baseUrl, "/");
-            log.info("splitBaseUrl = " + Arrays.toString(splitBaseUrl));
+            List<String> splitBaseUrl = WebMotionUtils.splitPath(baseUrl);
+            log.info("splitBaseUrl = " + splitBaseUrl);
 
             for(String item : splitBaseUrl) {
                 URLPattern expression = extractExpression(item, false);

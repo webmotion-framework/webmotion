@@ -491,10 +491,6 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/PATH/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                if(value.equals("/")) {
-                    return;
-                }
-                
                 URLPattern fragment = new URLPattern();
                 Pattern pattern = Pattern.compile(value);
                 fragment.setPattern(pattern);
@@ -674,6 +670,8 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/DEFAULT_PARAMETERS/PARAMETER/VALUE/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
+                value = value.substring(1); // Remove "="
+                
                 String key = (String) stack.peekLast();
                 ActionRule actionRule = (ActionRule) stack.getFirst();
                 Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();

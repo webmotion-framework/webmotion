@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.util.ArrayList;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +92,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         // Retrieve the good name for parameters give in mapping
         HttpContext context = call.getContext();
         String url = context.getUrl();
-        String[] path = StringUtils.splitPreserveAllTokens(url, "/");
+        List<String> path = WebMotionUtils.splitPath(url);
         
         List<URLPattern> ruleUrl = actionRule.getRuleUrl();
         int position = 0;
@@ -100,7 +100,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             String name = expression.getName();
             
             if(!StringUtils.isEmpty(name)) {
-                result.put(name, path[position]);
+                result.put(name, path.get(position));
             }
             position ++;
         }
