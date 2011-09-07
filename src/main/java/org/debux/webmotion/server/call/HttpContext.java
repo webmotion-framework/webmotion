@@ -105,7 +105,7 @@ public class HttpContext {
         
         public boolean isError() {
             String url = getUrl();
-            return url.startsWith("/error");
+            return url != null && url.startsWith("/error");
         }
         
         public boolean isException() {
