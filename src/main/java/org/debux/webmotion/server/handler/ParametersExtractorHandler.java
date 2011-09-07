@@ -27,7 +27,7 @@ package org.debux.webmotion.server.handler;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.URLPattern;
+import org.debux.webmotion.server.mapping.FragmentUrl;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,9 +94,9 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         String url = context.getUrl();
         List<String> path = WebMotionUtils.splitPath(url);
         
-        List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+        List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
         int position = 0;
-        for (URLPattern expression : ruleUrl) {
+        for (FragmentUrl expression : ruleUrl) {
             String name = expression.getName();
             
             if(!StringUtils.isEmpty(name)) {
@@ -105,8 +105,8 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             position ++;
         }
         
-        List<URLPattern> ruleParameters = actionRule.getRuleParameters();
-        for (URLPattern expression : ruleParameters) {
+        List<FragmentUrl> ruleParameters = actionRule.getRuleParameters();
+        for (FragmentUrl expression : ruleParameters) {
             String name = expression.getName();
             String param = expression.getParam();
             

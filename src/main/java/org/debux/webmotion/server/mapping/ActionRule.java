@@ -38,14 +38,14 @@ import java.util.Map;
 public class ActionRule {
 
     protected String method;
-    protected List<URLPattern> ruleUrl;
-    protected List<URLPattern> ruleParameters;
+    protected List<FragmentUrl> ruleUrl;
+    protected List<FragmentUrl> ruleParameters;
     protected Action action;
     protected Map<String, String[]> defaultParameters;
 
     public ActionRule() {
-        ruleUrl = new ArrayList<URLPattern>();
-        ruleParameters = new ArrayList<URLPattern>();
+        ruleUrl = new ArrayList<FragmentUrl>();
+        ruleParameters = new ArrayList<FragmentUrl>();
         defaultParameters = new LinkedHashMap<String, String[]>();
     }
 
@@ -65,19 +65,19 @@ public class ActionRule {
         this.method = method;
     }
 
-    public List<URLPattern> getRuleParameters() {
+    public List<FragmentUrl> getRuleParameters() {
         return ruleParameters;
     }
 
-    public void setRuleParameters(List<URLPattern> ruleParameters) {
+    public void setRuleParameters(List<FragmentUrl> ruleParameters) {
         this.ruleParameters = ruleParameters;
     }
 
-    public List<URLPattern> getRuleUrl() {
+    public List<FragmentUrl> getRuleUrl() {
         return ruleUrl;
     }
 
-    public void setRuleUrl(List<URLPattern> ruleUrl) {
+    public void setRuleUrl(List<FragmentUrl> ruleUrl) {
         this.ruleUrl = ruleUrl;
     }
 

@@ -43,7 +43,7 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.URLPattern;
+import org.debux.webmotion.server.mapping.FragmentUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,10 +201,10 @@ public class BasicMappingParser implements MappingParser {
         String method = extractMethod(splitRule[0]);
         actionRule.setMethod(method);
         
-        List<URLPattern> url = extractUrl(splitRule[1]);
+        List<FragmentUrl> url = extractUrl(splitRule[1]);
         actionRule.setRuleUrl(url);
         
-        List<URLPattern> parameters = extractParameters(splitRule[1]);
+        List<FragmentUrl> parameters = extractParameters(splitRule[1]);
         actionRule.setRuleParameters(parameters);
         
         Action action = extractAction(splitRule[2]);
@@ -242,11 +242,6 @@ public class BasicMappingParser implements MappingParser {
             value = ruleAction.substring(typeSeparatorIndex + 1);
         }
         
-        int packageSeparatorIndex = value.lastIndexOf('.');
-        if(packageSeparatorIndex != -1) {
-            action.setClassName(value.substring(0, packageSeparatorIndex));
-            action.setMethodName(value.substring(packageSeparatorIndex + 1));
-        }
         action.setFullName(value);
         return action;
     }
@@ -274,20 +269,20 @@ public class BasicMappingParser implements MappingParser {
     }
 
     /**
-     * Extract the url pattern
-     * @param urlPattern 
+     * Extract the url fragment
+     * @param fragment 
      */
-    protected List<URLPattern> extractUrl(String urlPattern) {
-        log.info("urlPattern = " + urlPattern);
-        List<URLPattern> ruleUrl = new ArrayList<URLPattern>();
-        String baseUrl = StringUtils.substringBefore(urlPattern, "?");
+    protected List<FragmentUrl> extractUrl(String fragment) {
+        log.info("fragment = " + fragment);
+        List<FragmentUrl> ruleUrl = new ArrayList<FragmentUrl>();
+        String baseUrl = StringUtils.substringBefore(fragment, "?");
         if(!baseUrl.isEmpty()) {
             
             List<String> splitBaseUrl = WebMotionUtils.splitPath(baseUrl);
             log.info("splitBaseUrl = " + splitBaseUrl);
 
             for(String item : splitBaseUrl) {
-                URLPattern expression = extractExpression(item, false);
+                FragmentUrl expression = extractExpression(item, false);
                 ruleUrl.add(expression);
             }
         }
@@ -295,19 +290,19 @@ public class BasicMappingParser implements MappingParser {
     }
 
     /**
-     * Extract the url pattern
-     * @param urlPattern 
+     * Extract the url fragment
+     * @param fragment 
      */
-    protected List<URLPattern> extractParameters(String urlPattern) {
-        List<URLPattern> ruleParameters = new ArrayList<URLPattern>();
-        String queryString = StringUtils.substringAfter(urlPattern, "?");
+    protected List<FragmentUrl> extractParameters(String fragment) {
+        List<FragmentUrl> ruleParameters = new ArrayList<FragmentUrl>();
+        String queryString = StringUtils.substringAfter(fragment, "?");
         if(!queryString.isEmpty()) {
             
             String[] splitQueryString = StringUtils.splitPreserveAllTokens(queryString, "&");
             log.info("splitQueryString = " + Arrays.toString(splitQueryString));
 
             for(String item : splitQueryString) {
-                URLPattern expression = extractExpression(item, true);
+                FragmentUrl expression = extractExpression(item, true);
                 ruleParameters.add(expression);
             }
         }
@@ -319,8 +314,8 @@ public class BasicMappingParser implements MappingParser {
      * @param value the fragment
      * @return memory representation
      */
-    protected URLPattern extractExpression(String value, boolean isParam) {
-        URLPattern expression = new URLPattern();
+    protected FragmentUrl extractExpression(String value, boolean isParam) {
+        FragmentUrl expression = new FragmentUrl();
 
         Matcher matcherPath = patternPath.matcher(value);
         Matcher matcherParam = patternParam.matcher(value);

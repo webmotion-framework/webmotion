@@ -31,7 +31,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.URLPattern;
+import org.debux.webmotion.server.mapping.FragmentUrl;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -99,8 +99,8 @@ public class ActionFinderHandler implements WebMotionHandler {
         int position;
         
         // Test url
-        List<URLPattern> ruleUrl = actionRule.getRuleUrl();
-        URLPattern[] expressions = ruleUrl.toArray(new URLPattern[0]);
+        List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
+        FragmentUrl[] expressions = ruleUrl.toArray(new FragmentUrl[0]);
         
         // All path math in rule
         if(expressions.length != path.size()) {
@@ -108,7 +108,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         }
         
         for (position = 0; position < expressions.length; position ++) {
-            URLPattern expression = expressions[position];
+            FragmentUrl expression = expressions[position];
             Pattern pattern = expression.getPattern();
             String name = expression.getName();
             
@@ -126,11 +126,11 @@ public class ActionFinderHandler implements WebMotionHandler {
         }
 
         // Test parameters
-        List<URLPattern> ruleParameters = actionRule.getRuleParameters();
-        expressions = ruleParameters.toArray(new URLPattern[0]);
+        List<FragmentUrl> ruleParameters = actionRule.getRuleParameters();
+        expressions = ruleParameters.toArray(new FragmentUrl[0]);
 
         for (position = 0; position < expressions.length; position ++) {
-            URLPattern expression = expressions[position];
+            FragmentUrl expression = expressions[position];
 
             log.info("param " + expression.getParam());
             String param = expression.getParam();
@@ -150,7 +150,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         return true;
     }
     
-    protected boolean matchValues(URLPattern expression, String[] values) {
+    protected boolean matchValues(FragmentUrl expression, String[] values) {
         if(values == null) {
             return false;
         }

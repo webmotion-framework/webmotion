@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  * 
  * @author julien
  */
-public class URLPattern {
+public class FragmentUrl {
     protected String param;
     protected String name;
     protected Pattern pattern;

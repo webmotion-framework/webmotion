@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.mapping;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Represents the action to execute when the url matches.
  * 
@@ -36,8 +38,6 @@ public class Action {
     public static String TYPE_URL = "url";
     
     protected String type;
-    protected String className;
-    protected String methodName;
     protected String fullName;
 
     public String getType() {
@@ -48,22 +48,6 @@ public class Action {
         this.type = type;
     }
 
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -72,6 +56,18 @@ public class Action {
         this.fullName = fullName;
     }
     
+    public String getClassName() {
+        return StringUtils.substringBeforeLast(fullName, ".");
+    }
+
+    public String getMethodName() {
+        return StringUtils.substringAfterLast(fullName, ".");
+    }
+
+    public String getExtension() {
+        return StringUtils.substringAfterLast(type, ".");
+    }
+
     /**
      * @return true if the action is directly a action
      */

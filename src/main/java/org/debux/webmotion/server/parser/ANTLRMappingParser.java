@@ -49,13 +49,13 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.URLPattern;
+import org.debux.webmotion.server.mapping.FragmentUrl;
 import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ANTLR implementation of parser.
+ * ANTLR implementation of parser the file mapping.
  * 
  * @author jruchaud
  */
@@ -63,6 +63,18 @@ public class ANTLRMappingParser implements MappingParser {
 
     private static final Logger log = LoggerFactory.getLogger(ANTLRMappingParser.class);
     
+    /** Mapping generate */
+    protected Mapping mapping;
+    
+    /** Context during visit tree */
+    protected Deque<Object> stack;
+    
+    /** Rule to vist tree */
+    protected Map<String, Visit> visitors;
+    
+    /**
+     * Report error during the parsing.
+     */
     public class MappingErrorReporter implements ErrorReporter {
         protected List<String> errors;
 
@@ -80,6 +92,83 @@ public class ANTLRMappingParser implements MappingParser {
         }
     }
         
+    /**
+     * Visit on type of element.
+     */
+    public class Visit {
+        /**
+         * Accept visit before explore child, by default do nothing.
+         * @param value value of element
+         */
+        public void acceptBefore(String value) {
+        }
+        
+        /**
+         * Accept visit after explore child, by default do nothing.
+         * @param value value of element
+         */
+        public void acceptAfter(String value) {
+        }
+    }
+
+    /** Implement tree visitor */
+    protected TreeVisitorAction visitorAction = new TreeVisitorAction() {
+        
+        /** Store the current path */
+        protected String path = "";
+
+        @Override
+        public Object pre(Object t) {
+            CommonTree tree = (CommonTree) t;
+
+            Token token = tree.getToken();
+            int type = token.getType();
+            String text = token.getText();
+
+            if(type == MappingLanguageParser.DOLLAR && !"$".equals(text)) {
+                path += "/" + text;
+            } else {
+                path += "/*";
+            }
+            
+            log.info("Before " + path + " = " + text);
+            Visit visit = visitors.get(path);
+            if(visit != null) {
+                visit.acceptBefore(text);
+            }
+                
+            return t;
+        }
+        
+        @Override
+        public Object post(Object t) {
+            CommonTree tree = (CommonTree) t;
+
+            Token token = tree.getToken();
+            String text = token.getText();
+            
+            log.info("After " + path + " = " + text);
+            Visit visit = visitors.get(path);
+            if(visit != null) {
+                visit.acceptAfter(text);
+            }
+            
+            path = StringUtils.substringBeforeLast(path, "/");
+            
+            return t;
+        }
+    };
+
+    /**
+     * Default contructor to initialize the attributes.
+     */
+    public ANTLRMappingParser() {
+        mapping = new Mapping();
+        stack = new LinkedList<Object>();
+        visitors = new HashMap<String, Visit>();
+        initVisit();
+    }
+    
     @Override
     public Mapping parse(InputStream stream) {
         try {
@@ -101,12 +190,13 @@ public class ANTLRMappingParser implements MappingParser {
             
             // Verify parsing errors
             List<String> errors = reporter.getErrors();
+            if(!errors.isEmpty()) {
+                throw new WebMotionException(errors.toString());
+            }
             
-            // Create mapping
+            // Visit tree
             CommonTree tree = result.tree;
             TreeVisitor treeVisitor = new TreeVisitor();
-            
-            initVisit();
             treeVisitor.visit(tree, visitorAction);
             return mapping;
 
@@ -116,22 +206,11 @@ public class ANTLRMappingParser implements MappingParser {
         } catch (IOException ioe) {
             throw new WebMotionException("Error to read the file mapping", ioe);
         }
-        
     }
 
-    public class Visit {
-        public void acceptBefore(String value) {
-            
-        }
-        public void acceptAfter(String value) {
-            
-        }
-    }
-    
-    protected Mapping mapping = new Mapping();
-    protected Deque<Object> stack = new LinkedList<Object>();
-    
-    protected Map<String, Visit> visitors = new HashMap<String, Visit>();
+    /**
+     * Init the visit with expression to get the action.
+     */
     protected void initVisit() {
         visitors.put("/CONFIG", new Visit() {
             @Override
@@ -220,6 +299,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -230,30 +310,14 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
+                
                 String fullName = action.getFullName();
-                String className = action.getClassName();
-                String methodName = action.getMethodName();
-                
-                if(value.equals(".")) {
-                    return;
-                }
-                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += "." + value;
+                    fullName += value;
                 }
                 action.setFullName(fullName);
-                
-                if(className == null) {
-                    className = methodName;
-                } else {
-                    className += "." + methodName;
-                }
-                
-                action.setClassName(className);
-                methodName = value;
-                action.setMethodName(methodName);
             }
         });
         
@@ -268,6 +332,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -302,6 +367,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 errorRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -326,6 +392,7 @@ public class ANTLRMappingParser implements MappingParser {
                 List<FilterRule> filterRules = mapping.getFilterRules();
                 filterRules.add(filterRule);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -368,6 +435,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 filterRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -378,30 +446,14 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
+                
                 String fullName = action.getFullName();
-                String className = action.getClassName();
-                String methodName = action.getMethodName();
-                
-                if(value.equals(".")) {
-                    return;
-                }
-                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += "." + value;
+                    fullName += value;
                 }
                 action.setFullName(fullName);
-                
-                if(className == null) {
-                    className = methodName;
-                } else {
-                    className += "." + methodName;
-                }
-                
-                action.setClassName(className);
-                methodName = value;
-                action.setMethodName(methodName);
             }
         });
         
@@ -416,6 +468,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 filterRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -450,6 +503,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 filterRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -474,6 +528,7 @@ public class ANTLRMappingParser implements MappingParser {
                 List<ActionRule> actionRules = mapping.getActionRules();
                 actionRules.add(actionRule);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -491,12 +546,12 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/PATH/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                URLPattern fragment = new URLPattern();
+                FragmentUrl fragment = new FragmentUrl();
                 Pattern pattern = Pattern.compile(value);
                 fragment.setPattern(pattern);
                 
                 ActionRule actionRule = (ActionRule) stack.peekLast();
-                List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+                List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
                 ruleUrl.add(fragment);
             }
         });
@@ -504,11 +559,11 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/PATH/VARIABLE/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                URLPattern fragment = new URLPattern();
+                FragmentUrl fragment = new FragmentUrl();
                 fragment.setName(value);
                 
                 ActionRule actionRule = (ActionRule) stack.peekLast();
-                List<URLPattern> ruleUrl = actionRule.getRuleUrl();
+                List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
                 ruleUrl.add(fragment);
             }
         });
@@ -524,6 +579,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 actionRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -534,30 +590,14 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = (Action) stack.peekLast();
+                
                 String fullName = action.getFullName();
-                String className = action.getClassName();
-                String methodName = action.getMethodName();
-                
-                if(value.equals(".")) {
-                    return;
-                }
-                
                 if(fullName == null) {
                     fullName = value;
                 } else {
-                    fullName += "." + value;
+                    fullName += value;
                 }
                 action.setFullName(fullName);
-                
-                if(className == null) {
-                    className = methodName;
-                } else {
-                    className += "." + methodName;
-                }
-                
-                action.setClassName(className);
-                methodName = value;
-                action.setMethodName(methodName);
             }
         });
 
@@ -567,26 +607,14 @@ public class ANTLRMappingParser implements MappingParser {
                 value = "{" + value + "}";
                 
                 Action action = (Action) stack.peekLast();
-                String fullName = action.getFullName();
-                String className = action.getClassName();
-                String methodName = action.getMethodName();
                 
+                String fullName = action.getFullName();
                 if(fullName == null) {
                     fullName = value;
                 } else {
                     fullName += value;
                 }
                 action.setFullName(fullName);
-                
-                if(className == null) {
-                    className = methodName;
-                } else {
-                    className += methodName;
-                }
-                
-                action.setClassName(className);
-                methodName = value;
-                action.setMethodName(methodName);
             }
         });
 
@@ -601,6 +629,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 actionRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -635,6 +664,7 @@ public class ANTLRMappingParser implements MappingParser {
                 stack.addLast(action);
                 actionRule.setAction(action);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -683,12 +713,13 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 ActionRule actionRule = (ActionRule) stack.peekLast();
-                List<URLPattern> ruleParameters = actionRule.getRuleParameters();
+                List<FragmentUrl> ruleParameters = actionRule.getRuleParameters();
                 
-                URLPattern fragment = new URLPattern();
+                FragmentUrl fragment = new FragmentUrl();
                 stack.addLast(fragment);
                 ruleParameters.add(fragment);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -698,88 +729,36 @@ public class ANTLRMappingParser implements MappingParser {
         visitors.put("/ACTION/PARAMETERS/PARAMETER/NAME/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                URLPattern fragment = (URLPattern) stack.peekLast();
+                FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                 fragment.setParam(value);
+            }
+        });
+        
+        visitors.put("/ACTION/PARAMETERS/PARAMETER/VARIABLE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FragmentUrl fragment = (FragmentUrl) stack.peekLast();
+                fragment.setName(value);
             }
         });
         
         visitors.put("/ACTION/PARAMETERS/PARAMETER/VALUE/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                URLPattern fragment = (URLPattern) stack.peekLast();
-                fragment.setName(value);
+                FragmentUrl fragment = (FragmentUrl) stack.peekLast();
+                Pattern pattern = Pattern.compile(value);
+                fragment.setPattern(pattern);
             }
         });
         
         visitors.put("/ACTION/PARAMETERS/PARAMETER/PATTERN/*", new Visit() {
             @Override
             public void acceptBefore(String value) {
-                URLPattern fragment = (URLPattern) stack.peekLast();
+                FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                 Pattern pattern = Pattern.compile(value);
                 fragment.setPattern(pattern);
             }
         });
     }
         
-    protected TreeVisitorAction visitorAction = new TreeVisitorAction() {
-        
-        protected String path = "";
-
-        @Override
-        public Object pre(Object t) {
-            CommonTree tree = (CommonTree) t;
-
-            Token token = tree.getToken();
-            int type = token.getType();
-            String text = token.getText();
-
-            if(type == MappingLanguageParser.DOLLAR 
-                            && !"$".equals(text)) {
-                path += "/" + text;
-                
-                log.info("Before " + path);
-                Visit visit = visitors.get(path);
-                if(visit != null) {
-                    visit.acceptBefore(null);
-                }
-            } else {
-                log.info("Before " + path + " = " + text);
-                Visit visit = visitors.get(path + "/*");
-                if(visit != null) {
-                    visit.acceptBefore(text);
-                }
-            }
-            
-            return t;
-        }
-
-        @Override
-        public Object post(Object t) {
-            CommonTree tree = (CommonTree) t;
-
-            Token token = tree.getToken();
-            int type = token.getType();
-            String text = token.getText();
-
-            if(type == MappingLanguageParser.DOLLAR 
-                            && !"$".equals(text)) {
-                log.info("After " + path);
-                Visit visit = visitors.get(path);
-                if(visit != null) {
-                    visit.acceptAfter(null);
-                }
-                path = StringUtils.substringBeforeLast(path, "/");
-                
-            } else {
-                log.info("After " + path + " = " + text);
-                Visit visit = visitors.get(path + "/*");
-                if(visit != null) {
-                    visit.acceptAfter(text);
-                }
-            }
-            
-            return t;
-        }
-    };
-
 }
