@@ -65,7 +65,7 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
 
         if(action.isView()) {
             String pageName = action.getFullName().replaceAll("\\.", "/")
-                    + action.getExtension();
+                    + "." + action.getExtension();
             
             Render render = new Render.RenderView(pageName, model);
             call.setRender(render);
