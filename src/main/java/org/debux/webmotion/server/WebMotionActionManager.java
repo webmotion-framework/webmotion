@@ -35,6 +35,7 @@ import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
 import org.debux.webmotion.server.handler.FilterMethodFinderHandler;
 import org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
+import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
 import org.debux.webmotion.server.handler.FilterFinderHandler;
 import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
@@ -71,6 +72,7 @@ public class WebMotionActionManager implements WebMotionHandler {
         handlers.add(new ActionMethodFinderHandler());
         handlers.add(new ExecutorInstanceCreatorHandler());
         handlers.add(new ExecutorParametersConvertorHandler());
+//        handlers.add(new ExecutorParametersValidatorHandler());
         handlers.add(new ExecutorMethodInvokerHandler());
         handlers.add(new RenderCreatorHandler());
     }

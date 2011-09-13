@@ -28,10 +28,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolation;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -91,6 +93,9 @@ public class HttpContext {
     
     /** Contains all message for the user. */
     protected FlashMessages flashMessages;
+    
+    /** Contains all constraint violation. */
+    protected Set<ConstraintViolation<?>> constraintViolations;
     
     /**
      * Error data is utility to get information on error in attributes.
@@ -245,6 +250,14 @@ public class HttpContext {
     
     public ErrorData getErrorData() {
         return errorData;
+    }
+
+    public Set<ConstraintViolation<?>> getConstraintViolations() {
+        return constraintViolations;
+    }
+
+    public void setConstraintViolations(Set<ConstraintViolation<?>> constraintViolations) {
+        this.constraintViolations = constraintViolations;
     }
     
     /**

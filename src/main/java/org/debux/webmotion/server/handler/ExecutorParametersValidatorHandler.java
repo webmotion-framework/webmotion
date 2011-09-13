@@ -35,6 +35,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Executor;
@@ -69,6 +70,9 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
             .unwrap(MethodValidator.class);
        
         Set<ConstraintViolation<?>> validate = new HashSet<ConstraintViolation<?>>();
+        HttpContext context = call.getContext();
+        context.setConstraintViolations(validate);
+        
         List<Executor> executors = call.getExecutors();
         for (Executor executor : executors) {
             
@@ -80,11 +84,13 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
             Collection<Object> values = parameters.values();
             for (Object parameterValue : values) {
                 
-                // Test validation on bean
-                validate.addAll(beanValidator.validate(parameterValue));
-                
                 // Test validation on method
                 validate.addAll(methodValidator.validateParameter(instance, method, parameterValue, parameterIndex++));
+                
+                // Test validation on bean
+                if(parameterValue != null) {
+                    validate.addAll(beanValidator.validate(parameterValue));
+                }
             }
         }
     }
