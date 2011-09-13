@@ -40,7 +40,7 @@ code:500                                                    Error.error
 *           /admin                                          view.jsp:sub.subaction.admin.index
 
 *           /static                                         Test.hello          value=coco,number=9
-*           /test/hello?who={value:aaaa*}&number={number}   action:Test.hello
+*           /test/hello?who={value:^aa.aa*\(.\)$}&number={number}   action:Test.hello
 *           /test/{value}/{number}                          Test.hello
 
 *           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}

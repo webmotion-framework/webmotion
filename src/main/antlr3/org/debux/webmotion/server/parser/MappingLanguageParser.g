@@ -185,9 +185,10 @@ url
     -> ^(DOLLAR["URL"]  DOT[$text])
     ;
 
-// TODO: jru 20110803 add other char in pattern
 pattern
-    : (Letter | Digit | QUESTION_MARK | ASTERISK | CIRCUMFLEX_ACCENT | DOLLAR)+
+    : (Letter| Digit | QUESTION_MARK | ASTERISK | CIRCUMFLEX_ACCENT 
+    | DOLLAR | PLUS | LEFT_SQUARE_BRACKET | RIGHT_SQUARE_BRACKET | HYPHEN 
+    | DOT |LEFT_PARENTHESIS| RIGHT_PARENTHESIS| BACKSLASH | SLASH)+
     -> DOT[$text]
     ;
 
