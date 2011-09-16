@@ -247,6 +247,8 @@ public class ANTLRMappingParser implements MappingParser {
                     config.setReloadable(Boolean.valueOf(value));
                 } else if(Config.REQUEST_ENCODING.equals(name)) {
                     config.setRequestEncoding(value);
+                } else if(Config.HANDLERS_FACTORY_CLASS.equals(name)) {
+                    config.setHandlersFactory(value);
                 }
             }
         });

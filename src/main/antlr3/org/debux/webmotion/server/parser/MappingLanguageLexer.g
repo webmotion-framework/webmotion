@@ -30,6 +30,7 @@ CONFIG_PACKAGE_ERRORS:'package.errors';
 CONFIG_RELOADABLE:'reloadable';
 CONFIG_MODE:'mode';
 CONFIG_REQUEST_ENCODING:'request.encoding';
+HANDLERS_FACTORY_CLASS:'handlers.factory.class';
 
 ACTION:'action:';
 CODE:'code:';

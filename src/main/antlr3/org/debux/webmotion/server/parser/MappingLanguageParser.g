@@ -52,6 +52,7 @@ section_config_name
     | CONFIG_RELOADABLE
     | CONFIG_MODE
     | CONFIG_REQUEST_ENCODING
+    | HANDLERS_FACTORY_CLASS
     ;
 
 // Section error

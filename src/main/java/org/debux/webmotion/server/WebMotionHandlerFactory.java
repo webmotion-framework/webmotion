@@ -25,13 +25,13 @@
 package org.debux.webmotion.server;
 
 import java.util.ArrayList;
-import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
 import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
+import org.debux.webmotion.server.handler.ErrorFinderHandler;
+import org.debux.webmotion.server.handler.ErrorMethodFinderHandler;
 import org.debux.webmotion.server.handler.FilterMethodFinderHandler;
 import org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
@@ -44,25 +44,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Chains handlers to process user request when the request is action type.
- * The action request can have filters. 
+ * Get chains handlers to process user request when the request is action or 
+ * error type.
  * 
  * @author julien
  */
-public class WebMotionActionManager implements WebMotionHandler {
+public class WebMotionHandlerFactory {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMotionActionManager.class);
-
-    /**
-     * List of {@see WebMotionHandler} that will be processed for action handling.
-     */
-    protected List<WebMotionHandler> handlers;
+    private static final Logger log = LoggerFactory.getLogger(WebMotionHandlerFactory.class);
 
     /**
      * Default constructor.
      */
-    public WebMotionActionManager() {
-        handlers = new ArrayList<WebMotionHandler>();
+    public WebMotionHandlerFactory() {
+    }
+    
+    /**
+     * @return list of {@see WebMotionHandler} that will be processed for action handling
+     */
+    public List<WebMotionHandler> getActionHandlers() {
+        List<WebMotionHandler> handlers = new ArrayList<WebMotionHandler>();
+        
         handlers.add(new ParametersMultipartHandler());
         handlers.add(new FilterFinderHandler());
         handlers.add(new ActionFinderHandler());
@@ -72,16 +74,29 @@ public class WebMotionActionManager implements WebMotionHandler {
         handlers.add(new ActionMethodFinderHandler());
         handlers.add(new ExecutorInstanceCreatorHandler());
         handlers.add(new ExecutorParametersConvertorHandler());
-//        handlers.add(new ExecutorParametersValidatorHandler());
+        handlers.add(new ExecutorParametersValidatorHandler());
         handlers.add(new ExecutorMethodInvokerHandler());
         handlers.add(new RenderCreatorHandler());
+        
+        return handlers;
     }
-
-    @Override
-    public void handle(Mapping mapping, Call call) {
-        for (WebMotionHandler handler : handlers) {
-            handler.handle(mapping, call);
-        }
+    
+    /**
+     * @return list of {@see WebMotionHandler} that will be processed for error handling
+     */
+    public List<WebMotionHandler> getErrorHandlers() {
+        List<WebMotionHandler> handlers = new ArrayList<WebMotionHandler>();
+        
+        handlers = new ArrayList<WebMotionHandler>();
+        handlers.add(new ParametersMultipartHandler());
+        handlers.add(new ErrorFinderHandler());
+        handlers.add(new ActionExecuteRenderHandler());
+        handlers.add(new ErrorMethodFinderHandler());
+        handlers.add(new ExecutorInstanceCreatorHandler());
+        handlers.add(new ExecutorMethodInvokerHandler());
+        handlers.add(new RenderCreatorHandler());
+        
+        return handlers;
     }
 
 }

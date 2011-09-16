@@ -94,9 +94,6 @@ public class HttpContext {
     /** Contains all message for the user. */
     protected FlashMessages flashMessages;
     
-    /** Contains all constraint violation. */
-    protected Set<ConstraintViolation<?>> constraintViolations;
-    
     /**
      * Error data is utility to get information on error in attributes.
      */
@@ -252,14 +249,6 @@ public class HttpContext {
         return errorData;
     }
 
-    public Set<ConstraintViolation<?>> getConstraintViolations() {
-        return constraintViolations;
-    }
-
-    public void setConstraintViolations(Set<ConstraintViolation<?>> constraintViolations) {
-        this.constraintViolations = constraintViolations;
-    }
-    
     /**
      * The value is stored in cookie during 10s.<p>
      * For example Use JSTL to read value : cookie.<key>

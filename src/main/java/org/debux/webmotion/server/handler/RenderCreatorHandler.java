@@ -168,6 +168,10 @@ public class RenderCreatorHandler implements WebMotionHandler {
         HttpServletRequest request = context.getRequest();
         
         String path = context.getHeader(HttpContext.HEADER_REFERER);
+        if(path == null) {
+            throw new WebMotionException("The header not contains the referer value");
+        }
+        
         Map<String, Object> model = render.getModel();
         path = addModel(call, path, model);
         

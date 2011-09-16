@@ -26,6 +26,8 @@ package org.debux.webmotion.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,18 +56,33 @@ public class WebMotionServer extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(WebMotionServer.class);
 
     protected Mapping mapping;
+    protected Config config;
+    
     protected WebMotionHandler actionManager;
     protected WebMotionHandler errorManager;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
-        actionManager = new WebMotionActionManager();
-        errorManager = new WebMotionErrorManager();
-        
+
         InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
         MappingParser parser = new BasicMappingParser();
         mapping = parser.parse(stream);
+        config = mapping.getConfig();
+            
+        try {
+            String handlersFactory = config.getHandlersFactory();
+            WebMotionHandlerFactory factory = (WebMotionHandlerFactory) Class.forName(handlersFactory).newInstance();
+            
+            List<WebMotionHandler> actionHandlers = factory.getActionHandlers();
+            actionManager = getHandlerManager(actionHandlers);
+            
+            List<WebMotionHandler> errorHandlers = factory.getErrorHandlers();
+            errorManager = getHandlerManager(errorHandlers);
+            
+        } catch (Exception ex) {
+            throw new WebMotionException("Invalid class name for handlers factory", ex);
+        }
     }
 
     @Override
@@ -73,7 +90,6 @@ public class WebMotionServer extends HttpServlet {
             throws ServletException, IOException {
         
         // Apply config
-        Config config = mapping.getConfig();
         String requestEncoding = config.getRequestEncoding();
         request.setCharacterEncoding(requestEncoding);
         
@@ -87,4 +103,14 @@ public class WebMotionServer extends HttpServlet {
         }
     }
     
+    protected WebMotionHandler getHandlerManager(final List<WebMotionHandler> handlers) {
+        return new WebMotionHandler() {
+            @Override
+            public void handle(Mapping mapping, Call call) {
+                for (WebMotionHandler handler : handlers) {
+                    handler.handle(mapping, call);
+                }
+            }
+        };
+    }
 }

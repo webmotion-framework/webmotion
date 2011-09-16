@@ -44,6 +44,7 @@ public class Config {
     public static String REQUEST_ENCODING = "request.encoding";
     public static String RELOADABLE = "reloadable";
     public static String MODE = "mode";
+    public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -66,6 +67,10 @@ public class Config {
     /** Precises the behavior of server is stateless or statefull */
     protected String mode = MODE_STATELESS;
     
+    /**  */
+    protected String handlersFactory = "org.debux.webmotion.server.WebMotionHandlerFactory";
+
+    /** Default contructor. */
     public Config() {
     }
 
@@ -123,6 +128,14 @@ public class Config {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public String getHandlersFactory() {
+        return handlersFactory;
+    }
+
+    public void setHandlersFactory(String handlersFactory) {
+        this.handlersFactory = handlersFactory;
     }
     
 }
