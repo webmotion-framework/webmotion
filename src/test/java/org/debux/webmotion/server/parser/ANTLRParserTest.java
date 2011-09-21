@@ -27,20 +27,11 @@ package org.debux.webmotion.server.parser;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
-import org.antlr.runtime.tree.DOTTreeGenerator;
-import org.antlr.runtime.tree.TreeVisitor;
-import org.antlr.runtime.tree.TreeVisitorAction;
-import org.antlr.stringtemplate.StringTemplate;
-import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
 
 /**
  * Test on extract mapping.
