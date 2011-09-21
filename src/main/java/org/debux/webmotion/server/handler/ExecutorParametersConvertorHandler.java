@@ -89,6 +89,14 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
     protected ConvertUtilsBean converter = new ConvertUtilsBean();
     protected BeanUtilsBean beanUtil = BeanUtilsBean.getInstance();
+
+    public ExecutorParametersConvertorHandler() {
+        this(new ConvertUtilsBean());
+    }
+    
+    public ExecutorParametersConvertorHandler(ConvertUtilsBean converter) {
+        this.converter = converter;
+    }
     
     @Override
     public void handle(Mapping mapping, Call call) {

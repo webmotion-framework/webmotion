@@ -52,7 +52,7 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
     protected SingletonFactory factory = new SingletonFactory();
 
     public ExecutorInstanceCreatorHandler() {
-        factory = new SingletonFactory();
+        this(new SingletonFactory());
     }
 
     public ExecutorInstanceCreatorHandler(SingletonFactory factory) {
