@@ -87,7 +87,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersConvertorHandler.class);
 
-    protected ConvertUtilsBean converter = new ConvertUtilsBean();
+    protected ConvertUtilsBean converter;
     protected BeanUtilsBean beanUtil = BeanUtilsBean.getInstance();
 
     public ExecutorParametersConvertorHandler() {
