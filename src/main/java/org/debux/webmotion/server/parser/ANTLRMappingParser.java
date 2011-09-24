@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -125,19 +126,26 @@ public class ANTLRMappingParser implements MappingParser {
             int type = token.getType();
             String text = token.getText();
 
-            if(type == MappingLanguageParser.DOLLAR && !"$".equals(text)) {
-                path += "/" + text;
-            } else {
-                path += "/*";
-            }
-            
-            log.info("Before " + path + " = " + text);
-            Visit visit = visitors.get(path);
-            if(visit != null) {
-                visit.acceptBefore(text);
-            }
+            try {
                 
-            return t;
+                if(type == MappingLanguageParser.DOLLAR && !"$".equals(text)) {
+                    path += "/" + text;
+                } else {
+                    path += "/*";
+                }
+
+                log.info("Before " + path + " = " + text);
+                Visit visit = visitors.get(path);
+                if(visit != null) {
+                    visit.acceptBefore(text);
+                }
+
+                return t;
+                
+            } catch (Exception ex) {
+                //FIXME: jru 20110924 Invalid line and char position
+                throw new WebMotionException("Syntax error at " + token.getLine() + ":" + token.getCharPositionInLine(), ex);
+            }
         }
         
         @Override
@@ -147,15 +155,22 @@ public class ANTLRMappingParser implements MappingParser {
             Token token = tree.getToken();
             String text = token.getText();
             
-            log.info("After " + path + " = " + text);
-            Visit visit = visitors.get(path);
-            if(visit != null) {
-                visit.acceptAfter(text);
+            try {
+                
+                log.info("After " + path + " = " + text);
+                Visit visit = visitors.get(path);
+                if(visit != null) {
+                    visit.acceptAfter(text);
+                }
+
+                path = StringUtils.substringBeforeLast(path, "/");
+
+                return t;
+                
+            } catch (Exception ex) {
+                //FIXME: jru 20110924 Invalid line and char position
+                throw new WebMotionException("Syntax error at " + token.getLine() + ":" + token.getCharPositionInLine(), ex);
             }
-            
-            path = StringUtils.substringBeforeLast(path, "/");
-            
-            return t;
         }
     };
 
