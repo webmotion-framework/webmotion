@@ -74,7 +74,8 @@ public class WebMotionHandlerFactory {
         handlers.add(new ActionMethodFinderHandler());
         handlers.add(new ExecutorInstanceCreatorHandler());
         handlers.add(new ExecutorParametersConvertorHandler());
-        handlers.add(new ExecutorParametersValidatorHandler());
+        // jru:20111001 Desactivate for the release 1.4, uncomment for version 2.0
+        //handlers.add(new ExecutorParametersValidatorHandler());
         handlers.add(new ExecutorMethodInvokerHandler());
         handlers.add(new RenderCreatorHandler());
         

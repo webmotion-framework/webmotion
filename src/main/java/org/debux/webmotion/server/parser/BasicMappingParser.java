@@ -134,9 +134,10 @@ public class BasicMappingParser implements MappingParser {
                     String value = extractConfig(Config.MODE, rule);
                     config.setMode(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
-                    String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
-                    config.setHandlersFactory(value);
+// jru:20111001 Desactivate for the release 1.4, uncomment for version 2.0
+//                } else if(section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
+//                    String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
+//                    config.setHandlersFactory(value);
                 }
             }
         } catch(IOException ioe) {
