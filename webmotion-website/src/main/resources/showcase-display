@@ -1,0 +1,45 @@
+[config]
+package.actions=org.debux.webmotion.showcase
+package.views=WEB-INF/org.debux.webmotion.showcase
+
+[actions]
+*           /hello                                      Showcase.hello
+*           /helloModel                                 Showcase.helloModel
+*           /helloParameters                            Showcase.helloParameters
+*           /view                                       Showcase.view
+*           /url                                        Showcase.url
+*           /act                                        Showcase.act
+*           /dynamic                                    Showcase.dynamic
+*           /helloDefaultParameters                     Showcase.helloDefaultParameters
+*           /filter                                     Showcase.filter
+*           /condition                                  Showcase.condition
+*           /code                                       Showcase.code
+*           /exception                                  Showcase.exception
+*           /npe                                        Showcase.npe
+*           /content                                    Showcase.content
+*           /stream                                     Showcase.stream
+*           /xml                                        Showcase.xml
+*           /json                                       Showcase.json
+*           /jsonp                                      Showcase.jsonp
+*           /first                                      Showcase.first
+*           /index                                      Showcase.index
+*           /save                                       Showcase.save
+*           /nocontent                                  Showcase.nocontent
+*           /forbidden                                  Showcase.forbidden
+*           /load                                       Showcase.load
+*           /message                                    Showcase.message
+*           /calc                                       Showcase.calc
+*           /readme                                     Showcase.readme
+*           /form                                       Showcase.form
+*           /pattern                                    Showcase.pattern
+*           /page                                       Showcase.page
+*           /upload                                     Showcase.upload
+*           /file                                       Showcase.file
+*           /shop                                       Showcase.shop
+*           /blog                                       Showcase.blog
+*           /wikipedia                                  Showcase.wikipedia
+*           /text                                       Showcase.text
+*           /notfound                                   Showcase.notfound
+*           /media                                      Showcase.media
+*           /login                                      Showcase.login
+*           /helloView                                  Showcase.helloView

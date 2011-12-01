@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Webmotion extension spring
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="parametersMultipartHandler"         class="ParametersMultipartHandler"/>
+    <bean id="filterFinderHandler"                class="FilterFinderHandler"/>
+    <bean id="actionFinderHandler"                class="ActionFinderHandler"/>
+    <bean id="parametersExtractorHandler"         class="ParametersExtractorHandler"/>
+    <bean id="errorFinderHandler"                 class="ErrorFinderHandler"/>
+    <bean id="actionExecuteRenderHandler"         class="ActionExecuteRenderHandler"/>
+    <bean id="filterMethodFinderHandler"          class="FilterMethodFinderHandler"/>
+    <bean id="actionMethodFinderHandler"          class="ActionMethodFinderHandler"/>
+    <bean id="errorMethodFinderHandler"           class="ErrorMethodFinderHandler"/>
+    <bean id="springInstanceCreatorHandler"       class="SpringInstanceCreatorHandler"/>
+    <bean id="executorParametersConvertorHandler" class="ExecutorParametersConvertorHandler"/>
+    <bean id="executorParametersInjectorHandler"  class="ExecutorParametersInjectorHandler"/>
+    <bean id="executorParametersValidatorHandler" class="ExecutorParametersValidatorHandler"/>
+    <bean id="executorMethodInvokerHandler"       class="ExecutorMethodInvokerHandler"/>
+    <bean id="renderCreatorHandler"               class="RenderCreatorHandler"/>
+
+    <bean id="springActionHandlers" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="parametersMultipartHandler" />
+                <ref bean="filterFinderHandler" />
+                <ref bean="actionFinderHandler" />
+                <ref bean="parametersExtractorHandler" />
+                <ref bean="actionExecuteRenderHandler" />
+                <ref bean="filterMethodFinderHandler" />
+                <ref bean="actionMethodFinderHandler" />
+                <ref bean="springInstanceCreatorHandler" />
+                <ref bean="executorParametersConvertorHandler" />
+                <ref bean="executorParametersInjectorHandler" />
+                <ref bean="executorParametersValidatorHandler" />
+                <ref bean="executorMethodInvokerHandler" />
+                <ref bean="renderCreatorHandler" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="springErrorHandlers" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="parametersMultipartHandler" />
+                <ref bean="errorFinderHandler" />
+                <ref bean="actionExecuteRenderHandler" />
+                <ref bean="errorMethodFinderHandler" />
+                <ref bean="springInstanceCreatorHandler" />
+                <ref bean="executorParametersInjectorHandler" />
+                <ref bean="executorMethodInvokerHandler" />
+                <ref bean="renderCreatorHandler" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>

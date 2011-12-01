@@ -1,0 +1,61 @@
+[config]
+package.filters=org.debux.webmotion.wiki
+package.actions=org.debux.webmotion.wiki
+package.errors=org.debux.webmotion.wiki
+package.views=WEB-INF/org.debux.webmotion.wiki
+
+[filters]
+*             /*                                                 Security.check
+*             /*                                                 Layout.put
+
+[actions]
+# Security
+POST          /login?username={username}&password={password}     Security.login    sub=login
+GET           /login                                             view:login.jsp
+GET           /logout                                            Security.logout   sub=logout
+
+# Media
+GET           /media?action=attach                               Media.attach
+GET           /media/{nameSpace}?action=attach                   Media.attach
+
+POST          /media?sub=upload                                  Media.upload
+POST          /media/{nameSpace}?sub=upload                      Media.upload
+
+GET           /media?name={mediaName}                            Media.get
+GET           /media/{nameSpace}?name={mediaName}                Media.get
+
+# Page
+GET           /{pageName}?sub=include                            Page.include
+GET           /{nameSpace}/{pageName}?sub=include                Page.include
+
+GET           /{pageName}?sub=source                             Page.source
+GET           /{nameSpace}/{pageName}?sub=source                 Page.source
+
+#GET           /{pageName}?sub=delete                             Page.delete
+#GET           /{nameSpace}/{pageName}?sub=delete                 Page.delete
+
+GET           /{pageName}?sub=create&type={type}                                         Page.create
+GET           /{nameSpace}/{pageName}?sub=create&type={type}                             Page.create
+
+POST          /{pageName}?sub=save&content={content}                                     Page.save
+POST          /{nameSpace}/{pageName}?sub=save&content={content}                         Page.save
+
+POST          /{pageName}?sub=preview&type={type}&content={content}                      Page.preview
+POST          /{nameSpace}/{pageName}?sub=preview&type={type}&content={content}          Page.preview
+
+GET           /{pageName}?action=edit                            Page.edit
+GET           /{nameSpace}/{pageName}?action=edit                Page.edit
+
+GET           /{pageName}                                        Page.display
+GET           /{nameSpace}/{pageName}                            Page.display
+
+# Map
+GET           /?action=mediamap                                  Media.map
+GET           /{nameSpace}/?action=mediamap                      Media.map
+
+GET           /?action=sitemap                                   Page.map
+GET           /{nameSpace}/?action=sitemap                       Page.map
+
+# Common
+GET           /?language={language}                              Layout.language  sub=language
+GET           /                                                  Page.firstPage   sub=first

@@ -1,0 +1,191 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Avancé</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="servlet">Architecture des servlets</h2>
+</div>
+<p>
+    Le framework est managé par deux servlets et un filtre. Le filtre regarde 
+    l'ensemble des requêtes et redirige sur l'une des servlets.
+</p>
+
+<p>
+    La première servlet permet de traiter une action dans le fichier de mapping, disponible sur /deploy. 
+    La seconde servlet permet de traiter les ressources static, disponible sur /static. 
+</p>
+
+<p>
+    Le filtre travaille de la façon suivant si le path de l'url ne contient pas d'extension , 
+    c'est à dire que l'url ne fini pas par point plus une chaine quelconque, il redirige vers la 
+    servlet d'action sinon la servlet static.
+</p>
+
+<p>
+    Par fois des données static passant à tord dans la servlet pour les actions, pour cela
+    il suffit d'appeller explicitement la servlet souhaité.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne sur /readme la resource static :
+</p>
+<pre class="prettyprint">
+[actions]
+*           /readme                                     url:/static/README
+</pre>
+
+<div class="page-header">
+    <h2 id="handler">Handler</h2>
+</div>
+<p>
+    Le traitement de la requête passse par différents handlers pour réaliser 
+    la demande du client web. Un handler particulier est une l'handler factory qui est
+    l'ordonnanceur des autres handlers. Il est redéfinissable dans le fichier de mapping 
+    dans la section config anisi :
+</p>
+<pre class="prettyprint">
+[config]
+handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
+</pre>
+
+<p>
+    Par défaut WebMotion propose un ensemble d'handler :
+</p>
+<p>
+    Comme handler factory, vous avez :
+</p>
+<ul>
+    <li><strong>WebMotionHandlerFactory</strong>, permet l'ordonnancement des autres handlers et la gestion des extensions.</li>
+</ul>
+
+<p>
+    Comme handlers pour la gestion des actions, vous avez :
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, permet la gestion des fichiers en multi-part.</li>
+    <li><strong>FilterFinderHandler</strong>, recherche les filtres à appliquer.</li>
+    <li><strong>ActionFinderHandler</strong>, recherche l'action à appliquer.</li>
+    <li><strong>ParametersExtractorHandler</strong>, extrait les paramètres et les renomment si nécessaire.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
+    <li><strong>FilterMethodFinderHandler</strong>, récupère les méthodes à éxecuter pour des filtres.</li>
+    <li><strong>ActionMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie les filters et l'action si nécessaire.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, converti les paramètres selon le type de méthode à invoquer.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
+    <li><strong>ExecutorParametersValidatorHandler</strong>, valide les paramètres.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action.</li>
+    <li><strong>RenderCreatorHandler</strong>, crée le rendu dans la response.</li>
+</ul>
+
+<p>
+    Comme handlers pour la gestion des erreurs, vous avez :
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, permet la gestion des fichiers en multi-part.</li>
+    <li><strong>ErrorFinderHandler</strong>, recherche l'action pour une erreur à appliquer.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
+    <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action .</li>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie l'action si nécessaire.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour l'action.</li>
+    <li><strong>RenderCreatorHandler</strong>, crée le rendu dans la response.</li>
+</ul>
+
+<p>
+    Chaque handler doit implémenter deux méthodes, une pour l'initialisation appelé
+    au moment de l'initialisation de la servlet et handle pour le traitement de la 
+    requête.
+</p>
+<pre class="prettyprint">
+public class MyHandler implements WebMotionHandler {
+
+    @Override
+    public void init(InitContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handle(Mapping mapping, Call call) {
+        // Do process
+    }
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="paranamer">Paranamer</h2>
+</div>
+<p>
+    WebMotion repose sur une librairie pour retrouver les noms des paramètres d'une méthode.
+    Cette librairie s'appelle <a href="http://paranamer.codehaus.org/">Paranamer</a>.
+    WebMotion avec Paranamer utilise la compilation java en mode debug.
+</p>
+<p>
+    Si vous devez passer la compilation sans le mode debug, il vous faudra configurer
+    le mapping et paranamer ainsi :
+</p>
+
+<p>
+    Pour le mapping :
+</p>
+<pre class="prettyprint">
+[config]
+javac.debug=false
+</pre>
+
+<p>
+    Pour paranamer avec Maven :
+</p>
+<pre class="prettyprint">
+&lt;plugin&gt;
+   &lt;groupId&gt;com.thoughtworks.paranamer&lt;/groupId&gt;
+   &lt;artifactId&gt;paranamer-maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;2.3&lt;/version&gt;
+   &lt;executions&gt;
+       &lt;execution&gt;
+           &lt;id&gt;run&lt;/id&gt;
+           &lt;configuration&gt;
+               &lt;sourceDirectory&gt;${project.build.sourceDirectory}&lt;/sourceDirectory&gt;
+               &lt;outputDirectory&gt;${project.build.outputDirectory}&lt;/outputDirectory&gt;
+           &lt;/configuration&gt;
+           &lt;goals&gt;
+               &lt;goal&gt;generate&lt;/goal&gt;
+           &lt;/goals&gt;
+       &lt;/execution&gt;
+   &lt;/executions&gt;
+&lt;/plugin&gt;
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn primary large" style="float:right;" href="showcase/hello">Démonstration »</a>
+</div>
+
+</div>

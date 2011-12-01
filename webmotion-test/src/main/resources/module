@@ -1,0 +1,9 @@
+[config]
+package.views=org.debux.webmotion.test.views
+package.filters=org.debux.webmotion.test.filters
+package.actions=org.debux.webmotion.test.actions
+package.errors=org.debux.webmotion.test.errors
+
+[actions]
+*           /view                               Test.moduleView
+*           /null                               Test.moduleNull

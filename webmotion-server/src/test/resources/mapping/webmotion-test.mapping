@@ -1,0 +1,57 @@
+[config]
+package.views=WEB-INF/pages
+package.base=org.debux.webmotion
+package.actions=test.actions
+package.filters=test.filters
+package.errors=test.errors
+
+javac.debug=true
+mode=statefull
+request.encoding=UTF-8
+
+[errors]
+java.lang.NullPointerException                              Error.npeError
+code:404                                                    Error.notFound
+code:500                                                    Error.error
+*                                                           view:error.jsp
+
+[filters]
+*           /*                                              Filters.log
+*           /test/hello/*                                   Filters.param
+*           /test/*/*                                       Filters.log
+
+[actions]
+#<method>   <url>                                           <action>
+*           /                                               Test.index
+*           /index                                          view:test/index.html
+*           /google                                         url:http://www.google.fr
+*           /info/                                          url:/test/hello/3
+*           /info/{param}                                   url:/test/{param}
+*           /info?value={}                                  view:{value}.jsp
+
+GET,POST    /user                                           User.get
+GET         /login?user.name={}&user.passwd={}                Auth.login
+GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
+
+*           /include                                        view:test/include.jsp
+
+*           /info/{infoId}                                  Test.all
+*           /info/{infoId}/                                 Test.run
+*           /run/?param                                     Test.all
+*           /run?param                                      Test.run
+*           /url/run/                                       Test.run
+*           /url/run                                        Test.all
+
+*           /test/run?param=test                            Test.all
+*           /test/run                                       Test.run
+*           /sub                                            sub.Subaction.index
+*           /admin                                          view:sub/subaction/admin/index.jsp
+
+*           /static                                                 Test.hello          value=coco,number=9
+*           /test/hello?who={value:^aa.aa*\(.\)$}&number={number}   action:Test.hello
+*           /test/{value}/{number}                                  Test.hello
+
+*           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}
+
+# All match
+*           /{class}/{method}                               {class}.{method}

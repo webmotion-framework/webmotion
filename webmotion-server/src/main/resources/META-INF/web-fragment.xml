@@ -1,0 +1,109 @@
+<!--
+  #%L
+  Webmotion in action
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<web-fragment>
+  
+    <name>WebMotion</name>
+  
+    <listener>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup </listener-class>
+    </listener>
+
+    <servlet>
+      <servlet-name>WebMotionStaticServlet</servlet-name>
+      <servlet-class>org.debux.webmotion.server.WebMotionStaticServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+      <servlet-name>WebMotionMainServlet</servlet-name>
+      <servlet-class>org.debux.webmotion.server.WebMotionMainServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>WebMotionStaticServlet</servlet-name>
+      <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>WebMotionMainServlet</servlet-name>
+      <url-pattern>/deploy/*</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>WebMotionRouterFilter</filter-name>
+        <filter-class>org.debux.webmotion.server.WebMotionRouterFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>WebMotionRouterFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+    <!-- Exception -->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error</location>
+    </error-page>
+
+    <!-- Bad Request -->
+    <error-page>
+        <error-code>400</error-code> 
+        <location>/error</location>
+    </error-page>
+
+    <!-- Unauthorized -->
+    <error-page>
+        <error-code>401</error-code> 
+        <location>/error</location>
+    </error-page>
+
+    <!-- Forbidden -->
+    <error-page>
+        <error-code>403</error-code> 
+        <location>/error</location>
+    </error-page>
+
+    <!-- Not Found -->
+    <error-page>
+        <error-code>404</error-code> 
+        <location>/error</location>
+    </error-page>
+
+    <!-- Request Time-out -->
+    <error-page>
+        <error-code>408</error-code> 
+        <location>/error</location>
+    </error-page>
+
+    <!-- Internal Server Error -->
+    <error-page>
+        <error-code>500</error-code> 
+        <location>/error</location>
+    </error-page>
+    
+</web-fragment>

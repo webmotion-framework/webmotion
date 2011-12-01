@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.debux.webmotion</groupId>
+    <artifactId>wikimotion</artifactId>
+  
+    <packaging>war</packaging>
+    <name>Webmotion wiki</name>
+    
+    <parent>
+        <groupId>org.debux</groupId>
+        <artifactId>webmotion-all</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.debux.webmotion</groupId>
+            <artifactId>webmotion</artifactId>
+        </dependency>
+        
+        <!-- Utils -->
+        <dependency>
+            <groupId>org.nuiton</groupId>
+            <artifactId>nuiton-utils</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+        </dependency>
+        
+        <!-- Servlet -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <!-- Logger -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>wikimotion</finalName>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.nuiton</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+            </plugin>
+            
+        </plugins>
+    </build>
+    
+</project>

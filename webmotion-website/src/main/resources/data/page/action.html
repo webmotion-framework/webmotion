@@ -1,0 +1,629 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Action Java</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="controller">WebMotionController</h2>
+</div>
+<p>
+    Dans WebMotion il est possible d'appelé une méthode d'une classe Java à partir
+    d'une Url. La classe doit hérité de WebMotionController. Elle bénéficie de
+    fonctionnalités supplémentaires :
+</p>
+
+<ul>
+    <li>Des renders, pour renvoyer des informations dans la réponse à l'utilisateur.</li>
+    <li>Du contexte web.</li>
+    <li>Des flashm essages, pour renvoyer des messages.</li>
+    <li>De la validation des paramètres de méthode.</li>
+</ul>
+
+<pre class="prettyprint">
+public class User extends WebMotionController {
+    public Render find(String id) {
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<p>
+    L'ensemble des controlleurs dans WebMotion sont en singleton, donc il est impératif
+    de travailler en mode stateless c'est à dire qu'il ne faut pas conserver d'attribut
+    au niveau de la classe au risque d'être utiliser à tord.
+</p>
+
+<div class="page-header">
+    <h2 id="render">Render</h2>
+</div>
+<p>
+    Un render est le retour fait pour le client web. Il est utiliser dans le 
+    retour des actions ou des filtres.
+</p>
+<p>
+    Un render prend un général un model, qui sont utilisé pour paramètrer le rendu.
+</p>
+
+<h3>Render view</h3>
+<p>
+    Le render view retourne une es page jsp, html, txt, ... à l'utilisateur.
+    Dans ce cas là, le model est passer en attribut de la request.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une page jsp :
+</p>
+<pre class="prettyprint">
+return renderView("index.jsp");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une page html :
+</p>
+<pre class="prettyprint">
+return renderView("index.html");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une page html dans le répertoire page :
+</p>
+<pre class="prettyprint">
+return renderView("page/index.html");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une page jsp avec un model :
+</p>
+<pre class="prettyprint">
+return renderView("index.jsp", "name", "value");
+</pre>
+Avec la page jsp :
+<pre class="prettyprint">
+Value = ${name}
+</pre>
+
+<h3>Render url</h3>
+<p>
+    Le render url permet de renvoyer le client web vers une autre url, elle 
+    peut être en relative ou en absolue. Utile pour mettre en place un pattern 
+    de type POST and GET. Le model est utilisé comme paramètre à l'url.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Url relative :
+</p>
+<pre class="prettyprint">
+return renderURL("/display");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Url absolue :
+</p>
+<pre class="prettyprint">
+return renderURL("http://www.google.fr");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Url avec model, vous aurez l'url suivante /user?id=1232323 pour :
+</p>
+<pre class="prettyprint">
+return renderURL("/user", "id", 1232323);
+</pre>
+
+<h3>Render action</h3>
+<p>
+    Le render action permet d'executer une méthode d'une action et d'en recupérer le rendu. 
+    Dans ce cas le model est la liste des paramètres pour l'appel vers l'action. Si 
+    vous trouvez dans la même classe entre les deux méthodes vous pouvez directement faire 
+    un appel entre les deux.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Appel direct :
+</p>
+<pre class="prettyprint">
+public class Call extends WebMotionController {
+    public Render action() {
+        // ...
+        return next("test");
+    }
+
+    public Render next(String value) {
+        // ...
+    }
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Appel indirect :
+</p>
+<pre class="prettyprint">
+public class Call extends WebMotionController {
+    public Render action() {
+        // ...
+        return renderAction("Call.next", "test");
+    }
+
+    public Render next(String value) {
+        // ...
+    }
+}
+</pre>
+
+<h3>Render content</h3>
+<p>
+    Le render content retourne directement le contenu sous la forme d'un String selon un mime type.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Rendu direct en html :
+</p>
+<pre class="prettyprint">
+return renderContent("&lt;h1&gt;exemple&lt;/h1&gt;", "text/html");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Rendu direct en text :
+</p>
+<pre class="prettyprint">
+return renderContent("&lt;h1&gt;exemple&lt;/h1&gt;", "text/plain");
+</pre>
+
+<h3>Render stream</h3>
+<p>
+    Le render stream retourne le flux dans la response selon un mime type.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne un pdf dans le classpath :
+</p>
+<pre class="prettyprint">
+ClassLoader classLoader = Stream.class.getClassLoader();
+InputStream stream = classLoader.getResourceAsStream("doc.pdf");
+return renderStream(stream, "application/pdf");
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une image dans le classpath :
+</p>
+<pre class="prettyprint">
+ClassLoader classLoader = Stream.class.getClassLoader();
+InputStream stream = classLoader.getResourceAsStream("logo.png");
+return renderStream(stream, "image/png");
+</pre>
+
+<h3>Reload page</h3>
+<p>
+    Le reload page permet de rafraichir la page courant, il utilise le referer dans le header http.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Recharge la page :
+</p>
+<pre class="prettyprint">
+return reloadPage();
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Recharge la page en passant des paramètres supplémentaires :
+</p>
+<pre class="prettyprint">
+return reloadPage("id", 122345);
+</pre>
+
+<h3>Render error</h3>
+<p>
+    Le render error retourne un statut d'erreur au client web. Vous pouvez 
+    directement utiliser HttpServletResponse pour les codes d'erreur.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne un 404 à l'utilisateur :
+</p>
+<pre class="prettyprint">
+return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+</pre>
+
+<h3>Render status</h3>
+<p>
+    Le render status retourne un statut au client web.V ous pouvez 
+    directement utiliser HttpServletResponse pour les codes de status.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne un 200 comme ping :
+</p>
+<pre class="prettyprint">
+return renderStatus(HttpServletResponse.SC_OK);
+</pre>
+
+<h3>Render xml</h3>
+<p>
+    Le render xml basé sur <a href="http://xstream.codehaus.org/">XStream</a> permet la sérialisation de bean java en xml.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne un objet en xml :
+</p>
+<pre class="prettyprint">
+return renderXML(user);
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une map :
+</p>
+<pre class="prettyprint">
+return renderXML("key", user);
+</pre>
+
+<h3>Render json</h3>
+<p>
+    Le render json basé sur <a href="https://code.google.com/p/google-gson/">Gson</a> permet la sérialisation de bean java en json.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne un objet en xml :
+</p>
+<pre class="prettyprint">
+return renderJSON(user);
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Retourne une map :
+</p>
+<pre class="prettyprint">
+return renderJSON("key", user);
+</pre>
+
+<h3>Render jsonp</h3>
+<p>
+    Le render jsonp permet de gérer des appels jsonp facilement en précisant le callback avec l'objet 
+    Json en paramètre.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Lance la fonction test avec l'objet user en paramètre :
+</p>
+<pre class="prettyprint">
+return renderJSONP("test", user);
+</pre>
+
+<h3>Nouveau render</h3>
+<p>
+    Pour créer un nouveau render vous pouver devez hériter de la classe Render et
+    implanter la méthode create. Vous avez accès à l'ensemble de la configuration, du context web, ...
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Render xml ou json en fonction de l'Accept dans le header :
+</p>
+<pre class="prettyprint">
+public class RenderAccept extends Render {
+
+    protected Map&lt;String, Object&gt; model;
+
+    public RenderAccept(Map&lt;String, Object&gt; model) {
+        this.model = model;
+    }
+
+    public Map&lt;String, Object&gt; getModel() {
+        return model;
+    }
+
+   @Override
+   public void create(Mapping mapping, Call call) throws IOException, ServletException {
+        // Get accept in header
+        HttpContext context = call.getContext();
+        HttpServletRequest request = context.getRequest();
+        String accept = request.getHeader("Accept");
+
+        Render render = null;
+        if (accept.equals("application/json")) {
+            // Delegate to renderJSON
+            render = new RenderJson(model);
+
+        } else if (accept.equals("text/xml")) {
+            // Delegate to renderXML
+            render = new RenderXml(model);
+
+        } else {
+            throw new IllegalArgumentException("Invalid accept");
+        }
+
+        // Create the real render
+        render.create(mapping, call);
+    }
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="context">Contexte web</h2>
+</div>
+<p>
+    L'ensemble des actions ont accès sur le context web, soit par le biais de la méthode getContext
+    soit directement en paramètre de votre action.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Recupération du context par paramètre :
+</p>
+<pre class="prettyprint">
+public class Action extends WebMotionController {
+    public Render run(HttpContext context) {
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Recupération du context par méthode :
+</p>
+<pre class="prettyprint">
+public class Action extends WebMotionController {
+    public Render run() {
+        HttpContext context = getContext();
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<p>
+    Vous disposez aussi d'autres types d'objets récupérable directement en paramètre de méthode.
+    A noter que le nom du paramètre n'influ pas, seul le type est important.
+</p>
+<ul>
+    <li><strong>HttpContext</strong>, pour le context.</li>
+    <li><strong>HttpSession</strong>, pour la session.</li>
+    <li><strong>HttpServletRequest</strong> ou <strong>ServletRequest</strong>, pour la request.</li>
+    <li><strong>HttpServletResponse</strong> ou <strong>ServletResponse</strong>, pour la reponse.</li>
+    <li><strong>ServletContext</strong>, pour le contexte de la servlet.</li>
+    <li><strong>ErrorData</strong>, pour les données en cas d'erreur.</li>
+    <li><strong>Exception</strong>, pour l'exception en cas d'erreur.</li>
+    <li><strong>FileProgressListener</strong>, pour la progression du fichier.</li>
+    <li><strong>Mapping</strong>, pour le mapping.</li>
+    <li><strong>Config</strong>, pour la config du mapping.</li>
+    <li><strong>Call</strong>, pour le context d'appel.</li>
+</ul>
+
+<p>
+    <span class="label notice">Exemple</span> Recupération de la session :
+</p>
+<pre class="prettyprint">
+public class Action extends WebMotionController {
+    public Render run(HttpSession session) {
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Recupération d'une exception :
+</p>
+<pre class="prettyprint">
+public class Error extends WebMotionController {
+    public Render display(TechnicalException exception) {
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="flashmessage">Flash message</h2>
+</div>
+<p>
+    L'une des difficulté lors d'un redirect est de conserver les messages pour que l'utilisateur 
+    les visualise, c'est ce que permet les flash message. Cette fonctionnalité est disponible dans 
+    le contexte http. Les flash messages peuvent être de différents types info, error, warning et misc.
+    Ils sont récupérable dans la request par l'attibut flashMessages.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Message d'info :
+</p>
+<pre class="prettyprint">
+public Render send() {
+    HttpContext context = getContext();
+    context.addInfoMessage("my_message", "test");
+
+    return renderURL("/url");
+}
+</pre>
+
+Avec comme récupération dans la request du message en jsp :
+<pre class="prettyprint">
+${flashMessages.infos.my_message}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Message d'erreur :
+</p>
+<pre class="prettyprint">
+public Render send() {
+    HttpContext context = getContext();
+    context.addErrorMessage("my_message", "test");
+
+    return renderURL("/url");
+}
+</pre>
+
+Avec comme récupération dans la request du message en jsp :
+<pre class="prettyprint">
+${flashMessages.errors.my_message}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Message de warning :
+</p>
+<pre class="prettyprint">
+public Render send() {
+    HttpContext context = getContext();
+    context.addWarningMessage("my_message", "test");
+
+    return renderURL("/url");
+}
+</pre>
+
+Avec comme récupération dans la request du message en jsp :
+<pre class="prettyprint">
+${flashMessages.warnings.my_message}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Message divers :
+</p>
+<pre class="prettyprint">
+public Render send() {
+    HttpContext context = getContext();
+    context.addMessage("my_message", "test");
+
+    return renderURL("/url");
+}
+</pre>
+
+Avec comme récupération dans la request du message en jsp :
+<pre class="prettyprint">
+${flashMessages.miscs.my_message}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Récupérations de l'ensemble des messages en jsp :
+</p>
+<pre class="prettyprint">
+${flashMessages.messages}
+</pre>
+
+<div class="page-header">
+    <h2 id="validation">Validation</h2>
+</div>
+<p>
+    WebMotion propose une validation des paramètres des actions Java, sur la JSR 303.
+    Pour plus de renseignement sur la JSR, vous pouvez consulter le site <a href="http://jcp.org/">jcp</a>.
+    Un bean ne sera valier seulement si sur le paramètre de méthode l'annotation 
+    @Valid ou @ValidGroup apparait. Notez que @ValidGroup est la seule annotation 
+    propre au framework qui permet la validation du bean sur un groupe. 
+    Vous pouvez bien sur créer vos propre annotation de validation et les utiliser avec WebMotion.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Validation simple :
+</p>
+<pre class="prettyprint">
+public Render search(@NotNull String query) {
+    // ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Validation sur un bean, attention il peut être null :
+</p>
+<pre class="prettyprint">
+public Render create(@Valid Book book) {
+    // ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Validation sur un bean, en précisant qu'il ne peut être null :
+</p>
+<pre class="prettyprint">
+public Render create(@Valid @NotNull Book book) {
+    // ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Validation d'un groupe sur un bean  :
+</p>
+<pre class="prettyprint">
+public Render comment(@ValidGroup(MyGroup.class) Book book) {
+    // ...
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="file">Fichier</h2>
+</div>
+<p>
+    Les fichiers sont gérer comme des paramètres simple. WebMotion s'occupe avec l'aide
+    de <a href="http://commons.apache.org/fileupload/">FileUpload</a> de faire le traitement 
+    pour la récupération multi-part. Vous pouvez utilisez soit File comme type de paramètre, 
+    soit le wrapper proposer par WebMotion pour récupérer des informations complémentaires, 
+    c'est à dire le nom , la taille et le type de fichier.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Récupération simple du fichier  :
+</p>
+<pre class="prettyprint">
+public Render upload(File file) {
+    // ...
+}
+</pre>
+
+<p>
+    <span class="label notice">Exemple</span> Récupération par le wrapper  :
+</p>
+<pre class="prettyprint">
+public Render upload(UploadFile file) {
+    String name = file.getName();
+    // ...
+}
+</pre>
+
+<p>
+    Il est possible de suivre l'évolution du téléchargement part le biais d'un 
+    listenner mise à disposition dans la session de l'utilisateur.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Récupération des informations de progression en format Json  :
+</p>
+<pre class="prettyprint">
+public Render progress(FileProgressListener listener) {
+    return renderJSON(listener);
+}
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn primary large" style="float:right;" href="extensions">Extensions »</a>
+</div>
+
+</div>
