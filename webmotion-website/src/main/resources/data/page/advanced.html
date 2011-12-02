@@ -33,28 +33,35 @@
     <h2 id="servlet">Architecture des servlets</h2>
 </div>
 <p>
-    Le framework est managé par deux servlets et un filtre. Le filtre regarde 
-    l'ensemble des requêtes et redirige sur l'une des servlets.
+    Le framework est géré par deux servlets et un filtre. Le filtre analyse 
+    l'intégralité des requêtes entrantes et les aiguillentvers les deux servlets.
 </p>
 
 <p>
     La première servlet permet de traiter une action dans le fichier de mapping, disponible sur /deploy. 
-    La seconde servlet permet de traiter les ressources static, disponible sur /static. 
+    La seconde servlet permet de traiter les ressources statiques, disponible sur /static. 
 </p>
 
 <p>
-    Le filtre travaille de la façon suivant si le path de l'url ne contient pas d'extension , 
-    c'est à dire que l'url ne fini pas par point plus une chaine quelconque, il redirige vers la 
-    servlet d'action sinon la servlet static.
+    Le filtre aiguille les requêtes de la façon suivante :
+</p>
+<ul>
+    <li>
+        Si le path de l'URL ne contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.*</code>
+        <ul>
+            <li>alors il redirige vers la servlet d'action</li>
+            <li>sinon il redirige vers la servlet dédiée aux ressources statiques</li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+    Il est possible que des requêtes d'accès à des données statiques passent à tort dans la servlet d'actions.
+    Pour éviter ce cas, il suffit d'appeller explicitement la servlet souhaitée
 </p>
 
 <p>
-    Par fois des données static passant à tord dans la servlet pour les actions, pour cela
-    il suffit d'appeller explicitement la servlet souhaité.
-</p>
-
-<p>
-    <span class="label notice">Exemple</span> Retourne sur /readme la resource static :
+    <span class="label notice">Exemple</span> Retourne sur /readme la resource statique :
 </p>
 <pre class="prettyprint">
 [actions]
@@ -62,11 +69,11 @@
 </pre>
 
 <div class="page-header">
-    <h2 id="handler">Handler</h2>
+    <h2 id="handler">Comprendre le fonctionnement de WebMotion</h2>
 </div>
 <p>
     Le traitement de la requête passse par différents handlers pour réaliser 
-    la demande du client web. Un handler particulier est une l'handler factory qui est
+    la demande du client web. Il y a un handler particulier qui est l'handler factory qui est
     l'ordonnanceur des autres handlers. Il est redéfinissable dans le fichier de mapping 
     dans la section config anisi :
 </p>
@@ -94,11 +101,11 @@ handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
     <li><strong>ActionFinderHandler</strong>, recherche l'action à appliquer.</li>
     <li><strong>ParametersExtractorHandler</strong>, extrait les paramètres et les renomment si nécessaire.</li>
     <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
-    <li><strong>FilterMethodFinderHandler</strong>, récupère les méthodes à éxecuter pour des filtres.</li>
-    <li><strong>ActionMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
+    <li><strong>FilterMethodFinderHandler</strong>, récupère les méthodes à exécuter pour des filtres.</li>
+    <li><strong>ActionMethodFinderHandler</strong>, récupère la méthode à exécuter pour l'action.</li>
     <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie les filters et l'action si nécessaire.</li>
-    <li><strong>ExecutorParametersConvertorHandler</strong>, converti les paramètres selon le type de méthode à invoquer.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, convertit les paramètres selon le type de méthode à invoquer.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
     <li><strong>ExecutorParametersValidatorHandler</strong>, valide les paramètres.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action.</li>
     <li><strong>RenderCreatorHandler</strong>, crée le rendu dans la response.</li>
@@ -111,7 +118,7 @@ handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
     <li><strong>ParametersMultipartHandler</strong>, permet la gestion des fichiers en multi-part.</li>
     <li><strong>ErrorFinderHandler</strong>, recherche l'action pour une erreur à appliquer.</li>
     <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
-    <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action .</li>
+    <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
     <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie l'action si nécessaire.</li>
     <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour l'action.</li>
@@ -119,7 +126,7 @@ handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
 </ul>
 
 <p>
-    Chaque handler doit implémenter deux méthodes, une pour l'initialisation appelé
+    Chaque handler doit implémenter deux méthodes, une pour l'initialisation appelée
     au moment de l'initialisation de la servlet et handle pour le traitement de la 
     requête.
 </p>
@@ -142,12 +149,12 @@ public class MyHandler implements WebMotionHandler {
     <h2 id="paranamer">Paranamer</h2>
 </div>
 <p>
-    WebMotion repose sur une librairie pour retrouver les noms des paramètres d'une méthode.
-    Cette librairie s'appelle <a href="http://paranamer.codehaus.org/">Paranamer</a>.
-    WebMotion avec Paranamer utilise la compilation java en mode debug.
+    WebMotion repose sur une bibliothèque pour retrouver les noms des paramètres d'une méthode.
+    Cette bibliothèque s'appelle <a href="http://paranamer.codehaus.org/">Paranamer</a>.
+    Par défaut, WebMotion avec Paranamer utilisent la compilation Java en mode debug.
 </p>
 <p>
-    Si vous devez passer la compilation sans le mode debug, il vous faudra configurer
+    Si vous souhaitez passer la compilation sans le mode debug, il vous faudra configurer
     le mapping et paranamer ainsi :
 </p>
 
