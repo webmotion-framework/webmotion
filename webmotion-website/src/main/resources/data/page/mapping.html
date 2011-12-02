@@ -877,15 +877,17 @@ java.lang.Exception           Error.display
 
 <h2 id="extensions" class="page-header">[extensions] Gestion des extensions de l'application</h2>
 <p>
-    La section pour les extensions permet de réutiliser un mapping, d'un autre 
-    projet ou sur le même projet. Dans chacun des deux cas, il est possible 
-    d'avoir des configurations différentes. Les extensions permet la réutilisation 
-    du code pour différents projet.
+    Il est possible de créer des morceaux applicatifs, avec des fichiers de mapping dédiés, et de les appliquer sur un
+    sous contexte applicatif (un chemin spécifié, relatif à l'application courante). Ces morceaux applicatifs sont appelés
+    des <strong>extensions</strong>.
+</p>
+<p>
+    Dans une application, il est possible d'utiliser une ou plusieurs extensions au sein d'un même projet.
 </p>
 
 <h3>Syntaxe</h3>
 <p>
-    La configuration se trouve après le mot clé "[extensions]" dans le fichier de mapping.
+    La configuration se trouve après le mot clé <code>[extensions]</code> dans le fichier de mapping.
 </p>
 <pre>
 [extensions]
@@ -900,7 +902,9 @@ java.lang.Exception           Error.display
 
 <h3>URL</h3>
 <p>
-    Une extension peut être utilisé sur plusieurs URL.
+    Une extension est appliquée sur un path donné. 
+    Cependant, il est possible d'utiliser plusieurs fois la même extension
+    pour plusieurs URLs.
 </p>
 <p>
     <span class="label notice">Exemple</span> Utilisation de l'extension pour les notes et le blog :
