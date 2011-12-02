@@ -256,7 +256,7 @@ mode=stateless
     Voici la syntaxe pour mapper une URL sur une vue :
 </p>
 <pre>
-&lt;http_method&gt;    &lt;url&gt;    <b>view:</b>&lt;page_name&gt;
+&lt;http_method&gt;    &lt;url&gt;    <b>view:</b>&lt;page_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
     Voici la syntaxe pour mapper une URL sur une autre URL :
@@ -635,7 +635,7 @@ public class Address {
 
 <h4>Valeurs par défaut des paramètres</h4>
 <p>
-    Il est possible de passer des paramètres aux méthodes Java sans qu'ils existent dans l'URL. 
+    Il est possible de passer des paramètres aux méthodes Java ou des vues sans qu'ils existent dans l'URL. 
     Vous pouvez utiliser la notation pointée pour passer des objets.
 </p>
 
