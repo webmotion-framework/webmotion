@@ -33,13 +33,12 @@
     <h2 id="principe">Principe</h2>
 </div>
 <p>
-    WebMotion s'incrire dans une approche composant par le système d'extension.
-    Elles permettent la réutilisation de code, au niveau application et 
-    au niveau technique.
+    WebMotion s'incrit dans une approche orientée composant, grâce à son système d'extensions.
+    L'existance d'extensions permet la réutilisation de code d'une application à une autre, et même à l'intérieur d'une même application.
 </p>
 <p>
-    Pour rappel les extensions sont déclarées dans le fichier de mapping et peuvent
-    être utilisé sur différente url.
+    Pour rappel, les extensions sont déclarées dans le fichier de mapping et peuvent
+    être utilisées sur différentes URL.
 </p>
 
 <div class="page-header">
@@ -47,17 +46,17 @@
 </div>
 
 <p>
-    WikiMotion est un moteur de wiki, qui peut à la fois être utiliser en standalone 
-    ou comme extension. Le site web est basé dessus.
+    WikiMotion est un moteur de wiki, qui peut à la fois être utilisé en standalone 
+    ou comme extension. Par exemple, le site web <a href="/">WebMotion</a> utilise le wiki en tant qu'extension.
 </p>
 
 <p>
     Il propose comme fonctionnalités :
 </p>
 <ul>
-    <li>Sauvegarde des fichiers à plat</li>
-    <li>Syntaxe des pages en HTML, RST ou Latex</li>
-    <li>Authentification basique</li>
+    <li>Sauvegarde de fichiers plats (pas besoin de base de données)</li>
+    <li>Syntaxe des pages en HTML, RST ou LaTeX</li>
+    <li>Support de l'authentification HTTP basic</li>
     <li>Upload de fichier</li>
     <li>Site map</li>
     <li>Media map</li>
@@ -68,9 +67,9 @@
 </div>
 
 <p>
-    WebMotion propose un module d'injection dépendance basé sur Spring. Il 
-    vous permet de gérer les WebMotionController et les WebMotionHandler dans spring.
-    Ce qui vous permet facilement d'utiliser les scopes spring (request/session/singleton/prototype) 
+    WebMotion propose une extension d'injection de dépendances basée sur Spring. Elle 
+    vous permet de gérer les contrôleurs (WebMotionController) et les WebMotionHandler dans Spring.
+    Cette extension permet également d'utiliser facilement les scopes Spring (request/session/singleton/prototype) 
     pour vos objets .
 </p>
 
@@ -78,13 +77,12 @@
     Pour l'utiliser il faut récupérer le jar et modifier la section <code>[config]</code> 
     de votre fichier de mapping ainsi :
 </p>
-<pre>
-[config]
+<pre>[config]
 handlers.factory.class=org.debux.webmotion.spring.SpringHandlerFactory
 </pre>
 
 <p>
-    Les fichiers de configuration sont automatiquement chargées depuis le répertoire 
+    Les fichiers de configuration sont automatiquement chargés depuis le répertoire 
     <code>WEB-INF</code>, le nom doit commencer par <code>applicationContext</code>.
 </p>
 <p>
@@ -126,24 +124,24 @@ public class Spring extends WebMotionController {
     <h2 id="next">Prochainement</h2>
 </div>
 <p>
-    Cette partie reprends les différents extensions qui seront prochainement développées.
+    Retrouvez ici les différentes extensions qui seront prochainement développées.
 </p>
 <p>
     Niveau technique :
 </p>
 <ul>
-    <li>Shiro, pour avoir la gestion de l'authentification et d'authorisation.</li>
-    <li>Hibernate, avec un CRUD pour construire rapidement des applications.</li>
-    <li>Guice, pour l'ioc.</li>
-    <li>Tiles, pour le templatage.</li>
+    <li>Shiro, pour avoir une gestion de l'authentification et d'autorisation plus avancée</li>
+    <li>Hibernate, avec un système de type CRUD pour construire rapidement des applications</li>
+    <li>Guice, pour l'IOC</li>
+    <li>Tiles, pour le templating des vues</li>
 </ul>
 <p>
-    Niveau applicatif :
+    Niveau fonctionnel :
 </p>
 <ul>
-    <li>Blog</li>
-    <li>Forum</li>
-    <li>Statistiques</li>
+    <li>Moteur de blog</li>
+    <li>Forums</li>
+    <li>Module de mesure d'audience et de statistiques</li>
 </ul>
 
 <div class="well" style="text-align: center;">
