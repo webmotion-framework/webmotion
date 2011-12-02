@@ -4,6 +4,7 @@ package.base=org.debux.webmotion.showcase
 
 [extensions]
 /blog                                                   blog
+/spring                                                 spring
 
 [filters]
 *           /path/*                                     Filter.pass

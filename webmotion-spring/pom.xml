@@ -10,12 +10,12 @@
     
     <parent>
         <groupId>org.debux</groupId>
-        <artifactId>webmotion-all</artifactId>
+        <artifactId>webmotion-project</artifactId>
         <version>2.0-SNAPSHOT</version>
     </parent>
     
     <properties>
-        <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+        <spring.version>3.0.6.RELEASE</spring.version>
     </properties>
 
     <repositories>
@@ -35,8 +35,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.debux.webmotion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webmotion</artifactId>
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
@@ -44,18 +45,25 @@
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${org.springframework.version}</version>
+            <version>${spring.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${org.springframework.version}</version>
+            <version>${spring.version}</version>
         </dependency>
+        
+        <dependency>  
+            <groupId>javax.inject</groupId>  
+            <artifactId>javax.inject</artifactId>  
+            <version>1</version>  
+        </dependency>
+        
     </dependencies>
     
     <build>

@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
 public class Showcase extends WebMotionController {
 
     protected static final int INDEX_EXTENSIONS = 5;
-    protected static final int INDEX_FILTERS = 8;
-    protected static final int INDEX_ERRORS = 12;
-    protected static final int INDEX_ACTIONS = 20;
+    protected static final int INDEX_FILTERS = 9;
+    protected static final int INDEX_ERRORS = 13;
+    protected static final int INDEX_ACTIONS = 21;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
@@ -728,6 +728,23 @@ public class Showcase extends WebMotionController {
                     getConfig(true, false, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 57, 1)),
                     getPageContent("helloParameters.jsp")
+                ) 
+        );
+    }
+    
+    public Render spring() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/spring/"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, false, false, false)
+                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 2, 1)),
+                    new FileContent("/src/main/resources/spring", getFile("spring")),
+                    getJavaContent("Spring.java"),
+                    getJavaContent("Bean.java"),
+                    getPageContent("spring.jsp")
                 ) 
         );
     }

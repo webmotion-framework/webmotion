@@ -154,6 +154,7 @@
                             <li><strong>Extension</strong>
                                 <ul>
                                     <li><a id="blog" href="./blog">Action</a> <span class="label notice">New</span></li>
+                                    <li><a id="spring" href="./spring">Spring</a> <span class="label notice">New</span></li>
                                 </ul>
                         </ul>
                     </div>

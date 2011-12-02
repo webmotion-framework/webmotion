@@ -25,17 +25,19 @@
 package org.debux.webmotion.spring;
 
 import java.util.List;
-import javax.servlet.ServletContext;
+
+import javax.inject.Inject;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.mapping.Mapping;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
 
 /**
  * Create instance with spring.
@@ -46,12 +48,15 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SpringInstanceCreatorHandler.class);
 
-    protected WebApplicationContext webApplicationContext;
-            
+    protected ApplicationContext applicationContext;
+
+    @Inject
+    public void SpringInstanceCreatorHandler(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     @Override
     public void init(InitContext context) {
-        ServletContext servletContext = context.getServletContext();
-        webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
     }
 
     @Override
@@ -60,8 +65,9 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
         for (Executor executor : executors) {
 
             Class<? extends WebMotionController> actionClass = executor.getClazz();
-            WebMotionController instance = webApplicationContext.getBean(actionClass);
+            WebMotionController instance = applicationContext.getBean(actionClass);
             executor.setInstance(instance);
         }
     }
+
 }

@@ -11,14 +11,15 @@
     
     <parent>
         <groupId>org.debux</groupId>
-        <artifactId>webmotion-all</artifactId>
+        <artifactId>webmotion-project</artifactId>
         <version>2.0-SNAPSHOT</version>
     </parent>
     
     <dependencies>
         <dependency>
-            <groupId>org.debux.webmotion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webmotion</artifactId>
+            <version>${project.version}</version>
         </dependency>
         
         <!-- Servlet -->

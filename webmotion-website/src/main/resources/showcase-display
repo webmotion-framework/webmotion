@@ -43,3 +43,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /media                                      Showcase.media
 *           /login                                      Showcase.login
 *           /helloView                                  Showcase.helloView
+*           /spring                                     Showcase.spring

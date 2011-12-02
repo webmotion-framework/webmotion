@@ -2,11 +2,11 @@
   
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.debux</groupId>
-    <artifactId>webmotion-all</artifactId>
+    <artifactId>webmotion-project</artifactId>
   
     <packaging>pom</packaging>
     <version>2.0-SNAPSHOT</version>
-    <name>Webmotion all</name>
+    <name>Webmotion project</name>
     <url>webmotion.debux.org</url>
       
     <inceptionYear>2011</inceptionYear>
@@ -52,8 +52,8 @@
     
     <scm>
         <url>http://projects.debux.org/projects/webmotion</url>
-        <connection>scm:svn:http://svn.debux.org/webmotion/webmotion-server</connection>
-        <developerConnection>scm:svn:https://svn.debux.org/webmotion/webmotion-server/trunk</developerConnection>
+        <connection>scm:svn:http://svn.debux.org/webmotion</connection>
+        <developerConnection>scm:svn:https://svn.debux.org/webmotion/trunk</developerConnection>
     </scm>
     
     <issueManagement>
@@ -109,27 +109,10 @@
         <!-- Default encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <!-- Current version -->
-        <webmotion.current.version>2.0-SNAPSHOT</webmotion.current.version>
     </properties>
     
     <dependencyManagement>
         <dependencies>
-            
-            <!-- Modules -->
-            <dependency>
-                <groupId>org.debux.webmotion</groupId>
-                <artifactId>webmotion</artifactId>
-                <version>${webmotion.current.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.debux.webmotion</groupId>
-                <artifactId>wikimotion</artifactId>
-                <type>war</type>
-                <version>${webmotion.current.version}</version>
-            </dependency>
         
             <!-- Utils -->
             <dependency>
@@ -203,7 +186,12 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.6.1</version>
-                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.0.0</version>
             </dependency>
 
             <!-- Servlet -->
