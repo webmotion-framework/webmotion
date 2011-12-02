@@ -897,7 +897,7 @@ java.lang.Exception           Error.display
     Voici la syntaxe pour monter une extension :
 </p>
 <pre>
-&lt;URL&gt;    &lt;file_mapping&gt;
+&lt;URL&gt;    &lt;nom du fichier de mapping de l'extension&gt;
 </pre>
 
 <h3>URL</h3>
@@ -907,44 +907,40 @@ java.lang.Exception           Error.display
     pour plusieurs URLs.
 </p>
 <p>
-    <span class="label notice">Exemple</span> Utilisation de l'extension pour les notes et le blog :
+    <span class="label notice">Exemple</span> Utilisation de l'extension wikimotion :
 </p>
 <pre>
-/note                  &lt;extension&gt;
-/blog                  &lt;extension&gt;
+/wiki                  &lt;wikimotion&gt;
 </pre>
 
+<h3>Fichier de mapping</h3>
 <p>
-    <span class="label notice">Exemple</span> Utilisation de l'extension comme mapping principal :
+    Le fichier de mapping de chaque extension doit être dans classpath de l'application.
 </p>
-<pre>
-/                  &lt;extension&gt;
-</pre>
-
-<h3>File mapping</h3>
-<p>
-    Le fichier de mapping doit être disponible dans le classpath de l'application pour être lu.
-</p>
-
 <p>
     <span class="label notice">Exemple</span> Utilisation du fichier de mapping wikimotion :
 </p>
 <pre>
 /wiki                  wikimotion
 </pre>
-
 <p>
-    Si une extension ne retourne pas de render, la recherche se poursuit sur l'extension suivante.
-    Cela permet d'avoir des filtres de façon transparente sur le mapping principal.
+    Dans le cas ci-dessus, le fichier <code>wikimotion</code>, qui doit être présent
+    dans le classpath de l'application, contient toutes les règles de mapping
+    de l'extension, qui seront appliquées relativement au chemin <code>/wiki</code>
 </p>
 <p>
-    <span class="label notice">Exemple</span> Utilisation du fichier de mapping stats  :
+    Si une extension ne retourne aucun rendu (page, flux JSON, etc.), le traitement continue sur l'extension suivante.
+    Cela permet d'utiliser des extensions uniquement pour des filtres sur les URLs (exemple : mesure d'audience, monitoring, etc.).
 </p>
-<pre>
-/                  stats
+<p>
+    <span class="label notice">Exemple</span> Imaginons un module de mesure d'audience (statistiques),
+    l'application qui utilisera ce module contiendra le morceau de configuration suivant :
+</p>
+<pre>[extensions]
+/                  statistiques
 </pre>
 
-Avec le fichier stats :
+<p>Avec le fichier de mapping du module, nommé statistiques, comme-suit :</p>
 <pre>
 [config]
 package.filters=org.debux.webmotion.stats
