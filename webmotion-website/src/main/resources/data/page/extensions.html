@@ -64,6 +64,42 @@
 </ul>
 
 <div class="page-header">
+    <h2 id="spring">Spring</h2>
+</div>
+
+<p>
+    WebMotion propose un module d'injection dépendance basé sur Spring. Il 
+    vous permet de gérer les WebMotionController et les WebMotionHandler dans spring.
+    Ce qui vous permet facilement d'utiliser les scopes spring (request/session/singleton/prototype) 
+    pour vos objets .
+</p>
+
+<p>
+    Pour l'utiliser il faut récupérer le jar et modifier la section <code>[config]</code> 
+    de votre fichier de mapping ainsi :
+</p>
+<pre>
+[config]
+handlers.factory.class=org.debux.webmotion.spring.SpringHandlerFactory
+</pre>
+
+<p>
+    Vous pouvez faire de l'injection de dépendance entre action au lieu du renderAction :
+</p>
+<pre class="prettyprint">
+public class Spring extends WebMotionController {
+
+    @Inject
+    protected Action action;
+
+    public Render run() {
+        return action.exec();
+    }
+
+}
+</pre>
+
+<div class="page-header">
     <h2 id="next">Prochainement</h2>
 </div>
 <p>
@@ -75,7 +111,6 @@
 <ul>
     <li>Shiro, pour avoir la gestion de l'authentification et d'authorisation.</li>
     <li>Hibernate, avec un CRUD pour construire rapidement des applications.</li>
-    <li>Spring, pour l'ioc.</li>
     <li>Guice, pour l'ioc.</li>
     <li>Tiles, pour le templatage.</li>
 </ul>
