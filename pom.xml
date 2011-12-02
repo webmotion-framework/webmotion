@@ -110,6 +110,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
+        <!-- Current version -->
         <webmotion.current.version>2.0-SNAPSHOT</webmotion.current.version>
     </properties>
     
@@ -286,8 +287,27 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-        </plugins>
         
+            <plugin>
+                <groupId>org.nuiton</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>3.0</version>
+                <executions>
+                    <execution>
+                        <id>update-file-header</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <configuration>
+                            <licenseName>lgpl_v3</licenseName>
+                            <addSvnKeyWords>true</addSvnKeyWords>
+                        </configuration>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
         <pluginManagement>
             <plugins>
                 
@@ -297,43 +317,6 @@
                     <version>2.7</version>
                 </plugin>
             
-                <plugin>
-                    <groupId>com.thoughtworks.paranamer</groupId>
-                    <artifactId>paranamer-maven-plugin</artifactId>
-                    <version>2.3</version>
-                    <executions>
-                        <execution>
-                            <id>run</id>
-                            <configuration>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            </configuration>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.nuiton</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <version>3.0</version>
-                    <executions>
-                        <execution>
-                            <id>update-file-header</id>
-                            <goals>
-                                <goal>update-file-header</goal>
-                            </goals>
-                            <configuration>
-                                <licenseName>lgpl_v3</licenseName>
-                                <addSvnKeyWords>true</addSvnKeyWords>
-                            </configuration>
-                            <phase>process-resources</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-
                 <plugin>
                     <groupId>org.antlr</groupId>
                     <artifactId>antlr3-maven-plugin</artifactId>

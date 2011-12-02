@@ -60,13 +60,6 @@
     
     <build>
         <finalName>webmotion-spring</finalName>
-        
-        <plugins>
-            <plugin>
-                <groupId>org.nuiton</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
     
 </project>

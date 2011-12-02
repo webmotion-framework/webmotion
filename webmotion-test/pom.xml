@@ -35,11 +35,6 @@
         
         <plugins>
             <plugin>
-                <groupId>org.nuiton</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-            </plugin>
-            
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>

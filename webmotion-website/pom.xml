@@ -72,11 +72,6 @@
         
         <plugins>
             <plugin>
-                <groupId>org.nuiton</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-            </plugin>
-            
-            <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
