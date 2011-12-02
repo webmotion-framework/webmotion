@@ -749,4 +749,20 @@ public class Showcase extends WebMotionController {
         );
     }
     
+    public Render select() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/select?param=value",
+                    "/showcase/action/select"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, false, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 58, 2)),
+                    getPageContent("selectValue.jsp"),
+                    getPageContent("select.jsp")
+                ) 
+        );
+    }
+    
 }

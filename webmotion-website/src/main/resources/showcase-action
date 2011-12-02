@@ -76,3 +76,5 @@ GET,POST    /video                                      Media.get
 GET         /login?user.name={}&user.passwd={}                Auth.login
 GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /helloView?name={who}                       view:helloParameters.jsp
+*           /select?param=value                         view:selectValue.jsp
+*           /select                                     view:select.jsp

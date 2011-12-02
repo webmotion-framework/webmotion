@@ -120,7 +120,7 @@
                     <div id="mapping" class="tab_menu">
                         <ul>
                             <li><a id="hello" href="./hello">Hello world !</a></li>
-                            <li><strong>Action</strong></li>
+                            <li><strong>Action</strong>
                                 <ul>
                                     <li><a id="act" href="./act">Action</a></li>
                                     <li><a id="view" href="./view">View</a></li>
@@ -129,6 +129,7 @@
                                     <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                     <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
                                     <li><a id="login" href="./login">Renamed parameters</a></li>
+                                    <li><a id="select" href="./select">Parameters static</a></li>
                                     <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
                                     <li><a id="text" href="./text">Dynamic view</a> <span class="label notice">New</span></li>
                                     <li><a id="helloView" href="./helloView">Dynamic jsp view</a> <span class="label notice">New</span></li>
@@ -138,11 +139,12 @@
                                     <li><a id="readme" href="./readme">Static resources</a></li>
                                 </ul>
                             </li>
-                            <li><strong>Filter</strong></li>
+                            <li><strong>Filter</strong>
                                 <ul>
                                     <li><a id="filter" href="./filter">Do process</a></li>
                                     <li><a id="condition" href="./condition">Render</a></li>
                                 </ul>
+                            </li>
                             <li><strong>Error</strong>
                                 <ul>
                                     <li><a id="code" href="./code">Code http</a></li>
@@ -156,11 +158,12 @@
                                     <li><a id="blog" href="./blog">Action</a> <span class="label notice">New</span></li>
                                     <li><a id="spring" href="./spring">Spring</a> <span class="label notice">New</span></li>
                                 </ul>
+                            </li>
                         </ul>
                     </div>
                     <div id="render" class="tab_menu">
                         <ul>
-                            <li><strong>Basic</strong></li>
+                            <li><strong>Basic</strong>
                                 <ul>
                                     <li><a id="first" href="./first">Action</a></li>
                                     <li><a id="index" href="./index">View</a></li>
@@ -172,28 +175,32 @@
                                     <li><a id="forbidden" href="./forbidden">Error</a> <span class="label notice">New</span></li>
                                     <li><a id="nocontent" href="./nocontent">Status</a> <span class="label notice">New</span></li>
                                 </ul>
-                            <li><strong>Data</strong></li>
+                            </li>
+                            <li><strong>Data</strong>
                                 <ul>
                                     <li><a id="xml" href="./xml">XML</a></li>
                                     <li><a id="json" href="./json">JSON</a></li>
                                     <li><a id="jsonp" href="./jsonp">JSONP</a></li>
                                 </ul>
+                            </li>
                         </ul>
                     </div>
                     <div id="misc" class="tab_menu">
                         <ul>
-                            <li><strong>Action</strong></li>
+                            <li><strong>Action</strong>
                                 <ul>
                                     <li><a id="page" href="./page">Include</a></li>
                                     <li><a id="calc" href="./calc">AJAX</a></li>
                                     <li><a id="message" href="./message">Flash message</a></li>
                                     <li><a id="shop" href="./shop">Validation</a> <span class="label notice">New</span></li>
                                 </ul>
-                            <li><strong>File</strong></li>
+                            </li>
+                            <li><strong>File</strong>
                                 <ul>
                                     <li><a id="file" href="./file">File</a></li>
                                     <li><a id="upload" href="./upload">File with progress</a></li>
                                 </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
