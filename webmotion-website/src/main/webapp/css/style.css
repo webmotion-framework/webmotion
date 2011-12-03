@@ -39,3 +39,9 @@ body {
     content: counter(chapter) "." counter(section) ". ";
     counter-increment: section;
 }
+
+pre.prettyprint {
+    background-color: #F4F7FB;
+    border: 1px solid #DEE6ED;
+    padding: 8.5px;
+}
