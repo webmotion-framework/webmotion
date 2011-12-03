@@ -45,3 +45,7 @@ pre.prettyprint {
     border: 1px solid #DEE6ED;
     padding: 8.5px;
 }
+
+.hero-unit {
+    text-align: justify;
+}
