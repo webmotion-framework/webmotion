@@ -45,6 +45,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.Payload;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
 import javax.validation.Validator;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.Call;
@@ -94,11 +95,19 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        MethodValidator methodValidator = Validation.byProvider(HibernateValidator.class)
-            .configure()
-            .buildValidatorFactory()
-            .getValidator()
-            .unwrap(MethodValidator.class);
+        MethodValidator methodValidator = null;
+        try {
+            methodValidator = Validation.byProvider(HibernateValidator.class)
+                .configure()
+                .buildValidatorFactory()
+                .getValidator()
+                .unwrap(MethodValidator.class);
+            
+        } catch (ValidationException ve) {
+            // Glassfish not supports MethodValidator, I don't known why.
+            log.info("MethodValidator not supported", ve);
+            return;
+        }
        
         Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
         

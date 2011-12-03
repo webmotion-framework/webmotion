@@ -34,7 +34,10 @@
 <h3 id="maven">Intégration dans un projet Maven</h3>
 <p>Maven est, entre autre, un outil de gestion de constructions de projets très connu dans le monde Java. Si vous ne connaissez pas Maven, nous vous invitons à consulter <a href="http://maven.apache.org">le site officiel</a>.</p>
 
-<p class="alert-message">Vous ne souhaitez pas utiliser Maven pour votre projet, lisez alors comment <a href="#eclipse">intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</a>.</p>
+<p>
+    <span class="label notice">Note</span>
+    Vous ne souhaitez pas utiliser Maven pour votre projet, lisez alors comment <a href="#eclipse">intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</a>.
+</p>
 
 <p>WebMotion s'intègre parfaitement dans un projet Maven webapp. Commençons par créer un projet (en ligne de commande) :</p>
 
@@ -166,7 +169,7 @@
     En effet, la servlet utilisée par WebMotion est déclarée et définie dans le <code>web-fragment</code> embarqué avec le framework. 
     Ce fragment est chargé de manière automatique, il est donc possible (et courant) d'avoir un fichier <code>web.xml</code> vide.
 </p>
-<p class="alert-message info">
+<p>
     <span class="label notice">Note</span>&nbsp;
     Il est possible de retrouver ce cas d'utilisation dans la section <a href="showcase/hello">démonstration</a>.
 </p>
@@ -304,7 +307,7 @@ GET     /                            view:index.jsp
 </div>
 
 <h2 id="work_with_parameters" class="page-header">Utilisation des paramètres de la requête HTTP dans un contrôleur</h2>
-<p class="alert-message block-message info">
+<p>
     <span class="label notice">Note</span>&nbsp;
     Il est possible de retrouver ce cas d'utilisation dans la section <a href="showcase/helloParameters">démonstration</a>.
 </p>
