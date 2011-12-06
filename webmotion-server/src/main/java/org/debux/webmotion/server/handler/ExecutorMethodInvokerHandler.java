@@ -74,6 +74,15 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         Iterator<Executor> filters = call.getApplyFilters();
         
+        // Process just filters because the call contains already the render
+        Executor executor = call.getExecutor(); // Search if the call contains a action
+        if(executor == null) {
+            if(filters.hasNext()) {
+                processFilter(mapping, call);
+            }
+            return;
+        }
+        
         // Process action and filters
         Render render = call.getRender();
         if(render == null) {
@@ -81,14 +90,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 processFilter(mapping, call);
             } else {
                 processAction(mapping, call);
-            }
-        }
-        
-        // Process just filters because the call contains already the render
-        Executor executor = call.getExecutor(); // Search if the call contains a action
-        if(executor == null) {
-            if(filters.hasNext()) {
-                processFilter(mapping, call);
             }
         }
     }

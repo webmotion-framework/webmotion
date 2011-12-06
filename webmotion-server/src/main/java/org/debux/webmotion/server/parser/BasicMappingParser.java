@@ -111,10 +111,11 @@ public class BasicMappingParser implements MappingParser {
 
                 } else if(section == 5) {
                     // Extension section
-                    Map<String, Mapping> extensions = extractSectionExtensions(rule);
-                    Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-                    extensionsRules.putAll(extensions);
-
+                    Map.Entry<String, Mapping> extensions = extractSectionExtensions(rule);
+                    String path = extensions.getKey();
+                    Mapping extensionMapping = extensions.getValue();
+                    mapping.putExtensions(path, extensionMapping);
+                    
                 } else if(section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
                     String value = extractConfig(Config.PACKAGE_VIEWS, rule);
                     config.setPackageViews(value);
@@ -235,16 +236,14 @@ public class BasicMappingParser implements MappingParser {
      * Extract in the given line an extension rule
      * @param line one line in mapping
      */
-    protected Map<String, Mapping> extractSectionExtensions(String line) {
+    protected Map.Entry<String, Mapping> extractSectionExtensions(String line) {
         String[] splitRule = line.split(" ");
         
         InputStream extension = getClass().getClassLoader().getResourceAsStream(splitRule[1]);
         BasicMappingParser parser = new BasicMappingParser();
         Mapping mapping = parser.parse(extension);
                 
-        Map<String, Mapping> extensionRule = new LinkedHashMap<String, Mapping>();
-        extensionRule.put(splitRule[0], mapping);
-        return extensionRule;
+        return new LinkedHashMap.SimpleEntry(splitRule[0], mapping);
     }
     
     /**

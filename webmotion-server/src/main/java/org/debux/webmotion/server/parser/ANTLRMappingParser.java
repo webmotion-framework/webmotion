@@ -177,14 +177,14 @@ public class ANTLRMappingParser implements MappingParser {
      * Default contructor to initialize the attributes.
      */
     public ANTLRMappingParser() {
-        mapping = new Mapping();
-        stack = new LinkedList<Object>();
-        visitors = new HashMap<String, Visit>();
         initVisit();
     }
     
     @Override
     public Mapping parse(InputStream stream) {
+        mapping = new Mapping();
+        stack = new LinkedList<Object>();
+        
         try {
             String content = IOUtils.toString(stream);
             ANTLRStringStream input = new ANTLRStringStream(content);
@@ -226,6 +226,8 @@ public class ANTLRMappingParser implements MappingParser {
      * Init the visit with expression to get the action.
      */
     protected void initVisit() {
+        visitors = new HashMap<String, Visit>();
+
         visitors.put("/CONFIG", new Visit() {
             @Override
             public void acceptAfter(String value) {
@@ -613,9 +615,7 @@ public class ANTLRMappingParser implements MappingParser {
                 InputStream extension = getClass().getClassLoader().getResourceAsStream(value);
                 ANTLRMappingParser parser = new ANTLRMappingParser();
                 Mapping extensionMapping = parser.parse(extension);
-                
-                Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-                extensionsRules.put(path, extensionMapping);
+                mapping.putExtensions(path, extensionMapping);
             }
         });
         

@@ -325,6 +325,7 @@ public class HttpContext {
             url = request.getPathInfo();
         }
         
+        String extensionPath = getExtensionPath();
         if(!extensionPath.isEmpty()) {
             url = url.replace(extensionPath, "");
         }
@@ -373,11 +374,19 @@ public class HttpContext {
     }
 
     public String getExtensionPath() {
-        return extensionPath;
+        if("/".equals(extensionPath)) {
+            return "";
+        } else {
+            return extensionPath;
+        }
     }
 
     public void setExtensionPath(String extensionPath) {
         this.extensionPath = extensionPath;
+    }
+    
+    public boolean isExtension() {
+        return !extensionPath.isEmpty();
     }
 
     public ServletContext getServletContext() {

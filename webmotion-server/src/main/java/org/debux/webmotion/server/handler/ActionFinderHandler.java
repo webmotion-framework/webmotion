@@ -63,8 +63,11 @@ public class ActionFinderHandler implements WebMotionHandler {
         if (actionRule != null) {
             call.setActionRule(actionRule);
         } else {
-            throw new WebMotionException("Not mapping found for url " 
-                    + call.getContext().getUrl());
+            HttpContext context = call.getContext();
+            if (!context.isExtension()) {
+                throw new WebMotionException("Not mapping found for url " 
+                        + call.getContext().getUrl());
+            }
         }
     }
     

@@ -26,6 +26,10 @@ package org.debux.webmotion.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -66,10 +70,24 @@ public class WebMotionMainServlet extends HttpServlet {
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
 
-        // Read the mapping
+        // Read the mapping in the current project
         InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
         MappingParser parser = new ANTLRMappingParser();
         mapping = parser.parse(stream);
+        
+        // Load mapping file in META-INF
+        try {
+            Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                log.info("Loading " + url.toExternalForm());
+                InputStream urlStream = url.openStream();
+                Mapping urlMapping = parser.parse(urlStream);
+                mapping.putExtensions("/", urlMapping);
+            }
+        } catch (IOException ioe) {
+            throw new WebMotionException("Error during load mapping in META-INF", ioe);
+        }
         
         // Create the handler factory
         Config config = mapping.getConfig();
