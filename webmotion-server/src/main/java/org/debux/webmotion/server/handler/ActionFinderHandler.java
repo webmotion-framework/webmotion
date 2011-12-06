@@ -60,7 +60,7 @@ public class ActionFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         ActionRule actionRule = getActionRule(mapping, call);
-        if(actionRule != null) {
+        if (actionRule != null) {
             call.setActionRule(actionRule);
         } else {
             throw new WebMotionException("Not mapping found for url " 
@@ -72,7 +72,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         HttpContext context = call.getContext();
         
         String url = context.getUrl();
-        if(url != null) {
+        if (url != null) {
             
             log.info("url = " + url);
             List<String> path = WebMotionUtils.splitPath(url);
@@ -109,7 +109,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         FragmentUrl[] expressions = ruleUrl.toArray(new FragmentUrl[0]);
         
         // All path math in rule
-        if(expressions.length != path.size()) {
+        if (expressions.length != path.size()) {
             return false;
         }
         
@@ -157,14 +157,14 @@ public class ActionFinderHandler implements WebMotionHandler {
     }
     
     protected boolean matchValues(FragmentUrl expression, String[] values) {
-        if(values == null) {
+        if (values == null) {
             return false;
         }
         
         boolean found = true;
 
         Pattern pattern = expression.getPattern();
-        if(pattern != null) {
+        if (pattern != null) {
             for (String value : values) {
                 Matcher matcher = pattern.matcher(value);
                 found &= matcher.find();
