@@ -22,6 +22,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,7 +30,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <form method="GET" action="/webmotion-website/showcase/action/person"><input type="submit" value="get"/></form>
-        <form method="POST" action="/webmotion-website/showcase/action/person"><input type="submit" value="post"/></form>
+        <form method="GET" action="<c:url value="/showcase/action/person"/>"><input type="submit" value="get"/></form>
+        <form method="POST" action="<c:url value="/showcase/action/person"/>"><input type="submit" value="post"/></form>
     </body>
 </html>

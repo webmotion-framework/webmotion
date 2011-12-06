@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--
   #%L
   Webmotion website
@@ -22,6 +23,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -42,7 +44,7 @@
             function add() {
                 $.ajax({
                     type : "POST",
-                    url: "/webmotion-website/showcase/action/add",
+                    url: "<c:url value="/showcase/action/add"/>",
                     data : {
                         value : $('#value').val(),
                         other : $('#other').val()

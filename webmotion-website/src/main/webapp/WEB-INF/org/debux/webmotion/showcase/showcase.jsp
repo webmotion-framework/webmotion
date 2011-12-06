@@ -106,7 +106,7 @@
 
         <div class="container-fluid">
             <div class="page-header" style="border: none;">
-                <h1 style="background: url('<c:url value="/img/My_Computer.png"/>') no-repeat; padding-left: 70px;height: 64px;line-height: 40px;">Démonstration <small><span id="subtitle"></span></small></h1>
+                <h1 style="background: url("<c:url value="/img/My_Computer.png"/>") no-repeat; padding-left: 70px;height: 64px;line-height: 40px;">Démonstration <small><span id="subtitle"></span></small></h1>
             </div>
 
             <div class="sidebar well" style="padding: 5px;">

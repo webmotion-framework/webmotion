@@ -84,7 +84,6 @@ public class Showcase extends WebMotionController {
 
     protected FileContent getPageContent(String name) throws IOException {
         String content = getFile("/pages/" + name);
-        content = content.replaceAll("/webmotion-website/showcase/action", "/contextPath");
         content = content.replaceAll("/showcase/action", "");
         return new FileContent("/src/main/webapp/WEB-INF/pages/" + name, content);
     }

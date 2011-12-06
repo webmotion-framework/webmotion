@@ -22,6 +22,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,7 +35,7 @@
         <!-- Frame use not block process -->
         <iframe id="uploadFrame" name="uploadFrame" height="0" width="0" frameborder="0" scrolling="yes"></iframe>
        
-        <form method="POST" action="/webmotion-website/showcase/action/finish"
+        <form method="POST" action="<c:url value="/showcase/action/finish"/>"
                target="uploadFrame" enctype="multipart/form-data" onsubmit="progress()">
             
             File : <input name="file" type="file"/>
@@ -47,7 +48,7 @@
            function progress() {
                $.ajax({
                     type : "GET",
-                    url: "/webmotion-website/showcase/action/progress",
+                    url: "<c:url value="/showcase/action/progress"/>",
                     dataType: 'json',
                     success: function(progression){
                         var bytesRead = progression.bytesRead;
@@ -57,7 +58,7 @@
                         
                         if(!bytesRead || !contentLength || bytesRead != contentLength) {
                             setTimeout(progress, 250);
-                        }
+                        }jsonp
                     }
                 });
            }

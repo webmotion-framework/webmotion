@@ -22,6 +22,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -35,6 +36,6 @@
         </script>
     </head>
     <body>
-        <script type="text/javascript" src="/webmotion-website/showcase/action/jsonp"></script>
+        <script type="text/javascript" src="<c:url value="/showcase/action/jsonp"/>"></script>
     </body>
 </html>

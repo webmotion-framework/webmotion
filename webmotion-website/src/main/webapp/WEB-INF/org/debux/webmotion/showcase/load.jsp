@@ -22,6 +22,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,7 +30,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <a href="/webmotion-website/showcase/action/reload">Reload</a>
+        <a href="<c:url value="/showcase/action/reload"/>">Reload</a>
         <p>${param.content}</p>
     </body>
 </html>
