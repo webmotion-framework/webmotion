@@ -615,7 +615,9 @@ public class ANTLRMappingParser implements MappingParser {
                 InputStream extension = getClass().getClassLoader().getResourceAsStream(value);
                 ANTLRMappingParser parser = new ANTLRMappingParser();
                 Mapping extensionMapping = parser.parse(extension);
-                mapping.putExtensions(path, extensionMapping);
+                
+                Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+                extensionsRules.put(path, extensionMapping);
             }
         });
         

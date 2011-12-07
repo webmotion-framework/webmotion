@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
@@ -135,8 +136,8 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         Mapping mapping = context.getMapping();
         ServletContext servletContext = context.getServletContext();
         
-        List<Mapping> extensionMappings = mapping.getExtensionsMapping();
-        for (Mapping extensionMapping : extensionMappings) {
+        Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensionsRules.values()) {
             
             Config extensionConfig = extensionMapping.getConfig();
             String handlersFactory = extensionConfig.getHandlersFactory();
@@ -166,18 +167,20 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         String extensionPath = context.getExtensionPath();
         log.info("url = " + url);
         log.info("extension path = " + extensionPath);
-        
-        // TODO jru 12062011 rewrite the loop
-        List<String> extensionsPath = mapping.getExtensionsPath();
-        List<Mapping> extensionsMapping = mapping.getExtensionsMapping();
-        int position = 0;
-        for (String path : extensionsPath) {
-            Mapping nextMapping = extensionsMapping.get(position);
-            position ++;
+
+        Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Map.Entry<String, Mapping> entry : extensionsRules.entrySet()) {
+            String path = entry.getKey();
+            Mapping nextMapping = entry.getValue();
             
             log.info("path = " + path);
             if(url.startsWith(path)) {
-                context.setExtensionPath(extensionPath + path);
+                
+                // Not change path when the extension is mount on root
+                if(!"/".equals(path)) {
+                    context.setExtensionPath(extensionPath + path);
+                }
+                context.setExtension(true);
                 
                 Config newConfig = nextMapping.getConfig();
                 String handlersFactory = newConfig.getHandlersFactory();
@@ -191,6 +194,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                     break;
                 }
                 context.setExtensionPath(extensionPath);
+                context.setExtension(false);
             }
         }
         

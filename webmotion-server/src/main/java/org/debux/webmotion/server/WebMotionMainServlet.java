@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -83,7 +84,9 @@ public class WebMotionMainServlet extends HttpServlet {
                 log.info("Loading " + url.toExternalForm());
                 InputStream urlStream = url.openStream();
                 Mapping urlMapping = parser.parse(urlStream);
-                mapping.putExtensions("/", urlMapping);
+                
+                Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+                extensionsRules.putAll(urlMapping.getExtensionsRules());
             }
         } catch (IOException ioe) {
             throw new WebMotionException("Error during load mapping in META-INF", ioe);

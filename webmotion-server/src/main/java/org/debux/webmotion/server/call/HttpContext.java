@@ -100,6 +100,9 @@ public class HttpContext {
     /** Keep current path for extension */
     protected String extensionPath = "";
     
+    /** True if the process is in extension */
+    protected boolean extension = false;
+    
     /**
      * Error data is utility to get information on error in attributes.
      */
@@ -325,7 +328,6 @@ public class HttpContext {
             url = request.getPathInfo();
         }
         
-        String extensionPath = getExtensionPath();
         if(!extensionPath.isEmpty()) {
             url = url.replace(extensionPath, "");
         }
@@ -374,19 +376,19 @@ public class HttpContext {
     }
 
     public String getExtensionPath() {
-        if("/".equals(extensionPath)) {
-            return "";
-        } else {
-            return extensionPath;
-        }
+        return extensionPath;
     }
 
     public void setExtensionPath(String extensionPath) {
         this.extensionPath = extensionPath;
     }
-    
+
+    public void setExtension(boolean extension) {
+        this.extension = extension;
+    }
+
     public boolean isExtension() {
-        return !extensionPath.isEmpty();
+        return extension;
     }
 
     public ServletContext getServletContext() {

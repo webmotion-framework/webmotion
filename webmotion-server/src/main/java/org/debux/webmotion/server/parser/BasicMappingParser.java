@@ -114,7 +114,9 @@ public class BasicMappingParser implements MappingParser {
                     Map.Entry<String, Mapping> extensions = extractSectionExtensions(rule);
                     String path = extensions.getKey();
                     Mapping extensionMapping = extensions.getValue();
-                    mapping.putExtensions(path, extensionMapping);
+                    
+                    Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+                    extensionsRules.put(path, extensionMapping);
                     
                 } else if(section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
                     String value = extractConfig(Config.PACKAGE_VIEWS, rule);

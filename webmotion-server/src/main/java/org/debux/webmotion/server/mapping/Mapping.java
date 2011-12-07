@@ -25,7 +25,9 @@
 package org.debux.webmotion.server.mapping;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The class represents all sections in the mapping file. This data are static, 
@@ -48,16 +50,14 @@ public class Mapping {
     protected List<ActionRule> actionRules;
 
     /** Represents extension section */
-    protected List<String> extensionsPath;
-    protected List<Mapping> extensionsMapping;
+    protected Map<String, Mapping> extensionsRules;
 
     public Mapping() {
         config = new Config();
         errorRules = new ArrayList<ErrorRule>();
         filterRules = new ArrayList<FilterRule>();
         actionRules = new ArrayList<ActionRule>();
-        extensionsPath = new ArrayList<String>();
-        extensionsMapping = new ArrayList<Mapping>();
+        extensionsRules = new LinkedHashMap<String, Mapping>();
     }
 
     public Config getConfig() {
@@ -84,24 +84,12 @@ public class Mapping {
         return errorRules;
     }
 
-    public List<Mapping> getExtensionsMapping() {
-        return extensionsMapping;
+    public Map<String, Mapping> getExtensionsRules() {
+        return extensionsRules;
     }
 
-    public void setExtensionsMapping(List<Mapping> extensionsMapping) {
-        this.extensionsMapping = extensionsMapping;
-    }
-
-    public List<String> getExtensionsPath() {
-        return extensionsPath;
-    }
-
-    public void setExtensionsPath(List<String> extensionsPath) {
-        this.extensionsPath = extensionsPath;
+    public void setExtensionsRules(Map<String, Mapping> extensionsRules) {
+        this.extensionsRules = extensionsRules;
     }
     
-    public void putExtensions(String path, Mapping mapping) {
-        extensionsPath.add(path);
-        extensionsMapping.add(mapping);
-    }
 }
