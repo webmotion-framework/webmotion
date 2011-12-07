@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletConfig;
@@ -78,16 +79,21 @@ public class WebMotionMainServlet extends HttpServlet {
         
         // Load mapping file in META-INF
         try {
+            Map<String, Mapping> extensions = new LinkedHashMap<String, Mapping>();
             Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
                 log.info("Loading " + url.toExternalForm());
-                InputStream urlStream = url.openStream();
-                Mapping urlMapping = parser.parse(urlStream);
+                InputStream metaStream = url.openStream();
+                Mapping metaMapping = parser.parse(metaStream);
                 
-                Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-                extensionsRules.putAll(urlMapping.getExtensionsRules());
+                extensions.put("/", metaMapping);
             }
+            
+            Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
+            extensions.putAll(extensionsRules);
+            mapping.setExtensionsRules(extensions);
+            
         } catch (IOException ioe) {
             throw new WebMotionException("Error during load mapping in META-INF", ioe);
         }
