@@ -904,7 +904,7 @@ java.lang.Exception           Error.display
 <p>
     Une extension est appliquée sur un path donné. 
     Cependant, il est possible d'utiliser plusieurs fois la même extension
-    pour plusieurs URLs.
+    pour plusieurs URLs. Des extensions ne peuvent pas être monter sur un même URL.
 </p>
 <p>
     <span class="label notice">Exemple</span> Utilisation de l'extension wikimotion :
@@ -912,6 +912,12 @@ java.lang.Exception           Error.display
 <pre>
 /wiki                  &lt;wikimotion&gt;
 </pre>
+
+<p>
+    <span class="label notice">Note</span>
+    Si vous mappez dans votre fichier de mapping une extension sur <code>/</code>, les actions du fichier sont ignorées.
+    Pour pouvoir ajouter tout de même des actions, il faut dans ce cas créer des extensions avant l'extension sur <code>/</code>.
+</p>
 
 <h3>Fichier de mapping</h3>
 <p>
@@ -943,9 +949,9 @@ java.lang.Exception           Error.display
 <p>Avec le fichier de mapping du module, nommé statistiques, comme-suit :</p>
 <pre>
 [config]
-package.filters=org.debux.webmotion.stats
+package.base=org.debux.webmotion.stats
 
-[filters]
+[actions]
 *          /*                  Stats.count
 </pre>
 
