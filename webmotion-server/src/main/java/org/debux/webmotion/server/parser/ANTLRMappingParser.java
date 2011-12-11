@@ -47,6 +47,7 @@ import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
@@ -612,12 +613,16 @@ public class ANTLRMappingParser implements MappingParser {
             public void acceptBefore(String value) {
                 String path = (String) stack.removeLast();
                 
-                InputStream extension = getClass().getClassLoader().getResourceAsStream(value);
+                InputStream stream = getClass().getClassLoader().getResourceAsStream(value);
                 ANTLRMappingParser parser = new ANTLRMappingParser();
-                Mapping extensionMapping = parser.parse(extension);
+                Mapping extensionMapping = parser.parse(stream);
                 
-                Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-                extensionsRules.put(path, extensionMapping);
+                Extension extension = new Extension();
+                extension.setPath(path);
+                extensionMapping.setExtension(extension);
+        
+                List<Mapping> extensionsRules = mapping.getExtensionsRules();
+                extensionsRules.add(extensionMapping);
             }
         });
         

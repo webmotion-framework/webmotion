@@ -25,9 +25,8 @@
 package org.debux.webmotion.server.mapping;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The class represents all sections in the mapping file. This data are static, 
@@ -50,14 +49,17 @@ public class Mapping {
     protected List<ActionRule> actionRules;
 
     /** Represents extension section */
-    protected Map<String, Mapping> extensionsRules;
+    protected List<Mapping> extensionsRules;
 
+    /** Informations if the extension is use as an extension */
+    protected Extension extension;
+    
     public Mapping() {
         config = new Config();
         errorRules = new ArrayList<ErrorRule>();
         filterRules = new ArrayList<FilterRule>();
         actionRules = new ArrayList<ActionRule>();
-        extensionsRules = new LinkedHashMap<String, Mapping>();
+        extensionsRules = new LinkedList<Mapping>();
     }
 
     public Config getConfig() {
@@ -84,11 +86,19 @@ public class Mapping {
         return errorRules;
     }
 
-    public Map<String, Mapping> getExtensionsRules() {
+    public Extension getExtension() {
+        return extension;
+    }
+
+    public void setExtension(Extension extension) {
+        this.extension = extension;
+    }
+
+    public List<Mapping> getExtensionsRules() {
         return extensionsRules;
     }
 
-    public void setExtensionsRules(Map<String, Mapping> extensionsRules) {
+    public void setExtensionsRules(List<Mapping> extensionsRules) {
         this.extensionsRules = extensionsRules;
     }
     

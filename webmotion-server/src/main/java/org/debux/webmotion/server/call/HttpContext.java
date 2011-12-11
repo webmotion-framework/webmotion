@@ -100,9 +100,6 @@ public class HttpContext {
     /** Keep current path for extension */
     protected String extensionPath = "";
     
-    /** True if the process is in extension */
-    protected boolean extension = false;
-    
     /**
      * Error data is utility to get information on error in attributes.
      */
@@ -381,14 +378,6 @@ public class HttpContext {
 
     public void setExtensionPath(String extensionPath) {
         this.extensionPath = extensionPath;
-    }
-
-    public void setExtension(boolean extension) {
-        this.extension = extension;
-    }
-
-    public boolean isExtension() {
-        return extension;
     }
 
     public ServletContext getServletContext() {

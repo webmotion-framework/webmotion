@@ -42,6 +42,7 @@ import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
@@ -111,12 +112,9 @@ public class BasicMappingParser implements MappingParser {
 
                 } else if(section == 5) {
                     // Extension section
-                    Map.Entry<String, Mapping> extensions = extractSectionExtensions(rule);
-                    String path = extensions.getKey();
-                    Mapping extensionMapping = extensions.getValue();
-                    
-                    Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-                    extensionsRules.put(path, extensionMapping);
+                    Mapping extensionMapping = extractSectionExtensions(rule);
+                    List<Mapping> extensionsRules = mapping.getExtensionsRules();
+                    extensionsRules.add(extensionMapping);
                     
                 } else if(section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
                     String value = extractConfig(Config.PACKAGE_VIEWS, rule);
@@ -238,14 +236,18 @@ public class BasicMappingParser implements MappingParser {
      * Extract in the given line an extension rule
      * @param line one line in mapping
      */
-    protected Map.Entry<String, Mapping> extractSectionExtensions(String line) {
+    protected Mapping extractSectionExtensions(String line) {
         String[] splitRule = line.split(" ");
+        String path = splitRule[0];
         
-        InputStream extension = getClass().getClassLoader().getResourceAsStream(splitRule[1]);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(splitRule[1]);
         BasicMappingParser parser = new BasicMappingParser();
-        Mapping mapping = parser.parse(extension);
+        Mapping mapping = parser.parse(stream);
                 
-        return new LinkedHashMap.SimpleEntry(splitRule[0], mapping);
+        Extension extension = new Extension();
+        extension.setPath(path);
+        mapping.setExtension(extension);
+        return mapping;
     }
     
     /**

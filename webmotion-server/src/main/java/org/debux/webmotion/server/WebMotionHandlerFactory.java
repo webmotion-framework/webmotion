@@ -36,6 +36,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
@@ -136,8 +137,8 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         Mapping mapping = context.getMapping();
         ServletContext servletContext = context.getServletContext();
         
-        Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-        for (Mapping extensionMapping : extensionsRules.values()) {
+        List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensionsRules) {
             
             Config extensionConfig = extensionMapping.getConfig();
             String handlersFactory = extensionConfig.getHandlersFactory();
@@ -168,10 +169,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         log.info("url = " + url);
         log.info("extension path = " + extensionPath);
 
-        Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-        for (Map.Entry<String, Mapping> entry : extensionsRules.entrySet()) {
-            String path = entry.getKey();
-            Mapping nextMapping = entry.getValue();
+        List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensionsRules) {
+            Extension extension = extensionMapping.getExtension();
+            String path = extension.getPath();
             
             log.info("path = " + path);
             if(url.startsWith(path)) {
@@ -180,13 +181,12 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                 if(!"/".equals(path)) {
                     context.setExtensionPath(extensionPath + path);
                 }
-                context.setExtension(true);
                 
-                Config newConfig = nextMapping.getConfig();
+                Config newConfig = extensionMapping.getConfig();
                 String handlersFactory = newConfig.getHandlersFactory();
                 
                 WebMotionHandler handler = factory.getInstance(handlersFactory);
-                handler.handle(nextMapping, call);
+                handler.handle(extensionMapping, call);
                 
                 // Stop if the first handler return a render
                 Render render = call.getRender();
@@ -194,7 +194,6 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                     break;
                 }
                 context.setExtensionPath(extensionPath);
-                context.setExtension(false);
             }
         }
         

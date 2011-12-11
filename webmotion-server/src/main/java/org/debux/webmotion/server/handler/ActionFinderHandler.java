@@ -39,6 +39,7 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.mapping.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +64,8 @@ public class ActionFinderHandler implements WebMotionHandler {
         if (actionRule != null) {
             call.setActionRule(actionRule);
         } else {
-            HttpContext context = call.getContext();
-            if (!context.isExtension()) {
+            Extension extension = mapping.getExtension();
+            if (extension == null) {
                 throw new WebMotionException("Not mapping found for url " 
                         + call.getContext().getUrl());
             }

@@ -42,6 +42,7 @@ import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.InitContext;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.parser.ANTLRMappingParser;
 import org.debux.webmotion.server.parser.MappingParser;
@@ -79,7 +80,8 @@ public class WebMotionMainServlet extends HttpServlet {
         
         // Load mapping file in META-INF
         try {
-            Map<String, Mapping> extensions = new LinkedHashMap<String, Mapping>();
+            List<Mapping> extensionsRules = mapping.getExtensionsRules();
+            
             Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
@@ -87,12 +89,12 @@ public class WebMotionMainServlet extends HttpServlet {
                 InputStream metaStream = url.openStream();
                 Mapping metaMapping = parser.parse(metaStream);
                 
-                extensions.put("/", metaMapping);
+                Extension extension = new Extension();
+                extension.setPath("/");
+                metaMapping.setExtension(extension);
+                
+                extensionsRules.add(metaMapping);
             }
-            
-            Map<String, Mapping> extensionsRules = mapping.getExtensionsRules();
-            extensions.putAll(extensionsRules);
-            mapping.setExtensionsRules(extensions);
             
         } catch (IOException ioe) {
             throw new WebMotionException("Error during load mapping in META-INF", ioe);
