@@ -226,12 +226,12 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     public List<Class<? extends WebMotionHandler>> getActionHandlers() {
         return Arrays.asList(
                     ParametersMultipartHandler.class,
-                    FilterFinderHandler.class,
                     ActionFinderHandler.class,
+                    FilterFinderHandler.class,
                     ParametersExtractorHandler.class,
                     ActionExecuteRenderHandler.class,
-                    FilterMethodFinderHandler.class,
                     ActionMethodFinderHandler.class,
+                    FilterMethodFinderHandler.class,
                     ExecutorInstanceCreatorHandler.class,
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,

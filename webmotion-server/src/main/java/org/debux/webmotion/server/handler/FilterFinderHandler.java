@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
@@ -59,8 +60,9 @@ public class FilterFinderHandler implements WebMotionHandler {
         call.setFilterRules(selection);
         
         HttpContext context = call.getContext();
+        ActionRule actionRule = call.getActionRule();
         String url = context.getUrl();
-        if(url != null) {
+        if(url != null && actionRule != null) {
             
             String method = context.getMethod();
             for (FilterRule filterRule : filterRules) {

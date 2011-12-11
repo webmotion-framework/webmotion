@@ -25,13 +25,13 @@
 package org.debux.webmotion.server.mapping;
 
 /**
- * The class represents all sections in the mapping file. This data are static, 
- * there is loaded when the server is deployed.
+ * The class represents if the mapping is an extension.
  * 
  * @author julien
  */
-public class Extension implements Comparable<Extension> {
+public class Extension {
 
+    /** Path where the extension in mounted */
     protected String path;
     
     public Extension() {
@@ -44,10 +44,4 @@ public class Extension implements Comparable<Extension> {
     public void setPath(String path) {
         this.path = path;
     }
-
-    @Override
-    public int compareTo(Extension extension) {
-        return extension.path.compareTo(this.path);
-    }
-
 }
