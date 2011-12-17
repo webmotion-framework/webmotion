@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -313,10 +314,10 @@ public class HttpContext {
         String url;
         
         DispatcherType dispatcherType = request.getDispatcherType();
-        if(dispatcherType == DispatcherType.INCLUDE) {
+        if (dispatcherType == DispatcherType.INCLUDE) {
             url = (String) request.getAttribute(ATTRIBUTE_INCLUDE_PATH_INFO);
             
-        } else if(isError()) {
+        } else if (isError()) {
             String contextPath = request.getContextPath();
             String requestUri = errorData.getRequestUri();
             url = requestUri.replaceFirst(contextPath, "");
@@ -325,7 +326,7 @@ public class HttpContext {
             url = request.getPathInfo();
         }
         
-        if(!extensionPath.isEmpty()) {
+        if (!extensionPath.isEmpty()) {
             url = url.replace(extensionPath, "");
         }
         return url;
