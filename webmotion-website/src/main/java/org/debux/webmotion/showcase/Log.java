@@ -42,7 +42,7 @@ public class Log extends WebMotionController {
         PrintWriter out = context.getOut();
         out.println("Action log");
         
-        return renderContent("Action render", "text/plain");
+        return renderContent("Action render\n", "text/plain");
     }
     
 }
