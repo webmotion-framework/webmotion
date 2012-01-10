@@ -61,8 +61,6 @@
           class="org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler"/>
     <bean id="executorMethodInvokerHandler"
           class="org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler"/>
-    <bean id="renderCreatorHandler"
-          class="org.debux.webmotion.server.handler.RenderCreatorHandler"/>
 
     <bean id="springActionHandlers" class="java.util.ArrayList">
         <constructor-arg>
@@ -79,7 +77,6 @@
                 <ref bean="executorParametersInjectorHandler" />
                 <ref bean="executorParametersValidatorHandler" />
                 <ref bean="executorMethodInvokerHandler" />
-                <ref bean="renderCreatorHandler" />
             </list>
         </constructor-arg>
     </bean>
@@ -94,7 +91,6 @@
                 <ref bean="springInstanceCreatorHandler" />
                 <ref bean="executorParametersInjectorHandler" />
                 <ref bean="executorMethodInvokerHandler" />
-                <ref bean="renderCreatorHandler" />
             </list>
         </constructor-arg>
     </bean>
