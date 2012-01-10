@@ -51,7 +51,6 @@ import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
 import org.debux.webmotion.server.handler.FilterFinderHandler;
 import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
-import org.debux.webmotion.server.handler.RenderCreatorHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
@@ -235,8 +234,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
                     ExecutorParametersValidatorHandler.class,
-                    ExecutorMethodInvokerHandler.class,
-                    RenderCreatorHandler.class
+                    ExecutorMethodInvokerHandler.class
                 );
     }
     
@@ -251,8 +249,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                     ErrorMethodFinderHandler.class,
                     ExecutorInstanceCreatorHandler.class,
                     ExecutorParametersInjectorHandler.class,
-                    ExecutorMethodInvokerHandler.class,
-                    RenderCreatorHandler.class
+                    ExecutorMethodInvokerHandler.class
                 );
     }
     

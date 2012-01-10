@@ -50,11 +50,31 @@ public abstract class Render {
 
     public static String DEFAULT_ENCODING = "UTF-8";
     
+    protected boolean executed;
+
+    public Render() {
+        this.executed = false;
+    }
+    
     /**
-     * Use to do the render
-     * @param context 
+     * Execute the render and store a state as executed.
+     */
+    public void exec(Mapping mapping, Call call) throws IOException, ServletException {
+        create(mapping, call);
+        executed = true;
+    }
+    
+    /**
+     * Use to do the render.
      */
     public abstract void create(Mapping mapping, Call call) throws IOException, ServletException;
+
+    /**
+     * @return true if the exec method is been called
+     */
+    public boolean isExecuted() {
+        return executed;
+    }
         
     /**
      * Get the url to the view.

@@ -70,9 +70,6 @@ public class Call {
     /** Information to execute the filters. */
     protected List<Executor> filters;
     
-    /** Current filters executed. */
-    protected Iterator<Executor> applyFilters;
-    
     /** The final render for user. */
     protected Render render;
     
@@ -159,13 +156,6 @@ public class Call {
         this.filterRules = filterRules;
     }
 
-    public Iterator<Executor> getApplyFilters() {
-        if(applyFilters == null) {
-            this.applyFilters = filters.iterator();
-        }
-        return applyFilters;
-    }
-    
     public List<Executor> getExecutors() {
         List<Executor> result = new ArrayList<Executor>(filters.size() + 1);
         result.addAll(filters);

@@ -24,19 +24,28 @@
  */
 package org.debux.webmotion.server.handler;
 
+import java.io.IOException;
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Executor;
+import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.InitContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,17 +61,24 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(ExecutorMethodInvokerHandler.class);
 
     protected WebMotionContextable contextable;
+    
+    protected ExecutorService threadPool;
 
-    public ExecutorMethodInvokerHandler(WebMotionContextable contextable) {
+    public ExecutorMethodInvokerHandler(WebMotionContextable contextable, ExecutorService threadPool) {
         this.contextable = contextable;
+        this.threadPool = threadPool;
     }
 
     public ExecutorMethodInvokerHandler() {
-        this(new WebMotionContextable());
+        this(new WebMotionContextable(), Executors.newCachedThreadPool());
     }
 
     public void setContextable(WebMotionContextable contextable) {
         this.contextable = contextable;
+    }
+
+    public void setExecutor(ExecutorService threadPool) {
+        this.threadPool = threadPool;
     }
     
     @Override
@@ -72,90 +88,146 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        Iterator<Executor> filters = call.getApplyFilters();
+        HttpContext context = call.getContext();
+        HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
         
-        // Process just filters because the call contains already the render
-        Executor executor = call.getExecutor(); // Search if the call contains a action
-        if(executor == null) {
-            if(filters.hasNext()) {
-                processFilter(mapping, call);
-            }
-            return;
-        }
-        
-        // Process action and filters
-        Render render = call.getRender();
-        if(render == null) {
-            if(filters.hasNext()) {
-                processFilter(mapping, call);
-            } else {
-                processAction(mapping, call);
-            }
-        }
-    }
-
-    public void processAction(Mapping mapping, Call call) {
-        Executor executor = call.getExecutor();
-        try {
-            WebMotionController controllerInstance = executor.getInstance();
-            contextable.create(this, mapping, call);
-            controllerInstance.setContextable(contextable);
-            
-            Map<String, Object> parameters = executor.getParameters();
-            Object[] toArray = parameters.values().toArray();
-
-            Method actionMethod = executor.getMethod();
-            Render render = (Render) actionMethod.invoke(controllerInstance, toArray);
-
-            // Check if is the last executor is finished to remove the thread local
-            List<Executor> filters = call.getFilters();
-            if(filters.isEmpty()) {
-                contextable.remove();
-            }
-        
-            call.setRender(render);
-
-        } catch (Exception ex) {
-            contextable.remove();
-            throw new WebMotionException("Error during invoke method for filter " 
-                    + executor.getClazz().getName() 
-                    + " on method " + executor.getMethod().getName(), ex);
-        }
+        RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
+        runnableHandler.run();
+//        request.startAsync(request, response);
+//        threadPool.execute(runnableHandler);
     }
     
-    public void processFilter(Mapping mapping, Call call) {
-        Iterator<Executor> filters = call.getApplyFilters();
-        Executor executor = filters.next();
-            
-        try {
-            WebMotionFilter filterInstance = (WebMotionFilter) executor.getInstance();
-            contextable.create(this, mapping, call);
-            filterInstance.setContextable(contextable);
-            
-            Map<String, Object> parameters = executor.getParameters();
-            Object[] toArray = parameters.values().toArray();
+    public class RunnableHandler implements Runnable, WebMotionHandler {
 
-            Method filterMethod = executor.getMethod();
-            Render render = (Render) filterMethod.invoke(filterInstance, toArray);
-            
-            // Check if is the last executor is finished to remove the thread local
-            Executor firstFilter = call.getFilters().get(0);
-            if(executor == firstFilter) {
-                contextable.remove();
-            }
+        protected Mapping mapping;
+        protected Call call;
         
-            if(render != null) {
+        /** Current filters executed. */
+        protected Iterator<Executor> filtersIterator;
+
+        public RunnableHandler(Mapping mapping, Call call) {
+            this.mapping = mapping;
+            this.call = call;
+            this.filtersIterator = call.getFilters().iterator();
+        }
+        
+        @Override
+        public void init(InitContext context) {
+            throw new UnsupportedOperationException("Not call.");
+        }
+
+        @Override
+        public void run() {
+            handle(mapping, call);
+        }
+
+        @Override
+        public void handle(Mapping mapping, Call call) {
+            // Process action and filters
+            Render render = call.getRender();
+            Executor executor = call.getExecutor(); // Search if the call contains a action
+            
+            if (render == null || !render.isExecuted()) {
+                if (filtersIterator.hasNext()) {
+                    processFilter(mapping, call);
+                    
+                } else if (executor != null) {
+                    processAction(mapping, call);
+                    
+                } else {
+                    // The call contains already the render
+                    processRender(mapping, call);
+                }
+            } 
+        }
+        
+        public void processAction(Mapping mapping, Call call) {
+            Executor executor = call.getExecutor();
+            try {
+                WebMotionController instance = executor.getInstance();
+                contextable.create(this, mapping, call);
+                instance.setContextable(contextable);
+
+                Map<String, Object> parameters = executor.getParameters();
+                Object[] toArray = parameters.values().toArray();
+
+                Method actionMethod = executor.getMethod();
+                Render render = (Render) actionMethod.invoke(instance, toArray);
+
+                // Check if is the last executor is finished to remove the thread local
+                List<Executor> filters = call.getFilters();
+                if(filters.isEmpty()) {
+                    contextable.remove();
+                }
+
                 call.setRender(render);
-                // Force action to render view on filter, i.e. package name
-                call.setExecutor(executor);
+                processRender(mapping, call);
+                
+            } catch (Exception ex) {
+                contextable.remove();
+                throw new WebMotionException("Error during invoke method for filter " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(), ex);
             }
-                        
-        } catch (Exception ex) {
-            contextable.remove();
-            throw new WebMotionException("Error during invoke method for filter " 
-                    + executor.getClazz().getName() 
-                    + " on method " + executor.getMethod().getName(), ex);
         }
-    }
+
+        public void processFilter(Mapping mapping, Call call) {
+            Executor executor = filtersIterator.next();
+
+            try {
+                WebMotionFilter filterInstance = (WebMotionFilter) executor.getInstance();
+                contextable.create(this, mapping, call);
+                filterInstance.setContextable(contextable);
+
+                Map<String, Object> parameters = executor.getParameters();
+                Object[] toArray = parameters.values().toArray();
+
+                Method filterMethod = executor.getMethod();
+                Render render = (Render) filterMethod.invoke(filterInstance, toArray);
+
+                // Check if is the last executor is finished to remove the thread local
+                Executor firstFilter = call.getFilters().get(0);
+                if(executor == firstFilter) {
+                    contextable.remove();
+                }
+
+                if(render != null) {
+                    call.setRender(render);
+                    processRender(mapping, call);
+                }
+
+            } catch (Exception ex) {
+                contextable.remove();
+                throw new WebMotionException("Error during invoke method for filter " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(), ex);
+            }
+        }
+        
+        public void processRender(Mapping mapping, Call call) {
+            try {
+                Render render = call.getRender();
+                log.info("Render = " + render);
+                if(render != null) {
+                    render.exec(mapping, call);
+                }
+
+            } catch (IOException ioe) {
+                throw new WebMotionException("Error during write the render in response", ioe);
+
+            } catch (ServletException se) {
+                throw new WebMotionException("Error on server when write the render in response", se);
+            }
+
+            if(call.isFileUploadRequest()) {
+                HttpContext context = call.getContext();
+                HttpSession session = context.getSession();
+                if(session != null) {
+                    session.removeAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
+                }
+            }
+        }
     
+    }
 }

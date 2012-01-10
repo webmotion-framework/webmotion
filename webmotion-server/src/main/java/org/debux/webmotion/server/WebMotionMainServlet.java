@@ -64,7 +64,6 @@ public class WebMotionMainServlet extends HttpServlet {
 
     protected Mapping mapping;
     protected WebMotionHandler handlersFactory;
-    protected WebMotionContextable contextable;
     
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
