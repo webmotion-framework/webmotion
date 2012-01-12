@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -91,7 +90,7 @@ public class HttpContext {
     
     /** Current HTTP response. */
     protected HttpServletResponse response;
-    
+
     /** Information on error contained in request. */
     protected ErrorData errorData;
     
