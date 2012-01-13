@@ -30,6 +30,10 @@
         <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup </listener-class>
     </listener>
 
+    <listener>
+        <listener-class>org.debux.webmotion.server.WebMotionService</listener-class>
+    </listener>
+
     <servlet>
       <servlet-name>WebMotionStaticServlet</servlet-name>
       <servlet-class>org.debux.webmotion.server.WebMotionStaticServlet</servlet-class>
@@ -38,6 +42,7 @@
     <servlet>
       <servlet-name>WebMotionMainServlet</servlet-name>
       <servlet-class>org.debux.webmotion.server.WebMotionMainServlet</servlet-class>
+      <async-supported>true</async-supported>
     </servlet>
 
     <servlet-mapping>
@@ -53,6 +58,7 @@
     <filter>
         <filter-name>WebMotionRouterFilter</filter-name>
         <filter-class>org.debux.webmotion.server.WebMotionRouterFilter</filter-class>
+        <async-supported>true</async-supported>
     </filter>
     
     <filter-mapping>

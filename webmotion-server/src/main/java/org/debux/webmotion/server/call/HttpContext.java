@@ -314,29 +314,24 @@ public class HttpContext {
         
         DispatcherType dispatcherType = request.getDispatcherType();
         if (dispatcherType == DispatcherType.INCLUDE) {
-            url = (String) request.getAttribute(ATTRIBUTE_INCLUDE_PATH_INFO);
+            url = (String) request.getAttribute(ATTRIBUTE_INCLUDE_REQUEST_URI);
             
         } else if (isError()) {
-            String contextPath = request.getContextPath();
-            String requestUri = errorData.getRequestUri();
-            url = requestUri.replaceFirst(contextPath, "");
+            url = errorData.getRequestUri();
             
         } else {
-            url = request.getPathInfo();
+            url = request.getRequestURI();
         }
+        
+        String contextPath = request.getContextPath();
+        url = url.replaceFirst(contextPath, "");
+        url = url.replaceFirst("/deploy", "");
         
         if (!extensionPath.isEmpty()) {
             url = url.replace(extensionPath, "");
         }
-        return url;
-    }
-    
-    public String getBaseUrl() {
-        String url = request.getRequestURL().toString();
-        String servletPath = request.getServletPath();
         
-        String path = StringUtils.substringBefore(url, servletPath);
-        return path;
+        return url;
     }
     
     public boolean isError() {
@@ -346,10 +341,12 @@ public class HttpContext {
         if(dispatcherType == DispatcherType.INCLUDE) {
             url = (String) request.getAttribute(ATTRIBUTE_INCLUDE_PATH_INFO);
         } else {
-            url = request.getPathInfo();
+            String contextPath = request.getContextPath();
+            String requestUri = request.getRequestURI();
+            url = requestUri.replaceFirst(contextPath, "");
         }
         
-        return url != null && url.startsWith("/error");
+        return url != null && (url.startsWith("/error") || url.startsWith("/deploy/error"));
     }
         
     public String getMethod() {

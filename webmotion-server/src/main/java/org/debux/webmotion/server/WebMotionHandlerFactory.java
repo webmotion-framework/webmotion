@@ -35,8 +35,9 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Extension;
-import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
@@ -86,7 +87,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     public void init(InitContext context) {
         if (factory == null) {
             ServletContext servletContext = context.getServletContext();
-            factory = (SingletonFactory<WebMotionHandler>) servletContext.getAttribute(WebMotionMainServlet.HANDLERS_ATTRIBUTE_NAME);
+            factory = (SingletonFactory<WebMotionHandler>) servletContext.getAttribute(WebMotionService.HANDLERS_ATTRIBUTE_NAME);
             
             initHandlers(context);
         }
@@ -186,17 +187,20 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                 WebMotionHandler handler = factory.getInstance(handlersFactory);
                 handler.handle(extensionMapping, call);
                 
-                // Stop if the first handler return a render
-                Render render = call.getRender();
-                if(render != null) {
+                context.setExtensionPath(extensionPath);
+                
+                // Stop if the first handler process the request
+                ActionRule actionRule = call.getActionRule();
+                ErrorRule errorRule = call.getErrorRule();
+                if(actionRule != null || errorRule != null) {
                     break;
                 }
-                context.setExtensionPath(extensionPath);
             }
         }
         
-        Render render = call.getRender();
-        if(render == null) {
+        ActionRule actionRule = call.getActionRule();
+        ErrorRule errorRule = call.getErrorRule();
+        if(actionRule == null && errorRule == null) {
             // Determine if the request contains an errors
             if(context.isError()) {
                 ErrorData errorData = context.getErrorData();

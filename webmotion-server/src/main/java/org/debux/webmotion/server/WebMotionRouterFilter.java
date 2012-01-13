@@ -30,10 +30,12 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
@@ -52,9 +54,12 @@ public class WebMotionRouterFilter implements Filter {
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
+    protected WebMotionMainServlet servlet;
+    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // Do nothing
+        servlet = new WebMotionMainServlet();
+        servlet.init(null);
     }
 
     @Override
@@ -65,6 +70,8 @@ public class WebMotionRouterFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = ((HttpServletRequest) request);
+        HttpServletResponse httpServletResponse = ((HttpServletResponse) response);
+        httpServletRequest.getSession(true);
         
         String uri;
         DispatcherType dispatcherType = request.getDispatcherType();
@@ -96,11 +103,9 @@ public class WebMotionRouterFilter implements Filter {
             
         } else {
             log.info("Is default");
-            if(dispatcherType == DispatcherType.INCLUDE) {
-                request.getRequestDispatcher("/deploy" + url).include(request, response);
-            } else {
-                request.getRequestDispatcher("/deploy" + url).forward(request, response);
-            }
+            ServletContext servletContext = request.getServletContext();
+            WebMotionService listener = (WebMotionService) servletContext.getAttribute(WebMotionService.SERVICE_ATTRIBUTE_NAME);
+            listener.service(httpServletRequest, httpServletResponse);
         }
     }
 }

@@ -26,6 +26,8 @@ package org.debux.webmotion.server.handler;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionFilter;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionContextable;
@@ -70,7 +73,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     }
 
     public ExecutorMethodInvokerHandler() {
-        this(new WebMotionContextable(), Executors.newCachedThreadPool());
+        this(new WebMotionContextable(), Executors.newFixedThreadPool(10));
     }
 
     public void setContextable(WebMotionContextable contextable) {
@@ -94,7 +97,38 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         
         RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
         runnableHandler.run();
-//        request.startAsync(request, response);
+        
+//        AsyncContext asyncContext = null;
+//        if (request.isAsyncStarted()) {
+//            asyncContext = request.getAsyncContext();
+//            
+//        } else {
+//            request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
+//            asyncContext = request.startAsync(request, response);
+//            asyncContext.setTimeout(0);
+//            asyncContext.addListener(new AsyncListener() {
+//                @Override
+//                public void onComplete(AsyncEvent event) throws IOException {
+//                    log.info("onComplete " + event);
+//                }
+//
+//                @Override
+//                public void onTimeout(AsyncEvent event) throws IOException {
+//                    log.info("onTimeout " + event);
+//                }
+//
+//                @Override
+//                public void onError(AsyncEvent event) throws IOException {
+//                    log.error("onError " + event, event.getThrowable());
+//                }
+//
+//                @Override
+//                public void onStartAsync(AsyncEvent event) throws IOException {
+//                    log.info("onStartAsync ");
+//                }
+//                
+//            });
+//        }
 //        threadPool.execute(runnableHandler);
     }
     
@@ -212,7 +246,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 if(render != null) {
                     render.exec(mapping, call);
                 }
-
+                
             } catch (IOException ioe) {
                 throw new WebMotionException("Error during write the render in response", ioe);
 

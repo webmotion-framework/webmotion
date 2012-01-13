@@ -66,7 +66,7 @@ public class RenderUrl extends Render {
             if (!url.startsWith("/static")) {
                 url = context.getExtensionPath() + url;
             }
-            url = context.getBaseUrl() + url;
+            url = request.getContextPath() + url;
         }
         
         url = addModel(url, render.getModel());
