@@ -87,7 +87,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     public void init(InitContext context) {
         if (factory == null) {
             ServletContext servletContext = context.getServletContext();
-            factory = (SingletonFactory<WebMotionHandler>) servletContext.getAttribute(WebMotionService.HANDLERS_ATTRIBUTE_NAME);
+            factory = (SingletonFactory<WebMotionHandler>) servletContext.getAttribute(WebMotionServerFilter.HANDLERS_ATTRIBUTE_NAME);
             
             initHandlers(context);
         }
