@@ -34,7 +34,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -324,7 +323,9 @@ public class HttpContext {
         }
         
         String contextPath = request.getContextPath();
-        url = url.replaceFirst(contextPath, "");
+        if (contextPath != null) {
+            url = url.replaceFirst(contextPath, "");
+        }
         url = url.replaceFirst("/deploy", "");
         
         if (!extensionPath.isEmpty()) {
@@ -335,7 +336,7 @@ public class HttpContext {
     }
     
     public boolean isError() {
-        String url;
+        String url = null;
         
         DispatcherType dispatcherType = request.getDispatcherType();
         if(dispatcherType == DispatcherType.INCLUDE) {
@@ -343,7 +344,9 @@ public class HttpContext {
         } else {
             String contextPath = request.getContextPath();
             String requestUri = request.getRequestURI();
-            url = requestUri.replaceFirst(contextPath, "");
+            if (contextPath != null) {
+                url = requestUri.replaceFirst(contextPath, "");
+            }
         }
         
         return url != null && (url.startsWith("/error") || url.startsWith("/deploy/error"));

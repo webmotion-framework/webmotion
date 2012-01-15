@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
+import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionFilter;
@@ -42,6 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.WebMotionController;
@@ -50,6 +52,7 @@ import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.render.RenderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,15 +99,27 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         HttpServletResponse response = context.getResponse();
         
         RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
-        runnableHandler.run();
-        
+        runnableHandler.handle(mapping, call);
+
+// Begin implements async requestt process. Don't remove comment lines.
 //        AsyncContext asyncContext = null;
-//        if (request.isAsyncStarted()) {
-//            asyncContext = request.getAsyncContext();
+//        if (request.getAttribute("ASYNC_STOPPED") != null) {
+//            runnableHandler.handle(mapping, call);
 //            
 //        } else {
 //            request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
-//            asyncContext = request.startAsync(request, response);
+//            request.setAttribute("ASYNC_STOPPED", true);
+//            
+//            // Tomcat path on dispatcher type
+//            asyncContext = request.startAsync(new HttpServletRequestWrapper(request) {
+//                @Override
+//                public DispatcherType getDispatcherType() {
+//                    return DispatcherType.INCLUDE;
+//                }
+//            } , response);
+//            
+////            asyncContext = request.startAsync(request, response);
+//            
 //            asyncContext.setTimeout(0);
 //            asyncContext.addListener(new AsyncListener() {
 //                @Override
@@ -128,8 +143,9 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 //                }
 //                
 //            });
+//            
+//            threadPool.execute(runnableHandler);
 //        }
-//        threadPool.execute(runnableHandler);
     }
     
     public class RunnableHandler implements Runnable, WebMotionHandler {
@@ -154,6 +170,14 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         @Override
         public void run() {
             handle(mapping, call);
+            
+            Render render = call.getRender();
+            if (!(render instanceof RenderView)) {
+                HttpContext context = call.getContext();
+                HttpServletRequest request = context.getRequest();
+                AsyncContext asyncContext = request.getAsyncContext();
+                asyncContext.complete();
+            }
         }
 
         @Override

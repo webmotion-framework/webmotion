@@ -26,6 +26,7 @@ package org.debux.webmotion.server.render;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -67,11 +68,16 @@ public class RenderView extends Render {
         
         String path = getActionPath(mapping, view);
         DispatcherType dispatcherType = request.getDispatcherType();
-        if (dispatcherType == DispatcherType.INCLUDE) {
-            request.getRequestDispatcher(path).include(request, response);
-        } else {
+
+        if (request.isAsyncStarted()) {
+            AsyncContext asyncContext = request.getAsyncContext();
+            asyncContext.dispatch(path);
+            
+        } else if (dispatcherType == DispatcherType.FORWARD) {
             request.getRequestDispatcher(path).forward(request, response);
+            
+        } else {
+            request.getRequestDispatcher(path).include(request, response);
         }
     }
-    
 }

@@ -27,7 +27,7 @@
     <name>WebMotion</name>
   
     <listener>
-        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup </listener-class>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
     </listener>
 
     <filter>

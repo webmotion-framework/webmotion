@@ -131,7 +131,7 @@ public class WebMotionServerFilter implements Filter {
         
         String uri;
         DispatcherType dispatcherType = request.getDispatcherType();
-        if(dispatcherType == DispatcherType.INCLUDE) {
+        if (dispatcherType == DispatcherType.INCLUDE) {
             uri = (String) httpServletRequest.getAttribute(HttpContext.ATTRIBUTE_INCLUDE_REQUEST_URI);
         } else {
             uri = httpServletRequest.getRequestURI();
