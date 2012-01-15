@@ -30,39 +30,14 @@
         <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup </listener-class>
     </listener>
 
-    <listener>
-        <listener-class>org.debux.webmotion.server.WebMotionService</listener-class>
-    </listener>
-
-    <servlet>
-      <servlet-name>WebMotionStaticServlet</servlet-name>
-      <servlet-class>org.debux.webmotion.server.WebMotionStaticServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-      <servlet-name>WebMotionMainServlet</servlet-name>
-      <servlet-class>org.debux.webmotion.server.WebMotionMainServlet</servlet-class>
-      <async-supported>true</async-supported>
-    </servlet>
-
-    <servlet-mapping>
-      <servlet-name>WebMotionStaticServlet</servlet-name>
-      <url-pattern>/static/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-      <servlet-name>WebMotionMainServlet</servlet-name>
-      <url-pattern>/deploy/*</url-pattern>
-    </servlet-mapping>
-    
     <filter>
-        <filter-name>WebMotionRouterFilter</filter-name>
-        <filter-class>org.debux.webmotion.server.WebMotionRouterFilter</filter-class>
+        <filter-name>WebMotionServerFilter</filter-name>
+        <filter-class>org.debux.webmotion.server.WebMotionServerFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
     
     <filter-mapping>
-        <filter-name>WebMotionRouterFilter</filter-name>
+        <filter-name>WebMotionServerFilter</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
