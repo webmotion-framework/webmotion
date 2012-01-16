@@ -43,6 +43,7 @@ public class Config {
     public static String PACKAGE_FILTERS = "package.filters";
     public static String PACKAGE_ERRORS = "package.errors";
     public static String REQUEST_ENCODING = "request.encoding";
+    public static String REQUEST_ASYNC = "request.async";
     public static String JAVAC_DEBUG = "javac.debug";
     public static String MODE = "mode";
     public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
@@ -64,6 +65,9 @@ public class Config {
     
     /** Force the encoding in parameter */
     protected String requestEncoding = "UTF-8";
+    
+    /** Indicates if by default the request is process to asynchronous mode */
+    protected boolean requestAsync = false;
     
     /** Indicates if the application is compile with debug mode */
     protected boolean javacDebug = true;
@@ -134,6 +138,14 @@ public class Config {
 
     public void setRequestEncoding(String requestEncoding) {
         this.requestEncoding = requestEncoding;
+    }
+
+    public boolean isRequestAsync() {
+        return requestAsync;
+    }
+
+    public void setRequestAsync(boolean requestAsync) {
+        this.requestAsync = requestAsync;
     }
 
     public boolean isJavacDebug() {

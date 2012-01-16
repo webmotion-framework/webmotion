@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.ServletRequest;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -216,6 +217,13 @@ public class WebMotionUtils {
             }
         }
         return name;
+    }
+    
+    /**
+     * @return true if webmotion in tomcat container.
+     */
+    public static boolean isTomcatContainer(ServletRequest request) {
+        return request.getServletContext().getClass().getName().equals("org.apache.catalina.core.ApplicationContextFacade");
     }
 
 }

@@ -42,6 +42,9 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /url/run/                                       Test.run
 *           /url/run                                        Test.all
 
+*           /async                                          async:Test.all
+*           /sync                                           sync:Test.all
+
 *           /test/run?param=test                            Test.all
 *           /test/run                                       Test.run
 *           /sub                                            sub.Subaction.index

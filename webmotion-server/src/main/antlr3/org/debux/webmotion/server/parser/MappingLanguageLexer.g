@@ -32,9 +32,12 @@ CONFIG_PACKAGE_ERRORS:'package.errors';
 CONFIG_JAVAC_DEBUG:'javac.debug';
 CONFIG_MODE:'mode';
 CONFIG_REQUEST_ENCODING:'request.encoding';
+CONFIG_REQUEST_ASYNC:'request.async';
 HANDLERS_FACTORY_CLASS:'handlers.factory.class';
 
 ACTION:'action:';
+ACTION_ASYNC:'async:';
+ACTION_SYNC:'sync:';
 CODE:'code:';
 VIEW:'view:';
 URL:'url:';

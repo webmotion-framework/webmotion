@@ -69,7 +69,7 @@ public class WebMotionServerFilter implements Filter {
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
     /** Attribute name use to store the handlers in ServletContext */
-    public static final String HANDLERS_ATTRIBUTE_NAME = "org.debux.webmotion.server.handlers";
+    public static final String HANDLERS_ATTRIBUTE_NAME = "org.debux.webmotion.server.HANDLERS";
     
     protected Mapping mapping;
     protected WebMotionHandler handlersFactory;

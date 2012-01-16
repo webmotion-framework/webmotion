@@ -72,6 +72,9 @@ public class Call {
     /** The final render for user. */
     protected Render render;
     
+    /** Indicate if the request is really asynchronous */
+    protected boolean async;
+    
     /**
      * Default contructor use to create wrapper to test
      */
@@ -174,6 +177,14 @@ public class Call {
 
     public void setFileUploadRequest(boolean fileUploadRequest) {
         this.fileUploadRequest = fileUploadRequest;
+    }
+
+    public boolean isAsync() {
+        return async;
+    }
+
+    public void setAsync(boolean async) {
+        this.async = async;
     }
 
 }

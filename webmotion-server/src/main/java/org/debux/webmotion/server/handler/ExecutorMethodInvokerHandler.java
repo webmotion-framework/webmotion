@@ -28,12 +28,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
-import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.mapping.Action;
+import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
@@ -42,6 +43,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.servlet.AsyncListener;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
@@ -49,10 +51,11 @@ import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.InitContext;
-import org.debux.webmotion.server.render.RenderView;
+import org.debux.webmotion.server.mapping.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +69,9 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorMethodInvokerHandler.class);
 
+    /** Attribute name use to stop asynchronous request after a dispatch to execute the includes to synchronous */
+    public static final String ASYNC_STOPED_ATTRIBUTE_NAME = "org.debux.webmotion.server.ASYNC_STOPED";
+    
     protected WebMotionContextable contextable;
     
     protected ExecutorService threadPool;
@@ -76,7 +82,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     }
 
     public ExecutorMethodInvokerHandler() {
-        this(new WebMotionContextable(), Executors.newFixedThreadPool(10));
+        this(new WebMotionContextable(), Executors.newFixedThreadPool(100));
     }
 
     public void setContextable(WebMotionContextable contextable) {
@@ -97,55 +103,71 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
         HttpServletResponse response = context.getResponse();
-        
-        RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
-        runnableHandler.handle(mapping, call);
 
-// Begin implements async requestt process. Don't remove comment lines.
-//        AsyncContext asyncContext = null;
-//        if (request.getAttribute("ASYNC_STOPPED") != null) {
-//            runnableHandler.handle(mapping, call);
-//            
-//        } else {
-//            request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
-//            request.setAttribute("ASYNC_STOPPED", true);
-//            
-//            // Tomcat path on dispatcher type
-//            asyncContext = request.startAsync(new HttpServletRequestWrapper(request) {
-//                @Override
-//                public DispatcherType getDispatcherType() {
-//                    return DispatcherType.INCLUDE;
-//                }
-//            } , response);
-//            
-////            asyncContext = request.startAsync(request, response);
-//            
-//            asyncContext.setTimeout(0);
-//            asyncContext.addListener(new AsyncListener() {
-//                @Override
-//                public void onComplete(AsyncEvent event) throws IOException {
-//                    log.info("onComplete " + event);
-//                }
-//
-//                @Override
-//                public void onTimeout(AsyncEvent event) throws IOException {
-//                    log.info("onTimeout " + event);
-//                }
-//
-//                @Override
-//                public void onError(AsyncEvent event) throws IOException {
-//                    log.error("onError " + event, event.getThrowable());
-//                }
-//
-//                @Override
-//                public void onStartAsync(AsyncEvent event) throws IOException {
-//                    log.info("onStartAsync ");
-//                }
-//                
-//            });
-//            
-//            threadPool.execute(runnableHandler);
-//        }
+        Config config = mapping.getConfig();
+        ActionRule actionRule = call.getActionRule();
+        Action action = actionRule.getAction();
+        
+        // Search if the request is execute to sync or async mode
+        boolean isSyncRequest = request.getAttribute(ASYNC_STOPED_ATTRIBUTE_NAME) != null
+                || action == null 
+                || action.getAsync() == null && !config.isRequestAsync()
+                || action.getAsync() != null && !action.getAsync();
+        call.setAsync(!isSyncRequest);
+        
+        // Create handler to process the request
+        RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
+        
+        // Execute the request
+        log.info("is Async " + !isSyncRequest + " for url " + context.getUrl());
+        if (isSyncRequest) {
+            runnableHandler.handle(mapping, call);
+            
+        } else {
+            // Only the first request is execute at async mode
+            request.setAttribute(ASYNC_STOPED_ATTRIBUTE_NAME, true);
+            
+            AsyncContext asyncContext;
+            if (WebMotionUtils.isTomcatContainer(request)) {
+                request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
+                // Tomcat patch : force the dispatcher type
+                asyncContext = request.startAsync(new HttpServletRequestWrapper(request) {
+                    @Override
+                    public DispatcherType getDispatcherType() {
+                        return DispatcherType.INCLUDE;
+                    }
+                } , response);
+                
+            } else {
+                asyncContext = request.startAsync(request, response);
+            }
+            
+            asyncContext.setTimeout(0);
+            asyncContext.addListener(new AsyncListener() {
+                @Override
+                public void onComplete(AsyncEvent event) throws IOException {
+                    log.info("onComplete " + event);
+                }
+
+                @Override
+                public void onTimeout(AsyncEvent event) throws IOException {
+                    log.warn("onTimeout " + event);
+                }
+
+                @Override
+                public void onError(AsyncEvent event) throws IOException {
+                    log.error("onError " + event, event.getThrowable());
+                }
+
+                @Override
+                public void onStartAsync(AsyncEvent event) throws IOException {
+                    log.info("onStartAsync");
+                }
+                
+            });
+            
+            threadPool.execute(runnableHandler);
+        }
     }
     
     public class RunnableHandler implements Runnable, WebMotionHandler {
@@ -170,14 +192,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         @Override
         public void run() {
             handle(mapping, call);
-            
-            Render render = call.getRender();
-            if (!(render instanceof RenderView)) {
-                HttpContext context = call.getContext();
-                HttpServletRequest request = context.getRequest();
-                AsyncContext asyncContext = request.getAsyncContext();
-                asyncContext.complete();
-            }
         }
 
         @Override

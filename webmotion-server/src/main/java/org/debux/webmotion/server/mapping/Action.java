@@ -33,18 +33,23 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Action {
 
-    public static String TYPE_ACTION = "action";
-    public static String TYPE_VIEW = "view";
-    public static String TYPE_URL = "url";
+    public static enum Type {
+        ACTION,
+        VIEW,
+        URL
+    }
     
-    protected String type;
+    protected Type type;
     protected String fullName;
-
-    public String getType() {
+    
+    /** If the boolean is null, the value is not forced in the mapping */
+    protected Boolean async;
+    
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -64,25 +69,33 @@ public class Action {
         return StringUtils.substringAfterLast(fullName, ".");
     }
 
+    public Boolean getAsync() {
+        return async;
+    }
+
+    public void setAsync(Boolean async) {
+        this.async = async;
+    }
+
     /**
      * @return true if the action is directly a action
      */
     public boolean isAction() {
-        return type == null || type.toLowerCase().startsWith(TYPE_ACTION);
+        return type == Type.ACTION;
     }
     
     /**
      * @return true if the action is directly a view
      */
     public boolean isView() {
-        return type != null && type.toLowerCase().startsWith(TYPE_VIEW);
+        return type == Type.VIEW;
     }
     
     /**
      * @return true if the action is directly a url
      */
     public boolean isUrl() {
-        return type != null && type.toLowerCase().startsWith(TYPE_URL);
+        return type == Type.URL;
     }
     
 }

@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -135,6 +134,10 @@ public class BasicMappingParser implements MappingParser {
                 } else if(section == 4 && rule.startsWith(Config.REQUEST_ENCODING)) {
                     String value = extractConfig(Config.REQUEST_ENCODING, rule);
                     config.setRequestEncoding(value);
+                    
+                } else if(section == 4 && rule.startsWith(Config.REQUEST_ASYNC)) {
+                    String value = extractConfig(Config.REQUEST_ASYNC, rule);
+                    config.setRequestAsync(Boolean.valueOf(value));
                     
                 } else if(section == 4 && rule.startsWith(Config.JAVAC_DEBUG)) {
                     String value = extractConfig(Config.JAVAC_DEBUG, rule);
@@ -264,7 +267,31 @@ public class BasicMappingParser implements MappingParser {
      */
     protected Action extractAction(String ruleAction) {
         Action action = new Action();
-        action.setFullName(ruleAction);
+        
+        String[] split = ruleAction.split(":");
+        if (split.length == 1) {
+            action.setFullName(split[0]);
+            action.setType(Action.Type.ACTION);
+        } else {
+            String type = split[0];
+            if (type.equalsIgnoreCase("ASYNC")) {
+                action.setAsync(true);
+                action.setType(Action.Type.ACTION);
+                
+            } else if (type.equalsIgnoreCase("SYNC")) {
+                action.setAsync(false);
+                action.setType(Action.Type.ACTION);
+                
+            } else if (type.equalsIgnoreCase("VIEW")) {
+                action.setType(Action.Type.VIEW);
+                
+            } else if (type.equalsIgnoreCase("URL")) {
+                action.setType(Action.Type.URL);
+            }
+            
+            action.setFullName(split[1]);
+        }
+        
         return action;
     }
 

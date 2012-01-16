@@ -262,10 +262,12 @@ public class ANTLRMappingParser implements MappingParser {
                     config.setPackageFilters(value);
                 } else if(Config.PACKAGE_VIEWS.equals(name)) {
                     config.setPackageViews(value);
-                } else if(Config.JAVAC_DEBUG.equals(name)) {
-                    config.setJavacDebug(Boolean.valueOf(value));
                 } else if(Config.REQUEST_ENCODING.equals(name)) {
                     config.setRequestEncoding(value);
+                } else if(Config.REQUEST_ASYNC.equals(name)) {
+                    config.setRequestAsync(Boolean.valueOf(value));
+                } else if(Config.JAVAC_DEBUG.equals(name)) {
+                    config.setJavacDebug(Boolean.valueOf(value));
                 } else if(Config.HANDLERS_FACTORY_CLASS.equals(name)) {
                     config.setHandlersFactory(value);
                 }
@@ -307,7 +309,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_ACTION);
+                action.setType(Action.Type.ACTION);
                 action.setFullName(value);
                 
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -319,7 +321,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_VIEW);
+                action.setType(Action.Type.VIEW);
                 action.setFullName(value);
                 
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -331,7 +333,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_URL);
+                action.setType(Action.Type.URL);
                 action.setFullName(value);
                 
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -380,7 +382,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_ACTION);
+                action.setType(Action.Type.ACTION);
                 action.setFullName(value);
                 
                 FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -392,7 +394,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_VIEW);
+                action.setType(Action.Type.VIEW);
                 action.setFullName(value);
                 
                 FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -404,7 +406,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_URL);
+                action.setType(Action.Type.URL);
                 action.setFullName(value);
                 
                 FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -485,15 +487,43 @@ public class ANTLRMappingParser implements MappingParser {
             }
         });
                 
-        visitors.put("/ACTION/ACTION/*", new Visit() {
+        visitors.put("/ACTION/ACTION", new Visit() {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_ACTION);
-                action.setFullName(value);
+                action.setType(Action.Type.ACTION);
                 
                 ActionRule actionRule = (ActionRule) stack.peekLast();
                 actionRule.setAction(action);
+                
+                stack.addLast(action);
+            }
+
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+
+        visitors.put("/ACTION/ACTION/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                action.setFullName(value);
+            }
+        });
+
+        visitors.put("/ACTION/ACTION/TYPE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                Action action = (Action) stack.peekLast();
+                if (value == null || value.isEmpty()) {
+                    action.setAsync(null);
+                } else if (value.equalsIgnoreCase("ASYNC:")) {
+                    action.setAsync(true);
+                } else if (value.equalsIgnoreCase("SYNC:")) {
+                    action.setAsync(false);
+                }
             }
         });
 
@@ -501,7 +531,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_VIEW);
+                action.setType(Action.Type.VIEW);
                 action.setFullName(value);
                 
                 ActionRule actionRule = (ActionRule) stack.peekLast();
@@ -513,7 +543,7 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 Action action = new Action();
-                action.setType(Action.TYPE_URL);
+                action.setType(Action.Type.URL);
                 action.setFullName(value);
                 
                 ActionRule actionRule = (ActionRule) stack.peekLast();

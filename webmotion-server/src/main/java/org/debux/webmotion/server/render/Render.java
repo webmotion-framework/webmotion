@@ -26,6 +26,7 @@ package org.debux.webmotion.server.render;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.call.Call;
@@ -62,6 +63,20 @@ public abstract class Render {
     public void exec(Mapping mapping, Call call) throws IOException, ServletException {
         create(mapping, call);
         executed = true;
+        complete(mapping, call);
+    }
+    
+    /**
+     * Call after the render is create. If the request is async, call complete method
+     * on AsyncContext.
+     */
+    public void complete(Mapping mapping, Call call) throws IOException, ServletException {
+        if (call.isAsync()) {
+            HttpContext context = call.getContext();
+            HttpServletRequest request = context.getRequest();
+            AsyncContext asyncContext = request.getAsyncContext();
+            asyncContext.complete();
+        }
     }
     
     /**

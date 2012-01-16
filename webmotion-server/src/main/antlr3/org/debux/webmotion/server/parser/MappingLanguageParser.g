@@ -53,6 +53,7 @@ section_config_name
     | CONFIG_JAVAC_DEBUG
     | CONFIG_MODE
     | CONFIG_REQUEST_ENCODING
+    | CONFIG_REQUEST_ASYNC
     | HANDLERS_FACTORY_CLASS
     ;
 
@@ -176,13 +177,13 @@ comment
 // Common
 
 action
-    : ACTION? full_name
-    -> ^(DOLLAR["ACTION"] full_name)
+    : (ACTION | ACTION_ASYNC | ACTION_SYNC)? full_name
+    -> ^(DOLLAR["ACTION"] ^(DOLLAR["TYPE"] ACTION_ASYNC? ACTION_SYNC?) full_name)
     ;
 
 view
     : VIEW file_name
-    -> ^(DOLLAR["VIEW"]  file_name)
+    -> ^(DOLLAR["VIEW"] file_name)
     ;
 
 url
@@ -195,8 +196,8 @@ dynamic_variable
     ;
 
 dynamic_action
-    : ACTION? dynamic_full_name
-    -> ^(DOLLAR["ACTION"] dynamic_full_name)
+    : (ACTION | ACTION_ASYNC | ACTION_SYNC)? dynamic_full_name
+    -> ^(DOLLAR["ACTION"] ^(DOLLAR["TYPE"] ACTION_ASYNC? ACTION_SYNC?) dynamic_full_name)
     ;
 
 dynamic_full_name

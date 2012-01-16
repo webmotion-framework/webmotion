@@ -80,4 +80,10 @@ public class RenderView extends Render {
             request.getRequestDispatcher(path).include(request, response);
         }
     }
+
+    @Override
+    public void complete(Mapping mapping, Call call) throws IOException, ServletException {
+        // do nothing due to dispatch
+    }
+
 }
