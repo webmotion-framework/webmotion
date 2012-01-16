@@ -30,7 +30,6 @@
 <html lang="en">
     <head>
         <title>WebMotion</title>
-        <meta charset="utf-8">
         <meta name="description" content="">
         <meta name="author" content="">
 
@@ -131,11 +130,11 @@
                                     <li><a id="login" href="./login">Renamed parameters</a></li>
                                     <li><a id="select" href="./select">Parameters static</a></li>
                                     <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
-                                    <li><a id="text" href="./text">Dynamic view</a> <span class="label notice">New</span></li>
-                                    <li><a id="helloView" href="./helloView">Dynamic jsp view</a> <span class="label notice">New</span></li>
-                                    <li><a id="wikipedia" href="./wikipedia">Dynamic url</a> <span class="label notice">New</span></li>
+                                    <li><a id="text" href="./text">Dynamic view</a></li>
+                                    <li><a id="helloView" href="./helloView">Dynamic jsp view</a></li>
+                                    <li><a id="wikipedia" href="./wikipedia">Dynamic url</a></li>
                                     <li><a id="form" href="./form">Method</a></li>
-                                    <li><a id="media" href="./media">Multiple method</a> <span class="label notice">New</span></li>
+                                    <li><a id="media" href="./media">Multiple method</a></li>
                                     <li><a id="readme" href="./readme">Static resources</a></li>
                                 </ul>
                             </li>
@@ -149,14 +148,14 @@
                                 <ul>
                                     <li><a id="code" href="./code">Code http</a></li>
                                     <li><a id="exception" href="./exception">Exception</a></li>
-                                    <li><a id="notfound" href="./notfound">All</a> <span class="label notice">New</span></li>
+                                    <li><a id="notfound" href="./notfound">All</a></li>
                                     <li><a id="npe" href="./npe">View</a></li>
                                 </ul>
                             </li>
                             <li><strong>Extension</strong>
                                 <ul>
-                                    <li><a id="blog" href="./blog">Action</a> <span class="label notice">New</span></li>
-                                    <li><a id="spring" href="./spring">Spring</a> <span class="label notice">New</span></li>
+                                    <li><a id="blog" href="./blog">Action</a></li>
+                                    <li><a id="spring" href="./spring">Spring</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -170,10 +169,10 @@
                                     <li><a id="helloModel" href="./helloModel">Model</a></li>
                                     <li><a id="save" href="./save">Url</a></li>
                                     <li><a id="content" href="./content">Content</a></li>
-                                    <li><a id="stream" href="./stream">Stream</a> <span class="label notice">New</span></li>
+                                    <li><a id="stream" href="./stream">Stream</a></li>
                                     <li><a id="load" href="./load">Reload page</a></li>
-                                    <li><a id="forbidden" href="./forbidden">Error</a> <span class="label notice">New</span></li>
-                                    <li><a id="nocontent" href="./nocontent">Status</a> <span class="label notice">New</span></li>
+                                    <li><a id="forbidden" href="./forbidden">Error</a></li>
+                                    <li><a id="nocontent" href="./nocontent">Status</a></li>
                                 </ul>
                             </li>
                             <li><strong>Data</strong>
@@ -192,7 +191,8 @@
                                     <li><a id="page" href="./page">Include</a></li>
                                     <li><a id="calc" href="./calc">AJAX</a></li>
                                     <li><a id="message" href="./message">Flash message</a></li>
-                                    <li><a id="shop" href="./shop">Validation</a> <span class="label notice">New</span></li>
+                                    <li><a id="shop" href="./shop">Validation</a></li>
+                                    <li><a id="async" href="./async">Async</a> <span class="label notice">New</span></li>
                                 </ul>
                             </li>
                             <li><strong>File</strong>

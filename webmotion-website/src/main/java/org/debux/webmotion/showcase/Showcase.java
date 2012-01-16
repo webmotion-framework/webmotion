@@ -764,4 +764,18 @@ public class Showcase extends WebMotionController {
         );
     }
     
+    public Render async() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/async"
+                ),
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false) 
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 60, 1)),
+                    getJavaContent("Async.java"),
+                    getPageContent("hello.jsp")
+                )
+        );
+    }
+    
 }
