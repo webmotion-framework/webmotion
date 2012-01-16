@@ -104,15 +104,19 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         HttpServletRequest request = context.getRequest();
         HttpServletResponse response = context.getResponse();
 
-        Config config = mapping.getConfig();
-        ActionRule actionRule = call.getActionRule();
-        Action action = actionRule.getAction();
-        
         // Search if the request is execute to sync or async mode
-        boolean isSyncRequest = request.getAttribute(ASYNC_STOPED_ATTRIBUTE_NAME) != null
-                || action == null 
-                || action.getAsync() == null && !config.isRequestAsync()
-                || action.getAsync() != null && !action.getAsync();
+        boolean isSyncRequest = true;
+        ActionRule actionRule = call.getActionRule();
+        if (actionRule != null) {
+            Action action = actionRule.getAction();
+            Config config = mapping.getConfig();
+            Boolean async = action.getAsync();
+            
+            isSyncRequest = request.getAttribute(ASYNC_STOPED_ATTRIBUTE_NAME) != null
+                    || async == null && !config.isRequestAsync()
+                    || async != null && !async;
+        }
+        
         call.setAsync(!isSyncRequest);
         
         // Create handler to process the request
