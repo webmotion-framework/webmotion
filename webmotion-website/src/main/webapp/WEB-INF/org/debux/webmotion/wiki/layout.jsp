@@ -30,8 +30,9 @@
 <!DOCTYPE html>
 <html lang="${language}">
     <head>
+        <meta charset="utf-8">
         <title>${site_name}</title>
-
+        
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
         <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
         
