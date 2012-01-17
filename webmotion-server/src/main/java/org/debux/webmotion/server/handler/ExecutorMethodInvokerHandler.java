@@ -182,10 +182,15 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         /** Current filters executed. */
         protected Iterator<Executor> filtersIterator;
 
+        /** Mark if the render is executed */
+        protected boolean executed;
+        
         public RunnableHandler(Mapping mapping, Call call) {
             this.mapping = mapping;
             this.call = call;
+            
             this.filtersIterator = call.getFilters().iterator();
+            this.executed = false;
         }
         
         @Override
@@ -204,7 +209,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             Render render = call.getRender();
             Executor executor = call.getExecutor(); // Search if the call contains a action
             
-            if (render == null || !render.isExecuted()) {
+            if (render == null || !executed) {
                 if (filtersIterator.hasNext()) {
                     processFilter(mapping, call);
                     
@@ -288,6 +293,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 if(render != null) {
                     render.exec(mapping, call);
                 }
+                executed = true;
                 
             } catch (IOException ioe) {
                 throw new WebMotionException("Error during write the render in response", ioe);

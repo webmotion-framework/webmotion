@@ -51,10 +51,7 @@ public abstract class Render {
 
     public static String DEFAULT_ENCODING = "UTF-8";
     
-    protected boolean executed;
-
     public Render() {
-        this.executed = false;
     }
     
     /**
@@ -62,7 +59,6 @@ public abstract class Render {
      */
     public void exec(Mapping mapping, Call call) throws IOException, ServletException {
         create(mapping, call);
-        executed = true;
         complete(mapping, call);
     }
     
@@ -84,13 +80,6 @@ public abstract class Render {
      */
     public abstract void create(Mapping mapping, Call call) throws IOException, ServletException;
 
-    /**
-     * @return true if the exec method is been called
-     */
-    public boolean isExecuted() {
-        return executed;
-    }
-        
     /**
      * Get the url to the view.
      * @param mapping
