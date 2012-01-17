@@ -88,14 +88,9 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersValidatorHandler.class);
 
-    @Override
-    public void init(InitContext context) {
-        // do nothing
-    }
+    protected MethodValidator methodValidator = null;
 
-    @Override
-    public void handle(Mapping mapping, Call call) {
-        MethodValidator methodValidator = null;
+    public ExecutorParametersValidatorHandler() {
         try {
             methodValidator = Validation.byProvider(HibernateValidator.class)
                 .configure()
@@ -108,7 +103,15 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
             log.info("MethodValidator not supported", ve);
             return;
         }
-       
+    }
+    
+    @Override
+    public void init(InitContext context) {
+        // do nothing
+    }
+
+    @Override
+    public void handle(Mapping mapping, Call call) {
         Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
         
         List<Executor> executors = call.getExecutors();
