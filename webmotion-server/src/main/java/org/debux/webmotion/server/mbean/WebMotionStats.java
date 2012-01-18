@@ -24,14 +24,19 @@
  */
 package org.debux.webmotion.server.mbean;
 
+import java.lang.management.ManagementFactory;
 import java.util.Collections;
 import java.util.Map;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils.LruCache;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 
 /**
- *
+ * Implements WebMotionStats.
+ * 
  * @author julien
  */
 public class WebMotionStats implements WebMotionStatsMXBean {
@@ -43,11 +48,48 @@ public class WebMotionStats implements WebMotionStatsMXBean {
     protected long requestTime;
     protected long errorRequestCount;
     
+    /**
+     * Default constructor.
+     */
     public WebMotionStats() {
         sizeLastRequest = 100;
         reset();
     }
     
+    /**
+     * Register the MBean.
+     */
+    public void register() {
+        try {
+            MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionStats");
+            mBeanServer.registerMBean(this, name);
+                        
+        } catch (Exception ex) {
+            throw new WebMotionException("Error during register the MBean", ex);
+        }    
+    }
+    
+    /**
+     * Unregister the MBean.
+     */
+    public void unregister() {
+        try {
+            MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionStats");
+            mBeanServer.unregisterMBean(name);
+            
+        } catch (Exception ex) {
+            throw new WebMotionException("Error during unregister the MBean", ex);
+        }
+    }
+    
+    /**
+     * Store the information from a call.
+     * 
+     * @param call call
+     * @param start when the call have been begin
+     */
     public void registerCallTime(Call call, long start) {
         long end = System.currentTimeMillis();
         long time = end - start;

@@ -27,19 +27,56 @@ package org.debux.webmotion.server.mbean;
 import java.util.Map;
 
 /**
- *
+ * Interface MBean to give global informations.
+ * 
  * @author julien
  */
 public interface WebMotionStatsMXBean {
 
+    /**
+     * Reset all stats.
+     */
     void reset();
+    
+    /**
+     * Reset juste last request map.
+     */
     void resetLastRequests();
+    
+    /**
+     * Set size last request by default is 100.
+     * @param size size
+     */
     void setSizeLastRequests(int size);
+    
+    /**
+     * @return size of last request list.
+     */
     int getSizeLastRequests();
+    
+    /**
+     * @return number of executed request.
+     */
     long getRequestCount();
+    
+    /**
+     * @return total time passed on requests.
+     */
     long getRequestTime();
+    
+    /**
+     * @return means time passed to execute the requests.
+     */
     long getRequestMeansTime();
+    
+    /**
+     * @return last request is executed.
+     */
     Map<String, Long> getLastRequests();
+    
+    /**
+     * @return number of executed error request.
+     */
     long getErrorRequestCount();
     
 }
