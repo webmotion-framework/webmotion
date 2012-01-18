@@ -227,8 +227,14 @@ public class WebMotionUtils {
         return request.getServletContext().getClass().getName().equals("org.apache.catalina.core.ApplicationContextFacade");
     }
 
+    /**
+     * Basic implementation LRU cache.
+     * @param <K> key type
+     * @param <V> value type
+     */
     public static class LruCache<K, V> extends LinkedHashMap<K, V> {
 
+        /** Max key in cache */
         protected int max;
 
         public LruCache(int maxEntries) {
