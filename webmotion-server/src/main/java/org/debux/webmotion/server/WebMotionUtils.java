@@ -30,6 +30,7 @@ import com.thoughtworks.paranamer.Paranamer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -224,6 +225,21 @@ public class WebMotionUtils {
      */
     public static boolean isTomcatContainer(ServletRequest request) {
         return request.getServletContext().getClass().getName().equals("org.apache.catalina.core.ApplicationContextFacade");
+    }
+
+    public static class LruCache<K, V> extends LinkedHashMap<K, V> {
+
+        protected int max;
+
+        public LruCache(int maxEntries) {
+            super(maxEntries + 1, 1.0f, true);
+            this.max = maxEntries;
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+            return super.size() > max;
+        }
     }
 
 }
