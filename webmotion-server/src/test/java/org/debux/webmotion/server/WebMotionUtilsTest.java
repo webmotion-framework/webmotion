@@ -39,9 +39,9 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class WebmotionUtilsTest {
+public class WebMotionUtilsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebmotionUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
     
     protected Mapping mapping;
     

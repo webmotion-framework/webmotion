@@ -35,9 +35,9 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class WebmotionStatsTest {
+public class WebMotionStatsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebmotionStatsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(WebMotionStatsTest.class);
     
     @Test
     public void testGetRequestCount() {
@@ -110,6 +110,39 @@ public class WebmotionStatsTest {
         }
         
         AssertJUnit.assertEquals(10, stats.getLastRequests().size());
+    }
+    
+    @Test
+    public void testReset() {
+        WebMotionStats stats = new WebMotionStats();
+        
+        for (int index = 0; index < 10; index++) {
+            final String url = "/test" + index;
+            
+            stats.registerCallTime(new Call() {
+                @Override
+                public HttpContext getContext() {
+                    return new HttpContext() {
+                        @Override
+                        public String getUrl() {
+                            return url;
+                        }
+                        @Override
+                        public boolean isError() {
+                            return false;
+                        }
+                    };
+                }
+            }, System.currentTimeMillis() - index * 100);
+        }
+        
+        stats.reset();
+        
+        AssertJUnit.assertEquals(0, stats.getRequestCount());
+        AssertJUnit.assertEquals(0, stats.getErrorRequestCount());
+        AssertJUnit.assertEquals(0, stats.getRequestMeansTime());
+        AssertJUnit.assertEquals(0, stats.getRequestTime());
+        AssertJUnit.assertTrue(stats.getLastRequests().isEmpty());
     }
     
 }
