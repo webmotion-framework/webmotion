@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.debux.webmotion.server.WebMotionServerContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
@@ -83,11 +84,13 @@ public class Call {
     
     /**
      * Default consturctor on request and response.
+     * 
+     * @param serverContext current server context used to store attributes in server.
      * @param request HTTP request used to get information on user request.
      * @param response HTTP response used to put next render for user.
      */
-    public Call(HttpServletRequest request, HttpServletResponse response) {
-        context = new HttpContext(request, response);
+    public Call(WebMotionServerContext serverContext, HttpServletRequest request, HttpServletResponse response) {
+        context = new HttpContext(serverContext, request, response);
     }
 
     public HttpContext getContext() {

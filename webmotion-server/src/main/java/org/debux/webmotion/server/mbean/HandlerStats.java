@@ -34,7 +34,7 @@ import javax.management.ObjectName;
 import org.debux.webmotion.server.WebMotionException;
 
 /**
- * Implements WebMotionHandlerStats.
+ * Implements HandlerStatsMXBean.
  * 
  * @author julien
  */
@@ -93,7 +93,7 @@ public class HandlerStats implements HandlerStatsMXBean {
     public void register() {
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionHandlerStats");
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=HandlerStats");
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
@@ -107,7 +107,7 @@ public class HandlerStats implements HandlerStatsMXBean {
     public void unregister() {
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionHandlerStats");
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=HandlerStats");
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {

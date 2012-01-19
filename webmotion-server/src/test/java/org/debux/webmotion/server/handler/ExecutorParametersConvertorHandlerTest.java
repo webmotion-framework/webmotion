@@ -49,7 +49,7 @@ public class ExecutorParametersConvertorHandlerTest {
     @BeforeMethod
     public void createHandler() {
         handler = new ExecutorParametersConvertorHandler();
-        handler.init(null);
+        handler.init(null, null);
     }
     
     public <T> T[] toArray(T ... values) {

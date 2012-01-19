@@ -35,13 +35,13 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class StatsTest {
+public class ServerStatsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(StatsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ServerStatsTest.class);
     
     @Test
     public void testGetRequestCount() {
-        Stats stats = new Stats();
+        ServerStats stats = new ServerStats();
         
         stats.registerCallTime(new Call() {
             @Override
@@ -64,7 +64,7 @@ public class StatsTest {
     
     @Test
     public void testGetErrorRequestCount() {
-        Stats stats = new Stats();
+        ServerStats stats = new ServerStats();
         
         stats.registerCallTime(new Call() {
             @Override
@@ -87,7 +87,7 @@ public class StatsTest {
     
     @Test
     public void testGetLastRequests() {
-        Stats stats = new Stats();
+        ServerStats stats = new ServerStats();
         
         for (int index = 0; index < 10; index++) {
             final String url = "/test" + index;
@@ -114,7 +114,7 @@ public class StatsTest {
     
     @Test
     public void testReset() {
-        Stats stats = new Stats();
+        ServerStats stats = new ServerStats();
         
         for (int index = 0; index < 10; index++) {
             final String url = "/test" + index;

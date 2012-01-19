@@ -1,0 +1,201 @@
+/*
+ * #%L
+ * Webmotion server
+ * 
+ * $Id$
+ * $HeadURL$
+ * %%
+ * Copyright (C) 2011 - 2012 Debux
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as 
+ * published by the Free Software Foundation, either version 3 of the 
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public 
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+package org.debux.webmotion.server;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletContext;
+import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Extension;
+import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mbean.HandlerStats;
+import org.debux.webmotion.server.mbean.ServerContextManager;
+import org.debux.webmotion.server.mbean.ServerStats;
+import org.debux.webmotion.server.parser.ANTLRMappingParser;
+import org.debux.webmotion.server.parser.MappingParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * WebMotionServerContext contains all global informations like factories, mbeans, ...
+ * The user can store the own attributes. The server context is an attributes of 
+ * ServletContext.
+ * 
+ * @author julien
+ */
+public class WebMotionServerContext {
+    
+    private static final Logger log = LoggerFactory.getLogger(WebMotionServerContext.class);
+
+    /** Attribute name use to set this in ServletContext */
+    public static final String ATTRIBUTE_SERVER_CONTEXT = "org.debux.webmotion.server.SERVER_CONTEXT";
+    
+    /** Factory of controllers*/
+    protected SingletonFactory<WebMotionController> controllers;
+    
+    /** Factory of handelrs */
+    protected SingletonFactory<WebMotionHandler> handlers;
+    
+    /** MBean for server stats */
+    protected ServerStats serverStats;
+    
+    /** MBean for handler stats */
+    protected HandlerStats handlerStats;
+            
+    /** MBean for manage server */
+    protected ServerContextManager serverManager;
+            
+    /** Current mapping */
+    protected Mapping mapping;
+    
+    /** Entry point */
+    protected WebMotionHandler handlersFactory;
+    
+    /** User attributes */
+    protected Map<String, Object> attributes;
+    
+    /** Current servlet context */
+    protected ServletContext servletContext;
+    
+    /**
+     * Initialize the context.
+     * 
+     * @param servletContext servlet context
+     */
+    public void contextInitialized(ServletContext servletContext) {
+        this.servletContext = servletContext;
+        this.attributes = new HashMap<String, Object>();
+        this.handlers = new SingletonFactory<WebMotionHandler>();
+        this.controllers = new SingletonFactory<WebMotionController>();
+
+        // Register MBeans
+        this.serverStats = new ServerStats();
+        this.handlerStats = new HandlerStats();
+        this.serverManager = new ServerContextManager(this);
+        
+        this.serverStats.register();
+        this.handlerStats.register();
+        this.serverManager.register();
+        
+        // Read the mapping
+        this.loadMapping();
+    }
+
+    /**
+     * Destroy the context.
+     */
+    public void contextDestroyed() {
+        serverStats.unregister();
+        handlerStats.unregister();
+        serverManager.unregister();
+    }
+
+    /**
+     * Load the mapping
+     */
+    public void loadMapping() {
+        // Read the mapping in the current project
+        InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
+        MappingParser parser = new ANTLRMappingParser();
+        mapping = parser.parse(stream);
+
+        // Load mapping file in META-INF
+        try {
+            List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        
+            Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                log.info("Loading " + url.toExternalForm());
+                InputStream metaStream = url.openStream();
+                Mapping metaMapping = parser.parse(metaStream);
+                
+                Extension extension = new Extension();
+                extension.setPath("/");
+                metaMapping.setExtension(extension);
+                
+                extensionsRules.add(metaMapping);
+            }
+            
+        } catch (IOException ioe) {
+            throw new WebMotionException("Error during load mapping in META-INF", ioe);
+        }
+        
+        // Create the handler factory
+        Config config = mapping.getConfig();
+        String handlersFactoryClassName = config.getHandlersFactory();
+        
+        handlersFactory = handlers.getInstance(handlersFactoryClassName);
+        
+        // Init handlers
+        handlersFactory.init(mapping, this);
+    }
+        
+    public SingletonFactory<WebMotionController> getControllers() {
+        return controllers;
+    }
+
+    public SingletonFactory<WebMotionHandler> getHandlers() {
+        return handlers;
+    }
+
+    public HandlerStats getHandlerStats() {
+        return handlerStats;
+    }
+
+    public ServerStats getServerStats() {
+        return serverStats;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+    
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
+    }
+    
+    public Object getAttribute(String name) {
+        return attributes.get(name);
+    }
+
+    public WebMotionHandler getHandlersFactory() {
+        return handlersFactory;
+    }
+
+    public Mapping getMapping() {
+        return mapping;
+    }
+
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
+}

@@ -51,8 +51,8 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.WebMotionServerContext;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.call.InitContext;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.method.MethodValidator;
 import org.slf4j.Logger;
@@ -106,7 +106,7 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
     }
     
     @Override
-    public void init(InitContext context) {
+    public void init(Mapping mapping, WebMotionServerContext context) {
         // do nothing
     }
 

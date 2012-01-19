@@ -34,7 +34,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
 import java.util.regex.Matcher;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.WebMotionServerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class FilterFinderHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(FilterFinderHandler.class);
 
     @Override
-    public void init(InitContext context) {
+    public void init(Mapping mapping, WebMotionServerContext context) {
         // do nothing
     }
 

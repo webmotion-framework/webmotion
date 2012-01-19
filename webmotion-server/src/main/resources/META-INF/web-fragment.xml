@@ -30,10 +30,6 @@
         <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>org.debux.webmotion.server.call.ApplicationContext</listener-class>
-    </listener>
-
     <filter>
         <filter-name>WebMotionServer</filter-name>
         <filter-class>org.debux.webmotion.server.WebMotionServer</filter-class>

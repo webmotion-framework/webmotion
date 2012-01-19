@@ -52,9 +52,9 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.WebMotionServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
-import org.debux.webmotion.server.call.InitContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,16 +85,8 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         this(new WebMotionContextable(), Executors.newFixedThreadPool(100));
     }
 
-    public void setContextable(WebMotionContextable contextable) {
-        this.contextable = contextable;
-    }
-
-    public void setExecutor(ExecutorService threadPool) {
-        this.threadPool = threadPool;
-    }
-    
     @Override
-    public void init(InitContext context) {
+    public void init(Mapping mapping, WebMotionServerContext context) {
         // do nothing
     }
 
@@ -194,7 +186,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         }
         
         @Override
-        public void init(InitContext context) {
+        public void init(Mapping mapping, WebMotionServerContext context) {
             throw new UnsupportedOperationException("Not call.");
         }
 

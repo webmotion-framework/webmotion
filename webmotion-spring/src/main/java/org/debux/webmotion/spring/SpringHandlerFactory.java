@@ -27,7 +27,8 @@ package org.debux.webmotion.spring;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionHandlerFactory;
-import org.debux.webmotion.server.call.InitContext;
+import org.debux.webmotion.server.WebMotionServerContext;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,7 +43,7 @@ public class SpringHandlerFactory extends WebMotionHandlerFactory {
     private static final Logger log = LoggerFactory.getLogger(SpringHandlerFactory.class);
 
     @Override
-    protected void initHandlers(InitContext context) {
+    protected void initHandlers(Mapping mapping, WebMotionServerContext context) {
         ServletContext servletContext = context.getServletContext();
         WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 

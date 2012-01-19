@@ -25,10 +25,6 @@
 package org.debux.webmotion.server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.regex.Pattern;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -43,17 +39,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
-import org.debux.webmotion.server.call.ApplicationContext;
-import org.debux.webmotion.server.mbean.Stats;
-import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.call.InitContext;
-import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.parser.ANTLRMappingParser;
-import org.debux.webmotion.server.parser.MappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,61 +59,20 @@ public class WebMotionServer implements Filter {
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
-    protected Mapping mapping;
-    protected WebMotionHandler handlersFactory;
-    protected Stats stats;
+    /** Current application context */
+    protected WebMotionServerContext serverContext;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // Get application context
+        serverContext = new WebMotionServerContext();
+        
         ServletContext servletContext = filterConfig.getServletContext();
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
-
-        // Read the mapping in the current project
-        InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
-        MappingParser parser = new ANTLRMappingParser();
-        mapping = parser.parse(stream);
-
-        // Load mapping file in META-INF
-        try {
-            List<Mapping> extensionsRules = mapping.getExtensionsRules();
-        
-            Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
-            while (resources.hasMoreElements()) {
-                URL url = resources.nextElement();
-                log.info("Loading " + url.toExternalForm());
-                InputStream metaStream = url.openStream();
-                Mapping metaMapping = parser.parse(metaStream);
-                
-                Extension extension = new Extension();
-                extension.setPath("/");
-                metaMapping.setExtension(extension);
-                
-                extensionsRules.add(metaMapping);
-            }
-            
-        } catch (IOException ioe) {
-            throw new WebMotionException("Error during load mapping in META-INF", ioe);
-        }
-        
-        // Create the handler factory
-        Config config = mapping.getConfig();
-        String handlersFactoryClassName = config.getHandlersFactory();
-        
-        SingletonFactory<WebMotionHandler> factory = applicationContext.getHandlers();
-        handlersFactory = factory.getInstance(handlersFactoryClassName);
-        
-        // Init handlers
-        InitContext context = new InitContext(servletContext, mapping);
-        handlersFactory.init(context);
-        
-        // Get MBean
-        stats = applicationContext.getStats();
+        serverContext.contextInitialized(servletContext);
     }
 
     @Override
     public void destroy() {
-        // Do nothing
+        serverContext.contextDestroyed();
     }
     
     @Override
@@ -174,13 +122,16 @@ public class WebMotionServer implements Filter {
         long start = System.currentTimeMillis();
         
         // Create call context use in handler to get information on user request
-        Call call = new Call(request, response);
+        Call call = new Call(serverContext, request, response);
         
         // Execute the main handler
+        Mapping mapping = serverContext.getMapping();
+        WebMotionHandler handlersFactory = serverContext.getHandlersFactory();
         handlersFactory.handle(mapping, call);
         
         // Register call in mbean
-        stats.registerCallTime(call, start);
+        ServerStats serverStats = serverContext.getServerStats();
+        serverStats.registerCallTime(call, start);
     }
     
     /**

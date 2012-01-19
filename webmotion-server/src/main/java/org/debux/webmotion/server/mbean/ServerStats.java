@@ -35,11 +35,11 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 
 /**
- * Implements WebMotionStats.
+ * Implements ServerStatsMXBean.
  * 
  * @author julien
  */
-public class Stats implements StatsMXBean {
+public class ServerStats implements ServerStatsMXBean {
 
     protected int sizeLastRequest;
     protected Map<String, Long> lastRequests;
@@ -51,7 +51,7 @@ public class Stats implements StatsMXBean {
     /**
      * Default constructor.
      */
-    public Stats() {
+    public ServerStats() {
         sizeLastRequest = 100;
         reset();
     }
@@ -62,7 +62,7 @@ public class Stats implements StatsMXBean {
     public void register() {
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionStats");
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=ServerStats");
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
@@ -76,7 +76,7 @@ public class Stats implements StatsMXBean {
     public void unregister() {
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-            ObjectName name = new ObjectName("org.debux.webmotion.server:type=WebMotionStats");
+            ObjectName name = new ObjectName("org.debux.webmotion.server:type=ServerStats");
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {

@@ -28,14 +28,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
-import org.debux.webmotion.server.call.ApplicationContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
-import org.debux.webmotion.server.call.InitContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Extension;
@@ -89,40 +86,37 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     protected List<WebMotionHandler> errorHandlers;
 
     @Override
-    public void init(InitContext context) {
-        ServletContext servletContext = context.getServletContext();
-        ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
-        
-        factory = applicationContext.getHandlers();
-        handlerStats = applicationContext.getHandlerStats();
+    public void init(Mapping mapping, WebMotionServerContext context) {
+        factory = context.getHandlers();
+        handlerStats = context.getHandlerStats();
         
         if (actionHandlers == null && errorHandlers == null) {
-            initHandlers(context);
+            initHandlers(mapping, context);
         }
         
-        initExtensions(context);
+        initExtensions(mapping, context);
     }
 
     /**
      * Init all handlers to process the request
      */
-    protected void initHandlers(InitContext context) {
+    protected void initHandlers(Mapping mapping, WebMotionServerContext context) {
         List<Class<? extends WebMotionHandler>> actionClasses = getActionHandlers();
-        actionHandlers = initHandlers(context, actionClasses);
+        actionHandlers = initHandlers(mapping, context, actionClasses);
 
         List<Class<? extends WebMotionHandler>> errorClasses = getErrorHandlers();
-        errorHandlers = initHandlers(context, errorClasses);
+        errorHandlers = initHandlers(mapping, context, errorClasses);
     }
     
     /**
      * Chain init methods on the handlers
      */
-    protected List<WebMotionHandler> initHandlers(InitContext context, List<Class<? extends WebMotionHandler>> classes) {
+    protected List<WebMotionHandler> initHandlers(Mapping mapping, WebMotionServerContext context, List<Class<? extends WebMotionHandler>> classes) {
         List<WebMotionHandler> handlers = new ArrayList<WebMotionHandler>(classes.size());
 
         for (Class<? extends WebMotionHandler> clazz : classes) {
             WebMotionHandler handler = getHandler(clazz);
-            handler.init(context);
+            handler.init(mapping, context);
             handlers.add(handler);
         }
         
@@ -140,10 +134,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     /**
      * Init handler factory for extension
      */
-    protected void initExtensions(InitContext context) {
-        Mapping mapping = context.getMapping();
-        ServletContext servletContext = context.getServletContext();
-        
+    protected void initExtensions(Mapping mapping, WebMotionServerContext context) {
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensionsRules) {
             
@@ -151,8 +142,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
             String handlersFactory = extensionConfig.getHandlersFactory();
             
             WebMotionHandler handlerFactory = factory.getInstance(handlersFactory);
-            InitContext extensionContext = new InitContext(servletContext, extensionMapping);
-            handlerFactory.init(extensionContext);
+            handlerFactory.init(extensionMapping, context);
         }
     }
     
