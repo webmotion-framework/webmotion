@@ -38,19 +38,19 @@ import org.debux.webmotion.server.WebMotionException;
  * 
  * @author julien
  */
-public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
+public class HandlerStats implements HandlerStatsMXBean {
 
-    protected Map<String, HandlerStats> handlers;
+    protected Map<String, HandlerData> handlers;
     
     /**
      * The class represents all stats for one handler.
      */
-    public static class HandlerStats {
+    public static class HandlerData {
         protected long requestCount;
         protected long requestTime;
 
         @ConstructorProperties({"requestCount", "requestTime"}) 
-        public HandlerStats(long requestCount, long requestTime) {
+        public HandlerData(long requestCount, long requestTime) {
             this.requestCount = requestCount;
             this.requestTime = requestTime;
         }
@@ -83,7 +83,7 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
     /**
      * Default constructor.
      */
-    public WebMotionHandlerStats() {
+    public HandlerStats() {
         reset();
     }
         
@@ -126,9 +126,9 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
         long time = end - start;
         
 //        synchronized (handlers) {
-            HandlerStats handlerStats = handlers.get(handlerName);
+            HandlerData handlerStats = handlers.get(handlerName);
             if (handlerStats == null) {
-                handlerStats = new HandlerStats(0, 0);
+                handlerStats = new HandlerData(0, 0);
                 handlers.put(handlerName, handlerStats);
             }
             
@@ -139,11 +139,11 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
     
     @Override
     public void reset() {
-        handlers = Collections.synchronizedMap(new HashMap<String, HandlerStats>());
+        handlers = Collections.synchronizedMap(new HashMap<String, HandlerData>());
     }
 
     @Override
-    public Map<String, HandlerStats> getHandlers() {
+    public Map<String, HandlerData> getHandlers() {
         return handlers;
     }
 }

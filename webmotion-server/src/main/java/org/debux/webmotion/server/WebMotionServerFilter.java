@@ -43,6 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
+import org.debux.webmotion.server.call.ApplicationContext;
+import org.debux.webmotion.server.mbean.Stats;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
@@ -80,11 +82,11 @@ public class WebMotionServerFilter implements Filter {
         InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
         MappingParser parser = new ANTLRMappingParser();
         mapping = parser.parse(stream);
-        
+
         // Load mapping file in META-INF
         try {
             List<Mapping> extensionsRules = mapping.getExtensionsRules();
-            
+        
             Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
@@ -166,12 +168,20 @@ public class WebMotionServerFilter implements Filter {
      */
     protected void doAction(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        long start = System.currentTimeMillis();
+        
         // Create call context use in handler to get information on user request
         Call call = new Call(request, response);
         
         // Execute the main handler
         handlersFactory.handle(mapping, call);
+        
+        // Register call in mbean
+        HttpContext context = call.getContext();
+        ApplicationContext applicationContext = context.getApplicationContext();
+        Stats stats = applicationContext.getStats();
+        stats.registerCallTime(call, start);
     }
     
     /**

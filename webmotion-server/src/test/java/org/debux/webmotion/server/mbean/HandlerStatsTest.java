@@ -33,13 +33,13 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class WebMotionHandlerStatsTest {
+public class HandlerStatsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMotionHandlerStatsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(HandlerStatsTest.class);
     
     @Test
     public void testGetHandlers() {
-        WebMotionHandlerStats handlerStats = new WebMotionHandlerStats();
+        HandlerStats handlerStats = new HandlerStats();
         handlerStats.registerHandlerTime("MyHandler", System.currentTimeMillis() - 1000);
         AssertJUnit.assertEquals(1, handlerStats.getHandlers().size());
         AssertJUnit.assertEquals(1, handlerStats.getHandlers().get("MyHandler").getRequestCount());
@@ -47,7 +47,7 @@ public class WebMotionHandlerStatsTest {
     
     @Test
     public void testReset() {
-        WebMotionHandlerStats handlerStats = new WebMotionHandlerStats();
+        HandlerStats handlerStats = new HandlerStats();
         handlerStats.registerHandlerTime("MyHandler", System.currentTimeMillis() - 1000);
         handlerStats.reset();
         AssertJUnit.assertTrue(handlerStats.getHandlers().isEmpty());

@@ -31,6 +31,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.call.ApplicationContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
@@ -54,6 +55,7 @@ import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mbean.HandlerStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,6 +152,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     
     @Override
     public void handle(Mapping mapping, Call call) {
+        long start = System.currentTimeMillis();
         HttpContext context = call.getContext();
         
         // Apply config
@@ -211,6 +214,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                 chainHandlers(actionHandlers, mapping, call);
             }
         }
+        
+        ApplicationContext applicationContext = context.getApplicationContext();
+        HandlerStats handlerStats = applicationContext.getHandlerStats();
+        handlerStats.registerHandlerTime(this.getClass().getName(), start);
     }
 
     /**
@@ -218,7 +225,13 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
      */
     protected void chainHandlers(List<WebMotionHandler> handlers, Mapping mapping, Call call) {        
         for (WebMotionHandler handler : handlers) {
+            long start = System.currentTimeMillis();
             handler.handle(mapping, call);
+            
+            HttpContext context = call.getContext();
+            ApplicationContext applicationContext = context.getApplicationContext();
+            HandlerStats handlerStats = applicationContext.getHandlerStats();
+            handlerStats.registerHandlerTime(handler.getClass().getName(), start);
         }
     }
 

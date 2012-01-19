@@ -39,7 +39,7 @@ import org.debux.webmotion.server.call.HttpContext;
  * 
  * @author julien
  */
-public class WebMotionStats implements WebMotionStatsMXBean {
+public class Stats implements StatsMXBean {
 
     protected int sizeLastRequest;
     protected Map<String, Long> lastRequests;
@@ -51,7 +51,7 @@ public class WebMotionStats implements WebMotionStatsMXBean {
     /**
      * Default constructor.
      */
-    public WebMotionStats() {
+    public Stats() {
         sizeLastRequest = 100;
         reset();
     }

@@ -25,14 +25,14 @@
 package org.debux.webmotion.server.mbean;
 
 import java.util.Map;
-import org.debux.webmotion.server.mbean.WebMotionHandlerStats.HandlerStats;
+import org.debux.webmotion.server.mbean.HandlerStats.HandlerData;
 
 /**
  * Interface MBean to give handler informations.
  * 
  * @author julien
  */
-public interface WebMotionHandlerStatsMXBean {
+public interface HandlerStatsMXBean {
 
     /**
      * Reset all stats.
@@ -42,6 +42,6 @@ public interface WebMotionHandlerStatsMXBean {
     /**
      * @return stats on handlers (count, time and means)
      */
-    Map<String, HandlerStats> getHandlers();
+    Map<String, HandlerData> getHandlers();
     
 }

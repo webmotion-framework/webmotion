@@ -31,7 +31,7 @@ import java.util.Map;
  * 
  * @author julien
  */
-public interface WebMotionStatsMXBean {
+public interface StatsMXBean {
 
     /**
      * Reset all stats.

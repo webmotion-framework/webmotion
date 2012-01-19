@@ -98,7 +98,7 @@ public class HttpContext {
     
     /** Keep current path for extension */
     protected String extensionPath = "";
-    
+
     /**
      * Error data is utility to get information on error in attributes.
      */
@@ -384,6 +384,11 @@ public class HttpContext {
         return request.getServletContext();
     }
     
+    public ApplicationContext getApplicationContext() {
+        ServletContext servletContext = getServletContext();
+        return ApplicationContext.getApplicationContext(servletContext);
+    }
+    
     /**
      * The value is stored in cookie during 10s.<p>
      * For example Use JSTL to read value : flashMessages.miscs.<key>
@@ -422,5 +427,5 @@ public class HttpContext {
     public void addWarningMessage(String key, String value) {
         flashMessages.addWarnings(key, value);
     }
-    
+
 }

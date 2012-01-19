@@ -35,13 +35,13 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class WebMotionStatsTest {
+public class StatsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMotionStatsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(StatsTest.class);
     
     @Test
     public void testGetRequestCount() {
-        WebMotionStats stats = new WebMotionStats();
+        Stats stats = new Stats();
         
         stats.registerCallTime(new Call() {
             @Override
@@ -64,7 +64,7 @@ public class WebMotionStatsTest {
     
     @Test
     public void testGetErrorRequestCount() {
-        WebMotionStats stats = new WebMotionStats();
+        Stats stats = new Stats();
         
         stats.registerCallTime(new Call() {
             @Override
@@ -87,7 +87,7 @@ public class WebMotionStatsTest {
     
     @Test
     public void testGetLastRequests() {
-        WebMotionStats stats = new WebMotionStats();
+        Stats stats = new Stats();
         
         for (int index = 0; index < 10; index++) {
             final String url = "/test" + index;
@@ -114,7 +114,7 @@ public class WebMotionStatsTest {
     
     @Test
     public void testReset() {
-        WebMotionStats stats = new WebMotionStats();
+        Stats stats = new Stats();
         
         for (int index = 0; index < 10; index++) {
             final String url = "/test" + index;
