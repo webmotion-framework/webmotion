@@ -70,14 +70,16 @@ public class WebMotionServerFilter implements Filter {
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
-    /** Attribute name use to store the handlers in ServletContext */
-    public static final String HANDLERS_ATTRIBUTE_NAME = "org.debux.webmotion.server.HANDLERS";
-    
     protected Mapping mapping;
     protected WebMotionHandler handlersFactory;
+    protected Stats stats;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // Get application context
+        ServletContext servletContext = filterConfig.getServletContext();
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
+
         // Read the mapping in the current project
         InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
         MappingParser parser = new ANTLRMappingParser();
@@ -109,15 +111,15 @@ public class WebMotionServerFilter implements Filter {
         Config config = mapping.getConfig();
         String handlersFactoryClassName = config.getHandlersFactory();
         
-        SingletonFactory<WebMotionHandler> factory = new SingletonFactory<WebMotionHandler>();
+        SingletonFactory<WebMotionHandler> factory = applicationContext.getHandlers();
         handlersFactory = factory.getInstance(handlersFactoryClassName);
         
-        ServletContext servletContext = filterConfig.getServletContext();
-        servletContext.setAttribute(HANDLERS_ATTRIBUTE_NAME, factory);
-            
         // Init handlers
         InitContext context = new InitContext(servletContext, mapping);
         handlersFactory.init(context);
+        
+        // Get MBean
+        stats = applicationContext.getStats();
     }
 
     @Override
@@ -178,9 +180,6 @@ public class WebMotionServerFilter implements Filter {
         handlersFactory.handle(mapping, call);
         
         // Register call in mbean
-        HttpContext context = call.getContext();
-        ApplicationContext applicationContext = context.getApplicationContext();
-        Stats stats = applicationContext.getStats();
         stats.registerCallTime(call, start);
     }
     

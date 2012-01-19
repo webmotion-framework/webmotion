@@ -24,13 +24,14 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.Stats;
 
@@ -43,16 +44,19 @@ public class ApplicationContext implements ServletContextListener {
     public static final String ATTRIBUTE_APPLICATION_CONTEXT = "org.debux.webmotion.server.call.ApplicationContext.APPLICATION_CONTEXT";
     
     protected SingletonFactory<WebMotionController> controllers;
-    
-    protected Mapping mapping;
-    protected WebMotionHandler handlersFactory;
     protected SingletonFactory<WebMotionHandler> handlers;
-
+    
     protected Stats stats;
     protected HandlerStats handlerStats;
             
+    protected Map<String, Object> attributes;
+    
     @Override
     public void contextInitialized(ServletContextEvent event) {
+        attributes = new HashMap<String, Object>();
+        handlers = new SingletonFactory<WebMotionHandler>();
+        controllers = new SingletonFactory<WebMotionController>();
+        
         stats = new Stats();
         stats.register();
         
@@ -89,22 +93,6 @@ public class ApplicationContext implements ServletContextListener {
         this.handlers = handlers;
     }
 
-    public WebMotionHandler getHandlersFactory() {
-        return handlersFactory;
-    }
-
-    public void setHandlersFactory(WebMotionHandler handlersFactory) {
-        this.handlersFactory = handlersFactory;
-    }
-
-    public Mapping getMapping() {
-        return mapping;
-    }
-
-    public void setMapping(Mapping mapping) {
-        this.mapping = mapping;
-    }
-
     public HandlerStats getHandlerStats() {
         return handlerStats;
     }
@@ -119,6 +107,18 @@ public class ApplicationContext implements ServletContextListener {
 
     public void setStats(Stats stats) {
         this.stats = stats;
+    }
+
+    public Map<String, ?> getAttributes() {
+        return attributes;
+    }
+    
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
+    }
+    
+    public Object getAttribute(String name) {
+        return attributes.get(name);
     }
     
 }

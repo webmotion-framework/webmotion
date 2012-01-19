@@ -35,6 +35,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.call.ApplicationContext;
 import org.debux.webmotion.server.call.InitContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,19 +51,13 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorInstanceCreatorHandler.class);
 
-    /** Attribute name use to store the mapping in ServletContext */
-    public static final String CONTROLLERS_ATTRIBUTE_NAME = "org.debux.webmotion.server.controllers";
-    
     protected SingletonFactory<WebMotionController> factory;
     
     @Override
     public void init(InitContext context) {
         ServletContext servletContext = context.getServletContext();
-        factory = (SingletonFactory<WebMotionController>) servletContext.getAttribute(CONTROLLERS_ATTRIBUTE_NAME);
-        if(factory == null) {
-            factory = new SingletonFactory<WebMotionController>();
-            servletContext.setAttribute(CONTROLLERS_ATTRIBUTE_NAME, factory);
-        }
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
+        factory = applicationContext.getControllers();
     }
 
     @Override

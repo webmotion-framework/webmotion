@@ -78,7 +78,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
 
     /** All handlers are a singleton */
     protected SingletonFactory<WebMotionHandler> factory;
-            
+    
+    /** Mbean for handlers */
+    protected HandlerStats handlerStats;
+    
     /** All handlers use to process an action */
     protected List<WebMotionHandler> actionHandlers;
     
@@ -89,7 +92,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     public void init(InitContext context) {
         if (factory == null) {
             ServletContext servletContext = context.getServletContext();
-            factory = (SingletonFactory<WebMotionHandler>) servletContext.getAttribute(WebMotionServerFilter.HANDLERS_ATTRIBUTE_NAME);
+            ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
+            
+            factory = applicationContext.getHandlers();
+            handlerStats = applicationContext.getHandlerStats();
             
             initHandlers(context);
         }
@@ -215,8 +221,6 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
             }
         }
         
-        ApplicationContext applicationContext = context.getApplicationContext();
-        HandlerStats handlerStats = applicationContext.getHandlerStats();
         handlerStats.registerHandlerTime(this.getClass().getName(), start);
     }
 
@@ -227,10 +231,6 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         for (WebMotionHandler handler : handlers) {
             long start = System.currentTimeMillis();
             handler.handle(mapping, call);
-            
-            HttpContext context = call.getContext();
-            ApplicationContext applicationContext = context.getApplicationContext();
-            HandlerStats handlerStats = applicationContext.getHandlerStats();
             handlerStats.registerHandlerTime(handler.getClass().getName(), start);
         }
     }
