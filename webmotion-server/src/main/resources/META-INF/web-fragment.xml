@@ -35,13 +35,13 @@
     </listener>
 
     <filter>
-        <filter-name>WebMotionServerFilter</filter-name>
-        <filter-class>org.debux.webmotion.server.WebMotionServerFilter</filter-class>
+        <filter-name>WebMotionServer</filter-name>
+        <filter-class>org.debux.webmotion.server.WebMotionServer</filter-class>
         <async-supported>true</async-supported>
     </filter>
     
     <filter-mapping>
-        <filter-name>WebMotionServerFilter</filter-name>
+        <filter-name>WebMotionServer</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>INCLUDE</dispatcher>

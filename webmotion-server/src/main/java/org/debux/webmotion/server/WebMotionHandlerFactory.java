@@ -90,16 +90,16 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
 
     @Override
     public void init(InitContext context) {
-        if (factory == null) {
-            ServletContext servletContext = context.getServletContext();
-            ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
-            
-            factory = applicationContext.getHandlers();
-            handlerStats = applicationContext.getHandlerStats();
-            
+        ServletContext servletContext = context.getServletContext();
+        ApplicationContext applicationContext = ApplicationContext.getApplicationContext(servletContext);
+        
+        factory = applicationContext.getHandlers();
+        handlerStats = applicationContext.getHandlerStats();
+        
+        if (actionHandlers == null && errorHandlers == null) {
             initHandlers(context);
         }
-         
+        
         initExtensions(context);
     }
 

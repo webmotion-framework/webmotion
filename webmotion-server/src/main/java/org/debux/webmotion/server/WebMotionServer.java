@@ -63,9 +63,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class WebMotionServerFilter implements Filter {
+public class WebMotionServer implements Filter {
     
-    private static final Logger log = LoggerFactory.getLogger(WebMotionServerFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(WebMotionServer.class);
 
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
