@@ -384,6 +384,10 @@ public class HttpContext {
         return request.getServletContext();
     }
     
+    /**
+     * Get the application context in servlet context
+     * @return current application context
+     */
     public ApplicationContext getApplicationContext() {
         ServletContext servletContext = getServletContext();
         return ApplicationContext.getApplicationContext(servletContext);

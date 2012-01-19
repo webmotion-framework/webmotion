@@ -36,19 +36,30 @@ import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.Stats;
 
 /**
+ * ApplicationContext contains all global informations like factories, mbeans, ...
+ * The user can store the owner attributes. The application is an attributes of 
+ * ServletContext.
  * 
  * @author julien
  */
 public class ApplicationContext implements ServletContextListener {
     
+    /** Attribute name use to set this in ServletContext */
     public static final String ATTRIBUTE_APPLICATION_CONTEXT = "org.debux.webmotion.server.call.ApplicationContext.APPLICATION_CONTEXT";
     
+    /** Factory of controllers*/
     protected SingletonFactory<WebMotionController> controllers;
+    
+    /** Factory of handelrs */
     protected SingletonFactory<WebMotionHandler> handlers;
     
+    /** MBean for global stats */
     protected Stats stats;
+    
+    /** MBean for handler stats */
     protected HandlerStats handlerStats;
             
+    /** User attributes */
     protected Map<String, Object> attributes;
     
     @Override
@@ -56,13 +67,15 @@ public class ApplicationContext implements ServletContextListener {
         attributes = new HashMap<String, Object>();
         handlers = new SingletonFactory<WebMotionHandler>();
         controllers = new SingletonFactory<WebMotionController>();
-        
+
+        // Register MBeans
         stats = new Stats();
         stats.register();
         
         handlerStats = new HandlerStats();
         handlerStats.register();
         
+        // Put instance in ServletContext
         ServletContext servletContext = event.getServletContext();
         servletContext.setAttribute(ATTRIBUTE_APPLICATION_CONTEXT, this);
     }
@@ -73,6 +86,11 @@ public class ApplicationContext implements ServletContextListener {
         handlerStats.unregister();
     }
 
+    /**
+     * Search in servlet context the current application context.
+     * @param servletContext current servlet context
+     * @return the application context
+     */
     public static ApplicationContext getApplicationContext(ServletContext servletContext) {
         return (ApplicationContext) servletContext.getAttribute(ATTRIBUTE_APPLICATION_CONTEXT);
     }
@@ -81,32 +99,16 @@ public class ApplicationContext implements ServletContextListener {
         return controllers;
     }
 
-    public void setControllers(SingletonFactory<WebMotionController> controllers) {
-        this.controllers = controllers;
-    }
-
     public SingletonFactory<WebMotionHandler> getHandlers() {
         return handlers;
-    }
-
-    public void setHandlers(SingletonFactory<WebMotionHandler> handlers) {
-        this.handlers = handlers;
     }
 
     public HandlerStats getHandlerStats() {
         return handlerStats;
     }
 
-    public void setHandlerStats(HandlerStats handlerStats) {
-        this.handlerStats = handlerStats;
-    }
-
     public Stats getStats() {
         return stats;
-    }
-
-    public void setStats(Stats stats) {
-        this.stats = stats;
     }
 
     public Map<String, ?> getAttributes() {
