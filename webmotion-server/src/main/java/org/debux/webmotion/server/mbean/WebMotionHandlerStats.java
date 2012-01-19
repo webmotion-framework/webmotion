@@ -42,6 +42,9 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
 
     protected Map<String, HandlerStats> handlers;
     
+    /**
+     * The class represents all stats for one handler.
+     */
     public static class HandlerStats {
         protected long requestCount;
         protected long requestTime;
@@ -52,14 +55,23 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
             this.requestTime = requestTime;
         }
 
+        /**
+         * @return number of request pass in handler.
+         */
         public long getRequestCount() {
             return requestCount;
         }
 
+        /**
+         * @return total time passed in handler.
+         */
         public long getRequestTime() {
             return requestTime;
         }
         
+        /**
+         * @return means time passed to execute the handler.
+         */
         public long getMeansTime() {
             if (requestCount == 0) {
                 return 0;
@@ -103,6 +115,12 @@ public class WebMotionHandlerStats implements WebMotionHandlerStatsMXBean {
         }
     }
     
+    /**
+     * Store the information for one handler.
+     * 
+     * @param handlerName handler class name
+     * @param start start when the call have been begin
+     */
     public void registerHandlerTime(String handlerName, long start) {
         long end = System.currentTimeMillis();
         long time = end - start;

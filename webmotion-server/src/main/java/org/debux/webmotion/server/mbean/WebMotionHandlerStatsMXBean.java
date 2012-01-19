@@ -34,7 +34,14 @@ import org.debux.webmotion.server.mbean.WebMotionHandlerStats.HandlerStats;
  */
 public interface WebMotionHandlerStatsMXBean {
 
+    /**
+     * Reset all stats.
+     */
     void reset();
+    
+    /**
+     * @return stats on handlers (count, time and means)
+     */
     Map<String, HandlerStats> getHandlers();
     
 }

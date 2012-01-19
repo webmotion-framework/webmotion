@@ -39,7 +39,7 @@ public interface WebMotionStatsMXBean {
     void reset();
     
     /**
-     * Reset juste last request map.
+     * Reset just last request map.
      */
     void resetLastRequests();
     
