@@ -44,6 +44,7 @@
             function add() {
                 $.ajax({
                     type : "POST",
+                    dataType : "html",
                     url: "<c:url value="/showcase/action/add"/>",
                     data : {
                         value : $('#value').val(),
