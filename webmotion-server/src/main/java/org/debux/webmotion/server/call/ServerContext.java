@@ -120,6 +120,7 @@ public class ServerContext {
 
     /**
      * Load the mapping
+     * TODO: jru 20120120 Move in other class
      */
     public void loadMapping() {
         // Read the mapping in the current project
