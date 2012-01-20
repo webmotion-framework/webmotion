@@ -1,4 +1,28 @@
 /*
+ * #%L
+ * Webmotion server
+ * 
+ * $Id$
+ * $HeadURL$
+ * %%
+ * Copyright (C) 2011 - 2012 Debux
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as 
+ * published by the Free Software Foundation, either version 3 of the 
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public 
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -6,6 +30,8 @@ package org.debux.webmotion.server.render;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +45,11 @@ import org.debux.webmotion.server.mapping.Mapping;
  * 
  * @author julien
  */
-public class RenderException extends Render {
+public class RenderException extends RenderStringTemplate {
+
+    public RenderException() {
+        super("template/render_exception.stg", new HashMap<String, Object>());
+    }
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
@@ -42,41 +72,21 @@ public class RenderException extends Render {
         // The error reason is either the status code or exception type
         String reason = code != null ? "Error " + code.toString() : type.toString();
         
-        response.setContentType("text/html");
-        
-        PrintWriter out = context.getOut();
-        out.println("<html>");
-        out.println("<head>");
-        
-        out.println("<title>" + reason + "</title>");
-        out.println("<style media=\"screen, projection\">");
-        out.println("html { background: #e6e6e6;}" + "body { margin: 0; }" + "div { margin: 0 auto; width: 98%; }" + "#content { background: #fff; border: 2px solid #ccc; width: auto;margin-top: 1em; padding: 0em 1em 1em; }" + "h1 { margin: 1.083em 0 0; color: #333; }" + "#about { text-align: center; }");
-        out.println("</style>");
-        
-        out.println("</head>");
-        out.println("<body>");
-        
-        out.println("<div>");
-        
-        out.println("<div id=\"content\">");
-        out.println("<h1> Oops! " + reason + "</h1>");
-        out.println("<h2>" + message + "</h2>");
-        out.println("<pre>");
+        // Get the stack trace
+        StringWriter trace = new StringWriter();
+        PrintWriter printTrace = new PrintWriter(trace);
         if (throwable != null) {
-            throwable.printStackTrace(out);
+            throwable.printStackTrace(printTrace);
         }
-        out.println("</pre>");
-        out.println("<hr>");
-        out.println("<i>Error accessing " + uri + "</i>");
-        out.println("</div>");
+                
+        // Create the model
+        model.put("reason", reason);
+        model.put("message", message);
+        model.put("trace", trace.toString());
+        model.put("uri", uri);
         
-        out.println("<div id=\"about\">");
-        out.println("WebMotion");
-        out.println("</div>");
-        
-        out.println("</div>");
-        
-        out.println("</body></html>");
+        super.create(mapping, call);
+        response.setContentType("text/html");
     }
     
 }
