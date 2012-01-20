@@ -52,7 +52,7 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
-import org.debux.webmotion.server.WebMotionServerContext;
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.mapping.Config;
@@ -86,7 +86,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     }
 
     @Override
-    public void init(Mapping mapping, WebMotionServerContext context) {
+    public void init(Mapping mapping, ServerContext context) {
         // do nothing
     }
 
@@ -186,7 +186,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         }
         
         @Override
-        public void init(Mapping mapping, WebMotionServerContext context) {
+        public void init(Mapping mapping, ServerContext context) {
             throw new UnsupportedOperationException("Not call.");
         }
 

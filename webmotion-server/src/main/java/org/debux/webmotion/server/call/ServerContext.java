@@ -22,7 +22,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server;
+package org.debux.webmotion.server.call;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Extension;
@@ -51,13 +54,10 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class WebMotionServerContext {
+public class ServerContext {
     
-    private static final Logger log = LoggerFactory.getLogger(WebMotionServerContext.class);
+    private static final Logger log = LoggerFactory.getLogger(ServerContext.class);
 
-    /** Attribute name use to set this in ServletContext */
-    public static final String ATTRIBUTE_SERVER_CONTEXT = "org.debux.webmotion.server.SERVER_CONTEXT";
-    
     /** Factory of controllers*/
     protected SingletonFactory<WebMotionController> controllers;
     

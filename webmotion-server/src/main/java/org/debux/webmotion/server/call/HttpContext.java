@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server.call;
 
-import org.debux.webmotion.server.WebMotionServerContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -92,7 +91,7 @@ public class HttpContext {
     protected HttpServletResponse response;
 
     /** Current server context */
-    protected WebMotionServerContext serverContext;
+    protected ServerContext serverContext;
             
     /** Information on error contained in request. */
     protected ErrorData errorData;
@@ -285,7 +284,7 @@ public class HttpContext {
     public HttpContext() {
     }
     
-    public HttpContext(WebMotionServerContext serverContext, HttpServletRequest request, HttpServletResponse response) {
+    public HttpContext(ServerContext serverContext, HttpServletRequest request, HttpServletResponse response) {
         this.serverContext = serverContext;
         this.request = request;
         this.response = response;
@@ -389,7 +388,7 @@ public class HttpContext {
         return request.getServletContext();
     }
     
-    public WebMotionServerContext getServerContext() {
+    public ServerContext getServerContext() {
         return serverContext;
     }
     

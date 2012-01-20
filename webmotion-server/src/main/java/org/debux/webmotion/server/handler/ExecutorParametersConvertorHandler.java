@@ -50,7 +50,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionServerContext;
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.UploadFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
     }
 
     @Override
-    public void init(Mapping mapping, WebMotionServerContext context) {
+    public void init(Mapping mapping, ServerContext context) {
         // do nothing
     }
 

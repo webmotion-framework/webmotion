@@ -30,7 +30,7 @@ import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionServerContext;
+import org.debux.webmotion.server.call.ServerContext;
 
 /**
  * Implements ServerContextManagerMXBean.
@@ -39,9 +39,9 @@ import org.debux.webmotion.server.WebMotionServerContext;
  */
 public class ServerContextManager implements ServerContextManagerMXBean {
 
-    protected WebMotionServerContext serverContext;
+    protected ServerContext serverContext;
 
-    public ServerContextManager(WebMotionServerContext serverContext) {
+    public ServerContextManager(ServerContext serverContext) {
         this.serverContext = serverContext;
     }
     

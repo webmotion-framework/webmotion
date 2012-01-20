@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -41,7 +42,7 @@ public interface WebMotionHandler {
      * @param mapping mapping
      * @param context context
      */
-    void init(Mapping mapping, WebMotionServerContext context);
+    void init(Mapping mapping, ServerContext context);
     
     /**
      * Call each request.

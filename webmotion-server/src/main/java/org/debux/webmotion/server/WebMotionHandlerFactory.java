@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.call.ServerContext;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +87,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     protected List<WebMotionHandler> errorHandlers;
 
     @Override
-    public void init(Mapping mapping, WebMotionServerContext context) {
+    public void init(Mapping mapping, ServerContext context) {
         factory = context.getHandlers();
         handlerStats = context.getHandlerStats();
         
@@ -100,7 +101,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     /**
      * Init all handlers to process the request
      */
-    protected void initHandlers(Mapping mapping, WebMotionServerContext context) {
+    protected void initHandlers(Mapping mapping, ServerContext context) {
         List<Class<? extends WebMotionHandler>> actionClasses = getActionHandlers();
         actionHandlers = initHandlers(mapping, context, actionClasses);
 
@@ -111,7 +112,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     /**
      * Chain init methods on the handlers
      */
-    protected List<WebMotionHandler> initHandlers(Mapping mapping, WebMotionServerContext context, List<Class<? extends WebMotionHandler>> classes) {
+    protected List<WebMotionHandler> initHandlers(Mapping mapping, ServerContext context, List<Class<? extends WebMotionHandler>> classes) {
         List<WebMotionHandler> handlers = new ArrayList<WebMotionHandler>(classes.size());
 
         for (Class<? extends WebMotionHandler> clazz : classes) {
@@ -134,7 +135,7 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
     /**
      * Init handler factory for extension
      */
-    protected void initExtensions(Mapping mapping, WebMotionServerContext context) {
+    protected void initExtensions(Mapping mapping, ServerContext context) {
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensionsRules) {
             

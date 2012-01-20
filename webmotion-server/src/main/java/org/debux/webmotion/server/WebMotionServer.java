@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import javax.servlet.DispatcherType;
@@ -60,11 +61,11 @@ public class WebMotionServer implements Filter {
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
     /** Current application context */
-    protected WebMotionServerContext serverContext;
+    protected ServerContext serverContext;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        serverContext = new WebMotionServerContext();
+        serverContext = new ServerContext();
         
         ServletContext servletContext = filterConfig.getServletContext();
         serverContext.contextInitialized(servletContext);

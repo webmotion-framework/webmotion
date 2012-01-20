@@ -34,7 +34,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
-import org.debux.webmotion.server.WebMotionServerContext;
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(ParametersExtractorHandler.class);
 
     @Override
-    public void init(Mapping mapping, WebMotionServerContext context) {
+    public void init(Mapping mapping, ServerContext context) {
         // do nothing
     }
 
