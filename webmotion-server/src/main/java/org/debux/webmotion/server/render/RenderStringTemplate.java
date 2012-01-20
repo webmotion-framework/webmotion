@@ -39,7 +39,7 @@ import org.stringtemplate.v4.STGroupFile;
 
 /**
  * Render use StringTemplate to create the response. Your template must contains
- * a group like <pre>render(model) ::= << ... >></pre>
+ * a group like <pre>render(model) ::= << ... >></pre>. The delimiters is '$'.
  * 
  * @author julien
  */
@@ -61,7 +61,7 @@ public class RenderStringTemplate extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        STGroup group = new STGroupFile(fileName);
+        STGroup group = new STGroupFile(fileName, '$', '$');
         ST template = group.getInstanceOf("render");
         template.add("model", model);
         

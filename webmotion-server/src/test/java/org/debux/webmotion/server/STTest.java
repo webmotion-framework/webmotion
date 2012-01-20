@@ -24,6 +24,11 @@
  */
 package org.debux.webmotion.server;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.IOUtils;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupString;
@@ -66,6 +71,17 @@ public class STTest {
         
         String result = st.render();
         AssertJUnit.assertEquals("<h1>test<h1>", result);
+    }
+    
+    @Test void testStringTemplate() throws IOException {
+        ST template = new ST("$model.key$", '$', '$');
+        
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("key", "value");
+        
+        template.add("model", model);
+        String render = template.render();
+        AssertJUnit.assertEquals("value", render);
     }
     
 }

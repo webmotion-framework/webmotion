@@ -1,31 +1,31 @@
 render(model) ::= <<
-\<html\>
-    \<head\>
-        \<title\><model.reason>\</title\>
-        \<style media="screen, projection"\>
+<html>
+    <head>
+        <title>$model.reason$</title>
+        <style media="screen, projection">
             html { background: #e6e6e6;}
             body { margin: 0; }
             div { margin: 0 auto; width: 98%; }
             #content { background: #fff; border: 2px solid #ccc; width: auto;margin-top: 1em; padding: 0em 1em 1em; }
             h1 { margin: 1.083em 0 0; color: #333; }
             #about { text-align: center; }
-        \</style\>
-    \</head\>
-    \<body\>
-        \<div\>
-            \<div id="content"\>
-                \<h1\>Oops! <model.reason>\</h1\>
-                \<h2\><model.message>\</h2\>
-                \<pre\>
-                    <model.trace>
-                \</pre\>
-                \<hr\>
-                \<i\>Error accessing <model.uri>\</i\>
-            \</div\>
-            \<div id="about"\>
+        </style>
+    </head>
+    <body>
+        <div>
+            <div id="content">
+                <h1>Oops! $model.reason$</h1>
+                <h2>$model.message$</h2>
+                <pre>
+$model.trace$
+                </pre>
+                <hr>
+                <i>Error accessing $model.uri$</i>
+            </div>
+            <div id="about">
                 WebMotion
-            \</div\>
-        \</div\>
-    \</body\>
-\</html\>
+            </div>
+        </div>
+    </body>
+</html>
 >>

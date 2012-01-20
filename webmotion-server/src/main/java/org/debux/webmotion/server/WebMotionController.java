@@ -250,7 +250,7 @@ public class WebMotionController {
     /**
      * Based on StringTemplate, the render return the content of template. 
      * Your template must contains a group like <pre>render(model) ::= << ... >></pre>
-     * 
+     * The delimiters is '$'.
      */
     public Render renderStringTemplate(String fileName, String mimeType, Object ... model) {
         return new RenderStringTemplate(fileName, mimeType, toMap(model));
