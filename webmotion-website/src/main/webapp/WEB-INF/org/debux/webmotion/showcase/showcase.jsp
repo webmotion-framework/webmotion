@@ -180,6 +180,7 @@
                                     <li><a id="xml" href="./xml">XML</a></li>
                                     <li><a id="json" href="./json">JSON</a></li>
                                     <li><a id="jsonp" href="./jsonp">JSONP</a></li>
+                                    <li><a id="template" href="./template">StringTemplate</a> <span class="label notice">New</span></li>
                                 </ul>
                             </li>
                         </ul>

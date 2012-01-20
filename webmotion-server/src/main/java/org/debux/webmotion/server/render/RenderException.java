@@ -48,7 +48,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 public class RenderException extends RenderStringTemplate {
 
     public RenderException() {
-        super("template/render_exception.stg", new HashMap<String, Object>());
+        super("template/render_exception.stg", "text/html", new HashMap<String, Object>());
     }
 
     @Override
@@ -86,7 +86,6 @@ public class RenderException extends RenderStringTemplate {
         model.put("uri", uri);
         
         super.create(mapping, call);
-        response.setContentType("text/html");
     }
     
 }

@@ -45,13 +45,15 @@ import org.stringtemplate.v4.STGroupFile;
  */
 public class RenderStringTemplate extends Render {
     protected String fileName;
+    protected String mimeType;
     protected Map<String, Object> model;
 
-    public RenderStringTemplate(String fileName, Map<String, Object> model) {
+    public RenderStringTemplate(String fileName, String mimeType, Map<String, Object> model) {
         this.fileName = fileName;
+        this.mimeType = mimeType;
         this.model = model;
     }
-
+    
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
         RenderStringTemplate render = (RenderStringTemplate) call.getRender();
@@ -66,6 +68,8 @@ public class RenderStringTemplate extends Render {
         String templateResult = template.render();
         PrintWriter out = context.getOut();
         out.print(templateResult);
+        
+        response.setContentType(mimeType);
     }
     
 }

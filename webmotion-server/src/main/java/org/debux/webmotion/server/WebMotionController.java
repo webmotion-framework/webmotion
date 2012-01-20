@@ -38,6 +38,7 @@ import org.debux.webmotion.server.render.RenderJsonP;
 import org.debux.webmotion.server.render.RenderReferer;
 import org.debux.webmotion.server.render.RenderStatus;
 import org.debux.webmotion.server.render.RenderStream;
+import org.debux.webmotion.server.render.RenderStringTemplate;
 import org.debux.webmotion.server.render.RenderTemplate;
 import org.debux.webmotion.server.render.RenderUrl;
 import org.debux.webmotion.server.render.RenderView;
@@ -244,6 +245,15 @@ public class WebMotionController {
      */
     public Render renderJSONP(String callback, Object ... model) {
         return new RenderJsonP(callback, toMap(model));
+    }
+    
+    /**
+     * Based on StringTemplate, the render return the content of template. 
+     * Your template must contains a group like <pre>render(model) ::= << ... >></pre>
+     * 
+     */
+    public Render renderStringTemplate(String fileName, String mimeType, Object ... model) {
+        return new RenderStringTemplate(fileName, mimeType, toMap(model));
     }
     
     /**

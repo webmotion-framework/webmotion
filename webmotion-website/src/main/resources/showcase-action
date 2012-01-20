@@ -79,3 +79,4 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /select?param=value                         view:selectValue.jsp
 *           /select                                     view:select.jsp
 *           /async                                      Async.exec
+*           /template                                   Template.exec

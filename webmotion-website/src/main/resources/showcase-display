@@ -46,3 +46,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /spring                                     Showcase.spring
 *           /select                                     Showcase.select
 *           /async                                      Showcase.async
+*           /template                                   Showcase.template

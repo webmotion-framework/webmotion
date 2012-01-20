@@ -778,4 +778,18 @@ public class Showcase extends WebMotionController {
         );
     }
     
+    public Render template() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/template"
+                ),
+                "files", Arrays.asList(
+                    getConfig(false, true, false, false) 
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 61, 1)),
+                    getJavaContent("Template.java"),
+                    new FileContent("/src/main/resources/template.stg", getFile("template.stg"))
+                )
+        );
+    }
+    
 }
