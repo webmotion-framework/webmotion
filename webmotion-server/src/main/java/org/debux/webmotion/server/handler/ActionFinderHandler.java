@@ -62,7 +62,7 @@ public class ActionFinderHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         ActionRule actionRule = getActionRule(mapping, call);
         if (actionRule != null) {
-            call.setActionRule(actionRule);
+            call.setRule(actionRule);
         } else {
             Extension extension = mapping.getExtension();
             if (extension == null) {

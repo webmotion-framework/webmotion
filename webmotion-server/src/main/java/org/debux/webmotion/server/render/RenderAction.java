@@ -27,7 +27,6 @@ package org.debux.webmotion.server.render;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +38,6 @@ import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -98,11 +96,11 @@ public class RenderAction extends Render {
             actionRender.create(mapping, call);
             
         } catch (IllegalAccessException iae) {
-            throw new WebMotionException("Error render action", iae);
+            throw new WebMotionException("Error render action", iae, call.getRule());
         } catch (IllegalArgumentException iae) {
-            throw new WebMotionException("Error render action", iae);
+            throw new WebMotionException("Error render action", iae, call.getRule());
         } catch (InvocationTargetException ite) {
-            throw new WebMotionException("Error render action", ite);
+            throw new WebMotionException("Error render action", ite, call.getRule());
         }
     }
     

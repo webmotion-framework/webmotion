@@ -34,7 +34,7 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
@@ -56,6 +56,7 @@ import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,9 +99,9 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
         // Search if the request is execute to sync or async mode
         boolean isSyncRequest = true;
-        ActionRule actionRule = call.getActionRule();
-        if (actionRule != null) {
-            Action action = actionRule.getAction();
+        Rule rule = call.getRule();
+        if (rule != null) {
+            Action action = rule.getAction();
             Config config = mapping.getConfig();
             Boolean async = action.getAsync();
             
@@ -173,6 +174,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         
         /** Current filters executed. */
         protected Iterator<Executor> filtersIterator;
+        protected int filtersIndex;
 
         /** Mark if the render is executed */
         protected boolean executed;
@@ -182,6 +184,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             this.call = call;
             
             this.filtersIterator = call.getFilters().iterator();
+            this.filtersIndex = 0;
             this.executed = false;
         }
         
@@ -239,15 +242,17 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 
             } catch (Exception ex) {
                 contextable.remove();
-                throw new WebMotionException("Error during invoke method for filter " 
+                throw new WebMotionException("Error during invoke method for action " 
                         + executor.getClazz().getName() 
-                        + " on method " + executor.getMethod().getName(), ex);
+                        + " on method " + executor.getMethod().getName(),
+                        ex, call.getRule());
             }
         }
 
         public void processFilter(Mapping mapping, Call call) {
             Executor executor = filtersIterator.next();
-
+            filtersIndex ++;
+            
             try {
                 WebMotionFilter filterInstance = (WebMotionFilter) executor.getInstance();
                 contextable.create(this, mapping, call);
@@ -269,12 +274,15 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     call.setRender(render);
                     processRender(mapping, call);
                 }
-
+                
             } catch (Exception ex) {
                 contextable.remove();
+                
+                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
                 throw new WebMotionException("Error during invoke method for filter " 
                         + executor.getClazz().getName() 
-                        + " on method " + executor.getMethod().getName(), ex);
+                        + " on method " + executor.getMethod().getName(),
+                        ex, filterRule);
             }
         }
         
@@ -288,10 +296,10 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 executed = true;
                 
             } catch (IOException ioe) {
-                throw new WebMotionException("Error during write the render in response", ioe);
+                throw new WebMotionException("Error during write the render in response", ioe, call.getRule());
 
             } catch (ServletException se) {
-                throw new WebMotionException("Error on server when write the render in response", se);
+                throw new WebMotionException("Error on server when write the render in response", se, call.getRule());
             }
 
             if(call.isFileUploadRequest()) {

@@ -31,18 +31,9 @@ package org.debux.webmotion.server.mapping;
  * 
  * @author julien
  */
-public class ErrorRule {
+public class ErrorRule extends Rule {
 
     protected String error;
-    protected Action action;
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
 
     public String getError() {
         return error;

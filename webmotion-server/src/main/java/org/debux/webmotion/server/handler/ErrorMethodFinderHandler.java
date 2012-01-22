@@ -36,7 +36,7 @@ import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +61,8 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
         Render render = call.getRender();
         if(render == null) {
             
-            ErrorRule errorRule = call.getErrorRule();
-            Action action = errorRule.getAction();
+            Rule rule = call.getRule();
+            Action action = rule.getAction();
 
             String className = action.getClassName();
             Config config = mapping.getConfig();
@@ -81,7 +81,7 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
                 call.setExecutor(executor);
 
             } catch (ClassNotFoundException clnfe) {
-                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
+                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, rule);
             }
         }
     }

@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
+import org.debux.webmotion.server.mapping.Rule;
 
 /**
  * The object represents the elements for resolving user request. This 
@@ -54,11 +55,8 @@ public class Call {
     /** The parameters contained in URL with the mapping-defined names. */
     protected Map<String, Object> aliasParameters;
 
-    /** Error rule selected in mapping by given URL. */
-    protected ErrorRule errorRule;
-    
-    /** Action rule selected in mapping by given URL. */
-    protected ActionRule actionRule;
+    /** Action rule or error rule selected in mapping by given URL. */
+    protected Rule rule;
     
     /** Filters selected in mapping by given URL. */
     protected List<FilterRule> filterRules;
@@ -96,12 +94,12 @@ public class Call {
         return context;
     }
 
-    public ActionRule getActionRule() {
-        return actionRule;
+    public Rule getRule() {
+        return rule;
     }
 
-    public void setActionRule(ActionRule actionRule) {
-        this.actionRule = actionRule;
+    public void setRule(Rule rule) {
+        this.rule = rule;
     }
 
     public void setRender(Render render) {
@@ -134,14 +132,6 @@ public class Call {
     
     public Executor getExecutor() {
         return executor;
-    }
-
-    public ErrorRule getErrorRule() {
-        return errorRule;
-    }
-
-    public void setErrorRule(ErrorRule errorRule) {
-        this.errorRule = errorRule;
     }
 
     public List<Executor> getFilters() {

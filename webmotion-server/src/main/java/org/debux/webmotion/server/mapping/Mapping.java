@@ -36,6 +36,9 @@ import java.util.List;
  */
 public class Mapping {
 
+    /** File name */
+    protected String name;
+    
     /** Represents config section */
     protected Config config;
     
@@ -55,11 +58,11 @@ public class Mapping {
     protected Extension extension;
     
     public Mapping() {
-        config = new Config();
-        errorRules = new ArrayList<ErrorRule>();
-        filterRules = new ArrayList<FilterRule>();
-        actionRules = new ArrayList<ActionRule>();
-        extensionsRules = new LinkedList<Mapping>();
+        this.config = new Config();
+        this.errorRules = new ArrayList<ErrorRule>();
+        this.filterRules = new ArrayList<FilterRule>();
+        this.actionRules = new ArrayList<ActionRule>();
+        this.extensionsRules = new LinkedList<Mapping>();
     }
 
     public Config getConfig() {
@@ -100,6 +103,14 @@ public class Mapping {
 
     public void setExtensionsRules(List<Mapping> extensionsRules) {
         this.extensionsRules = extensionsRules;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

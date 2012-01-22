@@ -59,7 +59,7 @@ public class RenderReferer extends Render {
         
         String path = context.getHeader(HttpContext.HEADER_REFERER);
         if (path == null) {
-            throw new WebMotionException("The header not contains the referer value");
+            throw new WebMotionException("The header not contains the referer value", call.getRule());
         }
         path = addModel(path, model);
         response.sendRedirect(path);

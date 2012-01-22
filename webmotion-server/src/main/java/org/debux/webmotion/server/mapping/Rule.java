@@ -1,11 +1,11 @@
 /*
  * #%L
- * Webmotion in action
+ * Webmotion server
  * 
  * $Id$
  * $HeadURL$
  * %%
- * Copyright (C) 2011 Debux
+ * Copyright (C) 2011 - 2012 Debux
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -24,39 +24,41 @@
  */
 package org.debux.webmotion.server.mapping;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 /**
- * Represents an filter for an url. The action is executed when the url and http
- * method matches. The url syntax likes the servlet filter. 
+ * Super class contains common informations for ActionRule, ErrorRule and 
+ * FilerRule.
  * 
  * @author julien
  */
-public class FilterRule extends Rule {
+public abstract class Rule {
 
-    protected List<String> methods;
-    protected Pattern pattern;
-
-    public FilterRule() {
-        methods = new ArrayList<String>();
-    }
+    protected Mapping mapping;
+    protected int line;
     
-    public List<String> getMethods() {
-        return methods;
+    /** Action to do */
+    protected Action action;
+
+    public Action getAction() {
+        return action;
     }
 
-    public void setMethods(List<String> methods) {
-        this.methods = methods;
+    public void setAction(Action action) {
+        this.action = action;
     }
 
-    public Pattern getPattern() {
-        return pattern;
+    public int getLine() {
+        return line;
     }
 
-    public void setPattern(Pattern pattern) {
-        this.pattern = pattern;
+    public void setLine(int line) {
+        this.line = line;
     }
-    
+
+    public Mapping getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(Mapping mapping) {
+        this.mapping = mapping;
+    }
 }

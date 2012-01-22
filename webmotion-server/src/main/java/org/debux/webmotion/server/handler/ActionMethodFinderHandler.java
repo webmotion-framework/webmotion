@@ -37,7 +37,7 @@ import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,12 +59,12 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         Render render = call.getRender();
-        ActionRule actionRule = call.getActionRule();
-        // Test if it directly mapped on view or url or not action found in extension
-        if(render == null && actionRule != null) {
+        // Test if it directly mapped on view or url
+        if(render == null) {
             
             Map<String, Object> parameters = call.getAliasParameters();
-            Action action = actionRule.getAction();
+            Rule rule = call.getRule();
+            Action action = rule.getAction();
 
             String className = action.getClassName();
             className = WebMotionUtils.replaceDynamicName(className, parameters);
@@ -93,7 +93,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
                 call.setExecutor(executor);
 
             } catch (ClassNotFoundException clnfe) {
-                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
+                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, rule);
             }
         }
     }

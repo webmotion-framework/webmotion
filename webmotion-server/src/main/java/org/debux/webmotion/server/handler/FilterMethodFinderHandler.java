@@ -81,7 +81,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
                 filters.add(executor);
                 
             } catch (ClassNotFoundException clnfe) {
-                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe);
+                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, filterRule);
             }
         }
     }

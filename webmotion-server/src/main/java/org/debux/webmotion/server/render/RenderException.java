@@ -29,21 +29,26 @@
 package org.debux.webmotion.server.render;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.io.IOUtils;
+import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.Rule;
 
 /**
  * Basic render execption to user.
@@ -59,47 +64,74 @@ public class RenderException extends RenderStringTemplate {
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
         HttpContext context = call.getContext();
-        HttpServletRequest request = context.getRequest();
-        HttpServletResponse response = context.getResponse();
-        HttpSession session = context.getSession();
-        ServerContext serverContext = context.getServerContext();
-        ServletContext servletContext = context.getServletContext();
-        
-        // Retrieve the three possible error attributes, some may be null
         ErrorData errorData = context.getErrorData();
-        Integer code = errorData.getStatusCode();
-        String message = errorData.getMessage();
-        Class<?> type = errorData.getExceptionType();
-        Throwable throwable = errorData.getException();
-        String uri = errorData.getRequestUri();
-        
-        if (uri == null) {
-            uri = request.getRequestURI(); // in case there's no URI given
-        }
-        
-        // The error reason is either the status code or exception type
-        String reason = code != null ? "Error " + code.toString() : type.toString();
-        
-        // Get the stack trace
-        StringWriter trace = new StringWriter();
-        PrintWriter printTrace = new PrintWriter(trace);
-        if (throwable != null) {
-            throwable.printStackTrace(printTrace);
-        }
-                
-        // Create the model
-        model.put("reason", reason);
-        model.put("message", message);
-        model.put("trace", trace.toString());
-        model.put("uri", uri);
+
+        // Request
+        HttpServletRequest request = context.getRequest();
         model.put("request", request);
         model.put("requestParameters", request.getParameterMap());
         model.put("requestAttributes", getRequestAttributes(request));
         model.put("requestHeaders", getRequestHeaders(request));
+
+        // Session
+        HttpSession session = context.getSession();
         model.put("session", session);
         model.put("sessionAttributes", getSessionAttributes(session));
+
+        // ServerContext
+        ServerContext serverContext = context.getServerContext();
         model.put("serverContextAttributes", serverContext.getAttributes());
+        
+        // Servlet context
+        ServletContext servletContext = context.getServletContext();
         model.put("servletContextAttributes", getServletContextAttributes(servletContext));
+        
+        // Message
+        String message = errorData.getMessage();
+        model.put("message", message);
+        
+        // Uri
+        String uri = errorData.getRequestUri();
+        if (uri == null) {
+            uri = request.getRequestURI(); // in case there's no URI given
+        }
+        model.put("uri", uri);
+        
+        // The error reason is either the status code or exception type
+        Class<?> type = errorData.getExceptionType();
+        Integer code = errorData.getStatusCode();
+        String reason = code != null ? "Error " + code.toString() : type.toString();
+        model.put("reason", reason);
+        
+        // Get the stack trace
+        StringWriter trace = new StringWriter();
+        PrintWriter printTrace = new PrintWriter(trace);
+        Throwable throwable = errorData.getException();
+        if (throwable != null) {
+            throwable.printStackTrace(printTrace);
+        }
+        model.put("trace", trace.toString());
+                
+        // Get exception
+        if (throwable instanceof WebMotionException) {
+            WebMotionException exception = (WebMotionException) throwable;
+            
+            Rule rule = exception.getRule();
+            if (rule != null) {
+                String name = rule.getMapping().getName();
+                int line = rule.getLine();
+                
+                InputStream stream = getClass().getClassLoader().getResourceAsStream(name);
+                List<String> readLines = IOUtils.readLines(stream);
+                String content = readLines.get(line);
+                
+                model.put("mappingName", name);
+                model.put("mappingLine", line);
+                model.put("mappingContent", content);
+            }
+        }
+        
+        // System properties
         model.put("system", System.getProperties());
         
         super.create(mapping, call);

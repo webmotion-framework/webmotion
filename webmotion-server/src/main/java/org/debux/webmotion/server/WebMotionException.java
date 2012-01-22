@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.mapping.Rule;
+
 /**
  * Represents a error during the user request process.
  * 
@@ -33,12 +35,28 @@ public class WebMotionException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    protected Rule rule;
+
+    public Rule getRule() {
+        return rule;
+    }
+
+    public WebMotionException(String message, Throwable cause, Rule rule) {
+        super(message, cause);
+        this.rule = rule;
+    }
+
+    public WebMotionException(String message, Rule rule) {
+        super(message);
+        this.rule = rule;
+    }
+    
     public WebMotionException(String message, Throwable cause) {
         super(message, cause);
     }
 
     public WebMotionException(String message) {
-        super(message);
+        super(message, null);
     }
     
 }

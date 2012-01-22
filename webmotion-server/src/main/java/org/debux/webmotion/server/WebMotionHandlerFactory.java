@@ -34,8 +34,6 @@ import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
-import org.debux.webmotion.server.mapping.ActionRule;
-import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
@@ -53,6 +51,7 @@ import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.mbean.HandlerStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,17 +189,15 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                 context.setExtensionPath(extensionPath);
                 
                 // Stop if the first handler process the request
-                ActionRule actionRule = call.getActionRule();
-                ErrorRule errorRule = call.getErrorRule();
-                if(actionRule != null || errorRule != null) {
+                Rule rule = call.getRule();
+                if(rule != null) {
                     break;
                 }
             }
         }
         
-        ActionRule actionRule = call.getActionRule();
-        ErrorRule errorRule = call.getErrorRule();
-        if(actionRule == null && errorRule == null) {
+        Rule rule = call.getRule();
+        if(rule == null) {
             // Determine if the request contains an errors
             if(context.isError()) {
                 ErrorData errorData = context.getErrorData();

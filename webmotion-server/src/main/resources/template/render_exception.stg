@@ -3,13 +3,24 @@ render(model) ::= <<
     <head>
         <title>$model.reason$</title>
         <style media="screen, projection">
-            /*html { background: #e6e6e6;}
-            body { margin: 0; }
-            div { margin: 0 auto; width: 98%; }
-            #content { background: #fff; border: 2px solid #ccc; width: auto;margin-top: 1em; padding: 0em 1em 1em; }
-            h1 { margin: 1.083em 0 0; color: #333; }
-            #about { text-align: center; }*/
-
+            body {
+                background: #e6e6e6;
+                margin: 0;
+            }
+            div {
+                margin: 0 auto;
+                width: 98%;
+            }
+            #content {
+                background: #fff;
+                border: 2px solid #ccc;
+                width: auto;
+                margin-top: 1em;
+                padding: 0em 1em 1em;
+            }
+            #about {
+                text-align: center;
+            }
             .name {
                 background: #e6e6e6;
             }
@@ -23,18 +34,21 @@ render(model) ::= <<
                 <h1>Oops! $model.reason$</h1>
                 <h2>Message</h2>
                 $model.message$
-                <h2>Location</h2>
+                <h2>URI</h2>
                 $model.uri$
 
-                <h1>Stack trace</h1>
-                <pre>
-$model.trace$
-                </pre>
+                <h2>Mapping</h2>
+                <div class="name">File</div>
+                <div class="value">$model.mappingName$</div>
+                <div class="name">Line</div>
+                <div class="value">$model.mappingLine$</div>
+                <div class="name">Content</div>
+                <pre class="value">$model.mappingContent$</pre>
 
-                <h1>Mapping</h1>
-                $mappingName$:$mappingLine$ $mappingContent$
+                <h2>Stack trace</h2>
+                <pre>$model.trace$</pre>
 
-                <h1>Request</h1>
+                <h2>Request</h2>
                 <div class="name">Context path</div>
                 <div class="value">$model.request.contextPath$</div>
                 <div class="name">Request path</div>
@@ -46,25 +60,25 @@ $model.trace$
                 <div class="name">Server name</div>
                 <div class="value">$model.request.serverName$</div>
 
-                <h2>Parameters</h2>
+                <h3>Parameters</h3>
                 $model.requestParameters.keys:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.requestParameters.(k)$</div>
                 }$
 
-                <h2>Attributes</h2>
+                <h3>Attributes</h3>
                 $model.requestAttributes:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.requestAttributes.(k)$</div>
                 }$
 
-                <h2>Headers</h2>
+                <h3>Headers</h3>
                 $model.requestHeaders:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.requestHeaders.(k)$</div>
                 }$
 
-                <h1>Session</h1>
+                <h2>Session</h2>
                 <div class="name">Id</div>
                 <div class="value">$model.session.id$</div>
                 <div class="name">CreationTime</div>
@@ -72,30 +86,33 @@ $model.trace$
                 <div class="name">Last accessed time</div>
                 <div class="value">$model.session.lastAccessedTime$</div>
 
-                <h2>Attributes</h2>
+                <h3>Attributes</h3>
                 $model.sessionAttributes:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.sessionAttributes.(k)$</div>
                 }$
 
-                <h1>Server context</h1>
+                <h2>Server context</h2>
                 $model.serverContextAttributes:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.serverContextAttributes.(k)$</div>
                 }$
 
-                <h1>Servlet context</h1>
+                <h2>Servlet context</h2>
                 $model.servletContextAttributes:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.servletContextAttributes.(k)$</div>
                 }$
 
-                <h1>System properties</h1>
+                <h2>System properties</h2>
                 $model.system.keys:{k|
                     <div class="name">$k$</div>
                     <div class="value">$model.system.(k)$</div>
                 }$
 
+            </div>
+            <div id="about">
+                <a href="http://webmotion.debux.org">WebMotion</a>
             </div>
         </div>
     </body>

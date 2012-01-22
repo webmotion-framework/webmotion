@@ -67,92 +67,103 @@ public class BasicMappingParser implements MappingParser {
     @Override
     public Mapping parse(InputStream stream) {
         Mapping mapping = new Mapping();
+        mapping.setName(MAPPING_FILE_NAME);
+        
         Config config = mapping.getConfig();
         
         try {
             List<String> rules = IOUtils.readLines(stream);
 
             int section = 0;
+            int line = 0;
             for (String rule : rules) {
-                
+
                 rule = rule.trim();
                 rule = rule.replaceAll(" +", " ");
 
                 if(rule.startsWith("#") || rule.isEmpty()) {
                     // Comments
-                } else if(rule.startsWith("[errors]")) {
+                } else if (rule.startsWith("[errors]")) {
                     section = 1;
-                } else if(rule.startsWith("[filters]")) {
+                } else if (rule.startsWith("[filters]")) {
                     section = 2;
-                } else if(rule.startsWith("[actions]")) {
+                } else if (rule.startsWith("[actions]")) {
                     section = 3;
-                } else if(rule.startsWith("[config]")) {
+                } else if (rule.startsWith("[config]")) {
                     section = 4;
-                } else if(rule.startsWith("[extensions]")) {
+                } else if (rule.startsWith("[extensions]")) {
                     section = 5;
 
-                } else if(section == 1) {
+                } else if (section == 1) {
                     // Errors section
                     ErrorRule errorRule = extractSectionErrors(rule);
+                    errorRule.setMapping(mapping);
+                    errorRule.setLine(line);
                     List<ErrorRule> errorRules = mapping.getErrorRules();
                     errorRules.add(errorRule);
 
-                } else if(section == 2) {
+                } else if (section == 2) {
                     // Filters section
                     FilterRule filterRule = extractSectionFilters(rule);
+                    filterRule.setMapping(mapping);
+                    filterRule.setLine(line);
                     List<FilterRule> filterRules = mapping.getFilterRules();
                     filterRules.add(filterRule);
 
-                } else if(section == 3) {
+                } else if (section == 3) {
                     // Actions section
                     ActionRule actionRule = extractSectionActions(rule);
+                    actionRule.setMapping(mapping);
+                    actionRule.setLine(line);
                     List<ActionRule> actionRules = mapping.getActionRules();
                     actionRules.add(actionRule);
 
-                } else if(section == 5) {
+                } else if (section == 5) {
                     // Extension section
                     Mapping extensionMapping = extractSectionExtensions(rule);
                     List<Mapping> extensionsRules = mapping.getExtensionsRules();
                     extensionsRules.add(extensionMapping);
                     
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
+                } else if (section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
                     String value = extractConfig(Config.PACKAGE_VIEWS, rule);
                     config.setPackageViews(value);
 
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_ACTIONS)) {
+                } else if (section == 4 && rule.startsWith(Config.PACKAGE_ACTIONS)) {
                     String value = extractConfig(Config.PACKAGE_ACTIONS, rule);
                     config.setPackageActions(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_FILTERS)) {
+                } else if (section == 4 && rule.startsWith(Config.PACKAGE_FILTERS)) {
                     String value = extractConfig(Config.PACKAGE_FILTERS, rule);
                     config.setPackageFilters(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.PACKAGE_ERRORS)) {
+                } else if (section == 4 && rule.startsWith(Config.PACKAGE_ERRORS)) {
                     String value = extractConfig(Config.PACKAGE_ERRORS, rule);
                     config.setPackageErrors(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.REQUEST_ENCODING)) {
+                } else if (section == 4 && rule.startsWith(Config.REQUEST_ENCODING)) {
                     String value = extractConfig(Config.REQUEST_ENCODING, rule);
                     config.setRequestEncoding(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.REQUEST_ASYNC)) {
+                } else if (section == 4 && rule.startsWith(Config.REQUEST_ASYNC)) {
                     String value = extractConfig(Config.REQUEST_ASYNC, rule);
                     config.setRequestAsync(Boolean.valueOf(value));
                     
-                } else if(section == 4 && rule.startsWith(Config.JAVAC_DEBUG)) {
+                } else if (section == 4 && rule.startsWith(Config.JAVAC_DEBUG)) {
                     String value = extractConfig(Config.JAVAC_DEBUG, rule);
                     config.setJavacDebug(Boolean.valueOf(value));
                     
-                } else if(section == 4 && rule.startsWith(Config.MODE)) {
+                } else if (section == 4 && rule.startsWith(Config.MODE)) {
                     String value = extractConfig(Config.MODE, rule);
                     config.setMode(value);
                     
-                } else if(section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
+                } else if (section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
                     String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
                     config.setHandlersFactory(value);
                 }
+                
+                line ++;
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             throw new WebMotionException("Error to read the file mapping", ioe);
         }
         
@@ -242,14 +253,17 @@ public class BasicMappingParser implements MappingParser {
     protected Mapping extractSectionExtensions(String line) {
         String[] splitRule = line.split(" ");
         String path = splitRule[0];
+        String name = splitRule[1];
         
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(splitRule[1]);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(name);
         BasicMappingParser parser = new BasicMappingParser();
         Mapping mapping = parser.parse(stream);
+        mapping.setName(name);
                 
         Extension extension = new Extension();
         extension.setPath(path);
         mapping.setExtension(extension);
+        
         return mapping;
     }
     

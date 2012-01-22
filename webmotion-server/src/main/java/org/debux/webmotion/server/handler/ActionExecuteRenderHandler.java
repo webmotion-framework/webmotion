@@ -33,8 +33,8 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
-import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.render.RenderUrl;
 import org.debux.webmotion.server.render.RenderView;
 import org.slf4j.Logger;
@@ -57,18 +57,9 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        Action action = null;
-        ActionRule actionRule = call.getActionRule();
-        if (actionRule != null) {
-            action = actionRule.getAction();
-        }
-        
-        ErrorRule errorRule = call.getErrorRule();
-        if (errorRule != null) {
-            action = errorRule.getAction();
-        }
-
-        if (action != null) {
+        Rule rule = call.getRule();
+        if (rule != null) {
+            Action action = rule.getAction();
             Map<String, Object> parameters = call.getAliasParameters();
             if (action.isView()) {
                 String pageName = action.getFullName();

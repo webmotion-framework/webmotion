@@ -35,12 +35,11 @@ import java.util.Map;
  * 
  * @author julien
  */
-public class ActionRule {
+public class ActionRule extends Rule {
 
     protected List<String> methods;
     protected List<FragmentUrl> ruleUrl;
     protected List<FragmentUrl> ruleParameters;
-    protected Action action;
     protected Map<String, String[]> defaultParameters;
 
     public ActionRule() {
@@ -48,14 +47,6 @@ public class ActionRule {
         ruleUrl = new ArrayList<FragmentUrl>();
         ruleParameters = new ArrayList<FragmentUrl>();
         defaultParameters = new LinkedHashMap<String, String[]>();
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
     }
 
     public List<String> getMethods() {
@@ -89,5 +80,5 @@ public class ActionRule {
     public void setDefaultParameters(Map<String, String[]> defaultParameters) {
         this.defaultParameters = defaultParameters;
     }
-
+    
 }

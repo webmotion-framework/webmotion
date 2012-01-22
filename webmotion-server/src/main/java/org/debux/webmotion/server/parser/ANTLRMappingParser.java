@@ -97,6 +97,7 @@ public class ANTLRMappingParser implements MappingParser {
      * Visit on type of element.
      */
     public class Visit {
+        
         /**
          * Accept visit before explore child, by default do nothing.
          * @param value value of element
@@ -105,10 +106,24 @@ public class ANTLRMappingParser implements MappingParser {
         }
         
         /**
+         * Accept visit before explore child, by default do nothing.
+         * @param token ANTLR token element
+         */
+        public void acceptBefore(Token token) {
+        }
+        
+        /**
          * Accept visit after explore child, by default do nothing.
          * @param value value of element
          */
         public void acceptAfter(String value) {
+        }
+        
+        /**
+         * Accept visit after explore child, by default do nothing.
+         * @param token ANTLR token element
+         */
+        public void acceptAfter(Token token) {
         }
     }
 
@@ -138,6 +153,7 @@ public class ANTLRMappingParser implements MappingParser {
                 Visit visit = visitors.get(path);
                 if(visit != null) {
                     visit.acceptBefore(text);
+                    visit.acceptBefore(token);
                 }
 
                 return t;
@@ -160,6 +176,7 @@ public class ANTLRMappingParser implements MappingParser {
                 log.info("After " + path + " = " + text);
                 Visit visit = visitors.get(path);
                 if(visit != null) {
+                    visit.acceptAfter(token);
                     visit.acceptAfter(text);
                 }
 
@@ -184,6 +201,8 @@ public class ANTLRMappingParser implements MappingParser {
     @Override
     public Mapping parse(InputStream stream) {
         mapping = new Mapping();
+        mapping.setName(MAPPING_FILE_NAME);
+        
         stack = new LinkedList<Object>();
         
         try {
@@ -283,6 +302,7 @@ public class ANTLRMappingParser implements MappingParser {
                 List<ErrorRule> errorRules = mapping.getErrorRules();
                 errorRules.add(errorRule);
             }
+            
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -295,6 +315,13 @@ public class ANTLRMappingParser implements MappingParser {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 errorRule.setError("code:" + value);
             }
+
+            @Override
+            public void acceptAfter(Token token) {
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                errorRule.setMapping(mapping);
+                errorRule.setLine(token.getLine());
+            }
         });
         
         visitors.put("/ERROR/EXCEPTION/*", new Visit() {
@@ -302,6 +329,13 @@ public class ANTLRMappingParser implements MappingParser {
             public void acceptBefore(String value) {
                 ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 errorRule.setError(value);
+            }
+
+            @Override
+            public void acceptAfter(Token token) {
+                ErrorRule errorRule = (ErrorRule) stack.removeLast();
+                errorRule.setMapping(mapping);
+                errorRule.setLine(token.getLine());
             }
         });
         
@@ -364,6 +398,13 @@ public class ANTLRMappingParser implements MappingParser {
                 List<String> methods = filterRule.getMethods();
                 methods.add(value);
             }
+            
+            @Override
+            public void acceptAfter(Token token) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                filterRule.setMapping(mapping);
+                filterRule.setLine(token.getLine());
+            }
         });
         
         visitors.put("/FILTER/PATH/*", new Visit() {
@@ -423,7 +464,7 @@ public class ANTLRMappingParser implements MappingParser {
                 List<ActionRule> actionRules = mapping.getActionRules();
                 actionRules.add(actionRule);
             }
-            
+
             @Override
             public void acceptAfter(String value) {
                 stack.removeLast();
@@ -436,6 +477,13 @@ public class ANTLRMappingParser implements MappingParser {
                 ActionRule actionRule = (ActionRule) stack.peekLast();
                 List<String> methods = actionRule.getMethods();
                 methods.add(value);
+            }
+            
+            @Override
+            public void acceptAfter(Token token) {
+                ActionRule actionRule = (ActionRule) stack.peekLast();
+                actionRule.setMapping(mapping);
+                actionRule.setLine(token.getLine());
             }
         });
         
@@ -645,7 +693,9 @@ public class ANTLRMappingParser implements MappingParser {
                 
                 InputStream stream = getClass().getClassLoader().getResourceAsStream(value);
                 ANTLRMappingParser parser = new ANTLRMappingParser();
+                
                 Mapping extensionMapping = parser.parse(stream);
+                extensionMapping.setName(value);
                 
                 Extension extension = new Extension();
                 extension.setPath(path);

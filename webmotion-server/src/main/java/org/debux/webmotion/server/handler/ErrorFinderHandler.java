@@ -35,6 +35,7 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
+import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,13 +69,13 @@ public class ErrorFinderHandler implements WebMotionHandler {
             String error = errorRule.getError();
 
             if(error == null) {
-                call.setErrorRule(errorRule);
+                call.setRule(errorRule);
                 break;
                 
             } else if(error.startsWith("code:")) {
                 String code = statusCode.toString();
                 if(error.equals("code:" + code)) {
-                    call.setErrorRule(errorRule);
+                    call.setRule(errorRule);
                     break;
                 }
 
@@ -85,7 +86,7 @@ public class ErrorFinderHandler implements WebMotionHandler {
                     Throwable throwableFound = getException(errorClass, exception);
                     if(throwableFound != null) {
                         errorData.setCause(throwableFound);
-                        call.setErrorRule(errorRule);
+                        call.setRule(errorRule);
                         break;
                     }
 
@@ -95,8 +96,8 @@ public class ErrorFinderHandler implements WebMotionHandler {
             }              
         }
         
-        ErrorRule errorRule = call.getErrorRule();
-        if(errorRule == null) {
+        Rule rule = call.getRule();
+        if(rule == null) {
             call.setRender(new RenderException());
         }
         

@@ -25,7 +25,6 @@
 package org.debux.webmotion.server.handler;
 
 import java.util.List;
-import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
@@ -82,10 +81,10 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
                 executor.setInstance(instance);
 
             } catch (InstantiationException ie) {
-                throw new WebMotionException("Error during create filter or action instance " + actionClass, ie);
+                throw new WebMotionException("Error during create filter or action instance " + actionClass, ie, call.getRule());
                 
             } catch (IllegalAccessException iae) {
-                throw new WebMotionException("Error during create filter or action instance " + actionClass, iae);
+                throw new WebMotionException("Error during create filter or action instance " + actionClass, iae, call.getRule());
             }
         }
     }
