@@ -7,7 +7,7 @@ render(model) ::= <<
                 background: #e6e6e6;
                 margin: 0;
             }
-            div {
+            div, pre {
                 margin: 0 auto;
                 width: 98%;
             }
