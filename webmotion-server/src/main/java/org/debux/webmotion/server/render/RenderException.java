@@ -31,13 +31,18 @@ package org.debux.webmotion.server.render;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
@@ -56,6 +61,9 @@ public class RenderException extends RenderStringTemplate {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
         HttpServletResponse response = context.getResponse();
+        HttpSession session = context.getSession();
+        ServerContext serverContext = context.getServerContext();
+        ServletContext servletContext = context.getServletContext();
         
         // Retrieve the three possible error attributes, some may be null
         ErrorData errorData = context.getErrorData();
@@ -84,8 +92,57 @@ public class RenderException extends RenderStringTemplate {
         model.put("message", message);
         model.put("trace", trace.toString());
         model.put("uri", uri);
+        model.put("request", request);
+        model.put("requestParameters", request.getParameterMap());
+        model.put("requestAttributes", getRequestAttributes(request));
+        model.put("requestHeaders", getRequestHeaders(request));
+        model.put("session", session);
+        model.put("sessionAttributes", getSessionAttributes(session));
+        model.put("serverContextAttributes", serverContext.getAttributes());
+        model.put("servletContextAttributes", getServletContextAttributes(servletContext));
+        model.put("system", System.getProperties());
         
         super.create(mapping, call);
+    }
+    
+    protected Map<String, Object> getRequestAttributes(HttpServletRequest request) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (Enumeration<String> names = request.getAttributeNames(); names.hasMoreElements();) {
+            String name = names.nextElement();
+            Object value = request.getAttribute(name);
+            result.put(name, value);
+        }
+        return result;
+    }
+    
+    protected Map<String, Object> getRequestHeaders(HttpServletRequest request) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (Enumeration<String> names = request.getHeaderNames(); names.hasMoreElements();) {
+            String name = names.nextElement();
+            Object value = request.getHeader(name);
+            result.put(name, value);
+        }
+        return result;
+    }
+    
+    protected Map<String, Object> getSessionAttributes(HttpSession session) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (Enumeration<String> names = session.getAttributeNames(); names.hasMoreElements();) {
+            String name = names.nextElement();
+            Object value = session.getAttribute(name);
+            result.put(name, value);
+        }
+        return result;
+    }
+    
+    protected Map<String, Object> getServletContextAttributes(ServletContext servletContext) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (Enumeration<String> names = servletContext.getAttributeNames(); names.hasMoreElements();) {
+            String name = names.nextElement();
+            Object value = servletContext.getAttribute(name);
+            result.put(name, value);
+        }
+        return result;
     }
     
 }

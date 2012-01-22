@@ -3,27 +3,99 @@ render(model) ::= <<
     <head>
         <title>$model.reason$</title>
         <style media="screen, projection">
-            html { background: #e6e6e6;}
+            /*html { background: #e6e6e6;}
             body { margin: 0; }
             div { margin: 0 auto; width: 98%; }
             #content { background: #fff; border: 2px solid #ccc; width: auto;margin-top: 1em; padding: 0em 1em 1em; }
             h1 { margin: 1.083em 0 0; color: #333; }
-            #about { text-align: center; }
+            #about { text-align: center; }*/
+
+            .name {
+                background: #e6e6e6;
+            }
+            .value {
+            }
         </style>
     </head>
     <body>
         <div>
             <div id="content">
                 <h1>Oops! $model.reason$</h1>
-                <h2>$model.message$</h2>
+                <h2>Message</h2>
+                $model.message$
+                <h2>Location</h2>
+                $model.uri$
+
+                <h1>Stack trace</h1>
                 <pre>
 $model.trace$
                 </pre>
-                <hr>
-                <i>Error accessing $model.uri$</i>
-            </div>
-            <div id="about">
-                WebMotion
+
+                <h1>Mapping</h1>
+                $mappingName$:$mappingLine$ $mappingContent$
+
+                <h1>Request</h1>
+                <div class="name">Context path</div>
+                <div class="value">$model.request.contextPath$</div>
+                <div class="name">Request path</div>
+                <div class="value">$model.request.requestPath$</div>
+                <div class="name">Locale</div>
+                <div class="value">$model.request.locale$</div>
+                <div class="name">Secure</div>
+                <div class="value">$model.request.secure$</div>
+                <div class="name">Server name</div>
+                <div class="value">$model.request.serverName$</div>
+
+                <h2>Parameters</h2>
+                $model.requestParameters.keys:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.requestParameters.(k)$</div>
+                }$
+
+                <h2>Attributes</h2>
+                $model.requestAttributes:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.requestAttributes.(k)$</div>
+                }$
+
+                <h2>Headers</h2>
+                $model.requestHeaders:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.requestHeaders.(k)$</div>
+                }$
+
+                <h1>Session</h1>
+                <div class="name">Id</div>
+                <div class="value">$model.session.id$</div>
+                <div class="name">CreationTime</div>
+                <div class="value">$model.session.creationTime$</div>
+                <div class="name">Last accessed time</div>
+                <div class="value">$model.session.lastAccessedTime$</div>
+
+                <h2>Attributes</h2>
+                $model.sessionAttributes:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.sessionAttributes.(k)$</div>
+                }$
+
+                <h1>Server context</h1>
+                $model.serverContextAttributes:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.serverContextAttributes.(k)$</div>
+                }$
+
+                <h1>Servlet context</h1>
+                $model.servletContextAttributes:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.servletContextAttributes.(k)$</div>
+                }$
+
+                <h1>System properties</h1>
+                $model.system.keys:{k|
+                    <div class="name">$k$</div>
+                    <div class="value">$model.system.(k)$</div>
+                }$
+
             </div>
         </div>
     </body>
