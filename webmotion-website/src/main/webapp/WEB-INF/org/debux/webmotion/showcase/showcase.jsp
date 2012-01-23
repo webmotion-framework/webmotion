@@ -194,6 +194,7 @@
                                     <li><a id="message" href="./message">Flash message</a></li>
                                     <li><a id="shop" href="./shop">Validation</a></li>
                                     <li><a id="async" href="./async">Async</a> <span class="label notice">New</span></li>
+                                    <li><a id="listener" href="./listener">Server listener</a> <span class="label notice">New</span></li>
                                 </ul>
                             </li>
                             <li><strong>File</strong>

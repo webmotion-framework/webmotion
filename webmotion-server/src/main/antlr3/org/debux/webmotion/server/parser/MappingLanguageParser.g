@@ -56,6 +56,7 @@ section_config_name
     | CONFIG_REQUEST_ASYNC
     | CONFIG_HANDLERS_FACTORY_CLASS
     | CONFIG_ERROR_PAGE
+    | CONFIG_SERVER_LISTENER_CLASS
     ;
 
 // Section error

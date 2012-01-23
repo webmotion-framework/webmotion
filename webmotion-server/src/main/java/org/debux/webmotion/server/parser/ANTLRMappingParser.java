@@ -291,6 +291,8 @@ public class ANTLRMappingParser implements MappingParser {
                     config.setHandlersFactory(value);
                 } else if(Config.ERROR_PAGE.equals(name)) {
                     config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
+                } else if(Config.SERVER_LISTENER_CLASS.equals(name)) {
+                    config.setServerListener(value);
                 }
             }
         });

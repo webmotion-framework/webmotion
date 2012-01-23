@@ -35,6 +35,7 @@ CONFIG_REQUEST_ENCODING:'request.encoding';
 CONFIG_REQUEST_ASYNC:'request.async';
 CONFIG_HANDLERS_FACTORY_CLASS:'handlers.factory.class';
 CONFIG_ERROR_PAGE:'error.page';
+CONFIG_SERVER_LISTENER_CLASS:'server.listener.class';
 
 ACTION:'action:';
 ACTION_ASYNC:'async:';

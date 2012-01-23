@@ -55,6 +55,7 @@ public class Config {
     public static String MODE = "mode";
     public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
     public static String ERROR_PAGE = "error.page";
+    public static String SERVER_LISTENER_CLASS = "server.listener.class";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -88,6 +89,9 @@ public class Config {
     
     /** Indicates how the error page is use */
     protected State errorPage = State.ENABLED;
+    
+    /** Listener on start/stop server */
+    protected String serverListener = null;
     
     /** Default contructor. */
     public Config() {
@@ -190,5 +194,12 @@ public class Config {
     public void setErrorPage(State errorPage) {
         this.errorPage = errorPage;
     }
-    
+
+    public String getServerListener() {
+        return serverListener;
+    }
+
+    public void setServerListener(String serverListener) {
+        this.serverListener = serverListener;
+    }
 }

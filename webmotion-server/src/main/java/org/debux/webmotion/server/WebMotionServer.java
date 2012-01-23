@@ -26,6 +26,8 @@ package org.debux.webmotion.server;
 
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -40,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
+import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
@@ -63,16 +66,34 @@ public class WebMotionServer implements Filter {
     /** Current application context */
     protected ServerContext serverContext;
     
+    /** Listeners on server */
+    protected List<WebMotionServerListener> listeners;
+    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         serverContext = new ServerContext();
         
         ServletContext servletContext = filterConfig.getServletContext();
         serverContext.contextInitialized(servletContext);
+        
+        // Extract listeners
+        listeners = new ArrayList<WebMotionServerListener>();
+        Mapping mapping = serverContext.getMapping();
+        extractServerListener(mapping);
+        
+        // Fire onStart
+        for (WebMotionServerListener listener : listeners) {
+            listener.onStart(serverContext);
+        }
     }
 
     @Override
     public void destroy() {
+        // Fire onStop
+        for (WebMotionServerListener listener : listeners) {
+            listener.onStop(serverContext);
+        }
+        
         serverContext.contextDestroyed();
     }
     
@@ -182,4 +203,36 @@ public class WebMotionServer implements Filter {
             dispatcher.forward(requestWrapper, response);
         }
     }
+    
+    /**
+     * Search in mapping all server listeners.
+     * @param mapping mapping
+     */
+    public void extractServerListener(Mapping mapping) {
+        
+        Config config = mapping.getConfig();
+        String serverListenerClassName = config.getServerListener();
+        if (serverListenerClassName != null && !serverListenerClassName.isEmpty()) {
+            
+            // Create an instance
+            try {
+                Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(serverListenerClassName);
+                WebMotionServerListener serverListener = serverListenerClass.newInstance();
+                listeners.add(serverListener);
+
+            } catch (IllegalAccessException iae) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, iae);
+            } catch (InstantiationException ie) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, ie);
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, cnfe);
+            }
+        }
+            
+        List<Mapping> extensions = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensions) {
+            extractServerListener(extensionMapping);
+        }
+    }
+
 }

@@ -41,10 +41,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Showcase extends WebMotionController {
 
-    protected static final int INDEX_EXTENSIONS = 5;
-    protected static final int INDEX_FILTERS = 9;
-    protected static final int INDEX_ERRORS = 13;
-    protected static final int INDEX_ACTIONS = 21;
+    protected static final int INDEX_EXTENSIONS = 6;
+    protected static final int INDEX_FILTERS = 10;
+    protected static final int INDEX_ERRORS = 14;
+    protected static final int INDEX_ACTIONS = 22;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
@@ -111,7 +111,7 @@ public class Showcase extends WebMotionController {
         }
         return content + "\n";
     }
-    
+
     public Render hello() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
@@ -788,6 +788,24 @@ public class Showcase extends WebMotionController {
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 61, 1)),
                     getJavaContent("Template.java"),
                     new FileContent("/src/main/resources/template.stg", getFile("template.stg"))
+                )
+        );
+    }
+    
+    public Render listener() throws IOException {
+        String section = "[config]\n";
+        section += "package.base=org.debux.webmotion.showcase\n";
+        section += "server.listener.class=org.debux.webmotion.showcase.Listener\n";
+        
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/context"
+                ),
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", section + "\n")
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 62, 1)),
+                    getJavaContent("Listener.java"),
+                    getJavaContent("Context.java")
                 )
         );
     }

@@ -163,6 +163,10 @@ public class BasicMappingParser implements MappingParser {
                 } else if (section == 4 && rule.startsWith(Config.ERROR_PAGE)) {
                     String value = extractConfig(Config.ERROR_PAGE, rule);
                     config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
+                    
+                } else if (section == 4 && rule.startsWith(Config.SERVER_LISTENER_CLASS)) {
+                    String value = extractConfig(Config.SERVER_LISTENER_CLASS, rule);
+                    config.setServerListener(value);
                 }
                 
                 line ++;
