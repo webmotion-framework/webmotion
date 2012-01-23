@@ -29,10 +29,11 @@ import java.util.Collections;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils.LruCache;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements ServerStatsMXBean.
@@ -41,6 +42,8 @@ import org.debux.webmotion.server.call.HttpContext;
  */
 public class ServerStats implements ServerStatsMXBean {
 
+    private static final Logger log = LoggerFactory.getLogger(ServerStats.class);
+    
     protected int sizeLastRequest;
     protected Map<String, Long> lastRequests;
     
@@ -66,7 +69,7 @@ public class ServerStats implements ServerStatsMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
-            throw new WebMotionException("Error during register the MBean", ex);
+            log.warn("Error during register the MBean", ex);
         }    
     }
     
@@ -80,7 +83,7 @@ public class ServerStats implements ServerStatsMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
-            throw new WebMotionException("Error during unregister the MBean", ex);
+            log.warn("Error during unregister the MBean", ex);
         }
     }
     

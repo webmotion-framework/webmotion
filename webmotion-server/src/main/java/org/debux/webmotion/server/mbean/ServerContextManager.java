@@ -26,16 +26,15 @@ package org.debux.webmotion.server.mbean;
 
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.State;
-import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements ServerContextManagerMXBean.
@@ -44,6 +43,8 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public class ServerContextManager implements ServerContextManagerMXBean {
 
+    private static final Logger log = LoggerFactory.getLogger(ServerContextManager.class);
+    
     protected ServerContext serverContext;
 
     public ServerContextManager(ServerContext serverContext) {
@@ -60,7 +61,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
-            throw new WebMotionException("Error during register the MBean", ex);
+            log.warn("Error during register the MBean", ex);
         }    
     }
     
@@ -74,7 +75,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
-            throw new WebMotionException("Error during unregister the MBean", ex);
+            log.warn("Error during unregister the MBean", ex);
         }
     }
     

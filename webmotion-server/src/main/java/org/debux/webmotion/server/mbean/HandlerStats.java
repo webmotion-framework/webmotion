@@ -31,7 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import org.debux.webmotion.server.WebMotionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements HandlerStatsMXBean.
@@ -40,6 +41,8 @@ import org.debux.webmotion.server.WebMotionException;
  */
 public class HandlerStats implements HandlerStatsMXBean {
 
+    private static final Logger log = LoggerFactory.getLogger(HandlerStats.class);
+    
     protected Map<String, HandlerData> handlers;
     
     /**
@@ -97,7 +100,7 @@ public class HandlerStats implements HandlerStatsMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
-            throw new WebMotionException("Error during register the MBean", ex);
+            log.warn("Error during register the MBean", ex);
         }    
     }
     
@@ -111,7 +114,7 @@ public class HandlerStats implements HandlerStatsMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
-            throw new WebMotionException("Error during unregister the MBean", ex);
+            log.warn("Error during unregister the MBean", ex);
         }
     }
     
