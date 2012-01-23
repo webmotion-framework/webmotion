@@ -26,11 +26,16 @@ package org.debux.webmotion.server.mbean;
 
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Config.State;
+import org.debux.webmotion.server.mapping.Extension;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
  * Implements ServerContextManagerMXBean.
@@ -95,5 +100,25 @@ public class ServerContextManager implements ServerContextManagerMXBean {
         }
         return map;
     }
-    
+
+    @Override
+    public void disabledErrorPage() {
+        Mapping mapping = serverContext.getMapping();
+        Config config = mapping.getConfig();
+        config.setErrorPage(State.DISABLED);
+    }
+
+    @Override
+    public void enabledErrorPage() {
+        Mapping mapping = serverContext.getMapping();
+        Config config = mapping.getConfig();
+        config.setErrorPage(State.ENABLED);
+    }
+
+    @Override
+    public void forceErrorPage() {
+        Mapping mapping = serverContext.getMapping();
+        Config config = mapping.getConfig();
+        config.setErrorPage(State.FORCED);
+    }
 }

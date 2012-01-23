@@ -54,7 +54,8 @@ section_config_name
     | CONFIG_MODE
     | CONFIG_REQUEST_ENCODING
     | CONFIG_REQUEST_ASYNC
-    | HANDLERS_FACTORY_CLASS
+    | CONFIG_HANDLERS_FACTORY_CLASS
+    | CONFIG_ERROR_PAGE
     ;
 
 // Section error

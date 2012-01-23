@@ -24,6 +24,9 @@
  */
 package org.debux.webmotion.server.handler;
 
+import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.render.RenderException;
 import java.util.ArrayList;
 import org.debux.webmotion.server.call.Call;
@@ -36,6 +39,7 @@ import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.render.RenderContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,13 +100,44 @@ public class ErrorFinderHandler implements WebMotionHandler {
             }              
         }
         
+        // Create a direct render if neither rule is found or the error page 
+        // is forced
+        HttpContext context = call.getContext();
+        ServerContext serverContext = context.getServerContext();
+        Mapping rootMapping = serverContext.getMapping();
+        Config rootConfig = rootMapping.getConfig();
+        State errorPage = rootConfig.getErrorPage();
+        
         Rule rule = call.getRule();
-        if(rule == null) {
-            call.setRender(new RenderException());
+        if (rule == null || errorPage == State.FORCED) {
+            call.setRule(null);
+            
+            RenderException render;
+            if (errorPage == State.DISABLED) {
+                render = getRenderSimple();
+            } else {
+                render = getRender();
+            }
+            call.setRender(render);
         }
         
+        // Initialize filters
         List<Executor> filters = new ArrayList<Executor>(0);
         call.setFilters(filters);
+    }
+
+    /**
+     * @return the render use to display error with all informations.
+     */
+    protected RenderException getRender() {
+        return new RenderException("template/render_exception.stg");
+    }
+    
+    /**
+     * @return the render use to display error without all informations.
+     */
+    protected RenderException getRenderSimple() {
+        return new RenderException("template/render_simple_exception.stg");
     }
     
     /**

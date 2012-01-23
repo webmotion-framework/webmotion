@@ -30,6 +30,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Config.Mode;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
@@ -60,7 +61,7 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         HttpContext context = call.getContext();
         Config config = mapping.getConfig();
-        String mode = config.getMode();
+        Mode mode = config.getMode();
 
         List<Executor> executors = call.getExecutors();
         for (Executor executor : executors) {
@@ -71,10 +72,10 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
                 // You must test mode here to manage correctly extension, otherwise
                 // you risk to have only the factory define in init method.
                 WebMotionController instance = null;
-                if(mode.equalsIgnoreCase(Config.MODE_STATEFULL)) {
+                if(mode == Mode.STATEFULL) {
                     instance = actionClass.newInstance();
 
-                } else if(mode.equalsIgnoreCase(Config.MODE_STATELESS)) {
+                } else if(mode == Mode.STATELESS) {
                     instance = factory.getInstance(actionClass);
                 }
                 

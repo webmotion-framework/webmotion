@@ -33,7 +33,8 @@ CONFIG_JAVAC_DEBUG:'javac.debug';
 CONFIG_MODE:'mode';
 CONFIG_REQUEST_ENCODING:'request.encoding';
 CONFIG_REQUEST_ASYNC:'request.async';
-HANDLERS_FACTORY_CLASS:'handlers.factory.class';
+CONFIG_HANDLERS_FACTORY_CLASS:'handlers.factory.class';
+CONFIG_ERROR_PAGE:'error.page';
 
 ACTION:'action:';
 ACTION_ASYNC:'async:';

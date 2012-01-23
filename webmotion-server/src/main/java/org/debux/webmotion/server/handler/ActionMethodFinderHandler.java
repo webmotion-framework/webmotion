@@ -59,11 +59,11 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         Render render = call.getRender();
-        // Test if it directly mapped on view or url
-        if(render == null) {
+        Rule rule = call.getRule();
+        // Test if it directly mapped on view or urlor not action found in extension
+        if(render == null && rule != null) {
             
             Map<String, Object> parameters = call.getAliasParameters();
-            Rule rule = call.getRule();
             Action action = rule.getAction();
 
             String className = action.getClassName();

@@ -32,9 +32,16 @@ package org.debux.webmotion.server.mapping;
  */
 public class Config {
 
-    // Modes
-    public static String MODE_STATEFULL = "statefull";
-    public static String MODE_STATELESS = "stateless";
+    public static enum Mode {
+        STATEFULL,
+        STATELESS
+    }
+    
+    public static enum State {
+        ENABLED,
+        DISABLED,
+        FORCED
+    }
     
     // Config names
     public static String PACKAGE_VIEWS = "package.views";
@@ -47,6 +54,7 @@ public class Config {
     public static String JAVAC_DEBUG = "javac.debug";
     public static String MODE = "mode";
     public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
+    public static String ERROR_PAGE = "error.page";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -73,10 +81,13 @@ public class Config {
     protected boolean javacDebug = true;
     
     /** Precises the behavior of server is stateless or statefull */
-    protected String mode = MODE_STATELESS;
+    protected Mode mode = Mode.STATELESS;
     
     /** Class to chain handler */
     protected String handlersFactory = "org.debux.webmotion.server.WebMotionHandlerFactory";
+    
+    /** Indicates how the error page is use */
+    protected State errorPage = State.ENABLED;
     
     /** Default contructor. */
     public Config() {
@@ -155,21 +166,29 @@ public class Config {
     public void setJavacDebug(boolean javacDebug) {
         this.javacDebug = javacDebug;
     }
-    
-    public String getMode() {
+
+    public Mode getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(Mode mode) {
         this.mode = mode;
     }
-
+    
     public String getHandlersFactory() {
         return handlersFactory;
     }
 
     public void setHandlersFactory(String handlersFactory) {
         this.handlersFactory = handlersFactory;
+    }
+
+    public State getErrorPage() {
+        return errorPage;
+    }
+
+    public void setErrorPage(State errorPage) {
+        this.errorPage = errorPage;
     }
     
 }

@@ -154,11 +154,15 @@ public class BasicMappingParser implements MappingParser {
                     
                 } else if (section == 4 && rule.startsWith(Config.MODE)) {
                     String value = extractConfig(Config.MODE, rule);
-                    config.setMode(value);
+                    config.setMode(Config.Mode.valueOf(value.toUpperCase()));
                     
                 } else if (section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
                     String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
                     config.setHandlersFactory(value);
+                    
+                } else if (section == 4 && rule.startsWith(Config.ERROR_PAGE)) {
+                    String value = extractConfig(Config.ERROR_PAGE, rule);
+                    config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
                 }
                 
                 line ++;

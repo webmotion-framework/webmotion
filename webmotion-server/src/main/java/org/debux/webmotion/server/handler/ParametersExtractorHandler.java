@@ -60,6 +60,11 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         Map<String, Object> result = new LinkedHashMap<String, Object>();
         call.setAliasParameters(result);
         
+        // Not action found in extension ?
+        ActionRule actionRule = (ActionRule) call.getRule();
+        if (actionRule == null) {
+            return;
+        }
         
         // Contains all parameters renamed
         Map<String, Object> parameters = call.getExtractParameters();
@@ -70,7 +75,6 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         String url = context.getUrl();
         List<String> path = WebMotionUtils.splitPath(url);
         
-        ActionRule actionRule = (ActionRule) call.getRule();
         List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
         int position = 0;
         for (FragmentUrl expression : ruleUrl) {

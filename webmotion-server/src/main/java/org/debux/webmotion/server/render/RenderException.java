@@ -39,7 +39,6 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
@@ -57,8 +56,8 @@ import org.debux.webmotion.server.mapping.Rule;
  */
 public class RenderException extends RenderStringTemplate {
 
-    public RenderException() {
-        super("template/render_exception.stg", "text/html", new HashMap<String, Object>());
+    public RenderException(String fileName) {
+        super(fileName, "text/html", new HashMap<String, Object>());
     }
 
     @Override

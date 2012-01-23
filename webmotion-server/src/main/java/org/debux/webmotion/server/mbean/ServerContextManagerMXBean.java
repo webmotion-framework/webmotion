@@ -48,4 +48,19 @@ public interface ServerContextManagerMXBean {
      */
     Map<String, String> getAttibutes();
     
+    /**
+     * Disabled error page only the simple page is display.
+     */
+    void disabledErrorPage();
+    
+    /**
+     * Enabled error page, if in mapping a rule is found, the page is not display.
+     */
+    void enabledErrorPage();
+    
+    /**
+     * Force error page, even if in mapping a rule is found, the page is display.
+     */
+    void forceErrorPage();
+    
 }

@@ -270,7 +270,7 @@ public class ANTLRMappingParser implements MappingParser {
                 value = value.substring(1);
                 
                 if(Config.MODE.equals(name)) {
-                    config.setMode(value);
+                    config.setMode(Config.Mode.valueOf(value.toUpperCase()));
                 } else if(Config.PACKAGE_BASE.equals(name)) {
                     config.setPackageBase(value);
                 } else if(Config.PACKAGE_ACTIONS.equals(name)) {
@@ -289,6 +289,8 @@ public class ANTLRMappingParser implements MappingParser {
                     config.setJavacDebug(Boolean.valueOf(value));
                 } else if(Config.HANDLERS_FACTORY_CLASS.equals(name)) {
                     config.setHandlersFactory(value);
+                } else if(Config.ERROR_PAGE.equals(name)) {
+                    config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
                 }
             }
         });
@@ -333,7 +335,7 @@ public class ANTLRMappingParser implements MappingParser {
 
             @Override
             public void acceptAfter(Token token) {
-                ErrorRule errorRule = (ErrorRule) stack.removeLast();
+                ErrorRule errorRule = (ErrorRule) stack.peekLast();
                 errorRule.setMapping(mapping);
                 errorRule.setLine(token.getLine());
             }
