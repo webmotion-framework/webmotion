@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
  * <li>HttpSession</li>
  * <li>HttpServletRequest or ServletRequest</li>
  * <li>HttpServletResponse or ServletResponse</li>
+ * <li>ServerContext</li>
  * <li>ServletContext</li>
  * <li>ErrorData</li>
  * <li>Exception</li>
@@ -141,6 +142,9 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
         } else if (ServletResponse.class.isAssignableFrom(type)) {
             value = context.getResponse();
+
+        } else if (ServerContext.class.isAssignableFrom(type)) {
+            value = context.getServerContext();
 
         } else if (ServletContext.class.isAssignableFrom(type)) {
             value = context.getServletContext();
