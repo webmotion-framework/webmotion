@@ -6,7 +6,7 @@ package.filters=test.filters
 package.errors=test.errors
 
 javac.debug=true
-mode=statefull
+server.controller.scope=request
 request.encoding=UTF-8
 
 [errors]

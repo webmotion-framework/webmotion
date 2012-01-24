@@ -25,15 +25,16 @@
 package org.debux.webmotion.server.handler;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.Config.Mode;
+import org.debux.webmotion.server.mapping.Config.Scope;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.slf4j.Logger;
@@ -50,43 +51,70 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorInstanceCreatorHandler.class);
 
-    protected SingletonFactory<WebMotionController> factory;
-    
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        factory = context.getControllers();
+        // Do nothing
     }
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        HttpContext context = call.getContext();
-        Config config = mapping.getConfig();
-        Mode mode = config.getMode();
-
         List<Executor> executors = call.getExecutors();
         for (Executor executor : executors) {
-
+            // You must test mode here to manage correctly extension, otherwise
+            // you risk to have only the factory define in init method.
+            
+            SingletonFactory<WebMotionController> factory = getControllerFactory(mapping, call);
             Class<? extends WebMotionController> actionClass = executor.getClazz();
-
-            try {
-                // You must test mode here to manage correctly extension, otherwise
-                // you risk to have only the factory define in init method.
-                WebMotionController instance = null;
-                if(mode == Mode.STATEFULL) {
-                    instance = actionClass.newInstance();
-
-                } else if(mode == Mode.STATELESS) {
-                    instance = factory.getInstance(actionClass);
-                }
-                
-                executor.setInstance(instance);
-
-            } catch (InstantiationException ie) {
-                throw new WebMotionException("Error during create filter or action instance " + actionClass, ie, call.getRule());
-                
-            } catch (IllegalAccessException iae) {
-                throw new WebMotionException("Error during create filter or action instance " + actionClass, iae, call.getRule());
-            }
+            
+            WebMotionController instance = factory.getInstance(actionClass);
+            executor.setInstance(instance);
         }
+    }
+    
+    /** Attribute name use to store controller factory in the session or the request */
+    public static final String CONTROLLER_FACTORY_ATTRIBUTE = "org.debux.webmotion.server.CONTROLLER_FACTORY";
+    
+    /**
+     * Search the controller factory from mode define in mapping.
+     * TODO: 20120124 jru Move to other class, to delete the dependance between handler and the render.
+     * 
+     * @param mapping mapping
+     * @param call call
+     * @return controller factory
+     */
+    public static SingletonFactory<WebMotionController> getControllerFactory(Mapping mapping, Call call) {
+        
+        HttpContext context = call.getContext();
+        Config config = mapping.getConfig();
+        Scope scope = config.getControllerScope();
+        
+        SingletonFactory<WebMotionController> factory = null;
+        
+        switch (scope) {
+            case REQUEST:
+                HttpServletRequest request = context.getRequest();
+                factory = (SingletonFactory<WebMotionController>) request.getAttribute(CONTROLLER_FACTORY_ATTRIBUTE);
+                if (factory == null) {
+                    factory = new SingletonFactory<WebMotionController>();
+                    request.setAttribute(CONTROLLER_FACTORY_ATTRIBUTE, factory);
+                }
+                break;
+                
+            case SESSION:
+                HttpSession session = context.getSession();
+                factory = (SingletonFactory<WebMotionController>) session.getAttribute(CONTROLLER_FACTORY_ATTRIBUTE);
+                if (factory == null) {
+                    factory = new SingletonFactory<WebMotionController>();
+                    session.setAttribute(CONTROLLER_FACTORY_ATTRIBUTE, factory);
+                }
+                break;
+                
+            case SINGLETON:
+                ServerContext serverContext = context.getServerContext();
+                factory = serverContext.getControllers();
+                break;
+        }
+        
+        return factory;
     }
 }

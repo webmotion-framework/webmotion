@@ -46,6 +46,8 @@ import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Config.Scope;
+import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
@@ -269,29 +271,29 @@ public class ANTLRMappingParser implements MappingParser {
                 String name = (String) stack.peekLast();
                 value = value.substring(1);
                 
-                if(Config.MODE.equals(name)) {
-                    config.setMode(Config.Mode.valueOf(value.toUpperCase()));
-                } else if(Config.PACKAGE_BASE.equals(name)) {
+                if (Config.PACKAGE_BASE.equals(name)) {
                     config.setPackageBase(value);
-                } else if(Config.PACKAGE_ACTIONS.equals(name)) {
+                } else if (Config.PACKAGE_ACTIONS.equals(name)) {
                     config.setPackageActions(value);
-                } else if(Config.PACKAGE_ERRORS.equals(name)) {
+                } else if (Config.PACKAGE_ERRORS.equals(name)) {
                     config.setPackageErrors(value);
-                } else if(Config.PACKAGE_FILTERS.equals(name)) {
+                } else if (Config.PACKAGE_FILTERS.equals(name)) {
                     config.setPackageFilters(value);
-                } else if(Config.PACKAGE_VIEWS.equals(name)) {
+                } else if (Config.PACKAGE_VIEWS.equals(name)) {
                     config.setPackageViews(value);
-                } else if(Config.REQUEST_ENCODING.equals(name)) {
+                } else if (Config.REQUEST_ENCODING.equals(name)) {
                     config.setRequestEncoding(value);
-                } else if(Config.REQUEST_ASYNC.equals(name)) {
+                } else if (Config.REQUEST_ASYNC.equals(name)) {
                     config.setRequestAsync(Boolean.valueOf(value));
-                } else if(Config.JAVAC_DEBUG.equals(name)) {
+                } else if (Config.JAVAC_DEBUG.equals(name)) {
                     config.setJavacDebug(Boolean.valueOf(value));
-                } else if(Config.HANDLERS_FACTORY_CLASS.equals(name)) {
+                } else if (Config.SERVER_CONTROLLER_SCOPE.equals(name)) {
+                    config.setControllerScope(Scope.valueOf(value.toUpperCase()));
+                } else if (Config.HANDLERS_FACTORY_CLASS.equals(name)) {
                     config.setHandlersFactory(value);
-                } else if(Config.ERROR_PAGE.equals(name)) {
-                    config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
-                } else if(Config.SERVER_LISTENER_CLASS.equals(name)) {
+                } else if (Config.SERVER_ERROR_PAGE.equals(name)) {
+                    config.setErrorPage(State.valueOf(value.toUpperCase()));
+                } else if (Config.SERVER_LISTENER_CLASS.equals(name)) {
                     config.setServerListener(value);
                 }
             }

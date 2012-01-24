@@ -40,6 +40,8 @@ import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Config.Scope;
+import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
@@ -152,17 +154,17 @@ public class BasicMappingParser implements MappingParser {
                     String value = extractConfig(Config.JAVAC_DEBUG, rule);
                     config.setJavacDebug(Boolean.valueOf(value));
                     
-                } else if (section == 4 && rule.startsWith(Config.MODE)) {
-                    String value = extractConfig(Config.MODE, rule);
-                    config.setMode(Config.Mode.valueOf(value.toUpperCase()));
+                } else if (section == 4 && rule.startsWith(Config.SERVER_CONTROLLER_SCOPE)) {
+                    String value = extractConfig(Config.SERVER_CONTROLLER_SCOPE, rule);
+                    config.setControllerScope(Scope.valueOf(value.toUpperCase()));
                     
                 } else if (section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
                     String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
                     config.setHandlersFactory(value);
                     
-                } else if (section == 4 && rule.startsWith(Config.ERROR_PAGE)) {
-                    String value = extractConfig(Config.ERROR_PAGE, rule);
-                    config.setErrorPage(Config.State.valueOf(value.toUpperCase()));
+                } else if (section == 4 && rule.startsWith(Config.SERVER_ERROR_PAGE)) {
+                    String value = extractConfig(Config.SERVER_ERROR_PAGE, rule);
+                    config.setErrorPage(State.valueOf(value.toUpperCase()));
                     
                 } else if (section == 4 && rule.startsWith(Config.SERVER_LISTENER_CLASS)) {
                     String value = extractConfig(Config.SERVER_LISTENER_CLASS, rule);

@@ -32,9 +32,10 @@ package org.debux.webmotion.server.mapping;
  */
 public class Config {
 
-    public static enum Mode {
-        STATEFULL,
-        STATELESS
+    public static enum Scope {
+        REQUEST,
+        SINGLETON,
+        SESSION
     }
     
     public static enum State {
@@ -52,9 +53,9 @@ public class Config {
     public static String REQUEST_ENCODING = "request.encoding";
     public static String REQUEST_ASYNC = "request.async";
     public static String JAVAC_DEBUG = "javac.debug";
-    public static String MODE = "mode";
     public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
-    public static String ERROR_PAGE = "error.page";
+    public static String SERVER_CONTROLLER_SCOPE = "server.controller.scope";
+    public static String SERVER_ERROR_PAGE = "server.error.page";
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
     
     /** The package name where the view is searched */
@@ -82,7 +83,7 @@ public class Config {
     protected boolean javacDebug = true;
     
     /** Precises the behavior of server is stateless or statefull */
-    protected Mode mode = Mode.STATELESS;
+    protected Scope controllerScope = Scope.SINGLETON;
     
     /** Class to chain handler */
     protected String handlersFactory = "org.debux.webmotion.server.WebMotionHandlerFactory";
@@ -171,14 +172,14 @@ public class Config {
         this.javacDebug = javacDebug;
     }
 
-    public Mode getMode() {
-        return mode;
+    public Scope getControllerScope() {
+        return controllerScope;
     }
 
-    public void setMode(Mode mode) {
-        this.mode = mode;
+    public void setControllerScope(Scope controllerScope) {
+        this.controllerScope = controllerScope;
     }
-    
+
     public String getHandlersFactory() {
         return handlersFactory;
     }

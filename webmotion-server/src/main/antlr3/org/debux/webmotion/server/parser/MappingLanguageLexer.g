@@ -30,11 +30,11 @@ CONFIG_PACKAGE_FILTERS:'package.filters';
 CONFIG_PACKAGE_ACTIONS:'package.actions';
 CONFIG_PACKAGE_ERRORS:'package.errors';
 CONFIG_JAVAC_DEBUG:'javac.debug';
-CONFIG_MODE:'mode';
 CONFIG_REQUEST_ENCODING:'request.encoding';
 CONFIG_REQUEST_ASYNC:'request.async';
 CONFIG_HANDLERS_FACTORY_CLASS:'handlers.factory.class';
-CONFIG_ERROR_PAGE:'error.page';
+CONFIG_SERVER_ERROR_PAGE:'server.error.page';
+CONFIG_SERVER_CONTROLLER_SCOPE:'server.controller.scope';
 CONFIG_SERVER_LISTENER_CLASS:'server.listener.class';
 
 ACTION:'action:';

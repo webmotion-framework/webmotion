@@ -5,7 +5,7 @@ package.actions=org.debox.web.action
 package.errors=org.debox.web.error
 
 #javac.debug=true
-#mode=statefull/stateless
+#server.controller.scope=singleton
 
 [errors]
 #java.lang.NullPointerException                              Error.npeError

@@ -38,6 +38,7 @@ import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -73,10 +74,6 @@ public class RenderAction extends Render {
         String className = StringUtils.substringBeforeLast(action, ".");
         String methodName = StringUtils.substringAfterLast(action, ".");
         
-        // Get instance
-        ServerContext serverContext = context.getServerContext();
-        SingletonFactory<WebMotionController> factory = serverContext.getControllers();
-        
         Config config = mapping.getConfig();
         String packageName = config.getPackageActions();
         String fullQualifiedName = null;
@@ -87,6 +84,7 @@ public class RenderAction extends Render {
         }
         
         try {
+            SingletonFactory<WebMotionController> factory = ExecutorInstanceCreatorHandler.getControllerFactory(mapping, call);
             WebMotionController instance = factory.getInstance(fullQualifiedName);
             // Invoke method
             Method method = WebMotionUtils.getMethod(instance.getClass(), methodName);
