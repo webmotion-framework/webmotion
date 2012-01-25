@@ -79,6 +79,6 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /helloView?name={who}                       view:helloParameters.jsp
 *           /select?param=value                         view:selectValue.jsp
 *           /select                                     view:select.jsp
-*           /async                                      Async.exec
+*           /async                                      async:Async.exec
 *           /template                                   Template.exec
 *           /context                                    Context.get
