@@ -26,6 +26,7 @@ package org.debux.webmotion.server.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
+import org.nuiton.util.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,9 +124,9 @@ public class BasicMappingParser implements MappingParser {
 
                 } else if (section == 5) {
                     // Extension section
-                    Mapping extensionMapping = extractSectionExtensions(rule);
+                    List<Mapping> extensionMappings = extractSectionExtensions(rule);
                     List<Mapping> extensionsRules = mapping.getExtensionsRules();
-                    extensionsRules.add(extensionMapping);
+                    extensionsRules.addAll(extensionMappings);
                     
                 } else if (section == 4 && rule.startsWith(Config.PACKAGE_VIEWS)) {
                     String value = extractConfig(Config.PACKAGE_VIEWS, rule);
@@ -260,21 +262,35 @@ public class BasicMappingParser implements MappingParser {
      * Extract in the given line an extension rule
      * @param line one line in mapping
      */
-    protected Mapping extractSectionExtensions(String line) {
+    protected List<Mapping> extractSectionExtensions(String line) {
         String[] splitRule = line.split(" ");
         String path = splitRule[0];
         String name = splitRule[1];
+
+        List<Mapping> mappings = new ArrayList<Mapping>();
         
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(name);
-        BasicMappingParser parser = new BasicMappingParser();
-        Mapping mapping = parser.parse(stream);
-        mapping.setName(name);
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            List<URL> resources = Resource.getResources(name, classLoader);
+            for (URL resource : resources) {
+                InputStream stream = resource.openStream();
+
+                BasicMappingParser parser = new BasicMappingParser();
+                Mapping extensionMapping = parser.parse(stream);
+                extensionMapping.setName(resource.toExternalForm());
+
+                Extension extension = new Extension();
+                extension.setPath(path);
+                extensionMapping.setExtension(extension);
                 
-        Extension extension = new Extension();
-        extension.setPath(path);
-        mapping.setExtension(extension);
-        
-        return mapping;
+                mappings.add(extensionMapping);
+            }
+
+        } catch (IOException ex) {
+            throw new WebMotionException("Error during read the file mapping with path in " + name, ex);
+        }
+
+        return mappings;
     }
     
     /**

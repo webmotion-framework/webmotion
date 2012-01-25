@@ -24,20 +24,14 @@
  */
 package org.debux.webmotion.server.call;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.ServerContextManager;
@@ -128,28 +122,6 @@ public class ServerContext {
         MappingParser parser = new ANTLRMappingParser();
         mapping = parser.parse(stream);
 
-        // Load mapping file in META-INF
-        try {
-            List<Mapping> extensionsRules = mapping.getExtensionsRules();
-        
-            Enumeration<URL> resources = getClass().getClassLoader().getResources("/META-INF/" + MappingParser.MAPPING_FILE_NAME);
-            while (resources.hasMoreElements()) {
-                URL url = resources.nextElement();
-                log.info("Loading " + url.toExternalForm());
-                InputStream metaStream = url.openStream();
-                Mapping metaMapping = parser.parse(metaStream);
-                
-                Extension extension = new Extension();
-                extension.setPath("/");
-                metaMapping.setExtension(extension);
-                
-                extensionsRules.add(metaMapping);
-            }
-            
-        } catch (IOException ioe) {
-            throw new WebMotionException("Error during load mapping in META-INF", ioe);
-        }
-        
         // Create the handler factory
         Config config = mapping.getConfig();
         String handlersFactoryClassName = config.getHandlersFactory();

@@ -162,8 +162,8 @@ section_extension
     ;
 
 section_extension_rule
-    : section_extension_path Blank file_name
-    -> ^(DOLLAR["EXTENSION"] ^(DOLLAR["PATH"] section_extension_path) ^(DOLLAR["FILE"] file_name))
+    : section_extension_path Blank pattern
+    -> ^(DOLLAR["EXTENSION"] ^(DOLLAR["PATH"] section_extension_path) ^(DOLLAR["FILE"] pattern))
     ;
 
 section_extension_path

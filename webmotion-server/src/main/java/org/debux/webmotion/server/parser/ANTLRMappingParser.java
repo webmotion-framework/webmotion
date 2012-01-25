@@ -26,6 +26,7 @@ package org.debux.webmotion.server.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
 import org.debux.webmotion.server.parser.MappingLanguageParser.mapping_return;
+import org.nuiton.util.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -696,19 +698,29 @@ public class ANTLRMappingParser implements MappingParser {
             @Override
             public void acceptBefore(String value) {
                 String path = (String) stack.removeLast();
-                
-                InputStream stream = getClass().getClassLoader().getResourceAsStream(value);
-                ANTLRMappingParser parser = new ANTLRMappingParser();
-                
-                Mapping extensionMapping = parser.parse(stream);
-                extensionMapping.setName(value);
-                
-                Extension extension = new Extension();
-                extension.setPath(path);
-                extensionMapping.setExtension(extension);
-        
+                        
                 List<Mapping> extensionsRules = mapping.getExtensionsRules();
-                extensionsRules.add(extensionMapping);
+                
+                try {
+                    ClassLoader classLoader = getClass().getClassLoader();
+                    List<URL> resources = Resource.getResources(value, classLoader);
+                    for (URL resource : resources) {
+                        InputStream stream = resource.openStream();
+
+                        ANTLRMappingParser parser = new ANTLRMappingParser();
+                        Mapping extensionMapping = parser.parse(stream);
+                        extensionMapping.setName(resource.toExternalForm());
+
+                        Extension extension = new Extension();
+                        extension.setPath(path);
+                        extensionMapping.setExtension(extension);
+
+                        extensionsRules.add(extensionMapping);
+                    }
+                
+                } catch (IOException ex) {
+                    throw new WebMotionException("Error during read the file mapping with path in " + value, ex);
+                }
             }
         });
         

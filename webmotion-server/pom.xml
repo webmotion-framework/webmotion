@@ -51,6 +51,11 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.nuiton</groupId>
+            <artifactId>nuiton-utils</artifactId>
+        </dependency>
+
         <!-- Logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
