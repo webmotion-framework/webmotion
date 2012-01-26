@@ -308,11 +308,17 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             } catch (InvocationTargetException ex) {
                 contextable.remove();
                 
-                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
-                throw new WebMotionException("Error during invoke method for filter " 
-                        + executor.getClazz().getName() 
-                        + " on method " + executor.getMethod().getName(),
-                        ex, filterRule);
+                Throwable cause = ex.getCause();
+                if (cause instanceof WebMotionException) {
+                    throw (WebMotionException) cause;
+                    
+                } else {
+                    FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                    throw new WebMotionException("Error during invoke method for filter " 
+                            + executor.getClazz().getName() 
+                            + " on method " + executor.getMethod().getName(),
+                            ex, filterRule);
+                }
             }
         }
         
