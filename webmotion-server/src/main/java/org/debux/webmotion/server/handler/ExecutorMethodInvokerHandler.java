@@ -234,7 +234,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
                 // Check if is the last executor is finished to remove the thread local
                 List<Executor> filters = call.getFilters();
-                if(filters.isEmpty()) {
+                if (filters.isEmpty()) {
                     contextable.remove();
                 }
 
@@ -267,11 +267,11 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
                 // Check if is the last executor is finished to remove the thread local
                 Executor firstFilter = call.getFilters().get(0);
-                if(executor == firstFilter) {
+                if (executor == firstFilter) {
                     contextable.remove();
                 }
 
-                if(render != null) {
+                if (render != null) {
                     call.setRender(render);
                     processRender(mapping, call);
                 }
@@ -291,7 +291,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             try {
                 Render render = call.getRender();
                 log.info("Render = " + render);
-                if(render != null) {
+                if (render != null) {
                     render.exec(mapping, call);
                 }
                 executed = true;
