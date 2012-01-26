@@ -71,10 +71,7 @@ public class WebMotionServer implements Filter {
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        serverContext = new ServerContext();
-        
-        ServletContext servletContext = filterConfig.getServletContext();
-        serverContext.contextInitialized(servletContext);
+        serverContext = initServerContext(filterConfig);
         
         // Extract listeners
         listeners = new ArrayList<WebMotionServerListener>();
@@ -87,6 +84,20 @@ public class WebMotionServer implements Filter {
         }
     }
 
+    /**
+     * Create the server context.
+     * @param filterConfig filter config
+     * @return server context
+     */
+    protected ServerContext initServerContext(FilterConfig filterConfig) {
+        ServerContext serverContext = new ServerContext();
+        
+        ServletContext servletContext = filterConfig.getServletContext();
+        serverContext.contextInitialized(servletContext);
+        
+        return serverContext;
+    }
+
     @Override
     public void destroy() {
         // Fire onStop
@@ -94,9 +105,16 @@ public class WebMotionServer implements Filter {
             listener.onStop(serverContext);
         }
         
+        destroyServerContext();
+    }
+
+    /**
+     * Detroy the server context.
+     */
+    protected void destroyServerContext() {
         serverContext.contextDestroyed();
     }
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = ((HttpServletRequest) request);

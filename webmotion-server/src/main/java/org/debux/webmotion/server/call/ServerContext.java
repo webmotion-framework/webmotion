@@ -113,11 +113,10 @@ public class ServerContext {
 
     /**
      * Load the mapping
-     * TODO: jru 20120120 Move in other class
      */
     public void loadMapping() {
         // Read the mapping in the current project
-        MappingParser parser = new ANTLRMappingParser();
+        MappingParser parser = getMappingParser();
         mapping = parser.parse();
 
         // Create the handler factory
@@ -128,6 +127,13 @@ public class ServerContext {
         
         // Init handlers
         handlersFactory.init(mapping, this);
+    }
+
+    /**
+     * @return the instance of mapping parser
+     */
+    protected ANTLRMappingParser getMappingParser() {
+        return new ANTLRMappingParser();
     }
         
     public SingletonFactory<WebMotionController> getControllers() {
