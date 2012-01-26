@@ -53,7 +53,7 @@
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>dependencies</outputDirectory>
+            <outputDirectory>lib</outputDirectory>
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>
