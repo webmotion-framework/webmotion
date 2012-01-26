@@ -64,9 +64,7 @@ public class ANTLRParserTest {
         public void testParser() throws RecognitionException, IOException {
             ClassLoader classLoader = ANTLRParserTest.class.getClassLoader();
             URL resource = classLoader.getResource(fileName);
-            String path = resource.getPath();
-            FileInputStream stream = new FileInputStream(path);
-            parser.parse(stream);
+            parser.parse(resource);
         }
         
     }

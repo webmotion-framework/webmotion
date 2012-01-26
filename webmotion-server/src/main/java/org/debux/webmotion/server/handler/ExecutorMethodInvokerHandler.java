@@ -25,6 +25,7 @@
 package org.debux.webmotion.server.handler;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -241,7 +242,19 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 call.setRender(render);
                 processRender(mapping, call);
                 
-            } catch (Exception ex) {
+            } catch (IllegalAccessException ex) {
+                contextable.remove();
+                throw new WebMotionException("Error during invoke method for action " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(),
+                        ex, call.getRule());
+            } catch (IllegalArgumentException ex) {
+                contextable.remove();
+                throw new WebMotionException("Error during invoke method for action " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(),
+                        ex, call.getRule());
+            } catch (InvocationTargetException ex) {
                 contextable.remove();
                 throw new WebMotionException("Error during invoke method for action " 
                         + executor.getClazz().getName() 
@@ -276,7 +289,23 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     processRender(mapping, call);
                 }
                 
-            } catch (Exception ex) {
+            } catch (IllegalAccessException ex) {
+                contextable.remove();
+                
+                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                throw new WebMotionException("Error during invoke method for filter " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(),
+                        ex, filterRule);
+            } catch (IllegalArgumentException ex) {
+                contextable.remove();
+                
+                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                throw new WebMotionException("Error during invoke method for filter " 
+                        + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(),
+                        ex, filterRule);
+            } catch (InvocationTargetException ex) {
                 contextable.remove();
                 
                 FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);

@@ -118,9 +118,8 @@ public class ServerContext {
      */
     public void loadMapping() {
         // Read the mapping in the current project
-        InputStream stream = getClass().getResourceAsStream(MappingParser.MAPPING_FILE_NAME);
         MappingParser parser = new ANTLRMappingParser();
-        mapping = parser.parse(stream);
+        mapping = parser.parse();
 
         // Create the handler factory
         Config config = mapping.getConfig();

@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author jruchaud
  */
-public class BasicMappingParser implements MappingParser {
+public class BasicMappingParser extends MappingParser {
 
     private static final Logger log = LoggerFactory.getLogger(BasicMappingParser.class);
     
@@ -68,13 +68,14 @@ public class BasicMappingParser implements MappingParser {
     protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
     @Override
-    public Mapping parse(InputStream stream) {
+    protected Mapping parse(URL url) {
         Mapping mapping = new Mapping();
-        mapping.setName(MAPPING_FILE_NAME);
+        mapping.setName(url.toExternalForm());
         
         Config config = mapping.getConfig();
         
         try {
+            InputStream stream = url.openStream();
             List<String> rules = IOUtils.readLines(stream);
 
             int section = 0;
@@ -272,13 +273,10 @@ public class BasicMappingParser implements MappingParser {
             ClassLoader classLoader = getClass().getClassLoader();
             List<URL> resources = Resource.getResources(name, classLoader);
             for (URL resource : resources) {
-                InputStream stream = resource.openStream();
-
                 BasicMappingParser parser = new BasicMappingParser();
-                Mapping extensionMapping = parser.parse(stream);
-                extensionMapping.setName(resource.toExternalForm());
-                extensionMapping.setExtensionPath(path);
                 
+                Mapping extensionMapping = parser.parse(resource);
+                extensionMapping.setExtensionPath(path);
                 mappings.add(extensionMapping);
             }
 

@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author jruchaud
  */
-public class ANTLRMappingParser implements MappingParser {
+public class ANTLRMappingParser extends MappingParser {
 
     private static final Logger log = LoggerFactory.getLogger(ANTLRMappingParser.class);
     
@@ -202,13 +202,14 @@ public class ANTLRMappingParser implements MappingParser {
     }
     
     @Override
-    public Mapping parse(InputStream stream) {
+    protected Mapping parse(URL url) {
         mapping = new Mapping();
-        mapping.setName(MAPPING_FILE_NAME);
+        mapping.setName(url.toExternalForm());
         
         stack = new LinkedList<Object>();
         
         try {
+            InputStream stream = url.openStream();
             String content = IOUtils.toString(stream);
             ANTLRStringStream input = new ANTLRStringStream(content);
             
@@ -704,13 +705,10 @@ public class ANTLRMappingParser implements MappingParser {
                     ClassLoader classLoader = getClass().getClassLoader();
                     List<URL> resources = Resource.getResources(value, classLoader);
                     for (URL resource : resources) {
-                        InputStream stream = resource.openStream();
-
                         ANTLRMappingParser parser = new ANTLRMappingParser();
-                        Mapping extensionMapping = parser.parse(stream);
-                        extensionMapping.setName(resource.toExternalForm());
-                        extensionMapping.setExtensionPath(path);
 
+                        Mapping extensionMapping = parser.parse(resource);
+                        extensionMapping.setExtensionPath(path);
                         extensionsRules.add(extensionMapping);
                     }
                 

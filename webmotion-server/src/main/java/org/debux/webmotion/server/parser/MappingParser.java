@@ -24,24 +24,33 @@
  */
 package org.debux.webmotion.server.parser;
 
-import java.io.InputStream;
+import java.net.URL;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * The interface represents to how parse the mapping file.
+ * The class represents to how parse the mapping file.
  * 
  * @author jruchaud
  */
-public interface MappingParser {
+public abstract class MappingParser {
     
     /** The absolute path to the mapping file */
     public static String MAPPING_FILE_NAME = "/mapping";
     
     /**
      * Parse a mapping file
-     * @param stream mapping file to parse
      * @return the representation of the file
      */
-    Mapping parse(InputStream stream);
+    public Mapping parse() {
+        URL url = getClass().getResource(MappingParser.MAPPING_FILE_NAME);
+        return parse(url);
+    }
+    
+    /**
+     * Parse a mapping file on url
+     * @param url mapping file to parse
+     * @return the representation of the file
+     */
+    protected abstract Mapping parse(URL url);
     
 }
