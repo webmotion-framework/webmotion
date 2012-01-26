@@ -33,7 +33,6 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
-import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.render.RenderUrl;
 import org.debux.webmotion.server.render.RenderView;
