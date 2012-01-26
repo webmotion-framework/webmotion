@@ -334,20 +334,22 @@
                 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>1.5</version>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2.2</version>
                     <executions>
                         <execution>
+                            <id>make-full</id>
                             <phase>package</phase>
                             <goals>
-                                <goal>shade</goal>
+                                <goal>single</goal>
                             </goals>
+                            <configuration>
+                                <descriptors>
+                                    <descriptor>${project.parent.basedir}/src/main/assembly/full.xml</descriptor>
+                                </descriptors>
+                            </configuration>
                         </execution>
                     </executions>
-                    <configuration>
-                        <finalName>${project.build.finalName}-with-dependencies</finalName>
-                        <minimizeJar>true</minimizeJar>
-                    </configuration>
                 </plugin>
             
             </plugins>
