@@ -79,9 +79,10 @@ public class WebMotionUtilsTest {
         AssertJUnit.assertNotNull(method);
     }
     
-    @Test(expectedExceptions={WebMotionException.class})
+    @Test
     public void testGetMethodNotFound() {
-        WebMotionUtils.getMethod(WebMotionUtils.class, "notFound");
+        Method method = WebMotionUtils.getMethod(WebMotionUtils.class, "notFound");
+        AssertJUnit.assertNull(method);
     }
 
     @Test

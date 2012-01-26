@@ -26,12 +26,12 @@ package org.debux.webmotion.server.call;
 
 import org.debux.webmotion.server.render.Render;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.debux.webmotion.server.mapping.ActionRule;
-import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Rule;
 
@@ -77,6 +77,10 @@ public class Call {
      * Default contructor use to create wrapper to test
      */
     public Call() {
+        this.extractParameters = new LinkedHashMap<String, Object>();
+        this.aliasParameters = new LinkedHashMap<String, Object>();
+        this.filterRules = new LinkedList<FilterRule>();
+        this.filters = new LinkedList<Executor>();
     }
     
     /**
@@ -87,7 +91,8 @@ public class Call {
      * @param response HTTP response used to put next render for user.
      */
     public Call(ServerContext serverContext, HttpServletRequest request, HttpServletResponse response) {
-        context = new HttpContext(serverContext, request, response);
+        this();
+        this.context = new HttpContext(serverContext, request, response);
     }
 
     public HttpContext getContext() {

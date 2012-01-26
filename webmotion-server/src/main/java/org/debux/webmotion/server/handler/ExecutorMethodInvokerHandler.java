@@ -205,11 +205,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             Executor executor = call.getExecutor(); // Search if the call contains a action
             
             if (render == null || !executed) {
-                if (filtersIterator.hasNext()) {
-                    processFilter(mapping, call);
-                    
-                } else if (executor != null) {
-                    processAction(mapping, call);
+                if (executor != null) {
+                    if (filtersIterator.hasNext()) {
+                        processFilter(mapping, call);
+                    } else {
+                        processAction(mapping, call);
+                    }
                     
                 } else {
                     // The call contains already the render

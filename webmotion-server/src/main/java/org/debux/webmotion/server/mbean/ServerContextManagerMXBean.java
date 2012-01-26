@@ -61,6 +61,11 @@ public interface ServerContextManagerMXBean {
     /**
      * Force error page, even if in mapping a rule is found, the page is display.
      */
-    void forceErrorPage();
+    void forcedErrorPage();
+    
+    /**
+     * @return error page status (enabled/disabled/forced)
+     */
+    String getErrorPageStatus();
     
 }

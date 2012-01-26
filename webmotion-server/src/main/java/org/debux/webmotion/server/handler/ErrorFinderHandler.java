@@ -28,7 +28,6 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.render.RenderException;
-import java.util.ArrayList;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.mapping.ErrorRule;
@@ -37,9 +36,7 @@ import java.util.List;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
-import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Rule;
-import org.debux.webmotion.server.render.RenderContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,48 +65,52 @@ public class ErrorFinderHandler implements WebMotionHandler {
             throw new WebMotionException("It is not possible to call directly error servlet", exception);
         }
 
-        List<ErrorRule> errorRules = mapping.getErrorRules();
-        for (ErrorRule errorRule : errorRules) {
-            String error = errorRule.getError();
-
-            if(error == null) {
-                call.setRule(errorRule);
-                break;
-                
-            } else if(error.startsWith("code:")) {
-                String code = statusCode.toString();
-                if(error.equals("code:" + code)) {
-                    call.setRule(errorRule);
-                    break;
-                }
-
-            } else if(exception != null) {
-                try {
-                    Class<?> errorClass = Class.forName(error);
-
-                    Throwable throwableFound = getException(errorClass, exception);
-                    if(throwableFound != null) {
-                        errorData.setCause(throwableFound);
-                        call.setRule(errorRule);
-                        break;
-                    }
-
-                } catch (ClassNotFoundException clnfe) {
-                    throw new WebMotionException("Class not found with name " + error, clnfe);
-                }
-            }              
-        }
-        
-        // Create a direct render if neither rule is found or the error page 
-        // is forced
         HttpContext context = call.getContext();
         ServerContext serverContext = context.getServerContext();
         Mapping rootMapping = serverContext.getMapping();
         Config rootConfig = rootMapping.getConfig();
         State errorPage = rootConfig.getErrorPage();
         
+        if (errorPage != State.FORCED) {
+            
+            List<ErrorRule> errorRules = mapping.getErrorRules();
+            for (ErrorRule errorRule : errorRules) {
+                String error = errorRule.getError();
+
+                if(error == null) {
+                    call.setRule(errorRule);
+                    break;
+
+                } else if(error.startsWith("code:")) {
+                    String code = statusCode.toString();
+                    if(error.equals("code:" + code)) {
+                        call.setRule(errorRule);
+                        break;
+                    }
+
+                } else if(exception != null) {
+                    try {
+                        Class<?> errorClass = Class.forName(error);
+
+                        Throwable throwableFound = getException(errorClass, exception);
+                        if(throwableFound != null) {
+                            errorData.setCause(throwableFound);
+                            call.setRule(errorRule);
+                            break;
+                        }
+
+                    } catch (ClassNotFoundException clnfe) {
+                        throw new WebMotionException("Class not found with name " + error, clnfe);
+                    }
+                }              
+            }
+        }
+        
+        // Create a direct render if neither rule is found or the error page 
+        // is forced
         Rule rule = call.getRule();
-        if (rule == null || errorPage == State.FORCED) {
+        String extensionPath = mapping.getExtensionPath();
+        if (extensionPath == null && rule == null) {
             call.setRule(null);
             
             RenderException render;
@@ -120,10 +121,6 @@ public class ErrorFinderHandler implements WebMotionHandler {
             }
             call.setRender(render);
         }
-        
-        // Initialize filters
-        List<Executor> filters = new ArrayList<Executor>(0);
-        call.setFilters(filters);
     }
 
     /**

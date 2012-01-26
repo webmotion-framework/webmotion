@@ -57,8 +57,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         // Save result in call
-        Map<String, Object> result = new LinkedHashMap<String, Object>();
-        call.setAliasParameters(result);
+        Map<String, Object> aliasParameters = call.getAliasParameters();
         
         // Not action found in extension ?
         ActionRule actionRule = (ActionRule) call.getRule();
@@ -109,7 +108,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             Object value = entry.getValue();
             
             // Manage object.property=value
-            Map<String, Object> map = result;
+            Map<String, Object> map = aliasParameters;
             
             String[] split = key.split("\\.");
             

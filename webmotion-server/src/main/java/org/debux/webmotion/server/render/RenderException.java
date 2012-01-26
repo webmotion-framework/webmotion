@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -120,9 +121,10 @@ public class RenderException extends RenderStringTemplate {
                 String name = rule.getMapping().getName();
                 int line = rule.getLine();
                 
-                InputStream stream = getClass().getClassLoader().getResourceAsStream(name);
+                URL url = new URL(name);
+                InputStream stream = url.openStream();
                 List<String> readLines = IOUtils.readLines(stream);
-                String content = readLines.get(line);
+                String content = readLines.get(line - 1);
                 
                 model.put("mappingName", name);
                 model.put("mappingLine", line);

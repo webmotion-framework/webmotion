@@ -31,13 +31,13 @@ import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
+import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,31 +57,37 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        List<FilterRule> filterRules = call.getFilterRules();
-        List<Executor> filters = new ArrayList<Executor>(filterRules.size());
-        call.setFilters(filters);
+        Rule rule = call.getRule();
+        if (rule != null) {
+            
+            List<FilterRule> filterRules = call.getFilterRules();
+            List<Executor> filters = call.getFilters();
 
-        for (FilterRule filterRule : filterRules) {
-            Action action = filterRule.getAction();
+            for (FilterRule filterRule : filterRules) {
+                Action action = filterRule.getAction();
 
-            Config config = mapping.getConfig();
-            String packageName = config.getPackageFilters();
-            String className = action.getClassName();
-            String fullQualifiedName = packageName + "." + className;
+                Config config = mapping.getConfig();
+                String packageName = config.getPackageFilters();
+                String className = action.getClassName();
+                String fullQualifiedName = packageName + "." + className;
 
-            try {
-                Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+                try {
+                    Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
 
-                String methodName = action.getMethodName();
-                Method method = WebMotionUtils.getMethod(clazz, methodName);
+                    String methodName = action.getMethodName();
+                    Method method = WebMotionUtils.getMethod(clazz, methodName);
+                    if (method == null) {
+                        throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, filterRule);
+                    }
 
-                Executor executor = new Executor();
-                executor.setClazz(clazz);
-                executor.setMethod(method);
-                filters.add(executor);
-                
-            } catch (ClassNotFoundException clnfe) {
-                throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, filterRule);
+                    Executor executor = new Executor();
+                    executor.setClazz(clazz);
+                    executor.setMethod(method);
+                    filters.add(executor);
+
+                } catch (ClassNotFoundException clnfe) {
+                    throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, filterRule);
+                }
             }
         }
     }

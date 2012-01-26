@@ -88,6 +88,10 @@ public class RenderAction extends Render {
             WebMotionController instance = factory.getInstance(fullQualifiedName);
             // Invoke method
             Method method = WebMotionUtils.getMethod(instance.getClass(), methodName);
+            if (method == null) {
+                throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, call.getRule());
+            }
+                
             Render actionRender = (Render) method.invoke(instance, model);
             // Request the render
             call.setRender(actionRender);

@@ -1,11 +1,11 @@
 /*
  * #%L
- * Webmotion in action
+ * Webmotion website
  * 
  * $Id$
  * $HeadURL$
  * %%
- * Copyright (C) 2011 Debux
+ * Copyright (C) 2011 - 2012 Debux
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -22,26 +22,27 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server.mapping;
+package org.debux.webmotion.showcase;
+
+import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.render.Render;
 
 /**
- * The class represents if the mapping is an extension.
+ * Basic stats extension
  * 
  * @author julien
  */
-public class Extension {
-
-    /** Path where the extension in mounted */
-    protected String path;
+public class Stats extends WebMotionFilter {
     
-    public Extension() {
+    public static int count = 0;
+    
+    public void count() {
+        count ++;
+        doProcess();
     }
-
-    public String getPath() {
-        return path;
+    
+    public Render get() {
+        return renderContent("<h1>count = " + count + "</h1>", "text/html");
     }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+    
 }

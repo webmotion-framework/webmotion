@@ -86,6 +86,9 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
                 String methodName = action.getMethodName();
                 methodName = WebMotionUtils.replaceDynamicName(methodName, parameters);
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
+                if (method == null) {
+                    throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);
+                }
 
                 Executor executor = new Executor();
                 executor.setClazz(clazz);

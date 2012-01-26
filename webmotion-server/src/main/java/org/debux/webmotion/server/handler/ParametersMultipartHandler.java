@@ -25,7 +25,6 @@
 package org.debux.webmotion.server.handler;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -67,8 +66,7 @@ public class ParametersMultipartHandler implements WebMotionHandler {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
 
-        Map<String, Object> extractParameters = new HashMap<String, Object>();
-        call.setExtractParameters(extractParameters);
+        Map<String, Object> extractParameters = call.getExtractParameters();
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if(isMultipart) {

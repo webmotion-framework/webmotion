@@ -55,7 +55,7 @@ public class Mapping {
     protected List<Mapping> extensionsRules;
 
     /** Informations if the extension is use as an extension */
-    protected Extension extension;
+    protected String extensionPath;
     
     public Mapping() {
         this.config = new Config();
@@ -85,16 +85,24 @@ public class Mapping {
         return actionRules;
     }
 
+    public void setActionRules(List<ActionRule> actionRules) {
+        this.actionRules = actionRules;
+    }
+
     public List<ErrorRule> getErrorRules() {
         return errorRules;
     }
 
-    public Extension getExtension() {
-        return extension;
+    public void setErrorRules(List<ErrorRule> errorRules) {
+        this.errorRules = errorRules;
+    }
+    
+    public String getExtensionPath() {
+        return extensionPath;
     }
 
-    public void setExtension(Extension extension) {
-        this.extension = extension;
+    public void setExtensionPath(String extensionPath) {
+        this.extensionPath = extensionPath;
     }
 
     public List<Mapping> getExtensionsRules() {
@@ -112,5 +120,5 @@ public class Mapping {
     public void setName(String name) {
         this.name = name;
     }
-    
+
 }

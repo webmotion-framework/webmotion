@@ -57,11 +57,11 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        // Test if it directly mapped on view or url
         Render render = call.getRender();
-        if(render == null) {
+        Rule rule = call.getRule();
+        // Test if it directly mapped on view or url
+        if (render == null && rule != null) {
             
-            Rule rule = call.getRule();
             Action action = rule.getAction();
 
             String className = action.getClassName();
@@ -74,6 +74,9 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
 
                 String methodName = action.getMethodName();
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
+                if (method == null) {
+                    throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);
+                }
 
                 Executor executor = new Executor();
                 executor.setClazz(clazz);

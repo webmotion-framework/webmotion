@@ -117,9 +117,17 @@ public class ServerContextManager implements ServerContextManagerMXBean {
     }
 
     @Override
-    public void forceErrorPage() {
+    public void forcedErrorPage() {
         Mapping mapping = serverContext.getMapping();
         Config config = mapping.getConfig();
         config.setErrorPage(State.FORCED);
     }
+
+    @Override
+    public String getErrorPageStatus() {
+        Mapping mapping = serverContext.getMapping();
+        Config config = mapping.getConfig();
+        return config.getErrorPage().toString();
+    }
+    
 }

@@ -48,3 +48,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /async                                      Showcase.async
 *           /template                                   Showcase.template
 *           /listener                                   Showcase.listener
+*           /stats                                      Showcase.stats

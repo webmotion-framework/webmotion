@@ -156,6 +156,7 @@
                                 <ul>
                                     <li><a id="blog" href="./blog">Action</a></li>
                                     <li><a id="spring" href="./spring">Spring</a></li>
+                                    <li><a id="stats" href="./stats">Pattern</a> <span class="label notice">New</span></li>
                                 </ul>
                             </li>
                         </ul>

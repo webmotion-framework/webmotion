@@ -50,7 +50,6 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.Scope;
 import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.mapping.ErrorRule;
-import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
@@ -710,10 +709,7 @@ public class ANTLRMappingParser implements MappingParser {
                         ANTLRMappingParser parser = new ANTLRMappingParser();
                         Mapping extensionMapping = parser.parse(stream);
                         extensionMapping.setName(resource.toExternalForm());
-
-                        Extension extension = new Extension();
-                        extension.setPath(path);
-                        extensionMapping.setExtension(extension);
+                        extensionMapping.setExtensionPath(path);
 
                         extensionsRules.add(extensionMapping);
                     }

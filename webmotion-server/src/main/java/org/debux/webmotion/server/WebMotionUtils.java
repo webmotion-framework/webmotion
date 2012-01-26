@@ -71,9 +71,7 @@ public class WebMotionUtils {
      * Get the first method corresponding with <code>name</code> parameter in the <code>clazz</code> class.
      * @param clazz The class to browse.
      * @param name The method name to search.
-     * @return The first found method which name is <code>name</code>.
-     * @throws WebMotionException If not any method corresponding with <code>name</code> 
-     * parameter has been found in the <code>clazz</code> class.
+     * @return The first found method which name is <code>name</code> otherwise null.
      */
     public static Method getMethod(Class<?> clazz, String name) {
         Method[] all = clazz.getMethods();
@@ -85,7 +83,7 @@ public class WebMotionUtils {
             }
         }
         
-        throw new WebMotionException("Method not found with name " + name + " on class " + clazz.getName());
+        return null;
     }
     
     /**

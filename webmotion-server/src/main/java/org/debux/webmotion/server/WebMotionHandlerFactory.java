@@ -34,7 +34,6 @@ import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
-import org.debux.webmotion.server.mapping.Extension;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
@@ -169,9 +168,8 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
 
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensionsRules) {
-            Extension extension = extensionMapping.getExtension();
-            String path = extension.getPath();
             
+            String path = extensionMapping.getExtensionPath();
             log.info("path = " + path);
             if(url.startsWith(path)) {
                 
@@ -196,8 +194,9 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
             }
         }
         
+        // Search in mapping
         Rule rule = call.getRule();
-        if(rule == null) {
+        if (rule == null) {
             // Determine if the request contains an errors
             if(context.isError()) {
                 ErrorData errorData = context.getErrorData();
