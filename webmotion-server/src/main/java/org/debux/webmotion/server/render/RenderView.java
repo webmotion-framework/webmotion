@@ -73,11 +73,11 @@ public class RenderView extends Render {
             AsyncContext asyncContext = request.getAsyncContext();
             asyncContext.dispatch(path);
             
-        } else if (dispatcherType == DispatcherType.FORWARD) {
-            request.getRequestDispatcher(path).forward(request, response);
+        } else if (dispatcherType == DispatcherType.INCLUDE) {
+            request.getRequestDispatcher(path).include(request, response);
             
         } else {
-            request.getRequestDispatcher(path).include(request, response);
+            request.getRequestDispatcher(path).forward(request, response);
         }
     }
 
