@@ -107,7 +107,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             Boolean async = action.getAsync();
             
             isSyncRequest = request.getAttribute(ASYNC_STOPED_ATTRIBUTE_NAME) != null
-                    || async == null && !config.isRequestAsync()
+                    || async == null && !config.isAsync()
                     || async != null && !async;
         }
         

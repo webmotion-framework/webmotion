@@ -7,7 +7,8 @@ package.errors=test.errors
 
 javac.debug=true
 server.controller.scope=request
-request.encoding=UTF-8
+server.encoding=UTF-8
+server.async=true
 
 [errors]
 java.lang.NullPointerException                              Error.npeError

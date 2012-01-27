@@ -144,13 +144,13 @@ public class BasicMappingParser extends MappingParser {
                     String value = extractConfig(Config.PACKAGE_ERRORS, rule);
                     config.setPackageErrors(value);
                     
-                } else if (section == 4 && rule.startsWith(Config.REQUEST_ENCODING)) {
-                    String value = extractConfig(Config.REQUEST_ENCODING, rule);
-                    config.setRequestEncoding(value);
+                } else if (section == 4 && rule.startsWith(Config.SERVER_ENCODING)) {
+                    String value = extractConfig(Config.SERVER_ENCODING, rule);
+                    config.setEncoding(value);
                     
-                } else if (section == 4 && rule.startsWith(Config.REQUEST_ASYNC)) {
-                    String value = extractConfig(Config.REQUEST_ASYNC, rule);
-                    config.setRequestAsync(Boolean.valueOf(value));
+                } else if (section == 4 && rule.startsWith(Config.SERVER_ASYNC)) {
+                    String value = extractConfig(Config.SERVER_ASYNC, rule);
+                    config.setAsync(Boolean.valueOf(value));
                     
                 } else if (section == 4 && rule.startsWith(Config.JAVAC_DEBUG)) {
                     String value = extractConfig(Config.JAVAC_DEBUG, rule);

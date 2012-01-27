@@ -26,6 +26,7 @@ package org.debux.webmotion.server;
 
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -164,8 +165,11 @@ public class WebMotionServer implements Filter {
         // Create call context use in handler to get information on user request
         Call call = new Call(serverContext, request, response);
         
-        // Execute the main handler
+        // Apply config
         Mapping mapping = serverContext.getMapping();
+        applyConfig(mapping, call);
+
+        // Execute the main handler
         WebMotionHandler mainHandler = serverContext.getMainHandler();
         mainHandler.handle(mapping, call);
         
@@ -174,6 +178,25 @@ public class WebMotionServer implements Filter {
         serverStats.registerCallTime(call, start);
     }
     
+    /**
+     * Apply config in mapping on request and response
+     */
+    protected void applyConfig(Mapping mapping, Call call) throws WebMotionException {
+        HttpContext context = call.getContext();
+        HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
+        
+        Config config = mapping.getConfig();
+        String encoding = config.getEncoding();
+        try {
+            request.setCharacterEncoding(encoding);
+            response.setCharacterEncoding(encoding);
+            
+        } catch (UnsupportedEncodingException encodingException) {
+            throw new WebMotionException("Invalid encoding for request", encodingException);
+        }
+    }
+
     /**
      * Static resources management
      */

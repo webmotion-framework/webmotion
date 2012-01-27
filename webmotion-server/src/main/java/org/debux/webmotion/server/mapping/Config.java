@@ -50,9 +50,9 @@ public class Config {
     public static String PACKAGE_ACTIONS = "package.actions";
     public static String PACKAGE_FILTERS = "package.filters";
     public static String PACKAGE_ERRORS = "package.errors";
-    public static String REQUEST_ENCODING = "request.encoding";
-    public static String REQUEST_ASYNC = "request.async";
     public static String JAVAC_DEBUG = "javac.debug";
+    public static String SERVER_ENCODING = "server.encoding";
+    public static String SERVER_ASYNC = "server.async";
     public static String SERVER_CONTROLLER_SCOPE = "server.controller.scope";
     public static String SERVER_ERROR_PAGE = "server.error.page";
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
@@ -73,11 +73,11 @@ public class Config {
     /** The package name where the error is searched */
     protected String packageErrors = "";
     
-    /** Force the encoding in parameter */
-    protected String requestEncoding = "UTF-8";
+    /** Force the encoding in parameter and response*/
+    protected String encoding = "UTF-8";
     
     /** Indicates if by default the request is process to asynchronous mode */
-    protected boolean requestAsync = false;
+    protected boolean async = false;
     
     /** Indicates if the application is compile with debug mode */
     protected boolean javacDebug = true;
@@ -148,20 +148,20 @@ public class Config {
         this.packageViews = packageViews;
     }
 
-    public String getRequestEncoding() {
-        return requestEncoding;
+    public String getEncoding() {
+        return encoding;
     }
 
-    public void setRequestEncoding(String requestEncoding) {
-        this.requestEncoding = requestEncoding;
+    public void setEncoding(String requestEncoding) {
+        this.encoding = requestEncoding;
     }
 
-    public boolean isRequestAsync() {
-        return requestAsync;
+    public boolean isAsync() {
+        return async;
     }
 
-    public void setRequestAsync(boolean requestAsync) {
-        this.requestAsync = requestAsync;
+    public void setAsync(boolean async) {
+        this.async = async;
     }
 
     public boolean isJavacDebug() {

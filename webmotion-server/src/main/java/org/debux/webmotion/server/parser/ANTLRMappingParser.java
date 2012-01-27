@@ -283,10 +283,10 @@ public class ANTLRMappingParser extends MappingParser {
                     config.setPackageFilters(value);
                 } else if (Config.PACKAGE_VIEWS.equals(name)) {
                     config.setPackageViews(value);
-                } else if (Config.REQUEST_ENCODING.equals(name)) {
-                    config.setRequestEncoding(value);
-                } else if (Config.REQUEST_ASYNC.equals(name)) {
-                    config.setRequestAsync(Boolean.valueOf(value));
+                } else if (Config.SERVER_ENCODING.equals(name)) {
+                    config.setEncoding(value);
+                } else if (Config.SERVER_ASYNC.equals(name)) {
+                    config.setAsync(Boolean.valueOf(value));
                 } else if (Config.JAVAC_DEBUG.equals(name)) {
                     config.setJavacDebug(Boolean.valueOf(value));
                 } else if (Config.SERVER_CONTROLLER_SCOPE.equals(name)) {

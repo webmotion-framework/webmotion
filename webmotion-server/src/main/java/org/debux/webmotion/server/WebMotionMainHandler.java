@@ -25,11 +25,9 @@
 package org.debux.webmotion.server;
 
 import org.debux.webmotion.server.call.ServerContext;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
@@ -150,16 +148,6 @@ public class WebMotionMainHandler implements WebMotionHandler {
         long start = System.currentTimeMillis();
         HttpContext context = call.getContext();
         
-        // Apply config
-        Config config = mapping.getConfig();
-        String requestEncoding = config.getRequestEncoding();
-        HttpServletRequest request = context.getRequest();
-        try {
-            request.setCharacterEncoding(requestEncoding);
-        } catch (UnsupportedEncodingException encodingException) {
-            throw new WebMotionException("Invalid encoding for request", encodingException);
-        }
-
         // Determine the extension is used
         String url = context.getUrl();
         String extensionPath = context.getExtensionPath();
