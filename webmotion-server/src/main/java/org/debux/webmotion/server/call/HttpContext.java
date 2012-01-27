@@ -158,7 +158,7 @@ public class HttpContext {
         public static final String PREFIX_FLASH_MESSAGES_INFOS = "wm_flash_infos_";
         public static final String PREFIX_FLASH_MESSAGES_ERRORS = "wm_flash_errors_";
         public static final String PREFIX_FLASH_MESSAGES_WARNINGS = "wm_flash_warnings_";
-        public static final String PREFIX_FLASH_MESSAGES_MISCS = "flwm_ash_miscs_";
+        public static final String PREFIX_FLASH_MESSAGES_MISCS = "wm_flash_miscs_";
         
         protected Map<String, String> infos;
         protected Map<String, String> errors;
