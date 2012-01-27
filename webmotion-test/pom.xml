@@ -20,12 +20,24 @@
             <artifactId>webmotion</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Utils -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
         
         <!-- Servlet -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Logger -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         
     </dependencies>

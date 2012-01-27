@@ -37,15 +37,20 @@
         </dependency>
 
         <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
-        
+
         <!-- Servlet -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
         </dependency>
         
         <dependency>
@@ -56,9 +61,14 @@
         <!-- Logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>runtime</scope>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        
     </dependencies>
 
     <build>
