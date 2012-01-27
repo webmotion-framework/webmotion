@@ -69,8 +69,8 @@ public class ServerContext {
     /** Current mapping */
     protected Mapping mapping;
     
-    /** Entry point */
-    protected WebMotionHandler handlersFactory;
+    /** The main handler is call the first */
+    protected WebMotionHandler mainHandler;
     
     /** User attributes */
     protected Map<String, Object> attributes;
@@ -121,12 +121,12 @@ public class ServerContext {
 
         // Create the handler factory
         Config config = mapping.getConfig();
-        String handlersFactoryClassName = config.getHandlersFactory();
+        String className = config.getMainHandler();
         
-        handlersFactory = handlers.getInstance(handlersFactoryClassName);
+        mainHandler = handlers.getInstance(className);
         
         // Init handlers
-        handlersFactory.init(mapping, this);
+        mainHandler.init(mapping, this);
     }
 
     /**
@@ -164,8 +164,8 @@ public class ServerContext {
         return attributes.get(name);
     }
 
-    public WebMotionHandler getHandlersFactory() {
-        return handlersFactory;
+    public WebMotionHandler getMainHandler() {
+        return mainHandler;
     }
 
     public Mapping getMapping() {

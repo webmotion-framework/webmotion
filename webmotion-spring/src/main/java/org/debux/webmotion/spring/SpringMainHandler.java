@@ -26,7 +26,7 @@ package org.debux.webmotion.spring;
 
 import java.util.List;
 import javax.servlet.ServletContext;
-import org.debux.webmotion.server.WebMotionHandlerFactory;
+import org.debux.webmotion.server.WebMotionMainHandler;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
@@ -36,11 +36,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Add SpringInstanceCreatorHandler with use bean in Spring
+ * 
  * @author julien
  */
-public class SpringHandlerFactory extends WebMotionHandlerFactory {
+public class SpringMainHandler extends WebMotionMainHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringHandlerFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringMainHandler.class);
 
     @Override
     protected void initHandlers(Mapping mapping, ServerContext context) {

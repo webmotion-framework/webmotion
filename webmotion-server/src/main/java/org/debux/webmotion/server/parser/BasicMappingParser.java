@@ -160,9 +160,9 @@ public class BasicMappingParser extends MappingParser {
                     String value = extractConfig(Config.SERVER_CONTROLLER_SCOPE, rule);
                     config.setControllerScope(Scope.valueOf(value.toUpperCase()));
                     
-                } else if (section == 4 && rule.startsWith(Config.HANDLERS_FACTORY_CLASS)) {
-                    String value = extractConfig(Config.HANDLERS_FACTORY_CLASS, rule);
-                    config.setHandlersFactory(value);
+                } else if (section == 4 && rule.startsWith(Config.SERVER_MAIN_HANDLER_CLASS)) {
+                    String value = extractConfig(Config.SERVER_MAIN_HANDLER_CLASS, rule);
+                    config.setMainHandler(value);
                     
                 } else if (section == 4 && rule.startsWith(Config.SERVER_ERROR_PAGE)) {
                     String value = extractConfig(Config.SERVER_ERROR_PAGE, rule);

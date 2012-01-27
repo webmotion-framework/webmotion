@@ -68,9 +68,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class WebMotionHandlerFactory implements WebMotionHandler {
+public class WebMotionMainHandler implements WebMotionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMotionHandlerFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(WebMotionMainHandler.class);
 
     /** All handlers are a singleton */
     protected SingletonFactory<WebMotionHandler> factory;
@@ -138,10 +138,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
         for (Mapping extensionMapping : extensionsRules) {
             
             Config extensionConfig = extensionMapping.getConfig();
-            String handlersFactory = extensionConfig.getHandlersFactory();
+            String className = extensionConfig.getMainHandler();
             
-            WebMotionHandler handlerFactory = factory.getInstance(handlersFactory);
-            handlerFactory.init(extensionMapping, context);
+            WebMotionHandler mainHandler = factory.getInstance(className);
+            mainHandler.init(extensionMapping, context);
         }
     }
     
@@ -179,10 +179,10 @@ public class WebMotionHandlerFactory implements WebMotionHandler {
                 }
                 
                 Config newConfig = extensionMapping.getConfig();
-                String handlersFactory = newConfig.getHandlersFactory();
+                String className = newConfig.getMainHandler();
                 
-                WebMotionHandler handler = factory.getInstance(handlersFactory);
-                handler.handle(extensionMapping, call);
+                WebMotionHandler mainHandler = factory.getInstance(className);
+                mainHandler.handle(extensionMapping, call);
                 
                 context.setExtensionPath(extensionPath);
                 

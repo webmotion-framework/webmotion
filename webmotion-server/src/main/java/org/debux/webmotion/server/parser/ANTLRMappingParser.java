@@ -291,8 +291,8 @@ public class ANTLRMappingParser extends MappingParser {
                     config.setJavacDebug(Boolean.valueOf(value));
                 } else if (Config.SERVER_CONTROLLER_SCOPE.equals(name)) {
                     config.setControllerScope(Scope.valueOf(value.toUpperCase()));
-                } else if (Config.HANDLERS_FACTORY_CLASS.equals(name)) {
-                    config.setHandlersFactory(value);
+                } else if (Config.SERVER_MAIN_HANDLER_CLASS.equals(name)) {
+                    config.setMainHandler(value);
                 } else if (Config.SERVER_ERROR_PAGE.equals(name)) {
                     config.setErrorPage(State.valueOf(value.toUpperCase()));
                 } else if (Config.SERVER_LISTENER_CLASS.equals(name)) {

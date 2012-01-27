@@ -90,12 +90,12 @@ public class WebMotionServer implements Filter {
      * @return server context
      */
     protected ServerContext initServerContext(FilterConfig filterConfig) {
-        ServerContext serverContext = new ServerContext();
+        ServerContext instance = new ServerContext();
         
         ServletContext servletContext = filterConfig.getServletContext();
-        serverContext.contextInitialized(servletContext);
+        instance.contextInitialized(servletContext);
         
-        return serverContext;
+        return instance;
     }
 
     @Override
@@ -166,8 +166,8 @@ public class WebMotionServer implements Filter {
         
         // Execute the main handler
         Mapping mapping = serverContext.getMapping();
-        WebMotionHandler handlersFactory = serverContext.getHandlersFactory();
-        handlersFactory.handle(mapping, call);
+        WebMotionHandler mainHandler = serverContext.getMainHandler();
+        mainHandler.handle(mapping, call);
         
         // Register call in mbean
         ServerStats serverStats = serverContext.getServerStats();

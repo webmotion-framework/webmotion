@@ -53,10 +53,10 @@ public class Config {
     public static String REQUEST_ENCODING = "request.encoding";
     public static String REQUEST_ASYNC = "request.async";
     public static String JAVAC_DEBUG = "javac.debug";
-    public static String HANDLERS_FACTORY_CLASS = "handlers.factory.class";
     public static String SERVER_CONTROLLER_SCOPE = "server.controller.scope";
     public static String SERVER_ERROR_PAGE = "server.error.page";
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
+    public static String SERVER_MAIN_HANDLER_CLASS = "server.main.handler.class";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -86,7 +86,7 @@ public class Config {
     protected Scope controllerScope = Scope.SINGLETON;
     
     /** Class to chain handler */
-    protected String handlersFactory = "org.debux.webmotion.server.WebMotionHandlerFactory";
+    protected String mainHandler = "org.debux.webmotion.server.WebMotionMainHandler";
     
     /** Indicates how the error page is use */
     protected State errorPage = State.ENABLED;
@@ -180,12 +180,12 @@ public class Config {
         this.controllerScope = controllerScope;
     }
 
-    public String getHandlersFactory() {
-        return handlersFactory;
+    public String getMainHandler() {
+        return mainHandler;
     }
 
-    public void setHandlersFactory(String handlersFactory) {
-        this.handlersFactory = handlersFactory;
+    public void setMainHandler(String mainHandler) {
+        this.mainHandler = mainHandler;
     }
 
     public State getErrorPage() {
