@@ -32,10 +32,10 @@ CONFIG_PACKAGE_ERRORS:'package.errors';
 CONFIG_JAVAC_DEBUG:'javac.debug';
 CONFIG_REQUEST_ENCODING:'request.encoding';
 CONFIG_REQUEST_ASYNC:'request.async';
-CONFIG_HANDLERS_FACTORY_CLASS:'handlers.factory.class';
 CONFIG_SERVER_ERROR_PAGE:'server.error.page';
 CONFIG_SERVER_CONTROLLER_SCOPE:'server.controller.scope';
 CONFIG_SERVER_LISTENER_CLASS:'server.listener.class';
+CONFIG_SERVER_MAIN_HANDLER_CLASS:'server.main.handler.class';
 
 ACTION:'action:';
 ACTION_ASYNC:'async:';
