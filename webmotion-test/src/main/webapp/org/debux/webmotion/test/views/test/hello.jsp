@@ -25,8 +25,8 @@
 <h1>Hello ${key1}</h1>
 <h1>Hello ${key2}</h1>
 
-Message : ${cookie.flash_info_hello.value}<br/>
-Message : ${flashMessages.info_hello}<br/>
+Message : ${cookie.wm_flash_infos_hello.value}<br/>
+Message : ${flashMessages.infos.hello}<br/>
 <a href="/webmotion-test/deploy/test/reload">Reload</a><br/>
 <a href="/webmotion-test/deploy/test/indexWithMessage">Index</a><br/>
 <a href="#" onclick="test();">Template</a><br/>
