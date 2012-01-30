@@ -65,11 +65,11 @@ public class RenderStringTemplate extends Render {
         ST template = group.getInstanceOf("render");
         template.add("model", model);
         
+        response.setContentType(mimeType);
+        
         String templateResult = template.render();
         PrintWriter out = context.getOut();
         out.print(templateResult);
-        
-        response.setContentType(mimeType);
     }
     
 }

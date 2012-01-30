@@ -63,11 +63,12 @@ public class RenderJson extends Render {
             object = model.values().toArray()[0];
         }
         
+        response.setContentType("application/json");
+        
         Gson gson = new Gson();
         String json = gson.toJson(object);
         PrintWriter out = context.getOut();
         out.print(json);
-        response.setContentType("application/json");
     }
     
 }

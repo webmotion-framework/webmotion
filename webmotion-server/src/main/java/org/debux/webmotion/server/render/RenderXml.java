@@ -61,11 +61,12 @@ public class RenderXml extends Render {
             object = model.values().toArray()[0];
         }
         
+        response.setContentType("application/xml");
+        
         XStream xstream = new XStream();
         String xml = xstream.toXML(object);
         PrintWriter out = context.getOut();
         out.print(xml);
-        response.setContentType("application/xml");
     }
     
 }
