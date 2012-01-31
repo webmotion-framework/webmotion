@@ -203,8 +203,8 @@ package.errors=errors
 <p>
     La propriété <strong>server.async</strong> permet de mettre l'ensemble des 
     actions en asynchrone. Les valeurs possible sont <code>true</code> ou 
-    <code>false</code>. Vous pouvez forcer dans le mapping précisement les actions
-    en asynchronne ou en synchronne.
+    <code>false</code>. Il est possible de préciser qu'une action est asynchrone ou inversement
+    dans la section des actions.
 </p>
 <p>
     <span class="label">Default</span> Par défaut, la valeur server.async est <code>false</code>.
@@ -236,21 +236,35 @@ package.errors=errors
 <h3>server.error.page</h3>
 <p>
     La propriété <strong>server.error.page</strong> permet de préciser si la 
-    page d'erreur fourni par WebMotion est disponible. Il est nécessaire de la 
-    désactivé ou de traiter l'ensemble des erreurs en mode production. 
-    Les valeurs possible sont <code>enabled</code> ou <code>disabled</code> ou <code>forced</code>.
-    La console JMX vous permet de modifier à tout moment cette valeur.
+    page d'erreur fourni par WebMotion est disponible. 
+    Les valeurs possible sont :
 </p>
+<ul>
+    <li><code>enabled</code> pour afficher la page d'erreur détailler si l'erreur n'est pas traité dans le mapping</li>
+    <li><code>disabled</code> pour afficher un message bref si l'erreur n'est pas traité dans le mapping</li>
+    <li><code>forced</code> pour afficher la page d'erreur détailler même si l'erreur est traité dans le mapping</li>
+</ul>
 <p>
     <span class="label">Default</span> Par défaut, la valeur de server.error.page est <code>enabled</code>.
+</p>
+<p>
+    <span class="label notice">Note</span> Vous pouvez à tout moment modifier ce paramètre par la console JMX.
+</p>
+<p>
+    <span class="label notice">Note</span> Il est aussi conseiller de mettre à <code>disabled</code> la propriété quand le serveur est déployé en production.
 </p>
 
 <h3>server.controller.scope</h3>
 <p>
     <strong>server.controller.scope</strong> permet de spécifier si l'application est en mode statefull ou stateless. 
     Par défaut le mode est stateless, c'est à dire que l'ensemble des classes Java, sont les mêmes pour toutes les requêtes. 
-    Par conséquence il n'est pas possible de conserver des attributs dans la classe.
+    Par conséquence il n'est pas possible de conserver des attributs dans la classe. Les valeurs possible sont :
 </p>
+<ul>
+    <li><code>singleton</code> une seule instance de l'action est utilisée pour l'ensemble des requêtes</li>
+    <li><code>request</code> une instance de l'action est valade tout le long d'une requête</li>
+    <li><code>session</code> la même instance de l'action est utilisé pour toute les requêtes d'un utilisateur</li>
+</ul>
 <p>
     <span class="label">Default</span> Par défaut, la valeur de server.controller.scope est <code>singleton</code>.
 </p>
@@ -258,11 +272,29 @@ package.errors=errors
 <h3>server.listener.class</h3>
 <p>
     <strong>server.listener.class</strong> permet de définir un listenner sur le démarrage et l'arrêt
-    du serveur. Il faut préciser le nom complet de la classe.
+    du serveur. Comme valeur il est nécessaire de préciser le nom complet de la classe.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de server.controller.scope est vide.
+    <span class="label">Default</span> Il n'y a pas de valeur par défaut.
 </p>
+<p>
+    <span class="label notice">Exemple</span> Implantation d'un listenner :
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        // do action
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        // do action
+    }
+    
+}
+</pre>
 
 <h3>server.main.handler.class</h3>
 <p>
