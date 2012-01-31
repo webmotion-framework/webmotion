@@ -376,6 +376,20 @@ public class Listener implements WebMotionServerListener {
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    &lt;method_name&gt;    [...]
 </pre>
+<p>
+    Voici la syntaxe pour mapper une URL sur une action <strong>asynchronne</strong>
+    (méthode d'un contrôleur). Ne tiens pas compte de la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>async:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+<p>
+    Voici la syntaxe pour mapper une URL sur une action <strong>synchronne Java</strong>
+    (méthode d'un contrôleur). Ne tiens pas compte de la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>sync:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
 
 <h3 id="http-methods">Les méthodes HTTP</h3>
 <p>
@@ -1003,8 +1017,11 @@ java.lang.Exception           Error.display
 <h3>URL</h3>
 <p>
     Une extension est appliquée sur un path donné. 
-    Cependant, il est possible d'utiliser plusieurs fois la même extension
-    pour plusieurs URLs. Des extensions ne peuvent pas être monter sur un même URL.
+    Si une extension ne retourne aucun rendu (page, flux JSON, etc.), 
+    le traitement continue sur l'extension suivante.
+    Les extensions peuvent être monter sur un même URL, 
+    c'est la première extension qui renvoi un rendu sera prise en compte.
+    Il est possible d'utiliser plusieurs fois la même extension pour plusieurs URLs.
 </p>
 <p>
     <span class="label notice">Exemple</span> Utilisation de l'extension wikimotion :
@@ -1012,12 +1029,6 @@ java.lang.Exception           Error.display
 <pre>
 /wiki                  &lt;wikimotion&gt;
 </pre>
-
-<p>
-    <span class="label warning">Attention</span>
-    Si vous définissez dans votre fichier de mapping une extension sur <code>/</code>, les actions spécifiées dans votre fichier seront ignorées.
-    Il s'agit d'un choix technique qui sera amélioré prochainement.
-</p>
 
 <h3>Fichier de mapping</h3>
 <p>
@@ -1034,9 +1045,23 @@ java.lang.Exception           Error.display
     dans le classpath de l'application, contient toutes les règles de mapping
     de l'extension, qui seront appliquées relativement au chemin <code>/wiki</code>
 </p>
+
 <p>
-    Si une extension ne retourne aucun rendu (page, flux JSON, etc.), le traitement continue sur l'extension suivante.
-    Cela permet d'utiliser des extensions uniquement pour des filtres sur les URLs (exemple : mesure d'audience, monitoring, etc.).
+    L'url de l'extension peut être un pattern sur des fichiers , 
+    ce qui permet de charger des mappings de façon dynamique.
+</p>
+<p>
+    <span class="label notice">Exemple</span> Chargement des extensions des fichiers 
+    dans le répertoire <code>META-INF</code> avec comme extension <code>wm</code> :
+</p>
+<pre>
+/                      META-INF/.*\.wm
+</pre>
+
+<p>
+    Les filtres des extensions sont cumulatif, c'est à dire qu'une extension 
+    où un filtre est applicable sera executé sur l'action répondante même si 
+    celle-ci n'appartient pas à l'extension.
 </p>
 <p>
     <span class="label notice">Exemple</span> Imaginons un module de mesure d'audience (statistiques),
@@ -1051,7 +1076,7 @@ java.lang.Exception           Error.display
 [config]
 package.base=org.debux.webmotion.stats
 
-[actions]
+[filters]
 *          /*                  Stats.count
 </pre>
 
