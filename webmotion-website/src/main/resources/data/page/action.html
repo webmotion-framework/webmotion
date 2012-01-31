@@ -292,7 +292,7 @@ return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
 
 <h3>Rendu de flux XML : renderXML</h3>
 <p>
-    La méthode <code>renderXML(Object model)</code> permet de retourner
+    La méthode <code>renderXML</code> permet de retourner
     au client la représentation XML de l'objet Java passé en paramètre.
     La sérialisation XML est effectuée à l'aide de la bibliothèque 
     <a href="http://xstream.codehaus.org/">XStream</a>.
@@ -315,7 +315,7 @@ return renderXML("key", user);
 
 <h3>Rendu de flux JSON : renderJSON</h3>
 <p>
-    La méthode <code>renderJSON(Object model)</code> permet de retourner
+    La méthode <code>renderJSON</code> permet de retourner
     au client la représentation JSON de l'objet Java passé en paramètre.
     La sérialisation JSON est effectuée à l'aide de la bibliothèque 
     <a href="https://code.google.com/p/google-gson/">Gson</a>.
@@ -337,7 +337,7 @@ return renderJSON("key", user);
 
 <h3>Rendu de script javascript : renderJSONP</h3>
 <p>
-    La méthode <code>renderJSONP(String javascriptFunctionName, Object model)</code>
+    La méthode <code>renderJSONP</code>
     permet de retourner au client un script Javascript qui exécutera une 
     fonction en prenant en paramètre le modèle qui sera passé.
     Pour plus de détails à propos de JSONP, voir la
@@ -350,6 +350,40 @@ return renderJSON("key", user);
 <pre class="prettyprint">
 return renderJSONP("myCallbackFuncton", user);
 </pre>
+
+<h3>Rendu d'un template : renderStringTemplate</h3>
+<p>
+    La méthode <code>renderStringTemplate</code>
+    permet de retourner au client un template basé sur <a href="http://stringtemplate.org/">StringTemplate</a>.
+    Le template de base doit contenir un groupe de la façon suivante <code>render(model) ::= &lt;&lt; ... &gt;&gt;</code>.
+    Le délimitateur des attributs est <code>$</code>.
+</p>
+
+<p>
+    <span class="label notice">Exemple</span> Exemple d'une creation de page  :
+</p>
+<pre class="prettyprint">
+return renderStringTemplate("template.stg", "text/html",
+        "title", "The title" ,
+        "content", "bla bla bla ...");
+</pre>
+<p>
+    Avec comme template :
+</p>
+<pre class="prettyprint">
+render(model) ::= &lt;&lt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;$model.title$&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        $strong(model.content)$
+    &lt;/body&gt;
+&lt;/html&gt;
+&gt;&gt;
+strong(value) ::= "&lt;strong&gt;$value$&lt;/strong&gt;"
+</pre>
+
 
 <h3>Créer son propre moteur de rendu</h3>
 <p>
