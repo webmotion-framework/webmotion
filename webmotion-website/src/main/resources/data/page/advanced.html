@@ -33,13 +33,9 @@
     <h2 id="servlet">Architecture des servlets</h2>
 </div>
 <p>
-    Le framework est géré par deux servlets et un filtre. Le filtre analyse 
-    l'intégralité des requêtes entrantes et les aiguillentvers les deux servlets.
-</p>
-
-<p>
-    La première servlet permet de traiter une action dans le fichier de mapping, disponible sur /deploy. 
-    La seconde servlet permet de traiter les ressources statiques, disponible sur /static. 
+    Le framework est géré par un filtre. Le filtre analyse 
+    l'intégralité des requêtes entrantes et les aiguillent soit vers une ressource statique (html, jsp, css, ...) 
+    soit vers une action défini dans le fichier de mapping.
 </p>
 
 <p>
@@ -49,8 +45,8 @@
     <li>
         Si le path de l'URL ne contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.*</code>
         <ul>
-            <li>alors il redirige vers la servlet d'action</li>
-            <li>sinon il redirige vers la servlet dédiée aux ressources statiques</li>
+            <li>alors il redirige vers une action defini dans le mapping</li>
+            <li>sinon il redirige vers une ressource statique</li>
         </ul>
     </li>
 </ul>
@@ -73,23 +69,23 @@
 </div>
 <p>
     Le traitement de la requête passse par différents handlers pour réaliser 
-    la demande du client web. Il y a un handler particulier qui est l'handler factory qui est
+    la demande du client web. Il y a un handler particulier qui est l'hander principal <code>MainHandler</code> qui est
     l'ordonnanceur des autres handlers. Il est redéfinissable dans le fichier de mapping 
     dans la section config anisi :
 </p>
 <pre>
 [config]
-handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
+server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
 </pre>
 
 <p>
     Par défaut WebMotion propose un ensemble d'handler :
 </p>
 <p>
-    Comme handler factory, vous avez :
+    Comme handler principal, vous avez :
 </p>
 <ul>
-    <li><strong>WebMotionHandlerFactory</strong>, permet l'ordonnancement des autres handlers et la gestion des extensions.</li>
+    <li><strong>WebMotionMainHandler</strong>, permet l'ordonnancement des autres handlers et la gestion des extensions.</li>
 </ul>
 
 <p>
@@ -107,8 +103,7 @@ handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
     <li><strong>ExecutorParametersConvertorHandler</strong>, convertit les paramètres selon le type de méthode à invoquer.</li>
     <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
     <li><strong>ExecutorParametersValidatorHandler</strong>, valide les paramètres.</li>
-    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action.</li>
-    <li><strong>RenderCreatorHandler</strong>, crée le rendu dans la response.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action et retourne le rendu.</li>
 </ul>
 
 <p>
@@ -121,8 +116,7 @@ handlers.factory.class=org.debux.webmotion.sample.HandlerFactory
     <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
     <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie l'action si nécessaire.</li>
     <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
-    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour l'action.</li>
-    <li><strong>RenderCreatorHandler</strong>, crée le rendu dans la response.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action et retourne le rendu.</li>
 </ul>
 
 <p>
