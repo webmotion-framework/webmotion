@@ -1060,13 +1060,12 @@ java.lang.Exception           Error.display
 </pre>
 
 <p>
-    Les filtres des extensions sont cumulatif, c'est à dire qu'une extension 
-    où un filtre est applicable sera executé sur l'action répondante même si 
-    celle-ci n'appartient pas à l'extension.
+    Les filtres des extensions sont cumulables. Cela signifie qu'il est possible que le traitement d'une requête passe 
+    par un ou plusieurs filtres avant d'être lancé par l'action définie dans le mapping applicatif. 
 </p>
 <p>
-    <span class="label notice">Exemple</span> Imaginons un module de mesure d'audience (statistiques),
-    l'application qui utilisera ce module contiendra le morceau de configuration suivant :
+    <span class="label notice">Exemple</span> Un module de mesure d'audience (statistiques) pourrait
+    être utilisé par une application, qui contiendra le morceau de configuration suivant :
 </p>
 <pre>[extensions]
 /                  statistiques
