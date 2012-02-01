@@ -224,7 +224,7 @@ package.errors=errors
     <span class="label">Default</span> Par défaut, la valeur de request.encoding est <code>UTF-8</code>.
 </p>
 <p>
-    <span class="label notice">Note</span> Pour Tomcat il est nécessaire de configurer le connecteur dans le server.xml ainsi :
+    <span class="label notice">Note</span> Pour Tomcat, il est nécessaire d'ajouter l'attribut <code>URIEncoding="UTF-8"</code> au connecteur dans le server.xml :
 </p>
 <pre class="prettyprint">
 &lt;Connector port="8080" protocol="HTTP/1.1"
@@ -258,7 +258,7 @@ package.errors=errors
 <h3>server.controller.scope</h3>
 <p>
     <strong>server.controller.scope</strong> permet de spécifier si l'application est en mode statefull ou stateless. 
-    Par défaut le mode est stateless, c'est à dire que l'ensemble des classes Java, sont les mêmes pour toutes les requêtes. 
+    Par défaut le mode est stateless, c'est-à-dire que l'ensemble des classes Java, sont les mêmes pour toutes les requêtes. 
     Par conséquence il n'est pas possible de conserver des attributs dans la classe. Les valeurs possible sont :
 </p>
 <ul>
@@ -272,14 +272,14 @@ package.errors=errors
 
 <h3>server.listener.class</h3>
 <p>
-    <strong>server.listener.class</strong> permet de définir un listenner sur le démarrage et l'arrêt
+    <strong>server.listener.class</strong> permet de définir un listener sur le démarrage et l'arrêt
     du serveur. Comme valeur il est nécessaire de préciser le nom complet de la classe.
 </p>
 <p>
     <span class="label">Default</span> Il n'y a pas de valeur par défaut.
 </p>
 <p>
-    <span class="label notice">Exemple</span> Implantation d'un listenner :
+    <span class="label notice">Exemple</span> Implantation d'un listener :
 </p>
 <pre class="prettyprint">
 public class Listener implements WebMotionServerListener {
@@ -378,15 +378,15 @@ public class Listener implements WebMotionServerListener {
 &lt;http_method&gt;    &lt;url&gt;    &lt;method_name&gt;    [...]
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une action <strong>asynchronne</strong>
-    (méthode d'un contrôleur). Ne tiens pas compte de la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+    Voici la syntaxe pour mapper une URL sur une action <strong>asynchrone</strong>
+    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code> :
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>async:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une action <strong>synchronne Java</strong>
-    (méthode d'un contrôleur). Ne tiens pas compte de la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+    Voici la syntaxe pour mapper une URL sur une action <strong>synchrone</strong>
+    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code> :
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>sync:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
