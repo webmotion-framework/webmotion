@@ -46,9 +46,9 @@
         <link rel="stylesheet" href="<c:url value="/prettify/prettify.css"/>" type="text/css"/>
         <link rel="stylesheet" href="<c:url value="/css/style.css"/>">
         
+        <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
         <script type="text/javascript" src="<c:url value="/prettify/prettify.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
-        <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
     </head>
 
     <body onload="prettyPrint()">

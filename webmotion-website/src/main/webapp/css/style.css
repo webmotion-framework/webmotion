@@ -136,6 +136,7 @@ h2 a:hover {
 
 .label {
     background-color: #BFBFBF;
+    color: white;
 }
 
 .label.label-info {
@@ -144,6 +145,16 @@ h2 a:hover {
 
 .label.label-warning {
     background-color: #F89406;
+}
+
+.label.select {
+    font-size: 13px;
+    text-transform: none;
+}
+
+.label.select:hover {
+    color: white;
+    text-decoration: none;
 }
 
 code {
@@ -158,10 +169,27 @@ code {
     border-color: #C6EDF9;
 }
 
-.alert.alert-warning {
+.alert {
     color: #404040;
 }
 
 h3, h4, h5, h6 {
     line-height: 36px;
+}
+
+.well {
+    background-color: #F4F7FB;
+    border: 1px solid #DEE6ED;
+}
+
+.nav-pills .active a {
+    background: #369EBC;
+    color: white;
+    text-shadow: rgba(0, 0, 0, 0, 246094) 0px 1px 1px;
+}
+.nav-pills > li > a:hover {
+    background: #59BEDC;
+    color: white;
+    text-decoration: none;
+    text-shadow: rgba(0, 0, 0, 0, 246094) 0px 1px 1px;
 }
