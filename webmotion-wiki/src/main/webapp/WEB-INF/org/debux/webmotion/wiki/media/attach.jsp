@@ -28,18 +28,18 @@
 <fmt:setBundle basename="bundle.wikimotion"/>
 
 <div id="main_content">
-    <form id="wiki_upload" action="<c:url value="${url}"/>" method="POST" enctype="multipart/form-data">
+    <form id="wiki_upload" class="form-horizontal" action="<c:url value="${url}"/>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="sub" value="upload" />
         
-        <div class="clearfix">
-            <label for="file"><fmt:message key="wiki.file"/></label>
-            <div class="input">
+        <div class="control-group">
+            <label class="control-label" for="file"><fmt:message key="wiki.file"/></label>
+            <div class="controls">
                 <input class="file" id="file" name="file" type="file">
             </div>
-        </div><!-- /clearfix -->
+        </div>
         
-        <div id="wiki_action" style="text-align: right; padding-top: 10px;">
-            <a class="btn primary" href="#" onclick="$('wiki_upload').submit();"><fmt:message key="wiki.upload"/></a>
+        <div id="wiki_action" class="form-actions">
+            <a class="btn btn-primary" href="#" onclick="$('#wiki_upload').submit();"><fmt:message key="wiki.upload"/></a>
         </div>
     </form>
 </div>

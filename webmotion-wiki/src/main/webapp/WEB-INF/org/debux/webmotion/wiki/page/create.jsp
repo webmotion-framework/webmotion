@@ -28,7 +28,7 @@
 <fmt:setBundle basename="bundle.wikimotion"/>
 
 <div id="wiki" style="text-align: center">
-    <div id="wiki_message" class="alert-message block-message warning">
+    <div id="wiki_message" class="alert alert-block">
         <h1><fmt:message key="wiki.page.not.found"/></h1>
     
         <form id="wiki_create" action="<c:url value="${url}"/>" method="GET">
@@ -40,7 +40,7 @@
                     <option value="tex">LaTex</option>
                 </select>
 
-                <a class="btn primary" href="#" onclick="$('wiki_create').submit();"><fmt:message key="wiki.create"/></a>
+                <a class="btn btn-primary" href="#" onclick="$('#wiki_create').submit();"><fmt:message key="wiki.create"/></a>
             </div>
         </form>
     </div>

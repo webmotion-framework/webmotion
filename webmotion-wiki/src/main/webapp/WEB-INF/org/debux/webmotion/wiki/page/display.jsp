@@ -31,12 +31,12 @@
     <c:if test="${current_user != null}">
         <div id="wiki_action" style="text-align: right">
             <c:if test="${nameSpace == null}">
-                <a class="btn primary" href="<c:url value="/media?action=attach"/>"><fmt:message key="wiki.attach"/></a>
+                <a class="btn btn-primary" href="<c:url value="/media?action=attach"/>"><fmt:message key="wiki.attach"/></a>
             </c:if>
             <c:if test="${nameSpace != null}">
-                <a class="btn primary" href="<c:url value="/media/${nameSpace}?action=attach"/>"><fmt:message key="wiki.attach"/></a>
+                <a class="btn btn-primary" href="<c:url value="/media/${nameSpace}?action=attach"/>"><fmt:message key="wiki.attach"/></a>
             </c:if>
-            <a class="btn primary" href="<c:url value="${url}?action=edit"/>"><fmt:message key="wiki.edit"/></a>
+            <a class="btn btn-primary" href="<c:url value="${url}?action=edit"/>"><fmt:message key="wiki.edit"/></a>
         </div>
     </c:if>
 
@@ -45,8 +45,6 @@
     </c:if>
     
     <c:if test="${param.toc}">
-        <script type="text/javascript" src="<c:url value="/js/generated_toc.js"/>"></script>
-        
         <div id="wiki_toc">
             <h2><fmt:message key="wiki.toc"/></h2>
             <div id="generated-toc" class="generate_from_h1 generate_for_wiki_content"></div>

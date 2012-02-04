@@ -29,7 +29,7 @@
 <fmt:setBundle basename="bundle.wikimotion"/>
 
 <div id="main_content">
-    <form id="wiki_login" action="<c:url value="login"/>" method="POST">
+    <form id="wiki_login" class="form-horizontal" action="<c:url value="login"/>" method="POST">
         <c:if test="${param['error.login'] == 'username'}" var="error_username">
             <c:set var="error_username_class" value="error"/>
         </c:if>
@@ -37,26 +37,28 @@
             <c:set var="error_password_class" value="error"/>
         </c:if>
         
-        <div class="clearfix ${error_username_class}">
-            <label for="username"><fmt:message key="wiki.username"/></label>
-            <div class="input">
+        <div class="control-group ${error_username_class}">
+            <label class="control-label" for="username"><fmt:message key="wiki.username"/></label>
+            <div class="controls">
                 <input class="username" id="username" name="username" size="20" type="text">
                 <c:if test="${error_username}">
                     <span class="help-inline"><fmt:message key="wiki.username.error"/></span>
                 </c:if>
             </div>
-        </div><!-- /clearfix -->
-        <div class="clearfix ${error_password_class}">
-            <label for="password"><fmt:message key="wiki.password"/></label>
-            <div class="input">
+        </div>
+            
+        <div class="control-group ${error_password_class}">
+            <label class="control-label" for="password"><fmt:message key="wiki.password"/></label>
+            <div class="controls">
                 <input class="password" id="password" name="password" size="20" type="password">
                 <c:if test="${error_password}">
                     <span class="help-inline"><fmt:message key="wiki.password.error"/></span>
                 </c:if>
             </div>
-        </div><!-- /clearfix -->
-        <div id="wiki_action" style="text-align: right; padding-top: 10px;">
-            <a class="btn primary" href="#" onclick="$('wiki_login').submit();"><fmt:message key="wiki.login"/></a>
+        </div>
+            
+        <div id="wiki_action" class="form-actions">
+            <a class="btn btn-primary" href="#" onclick="$('#wiki_login').submit()"><fmt:message key="wiki.login"/></a>
         </div>
     </form>
 </div>

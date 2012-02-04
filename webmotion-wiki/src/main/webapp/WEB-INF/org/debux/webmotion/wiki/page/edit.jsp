@@ -45,10 +45,10 @@
         
         <textarea id="content" name="content"><jsp:include page="${url}?sub=source" /></textarea>
 
-        <div id="wiki_action" style="text-align: right; padding-top: 10px;">
-            <a class="btn primary" href="#" onclick="$('wiki_edit').submit();"><fmt:message key="wiki.save"/></a>
-            <a class="btn primary" href="#" onclick="preview();"><fmt:message key="wiki.preview"/></a>
-            <a class="btn primary" href="<c:url value="${requestScope.url}"/>"><fmt:message key="wiki.cancel"/></a>
+        <div id="wiki_action" class="form-actions">
+            <a class="btn btn-primary" href="#" onclick="$('#wiki_edit').submit();"><fmt:message key="wiki.save"/></a>
+            <a class="btn btn-primary" href="#" onclick="preview();"><fmt:message key="wiki.preview"/></a>
+            <a class="btn btn-primary" href="<c:url value="${requestScope.url}"/>"><fmt:message key="wiki.cancel"/></a>
         </div>
     </form>
 
@@ -64,32 +64,38 @@
         tex : "stex"
     };
 
-    $("preview").style.display = "none";
+    $("#preview").hide();
     createEditor(modes["${type}"]);
 
     function createEditor(type) {
-    editor = CodeMirror.fromTextArea(
-                    $("content"), {
-                        lineNumbers: true,
-                        mode : type
-                    }
-                 );
+        editor = CodeMirror.fromTextArea(
+                        $("#content")[0], {
+                            lineNumbers: true,
+                            mode : type
+                        }
+                     );
     }
 
     function preview() {
         var type = "${type}";
-        $("preview").style.display = "block";
+        $("#preview").show();
 
-        new Ajax.Request('${previewUrl}',
-            {
-                method:'post',
-                parameters: {sub : 'preview', type: type, content: editor.getValue()},
-                onSuccess: function(transport) {
-                    var response = transport.responseText || "no response text";
-                    $("preview").innerHTML = response;
+        $.ajax({
+                url : '${previewUrl}',
+                type: 'POST',
+                data: {
+                    sub : 'preview',
+                    type: type,
+                    content: editor.getValue()
                 },
-                onFailure: function() {
-                    $("preview").innerHTML = "Something went wrong...";
+                dataType: "html",
+                
+                success: function(value) {
+                    value = value || "no response text";
+                    $("#preview").html(value);
+                },
+                fail: function() {
+                    $("#preview").html("Something went wrong...");
                 }
             });
     }

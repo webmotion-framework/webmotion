@@ -37,14 +37,14 @@
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
         <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
         
-        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements --> 
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        <!-- Le styles -->
-        <link href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css" rel="stylesheet">
-        <style type="text/css">
+        <![endif]--> 
+        
+        <!-- Le styles --> 
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet"> 
+        <style> 
             /* Override some defaults */
             html, body {
                 background-color: #eee;
@@ -63,21 +63,37 @@
                    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
                         box-shadow: 0 1px 2px rgba(0,0,0,.15);
               }
-        </style>
-
-        <script type="text/javascript" src="<c:url value="/js/prototype.js"/>"></script>
+        </style> 
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+        <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
+    
+        <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"></script> 
+        <script src="http://twitter.github.com/bootstrap/assets/js/application.js"></script> 
     </head>
 
     <body>
 
-        <div class="topbar">
-            <div class="fill">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="<c:url value="/"/>">${site_name}</a>
 
                     <jsp:include page="/header?sub=include" />
                     
-                    <ul class="nav secondary-nav">
+                    <ul class="nav pull-right">
                         <c:forEach items="${languages}" var="lang">
                             <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
                         </c:forEach>
