@@ -36,33 +36,25 @@
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
         <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
         
-        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements --> 
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        <!-- Le styles -->
-        <link rel="stylesheet/less" href="<c:url value="/js/bootstrap/bootstrap.less"/>">
-        <script src="<c:url value="/js/bootstrap/less-1.1.3.min.js"/>"></script>
+        <![endif]--> 
         
-        <link rel="stylesheet" href="<c:url value="/js/prettify/prettify.css"/>" type="text/css"/>
-        <link rel="stylesheet" href="<c:url value="/css/style.css"/>" type="text/css"/>
-        <script type="text/javascript" src="<c:url value="/js/prettify/prettify.js"/>"></script>
-
-        <style type="text/css">
-            body {
-/*                background-color: #ededed;*/
-                padding-top: 60px;
-            }
-        </style>
-
-        <script type="text/javascript" src="<c:url value="/js/prototype.js"/>"></script>
+        <!-- Le styles --> 
+        <link rel="stylesheet" href="<c:url value="/bootstrap/css/bootstrap.css"/>">
+        <link rel="stylesheet" href="<c:url value="/prettify/prettify.css"/>" type="text/css"/>
+        <link rel="stylesheet" href="<c:url value="/css/style.css"/>">
+        
+        <script type="text/javascript" src="<c:url value="/prettify/prettify.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
+        <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
     </head>
 
     <body onload="prettyPrint()">
 
-        <div class="topbar">
-            <div class="fill">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="<c:url value="/"/>">${site_name}</a>
 
@@ -112,6 +104,7 @@
             </div>
         </div>
             
+        <hr/>
         <footer style="text-align: center">
             <p>Powered by WikiMotion and WebMotion</p>
         </footer>
