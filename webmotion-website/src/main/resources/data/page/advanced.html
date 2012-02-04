@@ -39,17 +39,11 @@
 </p>
 
 <p>
-    Le filtre aiguille les requêtes de la façon suivante :
+    Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL ne 
+    contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.*</code>
+    alors il redirige vers une action definie dans le mapping sinon il redirige 
+    vers une ressource statique.
 </p>
-<ul>
-    <li>
-        Si le path de l'URL ne contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.*</code>
-        <ul>
-            <li>alors il redirige vers une action definie dans le mapping</li>
-            <li>sinon il redirige vers une ressource statique</li>
-        </ul>
-    </li>
-</ul>
 
 <p>
     Il est possible que des requêtes d'accès à des données statiques passent à tort dans la servlet d'actions.
@@ -57,7 +51,7 @@
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne sur /readme la resource statique :
+    <span class="label label-info">Exemple</span> Retourne sur /readme la resource statique :
 </p>
 <pre>
 [actions]
@@ -204,12 +198,12 @@ javac.debug=false
 </ul>
 
 <p>
-    <span class="label notice">Note</span> Vous pouvez accèder aux MBeans de WebMotion en utilisant <code>jconsole</code>.
+    <span class="label label-info">Note</span> Vous pouvez accèder aux MBeans de WebMotion en utilisant <code>jconsole</code>.
 </p>
 
-<div class="media-grid" style="text-align: center;">
-    <a href="media?name=jconsole.png" style="display:inline-block; float:none;">
-        <img class="thumbnail" src="media?name=jconsole.png" alt="Jconsole" title="Jconsole" />
+<div style="text-align: center; margin: 0px 0px 20px 20px;">
+    <a class="thumbnail" style="width: 700px; display:inline-block;">
+        <img src="media?name=jconsole.png" alt="Jconsole" title="Jconsole" />
     </a>
 </div>
 

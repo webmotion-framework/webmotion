@@ -86,28 +86,28 @@ public class User extends WebMotionController {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une page JSP :
+    <span class="label label-info">Exemple</span> Retourne une page JSP :
 </p>
 <pre class="prettyprint">
 return renderView("index.jsp");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une page html :
+    <span class="label label-info">Exemple</span> Retourne une page html :
 </p>
 <pre class="prettyprint">
 return renderView("index.html");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une page html dans le répertoire page :
+    <span class="label label-info">Exemple</span> Retourne une page html dans le répertoire page :
 </p>
 <pre class="prettyprint">
 return renderView("page/index.html");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une page JSP avec un model :
+    <span class="label label-info">Exemple</span> Retourne une page JSP avec un model :
 </p>
 <pre class="prettyprint">
 return renderView("index.jsp", "name", "value");
@@ -129,21 +129,21 @@ Value = ${name}
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> URL relative :
+    <span class="label label-info">Exemple</span> URL relative :
 </p>
 <pre class="prettyprint">
 return renderURL("/display");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> URL absolue :
+    <span class="label label-info">Exemple</span> URL absolue :
 </p>
 <pre class="prettyprint">
 return renderURL("http://www.google.fr");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> URL relative avec un modèle :
+    <span class="label label-info">Exemple</span> URL relative avec un modèle :
 </p>
 <pre class="prettyprint">
 // L'utilisateur sera redirigé vers l'adresse /user?id=1232323&amp;action=view
@@ -158,7 +158,7 @@ return renderURL("/user", "id", 1232323, "action", "view");
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Appel direct :
+    <span class="label label-info">Exemple</span> Appel direct :
 </p>
 <pre class="prettyprint">
 public class Call extends WebMotionController {
@@ -174,7 +174,7 @@ public class Call extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Appel indirect :
+    <span class="label label-info">Exemple</span> Appel indirect :
 </p>
 <pre class="prettyprint">
 public class Call extends WebMotionController {
@@ -196,7 +196,7 @@ public class Call extends WebMotionController {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Rendu direct en HTML :
+    <span class="label label-info">Exemple</span> Rendu direct en HTML :
 </p>
 <pre class="prettyprint">
 // Affichera "exemple" dans le style de titre h1
@@ -204,7 +204,7 @@ return renderContent("&lt;h1&gt;exemple&lt;/h1&gt;", "text/html");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Rendu direct en text brut :
+    <span class="label label-info">Exemple</span> Rendu direct en text brut :
 </p>
 <pre class="prettyprint">
 // Affichera "&lt;h1&gt;exemple&lt;/h1&gt;"
@@ -219,7 +219,7 @@ return renderContent("&lt;h1&gt;exemple&lt;/h1&gt;", "text/plain");
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne un document PDF présent dans le classpath :
+    <span class="label label-info">Exemple</span> Retourne un document PDF présent dans le classpath :
 </p>
 <pre class="prettyprint">
 ClassLoader classLoader = Stream.class.getClassLoader();
@@ -228,7 +228,7 @@ return renderStream(stream, "application/pdf");
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une image présente dans le classpath :
+    <span class="label label-info">Exemple</span> Retourne une image présente dans le classpath :
 </p>
 <pre class="prettyprint">
 ClassLoader classLoader = Stream.class.getClassLoader();
@@ -243,14 +243,14 @@ return renderStream(stream, "image/png");
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Recharge la page :
+    <span class="label label-info">Exemple</span> Recharge la page :
 </p>
 <pre class="prettyprint">
 return reloadPage();
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Recharge la page en passant des paramètres supplémentaires :
+    <span class="label label-info">Exemple</span> Recharge la page en passant des paramètres supplémentaires :
 </p>
 <pre class="prettyprint">
 return reloadPage("id", 122345);
@@ -267,7 +267,7 @@ return reloadPage("id", 122345);
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne un 200 comme ping :
+    <span class="label label-info">Exemple</span> Retourne un 200 comme ping :
 </p>
 <pre class="prettyprint">
 return renderStatus(HttpServletResponse.SC_OK);
@@ -284,7 +284,7 @@ return renderStatus(HttpServletResponse.SC_OK);
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une erreur 404 à l'utilisateur :
+    <span class="label label-info">Exemple</span> Retourne une erreur 404 à l'utilisateur :
 </p>
 <pre class="prettyprint">
 return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
@@ -299,7 +299,7 @@ return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne un objet en xml :
+    <span class="label label-info">Exemple</span> Retourne un objet en xml :
 </p>
 <pre class="prettyprint">
 User user = new User("John", "Brown");
@@ -307,7 +307,7 @@ return renderXML(user);
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une map :
+    <span class="label label-info">Exemple</span> Retourne une map :
 </p>
 <pre class="prettyprint">
 return renderXML("key", user);
@@ -322,14 +322,14 @@ return renderXML("key", user);
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne un objet en JSON :
+    <span class="label label-info">Exemple</span> Retourne un objet en JSON :
 </p>
 <pre class="prettyprint">
 return renderJSON(user);
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Retourne une map :
+    <span class="label label-info">Exemple</span> Retourne une map :
 </p>
 <pre class="prettyprint">
 return renderJSON("key", user);
@@ -345,7 +345,7 @@ return renderJSON("key", user);
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Lance la fonction test avec l'objet user en paramètre :
+    <span class="label label-info">Exemple</span> Lance la fonction test avec l'objet user en paramètre :
 </p>
 <pre class="prettyprint">
 return renderJSONP("myCallbackFuncton", user);
@@ -360,7 +360,7 @@ return renderJSONP("myCallbackFuncton", user);
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Exemple d'une creation de page  :
+    <span class="label label-info">Exemple</span> Exemple d'une creation de page  :
 </p>
 <pre class="prettyprint">
 return renderStringTemplate("template.stg", "text/html",
@@ -392,7 +392,7 @@ strong(value) ::= "&lt;strong&gt;$value$&lt;/strong&gt;"
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Rendu XML ou JSON selon l'en-tête <code>Accept</code> de la requête :
+    <span class="label label-info">Exemple</span> Rendu XML ou JSON selon l'en-tête <code>Accept</code> de la requête :
 </p>
 <pre class="prettyprint">
 public class RenderAccept extends Render {
@@ -442,7 +442,7 @@ public class RenderAccept extends Render {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Recupération du context par paramètre :
+    <span class="label label-info">Exemple</span> Recupération du context par paramètre :
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -455,7 +455,7 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Recupération du context par méthode :
+    <span class="label label-info">Exemple</span> Recupération du context par méthode :
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -489,7 +489,7 @@ public class Action extends WebMotionController {
 </ul>
 
 <p>
-    <span class="label notice">Exemple</span> Recupération de la session :
+    <span class="label label-info">Exemple</span> Recupération de la session :
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -502,7 +502,7 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Recupération d'une exception :
+    <span class="label label-info">Exemple</span> Recupération d'une exception :
 </p>
 <pre class="prettyprint">
 public class Error extends WebMotionController {
@@ -524,7 +524,7 @@ public class Error extends WebMotionController {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Message d'info :
+    <span class="label label-info">Exemple</span> Message d'info :
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -540,7 +540,7 @@ ${flashMessages.infos.my_message}
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Message d'erreur :
+    <span class="label label-info">Exemple</span> Message d'erreur :
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -557,7 +557,7 @@ ${flashMessages.errors.my_message}
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Message d'avertissement :
+    <span class="label label-info">Exemple</span> Message d'avertissement :
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -573,7 +573,7 @@ ${flashMessages.warnings.my_message}
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Message divers :
+    <span class="label label-info">Exemple</span> Message divers :
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -589,7 +589,7 @@ ${flashMessages.miscs.my_message}
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Récupérations de l'ensemble des messages en jsp :
+    <span class="label label-info">Exemple</span> Récupérations de l'ensemble des messages en jsp :
 </p>
 <pre class="prettyprint">
 ${flashMessages.messages}
@@ -609,7 +609,7 @@ ${flashMessages.messages}
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Validation simple :
+    <span class="label label-info">Exemple</span> Validation simple :
 </p>
 <pre class="prettyprint">
 public Render search(@NotNull String query) {
@@ -618,7 +618,7 @@ public Render search(@NotNull String query) {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Validation sur un bean, attention il peut être null :
+    <span class="label label-info">Exemple</span> Validation sur un bean, attention il peut être null :
 </p>
 <pre class="prettyprint">
 public Render create(@Valid Book book) {
@@ -627,7 +627,7 @@ public Render create(@Valid Book book) {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Validation sur un bean, en précisant qu'il ne peut être null :
+    <span class="label label-info">Exemple</span> Validation sur un bean, en précisant qu'il ne peut être null :
 </p>
 <pre class="prettyprint">
 public Render create(@Valid @NotNull Book book) {
@@ -636,7 +636,7 @@ public Render create(@Valid @NotNull Book book) {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Validation d'un groupe sur un bean  :
+    <span class="label label-info">Exemple</span> Validation d'un groupe sur un bean  :
 </p>
 <pre class="prettyprint">
 public Render comment(@ValidGroup(MyGroup.class) Book book) {
@@ -644,9 +644,9 @@ public Render comment(@ValidGroup(MyGroup.class) Book book) {
 }
 </pre>
 
-<div class="alert-message block-message warning">
+<div class="alert alert-warning">
     <p>
-        <span class="label warning">Attention</span>&nbsp; GlassFish ne supporte pas la validation sur les méthodes.
+        <span class="label label-warning">Attention</span>&nbsp; GlassFish ne supporte pas la validation sur les méthodes.
 </div>
 
 <div class="page-header">
@@ -661,7 +661,7 @@ public Render comment(@ValidGroup(MyGroup.class) Book book) {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Récupération simple du fichier  :
+    <span class="label label-info">Exemple</span> Récupération simple du fichier  :
 </p>
 <pre class="prettyprint">
 public Render upload(File file) {
@@ -670,7 +670,7 @@ public Render upload(File file) {
 </pre>
 
 <p>
-    <span class="label notice">Exemple</span> Récupération par le wrapper  :
+    <span class="label label-info">Exemple</span> Récupération par le wrapper  :
 </p>
 <pre class="prettyprint">
 public Render upload(UploadFile file) {
@@ -685,7 +685,7 @@ public Render upload(UploadFile file) {
 </p>
 
 <p>
-    <span class="label notice">Exemple</span> Récupération des informations de progression en format JSON  :
+    <span class="label label-info">Exemple</span> Récupération des informations de progression en format JSON  :
 </p>
 <pre class="prettyprint">
 public Render progress(FileProgressListener listener) {
