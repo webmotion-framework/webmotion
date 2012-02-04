@@ -88,9 +88,6 @@
     <li>server.controller.scope</li>
     <li>server.listener.class</li>
     <li>server.main.handler.class</li>
-    <li><s>request.encoding</s> (version 2.0 deprécié remplacé par server.encoding)</li> 
-    <li><s>handlers.factory.class</s> (version 2.0 deprécié remplacé par server.main.handler.class)</li>
-    
 </ul>
 
 <h3>package.views</h3>
@@ -221,7 +218,7 @@ package.errors=errors
         ServletResponse.setCharacterEncoding(encoding)</a>.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de request.encoding est <code>UTF-8</code>.
+    <span class="label">Default</span> Par défaut, la valeur de server.encoding est <code>UTF-8</code>.
 </p>
 <p>
     <span class="label notice">Note</span> Pour Tomcat, il est nécessaire d'ajouter l'attribut <code>URIEncoding="UTF-8"</code> au connecteur dans le server.xml :
@@ -308,28 +305,6 @@ public class Listener implements WebMotionServerListener {
     <span class="label">Default</span> Par défaut, la valeur server.main.handler.class est <code>org.debux.webmotion.server.WebMotionMainHandler</code>
 </p>
 
-<h3>request.encoding (version 2.0 deprécié remplacé par server.encoding)</h3>
-<p>
-    La propriété <strong>request.encoding</strong> permet de forcer l'encodage utilisé pour lire les paramètres de la requête HTTP. 
-    Pour plus de renseignements, veuillez vous reporter à la javadoc sur 
-    <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#setCharacterEncoding(java.lang.String)">
-        ServletRequest.setCharacterEncoding(encoding)</a>.
-</p>
-<p>
-    <span class="label">Default</span> Par défaut, la valeur de request.encoding est <code>UTF-8</code>.
-</p>
-
-<h3>handlers.factory.class (version 2.0 deprécié remplacé par server.main.handler.class)</h3>
-<p>
-    La propriété <strong>handlers.factory.class</strong> permet de définir la 
-    classe responsable du chaînage des actions en interne à WebMotion. 
-    Cette propriété est utile uniquement dans le but d'étendre le framework. 
-    Pour plus de renseignement, veuillez vous reporter à partie <a href="advanced#handler">Avancé - Comprendre le fonctionnement de WebMotion</a>.
-</p>
-<p>
-    <span class="label">Default</span> Par défaut, la valeur handlers.factory.class est <code>org.debux.webmotion.server.WebMotionHandlerFactory</code>
-</p>
-
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
 <p>
     Cette section permet de définir, pour une méthode HTTP et une URL données, une action à réaliser, comme l'affichage d'une vue, 
@@ -379,7 +354,9 @@ public class Listener implements WebMotionServerListener {
 </pre>
 <p>
     Voici la syntaxe pour mapper une URL sur une action <strong>asynchrone</strong>
-    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code>.
+    Une requête asynchrone permet de traiter en différé une action qui nécessite un temps de traitements important 
+    (accès en base de données, accès à un webservice, ...) sans bloquer le serveur d'application :
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>async:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
@@ -989,16 +966,22 @@ public class Error extends WebMotionController {
 java.lang.Exception           Error.display
 </pre>
 
-
 <h2 id="extensions" class="page-header">[extensions] Gestion des extensions de l'application</h2>
 <p>
     Il est possible de créer des morceaux applicatifs, avec des fichiers de mapping dédiés, et de les appliquer sur un
     sous contexte applicatif (un chemin spécifié, relatif à l'application courante). Ces morceaux applicatifs sont appelés
-    des <strong>extensions</strong>.
+    des <strong>extensions</strong>. Dans une application, il est possible d'utiliser une ou plusieurs extensions 
+    au sein d'un même projet.
 </p>
 <p>
-    Dans une application, il est possible d'utiliser une ou plusieurs extensions au sein d'un même projet.
+    Les avantages de l'utilisation des extensions dans votre projet sont importantes :
 </p>
+<ul>
+    <li>La réutilisation, il vous est possible de mutualisé des composants métiers entre différent projet.</li>
+    <li>La structuration, les extensions vous permetent de découper votre projet 
+        de façon fonctionnelle ou technique.</li>
+    <li>La modularité, lors du déploiement les extensions peuvent être déterminé de mamière dynamique.</li>
+</ul>
 
 <h3>Syntaxe</h3>
 <p>
