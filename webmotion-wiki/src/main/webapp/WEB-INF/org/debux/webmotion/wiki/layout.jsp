@@ -115,6 +115,7 @@
             </div>
         </div>
             
+        <hr/>
         <jsp:include page="/footer?sub=include" />
 
     </body>
