@@ -44,18 +44,31 @@
         
         <!-- Le styles --> 
         <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet"> 
-        <style> 
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+        <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
+    
+        <style>
             /* Override some defaults */
             html, body {
                 background-color: #eee;
             }
+            
             body {
                 padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
             }
+            
+            @media (max-width: 980px) {
+                body {
+                    padding-top: 0;
+                }
+                .navbar-fixed-top {
+                    margin-bottom: 0px;
+                }
+            }
+            
             .content {
                 background-color: #fff;
                 padding: 20px;
-                margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
                 -webkit-border-radius: 0 0 6px 6px;
                    -moz-border-radius: 0 0 6px 6px;
                         border-radius: 0 0 6px 6px;
@@ -63,10 +76,8 @@
                    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
                         box-shadow: 0 1px 2px rgba(0,0,0,.15);
               }
-        </style> 
-        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
-        <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
-    
+        </style>
+        
         <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
         <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script> 
         <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script> 
@@ -84,27 +95,35 @@
         <script src="http://twitter.github.com/bootstrap/assets/js/application.js"></script> 
     </head>
 
-    <body>
+    <body onload="prettyPrint()">
 
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
-                <div class="container">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span> 
+                    </a>
+                    
                     <a class="brand" href="<c:url value="/"/>">${site_name}</a>
 
-                    <jsp:include page="/header?sub=include" />
+                    <div class="nav-collapse">
+                        <jsp:include page="/header?sub=include" />
                     
-                    <ul class="nav pull-right">
-                        <c:forEach items="${languages}" var="lang">
-                            <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
-                        </c:forEach>
-                        
-                        <c:if test="${current_user == null}">
-                            <li><a href="<c:url value="/login"/>"><fmt:message key="wiki.login"/></a></li>
-                        </c:if>
-                        <c:if test="${current_user != null}">
-                            <li><a href="<c:url value="/logout"/>"><fmt:message key="wiki.logout"/>${current_user.name}</a></li>
-                        </c:if>
-                    </ul>
+                        <ul class="nav pull-right">
+                            <c:forEach items="${languages}" var="lang">
+                                <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
+                            </c:forEach>
+
+                            <c:if test="${current_user == null}">
+                                <li><a href="<c:url value="/login"/>"><fmt:message key="wiki.login"/></a></li>
+                            </c:if>
+                            <c:if test="${current_user != null}">
+                                <li><a href="<c:url value="/logout"/>"><fmt:message key="wiki.logout"/>${current_user.name}</a></li>
+                            </c:if>
+                        </ul>
+                    </div>
                 </div> 
             </div>
         </div>
