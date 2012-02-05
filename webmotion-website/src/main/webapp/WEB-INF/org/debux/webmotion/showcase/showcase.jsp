@@ -51,7 +51,7 @@
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
 
         <style type="text/css">
-            .tab_menu {
+            .tab-pane {
                 clear: both;
                 padding-left: 5px;
                 padding-top: 10px;
@@ -116,7 +116,7 @@
                     </ul>
 
                     <div class="tab-content">
-                        <div id="mapping" class="tab-pane tab_menu fade in">
+                        <div id="mapping" class="tab-pane fade in">
                             <ul>
                                 <li><a id="hello" href="./hello">Hello world !</a></li>
                                 <li><strong>Action</strong>
@@ -161,7 +161,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div id="render" class="tab-pane tab_menu fade in">
+                        <div id="render" class="tab-pane fade in">
                             <ul>
                                 <li><strong>Basic</strong>
                                     <ul>
@@ -186,7 +186,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div id="misc" class="tab-pane tab_menu fade in">
+                        <div id="misc" class="tab-pane fade in">
                             <ul>
                                 <li><strong>Action</strong>
                                     <ul>
@@ -224,7 +224,7 @@
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
                                     http://serverName:port/contextPath/<strong>${fn:substringAfter(path, '/showcase/action/')}</strong>
                                 </div>
-                                <iframe src="<c:url value="${path}"/>" style="margin-bottom: 20px; width: 98%;height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
+                                <iframe src="<c:url value="${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
                                 </iframe>
                             </c:forEach>
                         </div>
