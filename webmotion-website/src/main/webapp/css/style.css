@@ -29,9 +29,12 @@ body {
 }
 
 @media (max-width: 980px) {
-  body {
-    padding-top: 0;
-  }
+    body {
+        padding-top: 0;
+    }
+    .navbar .nav > li > a:hover, .navbar .dropdown-menu a:hover {
+        background-color: rgba(0,0,0,.3);
+    }
 }
 
 #article h2:before { 
@@ -220,10 +223,11 @@ h3, h4, h5, h6 {
 .btn-navbar:hover, .btn-navbar:active, .btn-navbar.active, .btn-navbar.disabled, .btn-navbar[disabled] {
     background-color: #369ebc;
 }
+
 .btn-navbar:hover, .btn-navbar:active, .btn-navbar.active, .btn-navbar.disabled, .btn-navbar[disabled] {
     background-color: #369ebc;
 }
 
 .navbar .nav > li > a:hover, .navbar .dropdown-menu a:hover {
-    background-color: rgba(0,0,0,.3);
+    background-color: none;
 }
