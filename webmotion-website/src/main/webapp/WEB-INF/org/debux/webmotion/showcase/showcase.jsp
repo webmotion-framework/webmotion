@@ -51,20 +51,10 @@
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
 
         <style type="text/css">
-            body {
-/*                background-color: #ededed;*/
-                padding-top: 60px;
-            }
-            
             .tab_menu {
-/*                height: 410px;*/
                 clear: both;
                 padding-left: 5px;
                 padding-top: 10px;
-/*                border-radius: 0px 0px 4px 4px;*/
-/*                border-width: 0px 1px 1px 1px;*/
-/*                border-style: solid;*/
-/*                border-color: #DDD;*/
             }
         </style>
         
@@ -88,15 +78,26 @@
                 
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
-                <div class="container">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span> 
+                    </a> 
                     <a class="brand" href="<c:url value="/"/>">WebMotion</a>
 
-                    <ul class="nav">
-                        <li><a href="<c:url value="/main"/>">À propos</a></li>
-                        <li class="active"><a href="<c:url value="/documentation"/>">Documentation</a></li>
-                        <li><a href="<c:url value="/download"/>">Téléchargement</a></li>
-                        <li><a href="<c:url value="/contacts"/>">Contacts</a></li>
-                    </ul>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li><a href="<c:url value="/main"/>">À propos</a></li>
+                            <li class="active"><a href="<c:url value="/documentation"/>">Documentation</a></li>
+                            <li><a href="<c:url value="/download"/>">Téléchargement</a></li>
+                            <li><a href="<c:url value="/contacts"/>">Contacts</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li><a href="<c:url value="/?language=fr"/>">fr</a></li>
+                            <li><a href="<c:url value="/?language=en"/>">en</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,7 +108,7 @@
             </div>
 
             <div class="row-fluid">
-                <div class="span2 well" style="padding: 5px;">
+                <div class="span2 well" style="padding: 5px; margin-bottom: 10px; min-width: 200px;">
                     <ul class="nav nav-pills" style="margin: 0px; border-bottom: 1px solid #DEE6ED;">
                         <li id="tab_mapping"><a href="#mapping" data-toggle="tab">Mapping</a></li>
                         <li id="tab_render"><a href="#render" data-toggle="tab">Render</a></li>
