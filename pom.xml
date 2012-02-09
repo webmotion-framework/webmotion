@@ -22,6 +22,7 @@
         <module>webmotion-spring</module>
         <module>webmotion-test</module>
         <module>webmotion-website</module>
+        <module>webmotion-archetype</module>
     </modules>
 
     <developers>
