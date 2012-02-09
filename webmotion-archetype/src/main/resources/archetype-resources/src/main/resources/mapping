@@ -1,0 +1,7 @@
+[config]
+package.views=WEB-INF/${package}
+package.base=${package}
+
+[actions]
+*         /                           Base.index
+*         /{class}/{method}           {class}.{method}

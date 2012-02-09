@@ -119,6 +119,22 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-file-header</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/bootstrap/**</exclude>
+                                <exclude>**/prettify/**</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
