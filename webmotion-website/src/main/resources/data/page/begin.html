@@ -39,77 +39,56 @@
     Vous ne souhaitez pas utiliser Maven pour votre projet, lisez alors comment <a href="#eclipse">intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</a>.
 </p>
 
-<p>WebMotion s'intègre parfaitement dans un projet Maven webapp. Commençons par créer un projet (en ligne de commande) :</p>
+<p>WebMotion s'intègre parfaitement dans un projet Maven. Commençons par créer un projet (en ligne de commande) :</p>
 
-<pre>$ mvn archetype:generate -DgroupId=org.debux -DartifactId=webmotion-sample -DarchetypeArtifactId=maven-archetype-webapp \
-    -Dversion=1.0-SNAPSHOT</pre>
-
-<p>À présent, le projet webmotion-sample est créé, nous allons ajouter la dépendance nécessaire dans le fichier pom.xml :</p>
-
-<pre id="default_pom" class="prettyprint">
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;org.debux&lt;/groupId&gt;
-  &lt;artifactId&gt;webmotion-sample&lt;/artifactId&gt;
-  &lt;packaging&gt;war&lt;/packaging&gt;
-  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-  &lt;name&gt;webmotion-sample Maven Webapp&lt;/name&gt;
-  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
-  
-  &lt;!-- Définition du repository contenant WebMotion --&gt;
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;debux-repository&lt;/id&gt;
-      &lt;name&gt;Debux repository for Maven (contains WebMotion projects)&lt;/name&gt;
-      &lt;url&gt;http://debux.org/maven/repo/&lt;/url&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
-      &lt;artifactId&gt;webmotion&lt;/artifactId&gt;
-      &lt;version&gt;2.0&lt;/version&gt;&lt;!-- Pensez à vérifier quelle est la dernière version disponible --&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-  
-  &lt;build&gt; 
-    &lt;finalName&gt;webmotion-sample&lt;/finalName&gt; 
-  &lt;/build&gt; 
-&lt;/project&gt;
+<pre>
+$ mvn archetype:generate \
+ -DarchetypeRepository=http://debux.org/maven/repo \
+ -DarchetypeGroupId=org.debux.webmotion \
+ -DarchetypeArtifactId=webmotion-archetype \
+ -DarchetypeVersion=2.1 \
+ -DgroupId=org.example \
+ -DartifactId=myapp \
+ -Dpackage=org.example.myapp \
+ -Dversion=1.0-SNAPSHOT
 </pre>
-<p>Il suffit de compiler le projet pour vérifier que la dépendance est correcte :</p>
-<pre>$ mvn compile
-[INFO] Scanning for projects...
+
+<p>À présent, le projet est créé. Il suffit de packager le projet pour vérifier que tout est correcte :</p>
+<pre>$ mvn package
+...
 [INFO] ------------------------------------------------------------------------
-[INFO] Building webmotion-sample Maven Webapp
-[INFO]    task-segment: [compile]
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] [compiler:compile {execution: default-compile}]
-[INFO] No sources to compile
+[INFO] Total time: 8.181s
+[INFO] Finished at: Sat Feb 11 20:49:59 CET 2012
+[INFO] Final Memory: 10M/122M
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 11 seconds
-[INFO] Finished at: Sat Oct 29 15:00:32 CEST 2011
-[INFO] Final Memory: 6M/14M
-[INFO] ------------------------------------------------------------------------</pre>
+</pre>
 
 <p>Le projet est créé, la prochaine étape est <a href="#first_page">la création notre première page</a>.</p>
 
 <h3 id="netbeans">Intégration dans un projet créé avec l'éditeur Netbeans</h3>
 
 <p>Si vous souhaitez utiliser l'éditeur Netbeans et que vous ne le posséder pas encore, il est possible de le télécharger depuis le <a href="http://netbeans.org/downloads/index.html">le site officiel</a>,  en choisisant la version JEE.</p>
-<p>Une fois votre éditeur lancé, il vous suffit de créer un nouveau projet Maven webapp, puis compléter le pom.xml avec la dépendance vers WebMotion, comme présenté <a href="#default_pom">ci-dessus</a>.</p>
+<p>Une fois votre éditeur lancé, il vous suffit de créer un nouveau projet Maven depuis un archetype.</p>
 
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
-    <a class="thumbnail" style="width: 500px; display:inline-block;">
+    <a class="thumbnail" style="width: 500px; display:inline-block; margin-right: 10px;">
         <img src="media?name=netbeans_new_project.png" alt="New project in Netbeans" title="New project in Netbeans" />
+    </a>
+    <a class="thumbnail" style="width: 500px; display:inline-block;">
+        <img src="media?name=netbeans_add_archetype.png" alt="Add archetype in Netbeans" title="Add archetype in Netbeans" />
     </a>
 </div>
 
-<p>Vous pouvez lancer dans Netbeans le serveur ainsi <code>Clic droit sur le projet → Run</code> puis choisir le serveur d'application.</p>
+<p>Enfin remplir les informations sur votre projet :</p>
+<div style="text-align: center; margin: 0px 0px 20px 20px;">
+    <a class="thumbnail" style="width: 500px; display:inline-block;">
+        <img src="media?name=netbeans_complete_project.png" alt="Complete project in Netbeans" title="Complete project in Netbeans" />
+    </a>
+</div>
+
+<p><span class="label label-info">Note</span> Vous pouvez lancer dans Netbeans le serveur d'application ainsi <code>Clic droit sur le projet → Run</code> puis choisir le serveur.</p>
 
 <div class="alert alert-info">
     <p>
@@ -141,8 +120,8 @@
 </div>
 
 <p>
-    Rajouter la dépendance dans le classpath au niveau des propriétées du projet en utilisant Add external jar :
-    <br /><code>Clic droit sur le projet → properties → section "Java Build Path" → sous-section "Librairies" → appuyer sur "Add external jar"  → sélectionner le jar de WebMotion</code>
+    Rajouter les dépendances dans le classpath au niveau des propriétées du projet en utilisant Add external jar :
+    <br /><code>Clic droit sur le projet → properties → section "Java Build Path" → sous-section "Librairies" → appuyer sur "Add external jar" → sélectionner le jar de WebMotion plus les dépendances dans la version full</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display:inline-block;">
