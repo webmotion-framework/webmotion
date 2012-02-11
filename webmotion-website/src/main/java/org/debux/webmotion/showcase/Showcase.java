@@ -218,7 +218,8 @@ public class Showcase extends WebMotionController {
     public Render helloDefaultParameters() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/showcase/action/helloDefaultParameters"
+                    "/showcase/action/helloDefaultParameters",
+                    "/showcase/action/helloDefaultParameters?who=other"
                 ),
                 
                 "files", Arrays.asList(

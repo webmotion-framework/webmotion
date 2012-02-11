@@ -65,9 +65,16 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             return;
         }
         
-        // Contains all parameters renamed
-        Map<String, Object> parameters = call.getExtractParameters();
-        Map<String, Object> tmp = new LinkedHashMap<String, Object>(parameters);
+        // Contains all parameters
+        Map<String, Object> tmp = new LinkedHashMap<String, Object>();
+        
+        // Add default parameters
+        Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
+        tmp.putAll(defaultParameters);
+        
+        // Add extract parameters
+        Map<String, Object> extractParameters = call.getExtractParameters();
+        tmp.putAll(extractParameters);
         
         // Retrieve the good name for parameters give in mapping
         HttpContext context = call.getContext();
@@ -91,16 +98,12 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             String param = expression.getParam();
             
             if(!StringUtils.isEmpty(name)) {
-                Object values = parameters.get(param);
+                Object values = extractParameters.get(param);
                 if(values != null) {
                     tmp.put(name, values);
                 }
             }
         }
-        
-        // Add default parameters
-        Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
-        tmp.putAll(defaultParameters);
         
         // Transform dot by map
         for (Map.Entry<String, Object> entry : tmp.entrySet()) {
