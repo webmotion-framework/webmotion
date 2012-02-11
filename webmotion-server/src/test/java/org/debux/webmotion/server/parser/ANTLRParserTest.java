@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server.parser;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import org.antlr.runtime.RecognitionException;
