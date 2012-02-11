@@ -23,12 +23,6 @@
             <version>1.0.0.GA</version>
         </dependency>
             
-        <dependency>  
-            <groupId>javax.inject</groupId>  
-            <artifactId>javax.inject</artifactId>  
-            <version>1</version>
-        </dependency>
-        
         <!-- Servlet -->
         <dependency>
             <groupId>javax</groupId>
@@ -75,7 +69,7 @@
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
-                        <contextPath>/${project.build.finalName}</contextPath>
+                        <contextPath>/${artifactId}</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
