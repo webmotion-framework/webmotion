@@ -1,0 +1,20 @@
+[config]
+package.base=org.debux.webmotion.jpa
+
+[filters]
+*         /*                          Transaction.manage
+
+[actions]
+*         /{entity}/create            Entity.create
+*         /{entity}/read              Entity.read
+*         /{entity}/update            Entity.update
+*         /{entity}/delete            Entity.delete
+
+*         /{entity}/get               Entity.get
+*         /{entity}/list              Entity.list
+*         /{entity}/find              Entity.find
+*         /{entity}/save              Entity.save
+
+*         /display/{entity}           Display.display
+*         /display/{entity}/table     Display.table
+*         /display/{entity}/form      Display.form
