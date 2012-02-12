@@ -23,7 +23,8 @@
         <module>webmotion-test</module>
         <module>webmotion-website</module>
         <module>webmotion-archetype</module>
-  </modules>
+        <module>webmotion-jpa</module>
+    </modules>
 
     <developers>
         <developer>
