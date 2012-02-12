@@ -5,7 +5,7 @@
     <artifactId>webmotion</artifactId>
   
     <packaging>jar</packaging>
-    <name>Webmotion server</name>
+    <name>WebMotion server</name>
     
     <parent>
         <groupId>org.debux</groupId>

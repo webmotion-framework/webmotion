@@ -5,7 +5,7 @@
     <artifactId>webmotion-archetype</artifactId>
   
     <packaging>maven-archetype</packaging>
-    <name>Webmotion archetype</name>
+    <name>WebMotion archetype</name>
     
     <parent>
         <groupId>org.debux</groupId>

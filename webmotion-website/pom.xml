@@ -5,7 +5,7 @@
     <artifactId>webmotion-website</artifactId>
   
     <packaging>war</packaging>
-    <name>Webmotion website</name>
+    <name>WebMotion website</name>
     
     <parent>
         <groupId>org.debux</groupId>

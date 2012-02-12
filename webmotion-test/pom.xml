@@ -6,7 +6,7 @@
     <artifactId>webmotion-test</artifactId>
   
     <packaging>war</packaging>
-    <name>Webmotion test</name>
+    <name>WebMotion test</name>
     
     <parent>
         <groupId>org.debux</groupId>
