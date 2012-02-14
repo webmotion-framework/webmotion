@@ -5,16 +5,16 @@ package.base=org.debux.webmotion.jpa
 *         /*                          Transaction.manage
 
 [actions]
-*         /{entity}/create            Entity.create
-*         /{entity}/read              Entity.read
-*         /{entity}/update            Entity.update
-*         /{entity}/delete            Entity.delete
+*         /{entityName}/create            Entity.create
+*         /{entityName}/read              Entity.read
+*         /{entityName}/update            Entity.update
+*         /{entityName}/delete            Entity.delete
 
-*         /{entity}/get               Entity.get
-*         /{entity}/list              Entity.list
-*         /{entity}/find              Entity.find
-*         /{entity}/save              Entity.save
+#*         /{entityName}/get               Entity.get
+#*         /{entityName}/list              Entity.list
+#*         /{entityName}/find              Entity.find
+#*         /{entityName}/save              Entity.save
 
-*         /display/{entity}           Display.display
-*         /display/{entity}/table     Display.table
-*         /display/{entity}/form      Display.form
+#*         /display/{entityName}           Display.display
+#*         /display/{entityName}/table     Display.table
+#*         /display/{entityName}/form      Display.form
