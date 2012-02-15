@@ -32,26 +32,30 @@
 <h2 id="new_project" class="page-header">Création d'un nouveau projet</h2>
 
 <h3 id="maven">Intégration dans un projet Maven</h3>
-<p>Maven est, entre autre, un outil de gestion de constructions de projets très connu dans le monde Java. Si vous ne connaissez pas Maven, nous vous invitons à consulter <a href="http://maven.apache.org">le site officiel</a>.</p>
+<p>Maven est, un outil de gestion de construction de projets très connu dans le monde Java. Si vous ne connaissez pas Maven, nous vous invitons à consulter <a href="http://maven.apache.org">le site officiel</a>.</p>
 
 <p>
     <span class="label label-info">Note</span>
-    Vous ne souhaitez pas utiliser Maven pour votre projet, lisez alors comment <a href="#eclipse">intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</a>.
+    Vous ne souhaitez pas utiliser Maven pour votre projet, vous pouvez lire la rubrique liée à <a href="#eclipse">l'intégration de WebMotion dans un projet Java dans l'éditeur Eclipse</a>.
 </p>
 
-<p>WebMotion s'intègre parfaitement dans un projet Maven. Commençons par créer un projet (en ligne de commande) :</p>
+<p>WebMotion s'intègre parfaitement dans un projet Maven. Il existe d'ailleurs un archetype pour vous aider à créer un nouveau projet. Commençons par créer un projet (en ligne de commande) :</p>
 
 <pre>
 $ mvn archetype:generate \
- -DarchetypeRepository=http://debux.org/maven/repo \
- -DarchetypeGroupId=org.debux.webmotion \
- -DarchetypeArtifactId=webmotion-archetype \
- -DarchetypeVersion=2.1 \
- -DgroupId=org.example \
- -DartifactId=myapp \
- -Dpackage=org.example.myapp \
- -Dversion=1.0-SNAPSHOT
+    -DarchetypeRepository=http://debux.org/maven/repo \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.1 \
+    -DgroupId=org.example \
+    -DartifactId=myapp \
+    -Dpackage=org.example.myapp \
+    -Dversion=1.0-SNAPSHOT
 </pre>
+<p>
+    <span class="label label-warning">Note</span>
+    Penser à vérifier la dernière version de l'archetype.
+</p>
 
 <p>À présent, le projet est créé. Il suffit de packager le projet pour vérifier que tout est correcte :</p>
 <pre>$ mvn package
@@ -69,7 +73,7 @@ $ mvn archetype:generate \
 
 <h3 id="netbeans">Intégration dans un projet créé avec l'éditeur Netbeans</h3>
 
-<p>Si vous souhaitez utiliser l'éditeur Netbeans et que vous ne le posséder pas encore, il est possible de le télécharger depuis le <a href="http://netbeans.org/downloads/index.html">le site officiel</a>,  en choisisant la version JEE.</p>
+<p>Si vous souhaitez utiliser l'éditeur Netbeans et que vous ne le posséder pas encore, il est possible de le télécharger depuis le <a href="http://netbeans.org/downloads/index.html">le site officiel</a>,  en choisisant la version Java EE.</p>
 <p>Une fois votre éditeur lancé, il vous suffit de créer un nouveau projet Maven depuis un archetype.</p>
 
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
@@ -88,7 +92,7 @@ $ mvn archetype:generate \
     </a>
 </div>
 
-<p><span class="label label-info">Note</span> Vous pouvez lancer dans Netbeans le serveur d'application ainsi <code>Clic droit sur le projet → Run</code> puis choisir le serveur.</p>
+<p><span class="label label-info">Note</span> Vous pouvez lancer dans Netbeans le serveur d'applications ainsi <code>Clic droit sur le projet → Run</code> puis choisir le serveur.</p>
 
 <div class="alert alert-info">
     <p>
@@ -105,13 +109,12 @@ $ mvn archetype:generate \
 <p>Le projet est créé, la prochaine étape est <a href="#first_page">la création notre première page</a>.</p>
 
 <h3 id="eclipse">Intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</h3>
-<p>Pour utiliser WebMotion avec éclipse, il vous faut télécharger et installer éclipse en version Java EE Developers,
+<p>Pour utiliser WebMotion avec Eclipse, il vous faut télécharger et installer Eclipse en version Java EE Developers,
     disponible à l'adresse suivante <a href="http://www.eclipse.org/downloads/">http://www.eclipse.org/downloads/</a>.
 </p>
 
 <p>
-    Créer un projet Web :
-    <br /><code>Menu "File" → Sous-menu "New" → Dynamic Web Project)</code>
+    Créer un projet Web : <code>Menu "File" → Sous-menu "New" → Dynamic Web Project</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width: 500px; display:inline-block;">
@@ -130,8 +133,7 @@ $ mvn archetype:generate \
 </div>
 
 <p>
-    Déployer votre application sur un serveur :
-    <br /><code>Clic droit sur le projet → Run as  → Run on server</code>
+    Déployer votre application sur un serveur : <code>Clic droit sur le projet → Run as  → Run on server</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display:inline-block;">
