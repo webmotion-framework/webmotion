@@ -6,9 +6,9 @@ package.base=org.debux.webmotion.jpa
 
 [actions]
 *         /{entityName}/create            Entity.create
-*         /{entityName}/read              Entity.read
+*         /{entityName}/read?id={}        Entity.read
 *         /{entityName}/update            Entity.update
-*         /{entityName}/delete            Entity.delete
+*         /{entityName}/delete?id={}      Entity.delete
 
 #*         /{entityName}/get               Entity.get
 #*         /{entityName}/list              Entity.list
