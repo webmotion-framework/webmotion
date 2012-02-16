@@ -59,10 +59,16 @@ pre.prettyprint {
 
 .hero-unit {
     text-align: justify;
+    padding: 25px;
+    padding-bottom: 20px;
 }
 
 .hero-unit h1 {
     margin-bottom: 10px;
+}
+
+.hero-unit h1 small {
+    margin-left: 10px;
 }
 
 .nav-list .active > a, .nav-list .active > a:hover {

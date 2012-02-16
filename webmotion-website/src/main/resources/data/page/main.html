@@ -21,33 +21,62 @@
   License along with this program.  If not, see
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
-  -->
+-->
 <div class="hero-unit">
-    <h1>WebMotion</h1>
-    <p>De nombreux frameworks web Java existent déjà à l'heure actuelle, mais ils proposent le plus souvent une solution &laquo;&nbsp;clés en main&nbsp;&raquo;, qui peut s'avérer trop lourde ou trop contraignante pour les développeurs. WebMotion est essentiellement fondé sur le principe « KISS » (“Keep it simple, Stupid!”). Il offre volontairement peu de fonctionnalités, mais il se concentre pour qu'elles soient utilisable le plus simplement possible. Il hérite alors des bons procédés présents dans certains des frameworks web, tout en évitant de couvrir trop de couches applicatives, et en laissant libre le choix technique de framework de persistence, d'injection de dépendance, de validation, etc. Les développeurs pourront donc faire fonctionner WebMotion avec leurs outils habituels. </p>
-    <p style="text-align: right"><a class="btn btn-large" href="documentation">En savoir plus &raquo;</a> <a class="btn btn-primary btn-large" href="download">Télécharger &raquo;</a></p>
+    <h1>WebMotion<small>Framework web Java reposant sur le standard Java EE 6</small></h1>
+    <p>
+        WebMotion est un framework web Java conçu pour l'aide au développement rapide d'applications web. 
+        Il se veut volontairement léger et simple, quitte à ne pas remplir toutes les fonctionnalités possibles et potentiellement souhaitées dans le monde du web.
+    </p>
+    <p style="text-align: right"><a class="btn btn-large" href="documentation">En savoir plus &raquo;</a> <a class="btn btn-primary btn-large" href="download">Télécharger la dernière version (2.1) &raquo;</a></p>
 </div>
 
+<h2 class="page-header">La philosophie du framework : priorité à la simplicité et à la liberté</h2>
 <div class="row">
     <div class="span1">
-        <img src="./img/Internet.png" alt=""/>
+        <img src="./img/User.png" alt=""/>
     </div>
     <div class="span3">
-        <h2>Web</h2>                    
-        <p>Le framework permet le développement d'application web en assurant la couche présentation par le biais de pages (JSP, HTML, etc.)..</p>
+        <h2>Simplicité</h2>
+        <p>Le coeur de WebMotion n'est volontairement pas complet fonctionnellement, il constitue une <strong>solution simple</strong> pour exposer des URLs à l'intérieur d'une application web.</p>
     </div>
     <div class="span1">
-        <img src="./img/Settings_ControlPanel.png" alt=""/>
+        <img src="./img/stock_lock-ok.png" alt=""/>
     </div>
     <div class="span3">
-        <h2>API REST</h2>
-        <p>Il permet d'exposer des services REST (pour les appels XHR, par exemple). A l'instar des frameworks web existants, il permet de serialiser le résultat de services en JSON ou XML.. </p>
+        <h2>Liberté</h2>
+        <p>WebMotion se veut le moins contraignant possible. Contrairement aux frameworks complets existants, WebMotion veut laisser le <strong>libre choix</strong> des outils aux développeurs (persistence, injection de dépendance, etc.).</p>
     </div>
     <div class="span1">
-        <img src="./img/Administrative_Tools.png" alt=""/>
+        <img src="./img/text-x-java.png" alt=""/>
     </div>
     <div class="span3">
-        <h2>Java</h2>
-        <p>WebMotion est un framework de développement d'application web qui repose sur une architecture REST et sur le standard Java EE 6.</p>
+        <h2>Fondé sur un standard</h2>
+        <p>WebMotion est fondé sur le <strong>standard Java EE 6</strong>, et plus précisément sur l'API JSP / Servlet, qui est la base de la plupart des applications web Java.</p>
+    </div>
+</div>
+
+<h2 class="page-header">Les fonctionnalités natives du framework</h2>
+<div class="row">
+    <div class="span1">
+        <img src="./img/stock_new-html.png" alt=""/>
+    </div>
+    <div class="span3">
+        <h2>Routage applicatif</h2>                    
+        <p>Un unique fichier de mapping permet d'avoir <strong>une vue d'ensemble claire</strong> sur les différents chemins d'accès à votre application web (liens entre un chemin et une action).</p>
+    </div>
+    <div class="span1">
+        <img src="./img/applications-internet1.png" alt=""/>
+    </div>
+    <div class="span3">
+        <h2>Création d'API REST</h2>
+        <p>Exposer des services REST (pour les appels XHR, par exemple) est simple. WebMotion gère les différentes méthodes HTTP et est capable de transmettre le résultat de services dans des <strong>formats universels</strong> tels que <a href="http://www.json.org">JSON</a> ou <a href="http://www.w3.org/XML/">XML</a>.</p>
+    </div>
+    <div class="span1">
+        <img src="./img/preferences-desktop-personal1.png" alt=""/>
+    </div>
+    <div class="span3">
+        <h2>Affichage de pages</h2>                    
+        <p>Le framework assure la couche présentation par le biais de pages (<strong>JSP, HTML</strong>, etc.). Il permet également de créer des <strong>applications avancées</strong> par l'utilisation de templates avec <a href="http://www.stringtemplate.org">StringTemplate</a>.</p>
     </div>
 </div>
