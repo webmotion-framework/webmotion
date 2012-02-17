@@ -44,15 +44,13 @@ public class RenderStream extends Render {
     protected InputStream stream;
     protected String mimeType;
     protected String encoding;
+    protected String name;
 
-    public RenderStream(InputStream stream, String mimeType, String encoding) {
+    public RenderStream(InputStream stream, String name, String mimeType, String encoding) {
         this.stream = stream;
+        this.name = name;
         this.mimeType = mimeType;
         this.encoding = encoding;
-    }
-
-    public RenderStream(InputStream stream, String mimeType) {
-        this(stream, mimeType, DEFAULT_ENCODING);
     }
 
     public String getEncoding() {
@@ -77,7 +75,17 @@ public class RenderStream extends Render {
         if (mimeType != null) {
             response.setContentType(mimeType);
         }
-        response.setCharacterEncoding(encoding);
+        
+        if (encoding == null) {
+            response.setCharacterEncoding(encoding);
+        } else {
+            response.setCharacterEncoding(DEFAULT_ENCODING);
+        }
+        
+        if (name != null) {
+            response.setHeader("Content-Transfer-Encoding", mimeType);
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
+        }
         
         InputStream inputStream = render.getStream();
         ServletOutputStream outputStream = response.getOutputStream();
