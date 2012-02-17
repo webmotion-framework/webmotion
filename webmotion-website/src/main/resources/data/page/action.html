@@ -236,9 +236,9 @@ InputStream stream = classLoader.getResourceAsStream("logo.png");
 return renderStream(stream, "image/png");
 </pre>
 
-<h3>Rechargement de page : reloadPage</h3>
+<h3>Rechargement de page : renderLastPage</h3>
 <p>
-    La méthode <code>reloadPage()</code> permet de rafraîchir la page courante, 
+    La méthode <code>renderLastPage()</code> permet de rafraîchir la page courante, 
     elle utilise le referer dans le header HTTP de la requête.
 </p>
 
@@ -246,14 +246,14 @@ return renderStream(stream, "image/png");
     <span class="label label-info">Exemple</span> Recharge la page :
 </p>
 <pre class="prettyprint">
-return reloadPage();
+return renderLastPage();
 </pre>
 
 <p>
     <span class="label label-info">Exemple</span> Recharge la page en passant des paramètres supplémentaires :
 </p>
 <pre class="prettyprint">
-return reloadPage("id", 122345);
+return renderLastPage("id", 122345);
 </pre>
 
 <h3>Retour de code HTTP : renderStatus</h3>

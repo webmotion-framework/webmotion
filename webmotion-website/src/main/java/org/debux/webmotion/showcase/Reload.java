@@ -35,7 +35,7 @@ import org.debux.webmotion.server.render.Render;
 public class Reload extends WebMotionController {
     
     public Render exec() {
-        return reloadPage("content", "... reloaded !");
+        return renderLastPage("content", "... reloaded !");
     }
     
 }

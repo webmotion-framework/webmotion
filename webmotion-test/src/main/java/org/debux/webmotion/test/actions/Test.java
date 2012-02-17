@@ -155,7 +155,7 @@ public class Test extends WebMotionController {
     public Render reload() {
         HttpContext context = getContext();
         context.addInfoMessage("hello", "Hello world !");
-        return reloadPage();
+        return renderLastPage();
     }
     
     public Render template() {

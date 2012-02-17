@@ -153,7 +153,7 @@ public class Security extends WebMotionFilter {
         HttpContext context = getContext();
         HttpSession session = context.getSession();
         session.removeAttribute(CURRENT_USER_ATTRIBUTE);
-        return reloadPage();
+        return renderLastPage();
     }
     
     public Render check(String action, String sub) throws Exception {

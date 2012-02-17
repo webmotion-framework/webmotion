@@ -35,14 +35,14 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * Render use to reload the current page with the referer in request header.
+ * Render use to reload the last page with the referer in request header.
  * 
  * @author julien
  */
-public class RenderReferer extends Render {
+public class RenderLastPage extends Render {
     protected Map<String, Object> model;
 
-    public RenderReferer(Map<String, Object> model) {
+    public RenderLastPage(Map<String, Object> model) {
         this.model = model;
     }
 
@@ -52,7 +52,7 @@ public class RenderReferer extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderReferer render = (RenderReferer) call.getRender();
+        RenderLastPage render = (RenderLastPage) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();

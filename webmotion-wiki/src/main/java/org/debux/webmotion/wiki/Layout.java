@@ -76,6 +76,6 @@ public class Layout extends WebMotionFilter {
         
         Config.set(session, Config.FMT_LOCALE, language);
         
-        return reloadPage();
+        return renderLastPage();
     }
 }

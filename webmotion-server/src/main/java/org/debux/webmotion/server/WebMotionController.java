@@ -35,7 +35,7 @@ import org.debux.webmotion.server.render.RenderContent;
 import org.debux.webmotion.server.render.RenderError;
 import org.debux.webmotion.server.render.RenderJson;
 import org.debux.webmotion.server.render.RenderJsonP;
-import org.debux.webmotion.server.render.RenderReferer;
+import org.debux.webmotion.server.render.RenderLastPage;
 import org.debux.webmotion.server.render.RenderStatus;
 import org.debux.webmotion.server.render.RenderStream;
 import org.debux.webmotion.server.render.RenderStringTemplate;
@@ -163,8 +163,8 @@ public class WebMotionController {
      * @param model data used, either just one object, either keys with values
      * @return render represents the next step for user
      */
-    public Render reloadPage(Object ... model) {
-        return new RenderReferer(toMap(model));
+    public Render renderLastPage(Object ... model) {
+        return new RenderLastPage(toMap(model));
     }
 
     /**
