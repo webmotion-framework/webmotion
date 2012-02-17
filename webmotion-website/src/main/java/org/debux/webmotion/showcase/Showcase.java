@@ -63,6 +63,7 @@ public class Showcase extends WebMotionController {
     protected String getFile(String name) throws IOException {
         InputStream stream = Showcase.class.getClassLoader().getResourceAsStream(name);
         String content = IOUtils.toString(stream);
+        content = content.replace("/showcase/action", "");
         if(content.contains("#L%\n */\n")) {
             content = StringUtils.substringAfter(content, "#L%\n */\n");
         }
@@ -822,6 +823,35 @@ public class Showcase extends WebMotionController {
                         .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 3, 1)),
                     new FileContent("/src/main/resources/stats.wm", getFile("META-INF/stats.wm")),
                     getJavaContent("Stats.java")
+                )
+        );
+    }
+    
+    public Render application() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/application"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 63, 2)),
+                    getJavaContent("Application.java"),
+                    getPageContent("application.jsp")
+                )
+        );
+    }
+    
+    public Render internal() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/internal"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 65, 2)),
+                    getJavaContent("Internal.java")
                 )
         );
     }

@@ -123,10 +123,11 @@ public abstract class Render {
      * @return 
      */
     protected String addModel(String url, Map<String, Object> model) {
+        String path = url;
         if(model != null) {
 
             String separator = "?";
-            if(url.contains("?")) {
+            if(path.contains("?")) {
                 separator = "&";
             }
             
@@ -134,10 +135,10 @@ public abstract class Render {
                 String key = entry.getKey();
                 Object value = entry.getValue();
 
-                url += separator + key + "=" + value;
+                path += separator + key + "=" + value;
                 separator = "&";
             }
         }
-        return url;
+        return path;
     }
 }

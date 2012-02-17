@@ -165,12 +165,14 @@
                             <ul>
                                 <li><strong>Basic</strong>
                                     <ul>
-                                        <li><a id="first" href="./first">Action</a></li>
                                         <li><a id="index" href="./index">View</a></li>
                                         <li><a id="helloModel" href="./helloModel">Model</a></li>
                                         <li><a id="save" href="./save">Url</a></li>
+                                        <li><a id="first" href="./first">Action</a></li>
+                                        <li><a id="internal" href="./internal">Action url</a> <span class="label label-info">New</span></li>
                                         <li><a id="content" href="./content">Content</a></li>
                                         <li><a id="stream" href="./stream">Stream</a></li>
+                                        <li><a id="application" href="./application">Download</a> <span class="label label-info">New</span></li>
                                         <li><a id="load" href="./load">Reload page</a></li>
                                         <li><a id="forbidden" href="./forbidden">Error</a></li>
                                         <li><a id="nocontent" href="./nocontent">Status</a></li>

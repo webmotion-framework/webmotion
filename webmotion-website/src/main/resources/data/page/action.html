@@ -189,7 +189,31 @@ public class Call extends WebMotionController {
 }
 </pre>
 
-<h3>Rendu de contenu avec type mime : renderContent</h3>
+<h3>Forward vers un autre contrôleur : renderActionUrl</h3>
+<p>
+    
+    Le forward vers un autre contrôleur permet d'enchaîner plusieurs actions et de retourner
+    le rendu du dernier contrôleur en utilisant une url dans le mapping, sans redirection au niveau du client.
+    Dans ce cas là, le modèle passé en paramètre se retrouve directement en paramètre du contrôleur appelé.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Appel d'une action interne par l'url :
+</p>
+<pre class="prettyprint">
+return renderActionURL("/internal/action", "param", "internal");
+</pre>
+
+<p>
+    Avec comme action :
+</p>
+<pre class="prettyprint">
+public Render action(String param) {
+    return ...
+}
+</pre>
+
+<h3>Rendu de contenu : renderContent</h3>
 <p>
     La méthode <code>renderContent(String content, String mimeType)</code> permet de retourner 
     directement qui chaîne de caractères qui sera interprêtée par le client sous le type mime spécifié.
@@ -236,6 +260,31 @@ InputStream stream = classLoader.getResourceAsStream("logo.png");
 return renderStream(stream, "image/png");
 </pre>
 
+<h3>Rendu pour le téléchargement : renderDownload</h3>
+<p>
+    La méthode <code>renderDownload(InputStream stream, String name, String mimeType)</code>
+    permet de retourner le flux en attachement dans la réponse pour provoquer le téléchargement
+    du fichier par le navigateur.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Retourne un document PDF présent dans le classpath :
+</p>
+<pre class="prettyprint">
+ClassLoader classLoader = Stream.class.getClassLoader();
+InputStream stream = classLoader.getResourceAsStream("doc.pdf");
+return renderDownload(stream, "file.pdf", "application/pdf");
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Retourne une image présente dans le classpath :
+</p>
+<pre class="prettyprint">
+ClassLoader classLoader = Stream.class.getClassLoader();
+InputStream stream = classLoader.getResourceAsStream("logo.png");
+return renderDownload(stream, "image.pdf", "image/png");
+</pre>
+
 <h3>Rechargement de page : renderLastPage</h3>
 <p>
     La méthode <code>renderLastPage()</code> permet de rafraîchir la page courante, 
@@ -273,7 +322,7 @@ return renderLastPage("id", 122345);
 return renderStatus(HttpServletResponse.SC_OK);
 </pre>
 
-<h3>Retour d'erreur : renderError()</h3>
+<h3>Retour d'erreur : renderError</h3>
 <p>
     La méthode <code>renderError(int status, String message)</code> permet de retourner
     au client un code d'erreur HTTP. Il est possible d'utiliser les constantes 
@@ -480,6 +529,7 @@ public class Action extends WebMotionController {
     <li><strong>HttpServletRequest</strong> ou <strong>ServletRequest</strong> : requête appelant le serveur</li>
     <li><strong>HttpServletResponse</strong> ou <strong>ServletResponse</strong> : réponse retournée au client</li>
     <li><strong>ServletContext : </strong> contexte de la servlet</li>
+    <li><strong>ServerContext : </strong> contexte du serveur</li>
     <li><strong>ErrorData : </strong>en cas d'erreur, des informations complémentaires</li>
     <li><strong>Exception : </strong>en cas d'erreur, l'exception responsable de l'erreur</li>
     <li><strong>FileProgressListener : </strong>permet de suivre la progression de chargement de fichier</li>

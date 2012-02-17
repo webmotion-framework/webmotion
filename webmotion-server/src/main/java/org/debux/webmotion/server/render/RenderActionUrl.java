@@ -26,6 +26,8 @@ package org.debux.webmotion.server.render;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,15 +36,15 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * Render use to redirect the user to an absolute url or relatif.
+ * Render use to forward a new action.
  * 
  * @author julien
  */
-public class RenderUrl extends Render {
+public class RenderActionUrl extends Render {
     protected String url;
     protected Map<String, Object> model;
 
-    public RenderUrl(String url, Map<String, Object> model) {
+    public RenderActionUrl(String url, Map<String, Object> model) {
         this.url = url;
         this.model = model;
     }
@@ -57,20 +59,30 @@ public class RenderUrl extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderUrl render = (RenderUrl) call.getRender();
+        RenderActionUrl render = (RenderActionUrl) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        if (url.startsWith("/")) {
-            if (!url.startsWith("/static")) {
-                url = context.getExtensionPath() + url;
-            }
-            url = request.getContextPath() + url;
-        }
-        
         String path = addModel(url, render.getModel());
-        response.sendRedirect(path);
+        
+        DispatcherType dispatcherType = request.getDispatcherType();
+
+        if (request.isAsyncStarted()) {
+            AsyncContext asyncContext = request.getAsyncContext();
+            asyncContext.dispatch(path);
+            
+        } else if (dispatcherType == DispatcherType.INCLUDE) {
+            request.getRequestDispatcher(path).include(request, response);
+            
+        } else {
+            request.getRequestDispatcher(path).forward(request, response);
+        }
     }
-    
+
+    @Override
+    public void complete(Mapping mapping, Call call) throws IOException, ServletException {
+        // do nothing due to dispatch
+    }
+
 }

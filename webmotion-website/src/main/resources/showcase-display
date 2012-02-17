@@ -49,3 +49,5 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /template                                   Showcase.template
 *           /listener                                   Showcase.listener
 *           /stats                                      Showcase.stats
+*           /application                                Showcase.application
+*           /internal                                   Showcase.internal

@@ -31,6 +31,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.render.RenderAction;
+import org.debux.webmotion.server.render.RenderActionUrl;
 import org.debux.webmotion.server.render.RenderContent;
 import org.debux.webmotion.server.render.RenderError;
 import org.debux.webmotion.server.render.RenderJson;
@@ -81,7 +82,7 @@ public class WebMotionController {
     /**
      * Can send any content, specifying the mime-type.
      * 
-     * @param content String representation of the content, put directly in content of HTTP response
+     * @param content string representation of the content, put directly in content of HTTP response
      * @param mimeType The content mime-type.
      * @param encoding The content encoding.
      * @return render represents the next step for user
@@ -94,7 +95,7 @@ public class WebMotionController {
      * Can send any content, specifying the mime-type. The encoding for response
      * is UTF-8  by default.
      * 
-     * @param content String representation of the content, put directly in content of HTTP response
+     * @param content string representation of the content, put directly in content of HTTP response
      * @param mimeType The content mime-type.
      * @return render represents the next step for user
      */
@@ -106,25 +107,51 @@ public class WebMotionController {
      * Can send any content, specifying the mime-type. For example return a file
      * content. 
      * 
-     * @param stream Stream representation of the content, put directly in content of HTTP response
-     * @param mimeType The content mime-type.
-     * @param encoding The content encoding.
+     * @param stream stream representation of the content, put directly in content of HTTP response
+     * @param mimeType the content mime-type
+     * @param encoding the content encoding
      * @return render represents the next step for user
      */
     public Render renderStream(InputStream stream, String mimeType, String encoding) {
-        return new RenderStream(stream, mimeType, encoding);
+        return new RenderStream(stream, null, mimeType, encoding);
     }
     
     /**
      * Can send any content, specifying the mime-type. The encoding for response
      * is UTF-8  by default. For example return a file content. 
      * 
-     * @param stream Stream representation of the content, put directly in content of HTTP response
-     * @param mimeType The content mime-type.
+     * @param stream stream representation of the content, put directly in content of HTTP response
+     * @param mimeType the content mime-type
      * @return render represents the next step for user
      */
     public Render renderStream(InputStream stream, String mimeType) {
-        return new RenderStream(stream, mimeType);
+        return new RenderStream(stream, null, mimeType, null);
+    }
+    
+    /**
+     * Can send any content as attachment. The encoding for response is UTF-8 
+     * by default. For example return a file content.
+     * 
+     * @param stream Stream representation of the content, put directly in content of HTTP response
+     * @param name attachment name
+     * @param mimeType the content mime-type
+     * @return render represents the next step for user
+     */
+    public Render renderDownload(InputStream stream, String name, String mimeType) {
+        return new RenderStream(stream, name, mimeType, null);
+    }
+    
+    /**
+     * Can send any content as attachment. For example return a file content.
+     * 
+     * @param stream Stream representation of the content, put directly in content of HTTP response
+     * @param name attachment name
+     * @param mimeType the content mime-type.
+     * @param encoding the content encoding
+     * @return render represents the next step for user
+     */
+    public Render renderDownload(InputStream stream, String name, String mimeType, String encoding) {
+        return new RenderStream(stream, name, mimeType, encoding);
     }
     
     /**
@@ -181,9 +208,20 @@ public class WebMotionController {
     }
 
     /**
+     * Forward the user to an URL. The model is put as parameters in url;
+     * 
+     * @param url the forward URL.
+     * @param model data used, either just one object, either key/value pairs.
+     * @return render represents the next step for user
+     */
+    public Render renderActionURL(String url, Object ... model) {
+        return new RenderActionUrl(url, toMap(model));
+    }
+
+    /**
      * Redirect the user to an URL. The model is put as parameters in url;
      * 
-     * @param url The redirect URL.
+     * @param url the redirect URL.
      * @param model data used, either just one object, either key/value pairs.
      * @return render represents the next step for user
      */
