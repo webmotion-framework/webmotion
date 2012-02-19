@@ -27,6 +27,8 @@ package org.debux.webmotion.server.handler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -293,6 +295,25 @@ public class RenderCreatorHandlerTest {
         public Locale getLocale() {
             return null;
         }
-        
+
+        @Override
+        public int getStatus() {
+            return 0;
+        }
+
+        @Override
+        public String getHeader(String value) {
+            return value;
+        }
+
+        @Override
+        public Collection<String> getHeaders(String value) {
+            return new ArrayList<String>();
+        }
+
+        @Override
+        public Collection<String> getHeaderNames() {
+            return new ArrayList<String>();
+        }
     }
 }
