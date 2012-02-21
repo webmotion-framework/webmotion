@@ -25,6 +25,7 @@
 package org.debux.webmotion.wiki;
 
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
@@ -55,8 +56,18 @@ public class Layout extends WebMotionFilter {
             // Check current language
             String language = (String) Config.get(session, Config.FMT_LOCALE);
             if(language == null) {
+                Locale locale = request.getLocale();
+                String lang = locale.getLanguage();
+                
                 language = WikiConfig.getDefaultLanguage();
                 Config.set(session, Config.FMT_LOCALE, language);
+                
+                for (String supported : languages) {
+                    if (lang.equals(supported)) {
+                        Config.set(session, Config.FMT_LOCALE, lang);
+                        break;
+                    }
+                }
             }
             
             return renderView("layout.jsp",
