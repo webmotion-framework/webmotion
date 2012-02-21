@@ -59,7 +59,19 @@
         </style>
         
         <script type="text/javascript">
+            <c:url value="/main" var="main_url"/>
+            <c:url value="/documentation" var="documentation_url"/>
+            <c:url value="/download" var="download_url"/>
+            <c:url value="/contacts" var="contacts_url"/>
+
             jQuery(document).ready(function () {
+                $('#documentation').addClass("active");
+                
+                $("#main>a").attr("href", "${main_url}")
+                $("#documentation>a").attr("href", "${documentation_url}")
+                $("#download>a").attr("href", "${download_url}")
+                $("#contacts>a").attr("href", "${contacts_url}")
+                
                 var end = /[^/]+$/g;
                 var id = '#' + end.exec(window.location.pathname)[0];
                 $(id).addClass("label select");
@@ -87,12 +99,8 @@
                     <a class="brand" href="<c:url value="/"/>">WebMotion</a>
 
                     <div class="nav-collapse">
-                        <ul class="nav">
-                            <li><a href="<c:url value="/main"/>">À propos</a></li>
-                            <li class="active"><a href="<c:url value="/documentation"/>">Documentation</a></li>
-                            <li><a href="<c:url value="/download"/>">Téléchargement</a></li>
-                            <li><a href="<c:url value="/contacts"/>">Contacts</a></li>
-                        </ul>
+                        <jsp:include page="/header?sub=include" />
+                        
                         <ul class="nav pull-right">
                             <li><a href="<c:url value="/?language=fr"/>">fr</a></li>
                             <li><a href="<c:url value="/?language=en"/>">en</a></li>

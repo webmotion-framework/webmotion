@@ -49,6 +49,48 @@
         <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
         <script type="text/javascript" src="<c:url value="/prettify/prettify.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
+    
+        <script type="text/javascript">
+            <c:url value="/main" var="main_url"/>
+            <c:if test="${layout_url == '/main'}" >
+                <c:set var="main_active" value="active"/>
+            </c:if>
+
+            <c:url value="/documentation" var="documentation_url"/>
+            <c:if test="${layout_url == '/documentation' 
+                          || layout_url == '/begin'
+                          || layout_url == '/mapping'
+                          || layout_url == '/action'
+                          || layout_url == '/extensions'
+                          || layout_url == '/advanced'
+                          || layout_url == '/changelog'}" >
+                <c:set var="documentation_active" value="active"/>
+            </c:if>
+
+            <c:url value="/download" var="download_url"/>
+            <c:if test="${layout_url == '/download'}" >
+                <c:set var="download_active" value="active"/>
+            </c:if>
+
+            <c:url value="/contacts" var="contacts_url"/>
+            <c:if test="${layout_url == '/contacts'}" >
+                <c:set var="contacts_active" value="active"/>
+            </c:if>
+                            
+            jQuery(document).ready(function () {
+                $('#main').addClass("${main_active}");
+                $("#main>a").attr("href", "${main_url}")
+                
+                $('#documentation').addClass("${documentation_active}");
+                $("#documentation>a").attr("href", "${documentation_url}")
+                
+                $('#download').addClass("${download_active}");
+                $("#download>a").attr("href", "${download_url}")
+                
+                $('#contacts').addClass("${contacts_active}");
+                $("#contacts>a").attr("href", "${contacts_url}")
+            });
+        </script>
     </head>
 
     <body onload="prettyPrint()">
@@ -64,37 +106,8 @@
                     <a class="brand" href="<c:url value="/"/>">${site_name}</a>
 
                     <div class="nav-collapse">
-                        <ul class="nav">
-                            <c:url value="/main" var="main_url"/>
-                            <c:if test="${layout_url == '/main'}" >
-                                <c:set var="main_active" value="active"/>
-                            </c:if>
-                            <li class="${main_active}"><a href="${main_url}">À propos</a></li>
-
-                            <c:url value="/documentation" var="documentation_url"/>
-                            <c:if test="${layout_url == '/documentation' 
-                                          || layout_url == '/begin'
-                                          || layout_url == '/mapping'
-                                          || layout_url == '/action'
-                                          || layout_url == '/extensions'
-                                          || layout_url == '/advanced'}" >
-                                <c:set var="documentation_active" value="active"/>
-                            </c:if>
-                            <li class="${documentation_active}"><a href="${documentation_url}">Documentation</a></li>
-
-                            <c:url value="/download" var="download_url"/>
-                            <c:if test="${layout_url == '/download'}" >
-                                <c:set var="download_active" value="active"/>
-                            </c:if>
-                            <li class="${download_active}"><a href="${download_url}">Téléchargement</a></li>
-
-                            <c:url value="/contacts" var="contacts_url"/>
-                            <c:if test="${layout_url == '/contacts'}" >
-                                <c:set var="contacts_active" value="active"/>
-                            </c:if>
-                            <li class="${contacts_active}"><a href="${contacts_url}">Contacts</a></li>
-                        </ul>
-
+                        <jsp:include page="/header?sub=include" />
+                        
                         <ul class="nav pull-right">
                             <c:forEach items="${languages}" var="lang">
                                 <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
