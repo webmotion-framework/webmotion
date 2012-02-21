@@ -99,7 +99,7 @@
                     <a class="brand" href="<c:url value="/"/>">WebMotion</a>
 
                     <div class="nav-collapse">
-                        <jsp:include page="/header?sub=include" />
+                        <jsp:include page="/menu?sub=include" />
                         
                         <ul class="nav pull-right">
                             <li><a href="<c:url value="/?language=fr"/>">fr</a></li>

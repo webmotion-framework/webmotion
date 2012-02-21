@@ -106,7 +106,7 @@
                     <a class="brand" href="<c:url value="/"/>">${site_name}</a>
 
                     <div class="nav-collapse">
-                        <jsp:include page="/header?sub=include" />
+                        <jsp:include page="/menu?sub=include" />
                         
                         <ul class="nav pull-right">
                             <c:forEach items="${languages}" var="lang">
