@@ -1,0 +1,125 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Archive.png') no-repeat;">Download <small>Get WebMotion</small></h1>
+</div>
+<table class="table table-striped table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2.1-SNAPSHOT</td>
+            <td>01/27/2012</td>
+            <td>
+                <p><a href="http://debux.org/maven/snapshot/org/debux/webmotion/webmotion/2.1-SNAPSHOT/">webmotion-2.1-SNAPSHOT.jar</a></p>
+                <p><a href="http://debux.org/maven/snapshot/org/debux/webmotion/webmotion-spring/2.1-SNAPSHOT/">webmotion-spring-2.1-SNAPSHOT.jar</a></p>
+                <p><a href="http://debux.org/maven/snapshot/org/debux/webmotion/wikimotion/2.1-SNAPSHOT/">wikimotion-2.1-SNAPSHOT.war</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>2.0</td>
+            <td>12/03/2011</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/20/webmotion-2.0.jar">webmotion-2.0.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/22/webmotion-2.0-sources.jar">webmotion-2.0-sources.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/21/webmotion-2.0-javadoc.jar">webmotion-2.0-javadoc.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/24/webmotion-spring-2.0.jar">webmotion-spring-2.0.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/23/wikimotion-2.0.war">wikimotion-2.0.jar</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>1.4</td>
+            <td>10/01/2011</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/17/webmotion-1.4.jar">webmotion-1.4.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/19/webmotion-1.4-sources.jar">webmotion-1.4-sources.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/18/webmotion-1.4-javadoc.jar">webmotion-1.4-javadoc.jar</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>1.0</td>
+            <td>06/14/2011</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/1/webmotion-1.0.jar">webmotion-1.0.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/3/webmotion-1.0-sources.jar">webmotion-1.0-sources.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/2/webmotion-1.0-javadoc.jar">webmotion-1.0-javadoc.jar</a></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Folder_Web.png') no-repeat;">Maven <small>Use Maven to get WebMotion</small></h1>
+</div>
+<p>A maven 2 repository is available by adding the following lines in your projects's pom.xml file:</p>
+<pre class="prettyprint">
+&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;debux.release&lt;/id&gt;
+        &lt;name&gt;DebuxReleaseRepository&lt;/name&gt;
+        &lt;url&gt;http://debux.org/maven/repo&lt;/url&gt;
+        &lt;releases&gt;
+            &lt;enabled&gt;true&lt;/enabled&gt;
+            &lt;checksumPolicy&gt;fail&lt;/checksumPolicy&gt;
+        &lt;/releases&gt;
+    &lt;/repository&gt;
+    &lt;repository&gt;
+        &lt;id&gt;debux.snapshot&lt;/id&gt;
+        &lt;name&gt;DebuxSnapshotRepository&lt;/name&gt;
+        &lt;url&gt;http://debux.org/maven/snapshot&lt;/url&gt;
+        &lt;snapshots&gt;
+            &lt;enabled&gt;true&lt;/enabled&gt;
+            &lt;checksumPolicy&gt;fail&lt;/checksumPolicy&gt;
+        &lt;/snapshots&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+...
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion&lt;/artifactId&gt;
+    &lt;version&gt;2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/TextDocument.png') no-repeat;">Sources <small>Get the sources</small></h1>
+</div>
+<p>The sources are available under subversion, you can anonymously checkout the project by executing the following comand:</p>
+<div class="well">
+    $ svn checkout <strong><a href="http://svn.debux.org/webmotion/trunk/">http://svn.debux.org/webmotion/trunk/</a></strong>
+</div>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Workgroup.png') no-repeat;">Redmine <small>Come to the forge to participate</small></h1>
+</div>
+<p>Redmine is used to enable everyone to participate in the project by reporting bugs and evolutions you may wish. Otherwise, do not hesitate to contact us.</p>
+<div class="well">
+    <strong><a href="http://projects.debux.org/projects/webmotion">http://projects.debux.org/projects/webmotion</a></strong>
+</div>
