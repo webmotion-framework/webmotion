@@ -860,7 +860,7 @@ public class Filters extends WebMotionFilter {
 
 <h3>Valeurs par défaut des paramètres</h3>
 <p>
-    Il est possible de passer des paramètres aux méthodes Java sans qu'ils existent dans l'URL. 
+    Il est possible de passer des paramètres aux méthodes Java sans qu'ils n'existent dans l'URL. 
     Vous pouvez utiliser la notation pointée pour passer des objets.
 </p>
 
@@ -884,7 +884,7 @@ public class Decorator extends WebMotionFilter {
 </pre>
 <p>
     <span class="label label-warning">Attention</span> Si les paramètres par défaut ont les mêmes noms entre le filtre et l'action,
-    ceux de l'action sont prioritaires et remplace celui du filtre.
+    les valeurs contenues pour ces paramètres seront celles définies au niveau action, et écraseront les valeurs définies au niveau filtre.
 </p>
 
 <h2 id="errors" class="page-header">[errors] Gestion des erreurs (exceptions, erreurs HTTP)</h2>
