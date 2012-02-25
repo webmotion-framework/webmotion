@@ -463,6 +463,34 @@ public class ANTLRMappingParser extends MappingParser {
             }
         });
         
+        visitors.put("/FILTER/DEFAULT_PARAMETERS/PARAMETER", new Visit() {
+            @Override
+            public void acceptAfter(String value) {
+                stack.removeLast();
+            }
+        });
+        
+        visitors.put("/FILTER/DEFAULT_PARAMETERS/PARAMETER/NAME/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                FilterRule filterRule = (FilterRule) stack.peekLast();
+                Map<String, String[]> defaultParameters = filterRule.getDefaultParameters();
+                defaultParameters.put(value, null);
+                stack.addLast(value);
+            }
+        });
+        
+        visitors.put("/FILTER/DEFAULT_PARAMETERS/PARAMETER/VALUE/*", new Visit() {
+            @Override
+            public void acceptBefore(String value) {
+                value = value.substring(1); // Remove "="
+                
+                String key = (String) stack.peekLast();
+                FilterRule actionRule = (FilterRule) stack.getFirst();
+                Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
+                defaultParameters.put(key, new String[]{value});            }
+        });
+        
         visitors.put("/ACTION", new Visit() {
             @Override
             public void acceptBefore(String value) {

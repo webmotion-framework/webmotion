@@ -150,6 +150,7 @@
                                     <ul>
                                         <li><a id="filter" href="./filter">Do process</a></li>
                                         <li><a id="condition" href="./condition">Render</a></li>
+                                        <li><a id="decorator" href="./decorator">Default parameters</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                                 <li><strong>Error</strong>

@@ -89,8 +89,8 @@ section_filter
     ;
 
 section_filter_rule
-    : method Blank section_filter_path Blank action
-    -> ^(DOLLAR["FILTER"] ^(DOLLAR["METHOD"] method) ^(DOLLAR["PATH"] section_filter_path) action)
+    : method Blank section_filter_path Blank action (Blank default_parameters)?
+    -> ^(DOLLAR["FILTER"] ^(DOLLAR["METHOD"] method) ^(DOLLAR["PATH"] section_filter_path) action default_parameters?)
     ;
 
 section_filter_path
@@ -106,8 +106,8 @@ section_action
     ;
 
 section_action_rule
-    : method Blank section_action_path section_action_path_parameters? Blank (dynamic_view | dynamic_url | dynamic_action) (Blank section_action_default_parameters)?
-    -> ^(DOLLAR["ACTION"] ^(DOLLAR["METHOD"] method) section_action_path section_action_path_parameters? dynamic_view? dynamic_url? dynamic_action? section_action_default_parameters*)
+    : method Blank section_action_path section_action_path_parameters? Blank (dynamic_view | dynamic_url | dynamic_action) (Blank default_parameters)?
+    -> ^(DOLLAR["ACTION"] ^(DOLLAR["METHOD"] method) section_action_path section_action_path_parameters? dynamic_view? dynamic_url? dynamic_action? default_parameters?)
     ;
 
 section_action_path
@@ -139,21 +139,6 @@ section_action_parameter
     -> ^(DOLLAR["PARAMETER"] ^(DOLLAR["NAME"] $name) section_action_variable* ^(DOLLAR["VALUE"] $value)?)
     ;
     
-section_action_default_parameters
-    :  (section_action_default_parameter (COMMA section_action_default_parameter)*)?
-    -> ^(DOLLAR["DEFAULT_PARAMETERS"] section_action_default_parameter*)
-    ;
-
-section_action_default_parameter
-    : full_name section_action_default_parameter_value
-    -> ^(DOLLAR["PARAMETER"] ^(DOLLAR["NAME"] full_name) ^(DOLLAR["VALUE"] section_action_default_parameter_value))
-    ;
-
-section_action_default_parameter_value
-    : EQUALS .*
-    -> DOT[$text]
-    ;
-
 // Section extension
 
 section_extension
@@ -168,6 +153,22 @@ section_extension_rule
 
 section_extension_path
     : SLASH | (SLASH path_name)+
+    -> DOT[$text]
+    ;
+
+// Default parameters
+default_parameters
+    :  (default_parameter (COMMA default_parameter)*)?
+    -> ^(DOLLAR["DEFAULT_PARAMETERS"] default_parameter*)
+    ;
+
+default_parameter
+    : full_name default_parameter_value
+    -> ^(DOLLAR["PARAMETER"] ^(DOLLAR["NAME"] full_name) ^(DOLLAR["VALUE"] default_parameter_value))
+    ;
+
+default_parameter_value
+    : EQUALS .*
     -> DOT[$text]
     ;
 

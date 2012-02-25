@@ -11,6 +11,8 @@ server.listener.class=org.debux.webmotion.showcase.Listener
 [filters]
 *           /path/*                                     Filter.pass
 *           /other/*                                    Condition.check
+*           /contact/*                                  Decorator.decorate      slot=contact
+*           /company/*                                  Decorator.decorate      slot=company
 
 [errors]
 javax.validation.ConstraintViolationException           ErrorConstraint.display
@@ -87,3 +89,5 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /application/download                       Application.download
 *           /internal                                   Internal.get
 *           /internal/action                            Internal.action
+*           /contact/view                               view:contact.jsp
+*           /company/view                               view:company.jsp

@@ -26,6 +26,7 @@ package org.debux.webmotion.server.handler;
 
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
 import java.util.LinkedHashMap;
@@ -69,6 +70,12 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         Map<String, Object> tmp = new LinkedHashMap<String, Object>();
         
         // Add default parameters
+        List<FilterRule> filterRules = call.getFilterRules();
+        for (FilterRule filterRule : filterRules) {
+            Map<String, String[]> defaultParameters = filterRule.getDefaultParameters();
+            tmp.putAll(defaultParameters);
+        }
+        
         Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
         tmp.putAll(defaultParameters);
         

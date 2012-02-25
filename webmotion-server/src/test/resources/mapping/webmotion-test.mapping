@@ -17,7 +17,7 @@ code:500                                                    Error.error
 *                                                           view:error.jsp
 
 [filters]
-*           /*                                              Filters.log
+*           /*                                              Filters.log         value=4
 *           /test/hello/*                                   Filters.param
 *           /test/*/*                                       Filters.log
 

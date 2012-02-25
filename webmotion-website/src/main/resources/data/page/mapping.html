@@ -767,7 +767,7 @@ public class Action extends WebMotionController {
     Voici la syntaxe pour filtrer des URLs sur une action Java :
 </p>
 <pre>
-&lt;http_method&gt;    &lt;URL_filter&gt;    <b>action:</b>&lt;method_name&gt;
+&lt;http_method&gt;    &lt;URL_filter&gt;    <b>action:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
     <span class="label label-info">Note</span> Comme pour la section <code>[actions]</code>, le préfixe <code>action:</code> est facultatif pour les actions Java.
@@ -775,7 +775,7 @@ public class Action extends WebMotionController {
 
 <h3>Méthode HTTP</h3>
 <p>
-    La syntaxe est les méthodes HTTP supportées pour les filtres dans WebMotion sont décrites dans <a href="#http-methods">la section [actions]</a>.
+    La syntaxe des méthodes HTTP supportées pour les filtres dans WebMotion sont décrites dans <a href="#http-methods">la section [actions]</a>.
 </p>
 
 <h3>URL</h3>
@@ -855,6 +855,31 @@ public class Filters extends WebMotionFilter {
         }
         return null;
     }
+}
+</pre>
+
+<h3>Valeurs par défaut des paramètres</h3>
+<p>
+    Il est possible de passer des paramètres aux méthodes Java sans qu'ils existent dans l'URL. 
+    Vous pouvez utiliser la notation pointée pour passer des objets.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Exécute le filtre <code>decorate</code> avec des paramètres par défaut :
+</p>
+<pre>
+GET         /*           Decorator.decorate    value=default
+</pre>
+<p>Avec le filtre Decorator suivante :</p>
+<pre class="prettyprint">
+public class Decorator extends WebMotionFilter {
+    public void decorate(String value) {
+        // value = "default"
+        ...
+        doProcess();
+        ...
+    }
+    ...
 }
 </pre>
 

@@ -25,7 +25,9 @@
 package org.debux.webmotion.server.mapping;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -38,9 +40,11 @@ public class FilterRule extends Rule {
 
     protected List<String> methods;
     protected Pattern pattern;
+    protected Map<String, String[]> defaultParameters;
 
     public FilterRule() {
         methods = new ArrayList<String>();
+        defaultParameters = new LinkedHashMap<String, String[]>();
     }
     
     public List<String> getMethods() {
@@ -58,5 +62,12 @@ public class FilterRule extends Rule {
     public void setPattern(Pattern pattern) {
         this.pattern = pattern;
     }
-    
+
+    public Map<String, String[]> getDefaultParameters() {
+        return defaultParameters;
+    }
+
+    public void setDefaultParameters(Map<String, String[]> defaultParameters) {
+        this.defaultParameters = defaultParameters;
+    }
 }

@@ -43,8 +43,8 @@ public class Showcase extends WebMotionController {
 
     protected static final int INDEX_EXTENSIONS = 6;
     protected static final int INDEX_FILTERS = 11;
-    protected static final int INDEX_ERRORS = 15;
-    protected static final int INDEX_ACTIONS = 23;
+    protected static final int INDEX_ERRORS = 17;
+    protected static final int INDEX_ACTIONS = 25;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
@@ -852,6 +852,24 @@ public class Showcase extends WebMotionController {
                     getConfig(false, true, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 65, 2)),
                     getJavaContent("Internal.java")
+                )
+        );
+    }
+    
+    public Render decorator() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/showcase/action/contact/view",
+                    "/showcase/action/company/view"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, false, true, false)
+                        .addContent(getMapping(SECTION_FILTERS, INDEX_FILTERS + 3, 2))
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 67, 2)),
+                    getJavaContent("Decorator.java"),
+                    getPageContent("contact.jsp"),
+                    getPageContent("company.jsp")
                 )
         );
     }
