@@ -6,6 +6,7 @@
   
     <packaging>war</packaging>
     <name>WebMotion wiki</name>
+    <url>www.webmotion-framework.org</url>
     
     <parent>
         <groupId>org.debux</groupId>

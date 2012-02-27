@@ -7,6 +7,7 @@
   
     <packaging>jar</packaging>
     <name>WebMotion JPA</name>
+    <url>www.webmotion-framework.org</url>
     
     <parent>
         <groupId>org.debux</groupId>
