@@ -67,6 +67,11 @@
                 <c:set var="documentation_active" value="active"/>
             </c:if>
 
+            <c:url value="/showcase/hello" var="showcase_url"/>
+            <c:if test="${layout_url == '/showcase'}" >
+                <c:set var="showcase_active" value="active"/>
+            </c:if>
+
             <c:url value="/download" var="download_url"/>
             <c:if test="${layout_url == '/download'}" >
                 <c:set var="download_active" value="active"/>
@@ -83,6 +88,9 @@
                 
                 $('#documentation').addClass("${documentation_active}");
                 $("#documentation>a").attr("href", "${documentation_url}")
+                
+                $('#showcase').addClass("${showcase_active}");
+                $("#showcase>a").attr("href", "${showcase_url}")
                 
                 $('#download').addClass("${download_active}");
                 $("#download>a").attr("href", "${download_url}")

@@ -61,14 +61,16 @@
         <script type="text/javascript">
             <c:url value="/main" var="main_url"/>
             <c:url value="/documentation" var="documentation_url"/>
+            <c:url value="/showcase/hello" var="showcase_url"/>
             <c:url value="/download" var="download_url"/>
             <c:url value="/contacts" var="contacts_url"/>
 
             jQuery(document).ready(function () {
-                $('#documentation').addClass("active");
+                $('#showcase').addClass("active");
                 
                 $("#main>a").attr("href", "${main_url}")
                 $("#documentation>a").attr("href", "${documentation_url}")
+                $("#showcase>a").attr("href", "${showcase_url}")
                 $("#download>a").attr("href", "${download_url}")
                 $("#contacts>a").attr("href", "${contacts_url}")
                 
