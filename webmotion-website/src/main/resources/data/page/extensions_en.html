@@ -1,0 +1,167 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Extensions</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="principe">Principle</h2>
+</div>
+<p>
+
+    Webmotion is part of a component-oriented approach, with its extension system.
+    The extensions enable the code reuse from one application to another, and even within a single application.
+</p>
+<p>
+    Reminder, the benefits of the use of extensions in your project are significant
+</p>
+<ul>
+    <li>Reuse : you can pool business components between different projects.</li>
+    <li>Structuring : the extensions enable to cut out a project in functional or technical..</li>
+    <li>Modularity : during deployment, the extensions can be determined dynamically.</li>
+</ul>
+
+<p>
+    If you want to know more about the realization and configuration of extensions, please refer to the <a href="mapping#extensions">Mapping - Extensions</a> section.
+</p>
+
+<div class="page-header">
+    <h2 id="wikimotion">Wikimotion</h2>
+</div>
+
+<p>
+    Wikimotion is a wiki engine which can be used both standalone or as an extension.
+    For example, the website <a href="/">WebMotion</a> uses the wiki as an extension.
+    A default configuration file <code>wikimotion-config.properties</code> is provided,
+    but you can modify it to configure and customize your wiki.
+</p>
+
+<p>
+    It offers the following features:
+</p>
+<ul>
+    <li>Flat files saving (no database needed)</li>
+    <li>Pages written in HTML, RST or LaTeX</li>
+    <li>Basic HTTP authentication support</li>
+    <li>File upload</li>
+    <li>Site map</li>
+    <li>Media map</li>
+</ul>
+
+<p style="text-align: right"><a class="btn" href="http://svn.debux.org/webmotion/trunk/webmotion-wiki/">Sources &raquo;</a> <a class="btn btn-primary" href="download">Download &raquo;</a></p>
+
+<div class="page-header">
+    <h2 id="spring">Spring</h2>
+</div>
+
+<p>
+    WebMotion offers a dependency injection extension based on Spring.
+    It enables you to manage the controllers (WebMotionController) and the WebMotionHandlers in Spring.
+    This extension also enables to easily use the Spring scopes (request/session/singleton/prototype) for your objects.
+</p>
+
+<p>
+    To use it, you need to get the jar and modify the <code>[config]</code> section of your mapping file as follows:
+</p>
+<pre>[config]
+server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
+</pre>
+
+<p>
+    The configuration files are automatically loaded from the <code>WEB-INF</code> directory.
+    Their name must starts with <code>applicationContext</code>.
+</p>
+<p>
+
+    <code>applicationContext.xml</code> file example:
+</p>
+<pre class="prettyprint">
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			   http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd"&gt;
+
+    &lt;context:annotation-config/&gt;
+
+    &lt;bean ... /&gt;
+
+&lt;/beans&gt;
+</pre>
+
+<p>
+    You need to use the dependency injection to make calls between actions instead of renderAction:
+</p>
+<pre class="prettyprint">
+public class Spring extends WebMotionController {
+
+    @Inject
+    protected Action action;
+
+    public Render run() {
+        return action.exec();
+    }
+
+}
+</pre>
+
+<p style="text-align: right"><a class="btn" href="http://svn.debux.org/webmotion/trunk/webmotion-spring/">Sources &raquo;</a> <a class="btn btn-primary" href="download">Download &raquo;</a></p>
+
+<div class="page-header">
+    <h2 id="next">Coming soon</h2>
+</div>
+<p>
+    Here are the different extensions that will be developed soon.
+</p>
+<p>
+    Technical level:
+</p>
+<ul>
+    <li>Shiro, to have a more advanced management of the authentication and permissions</li>
+    <li>Hibernate, with CRUD system to quickly build applications</li>
+    <li>Guice, for the IOC</li>
+    <li>Tiles, for the view templates</li>
+</ul>
+<p>
+    Functional level:
+</p>
+<ul>
+    <li>Blog engine</li>
+    <li>Forums</li>
+    <li>Audience and statistics measurement module</li>
+</ul>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="advanced">Avanced »</a>
+</div>
+
+</div>
