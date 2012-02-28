@@ -34,7 +34,7 @@
 </div>
 <p>
     Le framework est géré par un filtre. Le filtre analyse 
-    l'intégralité des requêtes entrantes et les aiguilles vers une ressource statique (html, jsp, css, ...) 
+    l'intégralité des requêtes entrantes et les aiguille vers une ressource statique (html, jsp, css, ...) 
     ou vers une action définie dans le fichier de mapping.
 </p>
 
@@ -62,7 +62,7 @@
     <h2 id="handler">Comprendre le fonctionnement de WebMotion</h2>
 </div>
 <p>
-    Le traitement de la requête passse par différents handlers pour réaliser 
+    Le traitement de la requête passe par différents handlers pour réaliser 
     la demande du client web. Il y a un handler particulier qui est l'hander principal <code>MainHandler</code> qui est
     l'ordonnanceur des autres handlers. Il est redéfinissable dans le fichier de mapping 
     dans la section config anisi :
@@ -109,13 +109,13 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
     <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
     <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
     <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie l'action si nécessaire.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, inject des paramètres supplémentaires en fonction du type.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action et retourne le rendu.</li>
 </ul>
 
 <p>
-    Chaque handler doit implémenter deux méthodes, une pour l'initialisation appelée
-    au moment de l'initialisation de la servlet et handle pour le traitement de la 
+    Chaque handler doit implémenter deux méthodes : <code>init</code> appelée
+    au moment de l'initialisation de la servlet et <code>handle</code> pour le traitement de la
     requête.
 </p>
 <pre class="prettyprint">

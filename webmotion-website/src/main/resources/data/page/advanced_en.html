@@ -1,0 +1,215 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Advanced</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="servlet">Servlet architecture</h2>
+</div>
+<p>
+    The framework is managed by a filter. The filter analyzes all the incoming requests
+    and redirects them to a static resource (html, jsp, css, ...)
+    or to an action which has been defined in the mapping file.
+</p>
+
+<p>
+    The filter redirects the requests as follows: if the URL path does not contain an extension
+    (i.e. if the URL does not ends with <code>.*</code>)
+    then it redirects to an action which has been defined in the mapping file.
+    Otherwise it redirects to a static resource.
+</p>
+
+<p>
+    Static data access requests may be redirected wrongly to the action servlet.
+    To avoid this case, you just need to call explicitly the desired servlet.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Returns on /readme the static resource:
+</p>
+<pre>
+[actions]
+*           /readme                                     url:/static/README
+</pre>
+
+<div class="page-header">
+    <h2 id="handler">How does WebMotion work?</h2>
+</div>
+<p>
+    The request treatment goes through different handlers to achieve web client request.
+    The <code>MainHandler</code>, which is the main handler, is the scheduler of the other handlers.
+    You can redefine it in the mapping file in the config section as follows:
+</p>
+<pre>
+[config]
+server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
+</pre>
+
+<p>
+    By default, WebMotion offers a set of handlers:
+</p>
+<p>
+    A main handler:
+</p>
+<ul>
+    <li><strong>WebMotionMainHandler</strong>, enables the scheduling of the other handlers
+        and the extension management.</li>
+</ul>
+
+<p>
+    Action management handlers:
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, enables the file management in multi-part.</li>
+    <li><strong>FilterFinderHandler</strong>, finds the filter to apply.</li>
+    <li><strong>ActionFinderHandler</strong>, finds the action to apply.</li>
+    <li><strong>ParametersExtractorHandler</strong>, extracts the parameters and rename them if needed.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
+    <li><strong>FilterMethodFinderHandler</strong>, finds the methods to execute for filters.</li>
+    <li><strong>ActionMethodFinderHandler</strong>, finds the method to execute for the action.</li>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the filters and the action if necessary.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, converts the parameters according to the type of the method to call.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
+    <li><strong>ExecutorParametersValidatorHandler</strong>, validates the parameters.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
+</ul>
+
+<p>
+    Error management handlers:
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, enables the file management in multi-part.</li>
+    <li><strong>ErrorFinderHandler</strong>, finds the action to apply for an error.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
+    <li><strong>ErrorMethodFinderHandler</strong>, finds the method to execute for the action.</li>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the action if necessary.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
+</ul>
+
+<p>
+    Each handler must implement two methods: 
+    <code>init</code> called at the servlet initialization
+    and <code>handle</code> for the request treatment.
+</p>
+<pre class="prettyprint">
+public class MyHandler implements WebMotionHandler {
+
+    @Override
+    public void init(InitContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handle(Mapping mapping, Call call) {
+        // Do process
+    }
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="paranamer">Paranamer</h2>
+</div>
+<p>
+    WebMotion is based on a library to find the method paramater names.
+    This library is <a href="http://paranamer.codehaus.org/">Paranamer</a>.
+    By default, WebMotion with Paranamer uses the Java compilation in debug mode.
+</p>
+<p>
+    If you wish to compile without the debug mode, you will need to configure the mapping and paranamer as follows:
+</p>
+
+<p>
+    For the mapping :
+</p>
+<pre>
+[config]
+javac.debug=false
+</pre>
+
+<p>
+    For paranamer with Maven :
+</p>
+<pre class="prettyprint">
+&lt;plugin&gt;
+   &lt;groupId&gt;com.thoughtworks.paranamer&lt;/groupId&gt;
+   &lt;artifactId&gt;paranamer-maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;2.3&lt;/version&gt;
+   &lt;executions&gt;
+       &lt;execution&gt;
+           &lt;id&gt;run&lt;/id&gt;
+           &lt;configuration&gt;
+               &lt;sourceDirectory&gt;${project.build.sourceDirectory}&lt;/sourceDirectory&gt;
+               &lt;outputDirectory&gt;${project.build.outputDirectory}&lt;/outputDirectory&gt;
+           &lt;/configuration&gt;
+           &lt;goals&gt;
+               &lt;goal&gt;generate&lt;/goal&gt;
+           &lt;/goals&gt;
+       &lt;/execution&gt;
+   &lt;/executions&gt;
+&lt;/plugin&gt;
+</pre>
+
+<div class="page-header">
+    <h2 id="jmx">JMX</h2>
+</div>
+<p>
+    Using JMX enables to get information about WebMotion execution, namely:
+</p>
+<ul>
+    <li>the general statistics about a request treatment</li>
+    <li>handler statistics about a request treatment</li>
+</ul>
+
+<p>
+    You can also find some operations as:
+</p>
+<ul>
+    <li>the mapping reloading</li>
+    <li>the error page configuration</li>
+    <li>the statistics resetting</li>
+</ul>
+
+<p>
+    <span class="label label-info">Note</span> You can access WebMotion MBeans by using <code>jconsole</code>.
+</p>
+
+<div style="text-align: center; margin: 0px 0px 20px 20px;">
+    <a class="thumbnail" style="width: 700px; display:inline-block;">
+        <img src="media?name=jconsole.png" alt="Jconsole" title="Jconsole" />
+    </a>
+</div>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="showcase/hello">Demo »</a>
+</div>
+
+</div>
