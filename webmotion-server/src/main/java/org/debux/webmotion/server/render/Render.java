@@ -132,11 +132,14 @@ public abstract class Render {
             }
             
             for (Map.Entry<String, Object> entry : model.entrySet()) {
-                String key = entry.getKey();
+                
                 Object value = entry.getValue();
-
-                path += separator + key + "=" + value;
-                separator = "&";
+                if (value != null) {
+                    
+                    String key = entry.getKey();
+                    path += separator + key + "=" + value;
+                    separator = "&";
+                }
             }
         }
         return path;
