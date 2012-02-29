@@ -57,7 +57,8 @@ public class RenderXml extends Render {
         HttpServletResponse response = context.getResponse();
         
         Object object = model;
-        if (model != null && model.size() == 1) {
+        if (model != null && model.size() == 1
+                && model.keySet().contains(DEFAULT_MODEL_NAME)) {
             object = model.values().toArray()[0];
         }
         

@@ -50,6 +50,7 @@ public abstract class Render {
     private static final Logger log = LoggerFactory.getLogger(Render.class);
 
     public static String DEFAULT_ENCODING = "UTF-8";
+    public static String DEFAULT_MODEL_NAME = "model";
     
     public Render() {
     }

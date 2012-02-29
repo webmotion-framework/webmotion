@@ -305,7 +305,7 @@ public class WebMotionController {
         Map<String, Object> map = new LinkedHashMap<String, Object>(model.length / 2);
         
         if(model.length == 1) {
-            map.put("model", model[0]);
+            map.put(Render.DEFAULT_MODEL_NAME, model[0]);
             
         } else {
             for (int index = 0; index < model.length; index += 2) {

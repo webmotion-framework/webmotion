@@ -65,7 +65,8 @@ public class RenderJsonP extends Render {
         HttpServletRequest request = context.getRequest();
         
         Object object = model;
-        if (model != null && model.size() == 1) {
+        if (model != null && model.size() == 1 
+                && model.keySet().contains(DEFAULT_MODEL_NAME)) {
             object = model.values().toArray()[0];
         }
         
