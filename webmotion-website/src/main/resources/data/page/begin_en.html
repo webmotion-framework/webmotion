@@ -24,22 +24,29 @@
   -->
 <div id="article">
 
-<h1>Premiers pas avec WebMotion</h1>
+<h1>First steps with WebMotion</h1>
 
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<h2 id="new_project" class="page-header">Création d'un nouveau projet</h2>
+<h2 id="new_project" class="page-header">New project creation</h2>
 
-<h3 id="maven">Intégration dans un projet Maven</h3>
-<p>Maven est un outil de gestion de construction de projets très connu dans le monde Java. Si vous ne connaissez pas Maven, nous vous invitons à consulter <a href="http://maven.apache.org">le site officiel</a>.</p>
+<h3 id="maven">Integration in a Maven project</h3>
+<p>
+    Maven is a tool to manage the project builds, well-known in the Java world.
+    If you do not know Maven, we invite you to consult <a href="http://maven.apache.org">the official site</a>.
+</p>
 
 <p>
     <span class="label label-info">Note</span>
-    Vous ne souhaitez pas utiliser Maven pour votre projet, vous pouvez lire la rubrique liée à <a href="#eclipse">l'intégration de WebMotion dans un projet Java dans l'éditeur Eclipse</a>.
+    If you do not want to use Maven to manage your project, you can read the rubric about <a href="#eclipse">the integration of WebMotion in a Java project with the Eclipse IDE</a>.
 </p>
 
-<p>WebMotion s'intègre parfaitement dans un projet Maven. Il existe d'ailleurs un archetype pour vous aider à créer un nouveau projet. Commençons par créer un projet (en ligne de commande) :</p>
+<p>
+    Webmotion fits perfectly in a Maven project.
+    There is also an archetype to help you to create a new project.
+    Let's start by creating a project (command line):
+</p>
 
 <pre>
 $ mvn archetype:generate \
@@ -54,10 +61,12 @@ $ mvn archetype:generate \
 </pre>
 <p>
     <span class="label label-warning">Note</span>
-    Penser à vérifier la dernière version de l'archetype.
+    Check the last version of the archetype.
 </p>
 
-<p>À présent, le projet est créé. Il suffit de packager le projet pour vérifier que tout est correcte :</p>
+<p>
+    Now the project has been created. You just need to package the project to check that everything is correct:
+</p>
 <pre>$ mvn package
 ...
 [INFO] ------------------------------------------------------------------------
@@ -69,12 +78,21 @@ $ mvn archetype:generate \
 [INFO] ------------------------------------------------------------------------
 </pre>
 
-<p>Le projet est créé, la prochaine étape est <a href="#first_page">la création notre première page</a>.</p>
+<p>
+    The project is created, the next step is <a href="#first_page">the creation of our first page</a>.
+</p>
 
-<h3 id="netbeans">Intégration dans un projet créé avec l'éditeur Netbeans</h3>
+<h3 id="netbeans">
+    Integration in a project created with the Netbeans IDE
+</h3>
 
-<p>Si vous souhaitez utiliser l'éditeur Netbeans mais que vous ne le possédez pas encore, il est possible de le télécharger depuis le <a href="http://netbeans.org/downloads/index.html">le site officiel</a>, en choisisant la version Java EE.</p>
-<p>Une fois votre éditeur lancé, il vous suffit de créer un nouveau projet Maven depuis un archetype.</p>
+<p>
+    You wish to use the Netbeans IDE but you have not got it yet,
+    you can download it on <a href="http://netbeans.org/downloads/index.html">the official website</a> by choosing the Java EE version.
+</p>
+<p>
+    Once you have launched the IDE, you just need to create a new Maven project from an archetype.
+</p>
 
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width: 500px; display:inline-block; margin-right: 10px;">
@@ -85,19 +103,30 @@ $ mvn archetype:generate \
     </a>
 </div>
 
-<p>Enfin remplir les informations sur votre projet :</p>
+<p>
+    Finally fill the information about your project:
+</p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width: 500px; display:inline-block;">
         <img src="media?name=netbeans_complete_project.png" alt="Complete project in Netbeans" title="Complete project in Netbeans" />
     </a>
 </div>
 
-<p><span class="label label-info">Note</span> Vous pouvez lancer dans Netbeans le serveur d'applications ainsi <code>Clic droit sur le projet → Run</code> puis choisir le serveur.</p>
+<p>
+    <span class="label label-info">Note</span>
+    You can launch the application server in Netbeans by doing:
+    <code>Right click on the project → Run</code> then choose the server.
+</p>
 
 <div class="alert alert-info">
     <p>
-        <span class="label label-info">Astuce</span>&nbsp;Le rechargement à chaud (modification de contrôleurs, par exemple) de votre application dans Netbeans est désactivé par défaut. Pour en bénéficier, il faut modifier les propriétés 
-        du projet :<br /><code>clic droit sur le projet &rarr; properties &rarr; section "Build" &rarr; sous-section "Compile" &rarr; sélectionner "For both application and test execution" pour l'option "Compile on save"</code>.
+        <span class="label label-info">Tip</span>
+        &nbsp;The warm reboot (modification of the controllers for instance) of your application in Netbeans is disabled by default.
+        To enable it, you need to modify the project properties:<br />
+        <code>
+            Right click on the project &rarr; properties &rarr; "Build" section &rarr;
+            "Compile" subsection &rarr; select "For both application and test execution" for the "Compile on save" option
+        </code>.
     </p>
     <div style="text-align: center; margin: 0px 0px 20px 20px;">
         <a class="thumbnail" style="width: 500px; display:inline-block;">
@@ -106,15 +135,21 @@ $ mvn archetype:generate \
     </div>
 </div>
 
-<p>Le projet est créé, la prochaine étape est <a href="#first_page">la création notre première page</a>.</p>
+<p>
+    The project is created, the next step is <a href="#first_page">the creation of our first page</a>.
+</p>
 
-<h3 id="eclipse">Intégrer WebMotion dans un projet Java dans l'éditeur Eclipse</h3>
-<p>Pour utiliser WebMotion avec Eclipse, il vous faut télécharger et installer Eclipse en version Java EE Developers,
-    disponible à l'adresse suivante <a href="http://www.eclipse.org/downloads/">http://www.eclipse.org/downloads/</a>.
+<h3 id="eclipse">
+    Integration in a Java project in the Eclipse IDE
+</h3>
+
+<p>
+    To use WebMotion with Eclipse, you need to download and install Java EE Developers version of Eclipse,
+    available at the following URL: <a href="http://www.eclipse.org/downloads/">http://www.eclipse.org/downloads/</a>.
 </p>
 
 <p>
-    Créer un projet Web : <code>Menu "File" → Sous-menu "New" → Dynamic Web Project</code>
+    Create a web project: <code>"File" menu → "New" submenu → Dynamic Web Project</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width: 500px; display:inline-block;">
@@ -123,8 +158,9 @@ $ mvn archetype:generate \
 </div>
 
 <p>
-    Rajouter les dépendances dans le classpath au niveau des propriétées du projet en utilisant Add external jar :
-    <br /><code>Clic droit sur le projet → properties → section "Java Build Path" → sous-section "Librairies" → appuyer sur "Add external jar" → sélectionner le jar de WebMotion plus les dépendances dans la version full</code>
+    Add the dependencies in the classpath in the project properties by using "Add external jar":
+    <br />
+    <code>Right click on the project → properties → "Java Build Path" section → "Libraries" subsection → click on "Add external jar" → select the WebMotion jar plus the full version dependencies</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display:inline-block;">
@@ -133,7 +169,7 @@ $ mvn archetype:generate \
 </div>
 
 <p>
-    Déployer votre application sur un serveur : <code>Clic droit sur le projet → Run as  → Run on server</code>
+    Deploy your application on a server: <code>Right click on the project → Run as  → Run on server</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display:inline-block;">
@@ -141,7 +177,7 @@ $ mvn archetype:generate \
     </a>
 </div>
 
-<p>Le projet est créé, la prochaine étape est <a href="#first_page">la création notre première page</a>.</p>
+<p>The project is created, the next step is <a href="#first_page">the creation of our first page</a>.</p>
 
 <h2 id="first_page" class="page-header">Créer ma première page web avec WebMotion</h2>
 <p>
