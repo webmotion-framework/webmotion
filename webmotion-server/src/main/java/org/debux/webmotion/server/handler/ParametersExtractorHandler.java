@@ -94,7 +94,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             String name = expression.getName();
             
             if(!StringUtils.isEmpty(name)) {
-                tmp.put(name, path.get(position));
+                tmp.put(name, new String[]{path.get(position)});
             }
             position ++;
         }
