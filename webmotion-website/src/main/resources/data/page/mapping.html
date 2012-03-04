@@ -57,6 +57,18 @@
     <li><code>[extensions]</code>&nbsp;<a href="#extensions">Les extensions utilisées par l'application</a></li>
 </ul>
 
+<h2 id="comment" class="page-header">Commentaires</h2>
+<p>
+    Vous pouvez mettre des commentaires dans le fichier mapping en préfixant vos ligne par un <code>#</code>.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Commentaire multi-lignes :
+</p>
+<pre>
+# Begin comment
+# End comment
+</pre>
+
 <h2 id="config" class="page-header">[config] Configuration de l'application web</h2>
 <p>
     Cette section permet de définir quelques éléments de fonctionnement et de valeurs par défaut pour WebMotion.
@@ -344,7 +356,7 @@ public class Listener implements WebMotionServerListener {
     Voici la syntaxe pour mapper une URL sur une action Java (méthode d'un contrôleur) :
 </p>
 <pre>
-&lt;http_method&gt;    &lt;url&gt;    <b>action:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+&lt;http_method&gt;    &lt;url&gt;    <b>action:</b>[&lt;package_name&gt].&lt;class_name&gt.&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
     <span class="label label-info">Note</span> Le préfixe <code>action:</code> est facultatif pour les actions. Il est donc possible d'écrire comme suit :
@@ -552,7 +564,7 @@ GET         /wikipedia/{page}                    <b>url:</b>http://www.wikipedia
 <p>
     Ce type de traitement est le plus courant, il s'agit d'exécuter une méthode Java (du code métier),
     qui finira son traitement en retournant un rendu (flux JSON, XML, une page JSP, etc.).
-    La classe Java devra impérativement étendre la classe <code>WebMotionController</code>.
+    La classe Java devra impérativement étendre la classe <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>.
     À l'intérieur d'un contrôleur, il est possible d'accéder à des éléments tels que la requête, la réponse, le contexte web, la session, etc.
     Pour plus de détails, voir la section <a href="action#context">Actions Java - Contexte web</a>.
     Ce type de traitement est défini par la présence su préfixe <code>action:</code>, qui est cependant optionnel.
@@ -965,7 +977,7 @@ java.lang.Exception           &lt;action&gt;
 <p>
     Les actions pour les erreurs peuvent être une vue, une URL ou une méthode Java.
     La classe Java de gestion des erreurs doit, comme pour la section <code>[actions]</code>,
-    étendre la classe WebMotionController. Cependant, dans ce contexte, il est possible d'accéder
+    étendre la classe <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>. Cependant, dans ce contexte, il est possible d'accéder
     aux informations de l'erreur rencontrée.
 </p>
 <pre class="prettyprint">
