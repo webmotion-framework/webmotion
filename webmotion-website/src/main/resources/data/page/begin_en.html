@@ -1,23 +1,23 @@
 <!--
   #%L
   Webmotion website
-  
+
   $Id$
   $HeadURL$
   %%
   Copyright (C) 2011 Debux
   %%
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as 
-  published by the Free Software Foundation, either version 3 of the 
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
   License, or (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Lesser Public License for more details.
-  
-  You should have received a copy of the GNU General Lesser Public 
+
+  You should have received a copy of the GNU General Lesser Public
   License along with this program.  If not, see
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
@@ -181,21 +181,20 @@ $ mvn archetype:generate \
 
 <h2 id="first_page" class="page-header">Créer ma première page web avec WebMotion</h2>
 <p>
-    Pour créer la première page de notre projet. Il est important de savoir que sauf cas particuliers, 
-    il n'est pas nécessaire de modifier le fichier <code>web.xml</code>.
-    En effet, la servlet utilisée par WebMotion est déclarée et définie dans le <code>web-fragment</code> embarqué avec le framework. 
-    Ce fragment est chargé de manière automatique, il est donc possible (et courant) d'avoir un fichier <code>web.xml</code> vide.
+    To create the first page of our project, it is important to know that except in special cases, it is not necessary to change the <code>web.xml</code> file.
+    Indeed, the servlet used by WebMotion is declared and defined in the <code>web-fragment</code> embedded by the framework.
+    This fragment is automatically loaded, so it is possible (and usual) to have an empty <code>web.xml</code> file.
 </p>
 <p>
     <span class="label label-info">Note</span>&nbsp;
-    Il est possible de retrouver ce cas d'utilisation dans la section <a href="showcase/hello">démonstration</a>.
+    There is an example of this use case in the <a href="showcase/hello">demo</a> section.
 </p>
 
-<h3>Le fichier web.xml</h3>
+<h3>The web.xml file</h3>
 <p>
-    Bien qu'un fichier web.xml vide suffise, ce fichier doit tout de même définir la version de l'application web. 
-    En effet, WebMotion dépend de la plate-forme Java EE 6, qui contient l'API Servlet en version 3, supportant notamment les <code>web-fragment</code>. 
-    Le fichier <code>web.xml</code> devrait donc ressembler à ceci :
+    Although an empty web.xml file is enough, this file must however define the webapp version.
+    Indeed, WebMotion depends on the Java EE 6 platform which contains the Servlet API in version 3, supporting the <code>web-fragment</code>.
+    The <code>web.xml</code> file should be like this:
 </p>
 <pre class="prettyprint">
 &lt;web-app version="3.0"
@@ -205,64 +204,60 @@ $ mvn archetype:generate \
   http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" /&gt;
 </pre>
 
-<h3 id="mapping">Le fichier de mapping</h3>
+<h3 id="mapping">The mapping file</h3>
 <p>
-    WebMotion repose sur un fichier de mapping pour déclarer les ressources accessibles dans notre applications web. 
-    Ce fichier doit être nommé <code>mapping</code> et doit se situer dans le classpath du projet.  
+    WebMotion is based on a mapping file to declare the available resources of our web application.
+    This file must be named <code>mapping</code> and must be in the project classpath.
 </p>
 <p>
-    Le fichier de mapping se compose de 5 rubriques principales :
+    The mapping file consists of five main sections:
 </p>
 <ul>
-    <li><code>[config]</code>&nbsp;La configuration de l'application web</li>
-    <li><code>[errors]</code>&nbsp;Les actions liées aux erreurs (techniques et / ou applicatives)</li>
-    <li><code>[filters]</code>&nbsp;Les filtres de l'applications</li>
-    <li><code>[actions]</code>&nbsp;Les actions liées aux URL de l'application</li>
-    <li><code>[extensions]</code>&nbsp;Les extensions utilisées par l'application</li>
+    <li><code>[config]</code>&nbsp;The web application configuration</li>
+    <li><code>[errors]</code>&nbsp;The actions linked to the errors (technical and/or applicative)</li>
+    <li><code>[filters]</code>&nbsp;The application filters</li>
+    <li><code>[actions]</code>&nbsp;The actions linked to the application URLs</li>
+    <li><code>[extensions]</code>&nbsp;The extensions used by the application</li>
 </ul>
 <p>
-    Cependant, pour la réalisation de la première page de notre application, 
-    nous allons commencer avec un fichier de mapping le plus minimaliste possible.
+    However, to realize the first page of our application, we will start with a mapping file as minimalist as possible.
 </p>
 <pre>
 [actions]
 GET     /                            view:index.jsp
 </pre>
 <p>
-    Dans ce fichier de mapping, nous venons de définir l'action à réaliser sur le path racine <code>/</code> de notre application.
-    L'action qui sera exécutée est le rendu d'une page nommée index.jsp, qui est située à la racine du répertoire <code>webapp</code> 
-    de votre projet, qui est le répertoire par défaut contenant les pages web de votre application.
+    In this mapping file, we have just defined the action to execute on the root path <code>/</code> of our application.
+    The action which will be executed is the rendering of a page named index.jsp, which is at the root of the <code>webapp</code> directory of your project, which is the default directory containing the web pages of your application.
 </p>
 <p>
-    Chaque ligne de mapping contient au minimum 3 informations (séparées par des espaces) :
+    Each mapping line contains at least 3 pieces of information (seperated by spaces):
 </p>
 <ul>
     <li>
-        <strong>La ou les méthodes HTTP autorisées pour le path défini : </strong> les méthodes les plus communément utilisées sont 
-        <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>PUT</code> et <code>DELETE</code>.
-        Toutes les méthodes HTTP sont décrites dans la <a href="http://tools.ietf.org/html/rfc2616#page-51">spécification</a>.
-        Trois syntaxe sont possibles :
+        <strong>The HTTP method(s) authorized for the defined path:</strong> the most commonly used methods are <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>PUT</code> and <code>DELETE</code>.
+        All the HTTP methods are described in the <a href="http://tools.ietf.org/html/rfc2616#page-51">spécification</a>.
+        Three syntaxes are possible:
         <ul>
-            <li>Le nom d'une méthode HTTP en majuscules (exemple : <code>POST</code>)</li>
-            <li>Les noms de plusieurs méthode HTTP, séparées par des virgules (exemple : <code>GET,POST</code>)</li>
-            <li>Un astérisque pour préciser que toutes les méthodes HTTP sont autorisées</li>
+            <li>The uppercase name of an HTTP method (example: <code>POST</code>)</li>
+            <li>The nmes of several HTTP methods, separated by commas (example: <code>GET,POST</code>)</li>
+            <li>An asterisk to precise that all the HTTP methods are authorized</li>
         </ul>
     </li>
     <li>
-        <strong>Le path</strong> que l'on souhaite configuré sur notre application web. Le path est relatif par rapport au contexte de l'application. 
-        Exemple : si le contexte de l'application est <code>webmotion-sample</code>, alors le path <code>/index</code> correspondra à l'URI suivante : 
+        <strong>The path</strong> that we want to configure on our web application. The path is relative to the application context.
+        Example: if the application context is <code>webmotion-sample</code>, then the path <code>/index</code> will mtch the following URI:
         <pre>http://&lt;host&gt;/webmotion-sample<code>/index</code></pre>
     </li>
     <li>
-        <strong>L'action à réaliser</strong> sur le path et la méthode HTTP configurés. Il peut s'agir d'une action, exécutée par le biais d'un contrôleur, 
-        d'une redirection ou encore de l'affichage d'une page sans traitement préalable.
-        Ici, le préfixe <code>view:</code> indique qu'il s'agit d'un traitement d'affichage simple d'une page.
+        <strong>The action to execute</strong> on the path and the configuredHTTP method. It can be an action executed via a controller, a redirection or the display of a page without any prior treatment.
+        Here, the <code>view:</code> prefix indicates that it is a simple display treatment.
     </li>
 </ul>
 
-<h3>La vue</h3>
+<h3>The view</h3>
 <p>
-    Ainsi, notre page <code>index.jsp</code> défini par le fichier de mapping précédemment écrit :
+    Thus, our <code>index.jsp</code> page defined by the previsouly written mapping file:
 </p>
 <pre class="prettyprint">
 &lt;!DOCTYPE html&gt;
@@ -277,16 +272,18 @@ GET     /                            view:index.jsp
 &lt;/html&gt;
 </pre>
 
-<h3>Testons notre première page</h3>
+<h3>Let's test our first page</h3>
 <p>
-    A présent, c'est l'heure de vérifier que notre page est accessible. Pour cela, il suffit de déployer l'application sur un serveur sachant interpréter l'API Servlet 3, 
-    comme par exemple le conteneur de servlet <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>.
+    Now, it is time to check that our first page is available.
+    To do it, you just need to deploy the application in a server which can interpret the Servlet 3 API,
+    like for instance the <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a> servlet container.
 </p>
 <div class="alert alert-info">
     <p>
-        <span class="label label-info">Note</span>&nbsp;Si vous utilisez Maven pour contruire votre projet. Vous pouvez tester plus simplement encore votre application,
-        grâce au conteneur de servlet <a href="http://jetty.codehaus.org/jetty/">Jetty</a>. Pour utiliser ce serveur, 
-        il faut ajouter dans votre fichier <code>pom.xml</code> le plugin <code>jetty-maven-plugin</code>, comme suit :
+        <span class="label label-info">Note</span>&nbsp;
+        If you are using Maven to build your project, you can test even more easily your application 
+        thanks to the <a href="http://jetty.codehaus.org/jetty/">Jetty</a> servlet container.
+        To use this server, you need to add the <code>jetty-maven-plugin</code> plugin in your <code>pom.xml</code> file as follows:
     </p>
     <pre class="prettyprint">
 &lt;build&gt;
@@ -294,7 +291,7 @@ GET     /                            view:index.jsp
     &lt;plugin&gt;
       &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;
       &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;
-      &lt;version&gt;8.0.4.v20111024&lt;/version&gt;&lt;!-- Pensez à vérifier le dernier numéro de version disponible --&gt;
+      &lt;version&gt;8.0.4.v20111024&lt;/version&gt;&lt;!-- Check the last available version number --&gt;
       &lt;configuration&gt;
         &lt;webApp&gt;
           &lt;contextPath&gt;/webmotion-sample&lt;/contextPath&gt;
@@ -303,49 +300,50 @@ GET     /                            view:index.jsp
     &lt;/plugin&gt;
   &lt;/plugins&gt;
 &lt;/build&gt;</pre>
-    <p>Puis, lancer la commande suivante pour lancer le serveur :</p>
+    <p>Then launch the following command to start the server:</p>
     <pre>mvn jetty:run</pre>
 </div>
 <p>
-    Une fois l'application déployée, ouvrez votre navigateur favori et rendez-vous à l'adresse suivante : <code>http://localhost:8080/webmotion-sample/</code>.
-    Si tout se passe bien, vous devriez voir la page affichée ci-dessous :
+    Once the application is deployed, open your favorite web browser and go to the following address: <code>http://localhost:8080/webmotion-sample/</code>.
+    If everything is OK, you should see the following page:
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display: inline-block;">
-        <img src="media?name=hello_world.png" alt="Affichage de la page Hello World" title="Rendu de la page Hello World" />
+        <img src="media?name=hello_world.png" alt="Hello World page display" title="Hello World page rendering" />
     </a>
 </div>
 <div class="alert alert-warning">
     <p>
-        <span class="label label-warning">Attention</span>&nbsp;Si vous obtenez l'erreur : <code>org.debux.webmotion.server.WebMotionException: Not mapping found for url /webmotion-sample/</code>,
-        vérifiez que le contexte de votre application est bien défini comme suit dans le fichier <code>META-INF/context.xml</code> :<br /><br />
+        <span class="label label-warning">Warning</span>&nbsp;
+        If you have got the error: <code>org.debux.webmotion.server.WebMotionException: Not mapping found for url /webmotion-sample/</code>,
+        check that your application context is well defined in the <code>META-INF/context.xml</code> file as follows:<br /><br />
     </p>
     <pre class="prettyprint">&lt;Context antiJARLocking="true" path="/webmotion-sample"/&gt;</pre>
 </div>
 
-<h2 id="work_with_parameters" class="page-header">Utilisation des paramètres de la requête HTTP dans un contrôleur</h2>
+<h2 id="work_with_parameters" class="page-header">Use of the HTTP request parameters in a controller</h2>
 <p>
     <span class="label label-info">Note</span>&nbsp;
-    Il est possible de retrouver ce cas d'utilisation dans la section <a href="showcase/helloParameters">démonstration</a>.
+    There is an example of this use case in the <a href="showcase/helloParameters">demo</a> section.
 </p>
 <p>
-    À présent, nous savons comment réaliser un &laquo;&nbsp;Hello world!&nbsp;&raquo; avec WebMotion. 
-    L'étape suivante consiste en la réalisation d'un message de bienvenue personnalisé à un visiteur. 
-    Il s'agira pour ce cas simple de passer le nom de l'utilisateur en paramètre de la requête.
+    Now, we know how to realize a &laquo;&nbsp;Hello world!&nbsp;&raquo; with WebMotion.
+    The following step consists in realizing a welcome message personalized for each visitor.
+    This will be for this simple case of passing the user name as a request parameter.
 </p>
 <p>
-    Pour ce faire, nous allons procéder en plusieurs étapes :
+    To do so, we will proceed in several steps:
 </p>
 <ul>
-    <li><a href="#modification-mapping">Modification du fichier de mapping</a></li>
-    <li><a href="#creation-controleur">Création d'un contrôleur</a></li>
-    <li><a href="#creation-vue">Création d'une nouvelle vue</a></li>
-    <li><a href="#tester-resultat">Tester le résultat</a></li>
+    <li><a href="#modification-mapping">Modification of the mapping file</a></li>
+    <li><a href="#creation-controleur">Creation of a controller</a></li>
+    <li><a href="#creation-vue">Creation of a new view</a></li>
+    <li><a href="#tester-resultat">Test the result</a></li>
 </ul>
 
 <h3 id="modification-mapping">Modification du fichier de mapping</h3>
 <p>
-    Le fichier de mapping précédemment utilisé pour le &laquo;&nbsp;Hello world!&nbsp;&raquo; était minimaliste. 
+    Le fichier de mapping précédemment utilisé pour le &laquo;&nbsp;Hello world!&nbsp;&raquo; était minimaliste.
     Nous allons l'aggrémenter afin de rendre possible l'ajout simple d'autres path qui bénéficieront d'un traitement plus avancé.
 </p>
 <pre>
@@ -362,9 +360,9 @@ GET     /hello?user={user}          Hello:sayHello
     Dans ce cas présent, il s'agira du package <code>org.debux.sample.actions</code>.
 </p>
 <p>
-    Dans la section <code>[actions]</code>, un chemin de l'application a été ajouté. 
+    Dans la section <code>[actions]</code>, un chemin de l'application a été ajouté.
     Ainsi, en accédant au chemin <code>/hello?user={user}</code> par le biais d'une requête <code>GET</code>,
-    Le traitement de la requête sera effectué par la classe <code>Hello</code> du package <code>org.debux.sample.actions</code>, 
+    Le traitement de la requête sera effectué par la classe <code>Hello</code> du package <code>org.debux.sample.actions</code>,
     par l'exécution de la méthode <code>sayHello</code>.
 </p>
 
@@ -380,19 +378,19 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.Render;
 
 public class Hello extends WebMotionController {
-    
+
     public Render sayHello(String user) {
-        return renderView("hello.jsp", 
+        return renderView("hello.jsp",
             "name", user); // couple clé = valeur
     }
-    
+
 }
 </pre>
 <p>
     Dans notre contrôleur, il faut remarquer la présence du paramètre <code>user</code>.
     Il s'agit du même paramètre défini dans le fichier de mapping, à savoir :<br />
     <code>/hello?user=<b>{user}</b></code>.
-    Le contrôleur ici effectue l'action de rendre à vue à l'utilisateur, en lui précisant un modèle, 
+    Le contrôleur ici effectue l'action de rendre à vue à l'utilisateur, en lui précisant un modèle,
     qui est une liste de paramètres constituant un ensemble de couples clé / valeur.
 </p>
 
