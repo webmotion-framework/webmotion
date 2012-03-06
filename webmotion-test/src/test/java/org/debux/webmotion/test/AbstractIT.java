@@ -40,6 +40,7 @@ public class AbstractIT {
 
     public String getAbsoluteUrl(String url) {
         return "http://localhost:8090/webmotion-test/test/" + url;
+//        return "http://localhost:8080/webmotion-website/test/" + url;
     }
     
     public String execute(HttpUriRequest request) throws IOException {
