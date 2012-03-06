@@ -620,7 +620,8 @@ public class Showcase extends WebMotionController {
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 46, 4)),
                     getJavaContent("Shop.java"),
                     getJavaContent("ErrorConstraint.java"),
-                    getJavaContent("Book.java")
+                    getJavaContent("Book.java"),
+                    getPageContent("error.jsp")
                 )
         );
     }
