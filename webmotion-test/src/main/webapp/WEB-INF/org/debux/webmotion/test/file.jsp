@@ -31,7 +31,7 @@
     </head>
     <body>
         
-        <form method="POST" action="<c:url value="/test/add"/>" enctype="multipart/form-data">
+        <form method="POST" action="<c:url value="/test/download"/>" enctype="multipart/form-data">
             File : <input name="file" type="file"/>
             <input type="submit" value="upload"/>
         </form>
