@@ -57,12 +57,18 @@
             <url>http://www.debox.fr</url>
             <organization>debox</organization>
             <organizationUrl>http://www.debox.fr</organizationUrl>
+            <roles>
+                <role>reporter</role>
+            </roles>        
             <timezone>+1</timezone>
         </contributor>
         <contributor>
             <name>Kevin Morin</name>
             <email>dev@kevinmorin.net</email>
             <url>http://www.kevinmorin.net</url>
+            <roles>
+                <role>translator</role>
+            </roles>
             <timezone>+1</timezone>
         </contributor>
     </contributors>
