@@ -1,9 +1,0 @@
-[config]
-package.base=org.debux.webmotion.showcase
-package.views=WEB-INF/org.debux.webmotion.showcase
-
-[filters]
-*           /*                                     Stats.count
-
-[actions]
-*           /stats                                 Stats.get
