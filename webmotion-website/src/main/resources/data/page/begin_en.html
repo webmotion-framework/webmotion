@@ -341,10 +341,10 @@ GET     /                            view:index.jsp
     <li><a href="#tester-resultat">Test the result</a></li>
 </ul>
 
-<h3 id="modification-mapping">Modification du fichier de mapping</h3>
+<h3 id="modification-mapping">Modification of the mapping file</h3>
 <p>
-    Le fichier de mapping précédemment utilisé pour le &laquo;&nbsp;Hello world!&nbsp;&raquo; était minimaliste.
-    Nous allons l'aggrémenter afin de rendre possible l'ajout simple d'autres path qui bénéficieront d'un traitement plus avancé.
+    The mapping file previously used for &laquo;&nbsp;Hello world!&nbsp;&raquo; was minimalist.
+    We are going to add a few lines to enable the simple adding of other paths which will have a more advanced treatment.
 </p>
 <pre>
 [config]
@@ -355,21 +355,22 @@ GET     /                           view:index.jsp
 GET     /hello?user={user}          Hello:sayHello
 </pre>
 <p>
-    Une section <code>[config]</code> a été ajoutée dans ce fichier de mapping. Cette section, si elle est définie, doit-être la première présente dans le fichier de mapping.
-    Cette section contient ici la définition du package Java qui va contenir l'ensemble des contrôleurs de l'application.
-    Dans ce cas présent, il s'agira du package <code>org.debux.sample.actions</code>.
+    A <code>[config]</code> section was added in this mapping file.
+    This section, if it is defined, must be the first of the mapping file.
+    This section contains here the definition of the Java package which will contain all the application controllers.
+    In the present case, it is the <code>org.debux.sample.actions</code> package.
 </p>
 <p>
-    Dans la section <code>[actions]</code>, un chemin de l'application a été ajouté.
-    Ainsi, en accédant au chemin <code>/hello?user={user}</code> par le biais d'une requête <code>GET</code>,
-    Le traitement de la requête sera effectué par la classe <code>Hello</code> du package <code>org.debux.sample.actions</code>,
-    par l'exécution de la méthode <code>sayHello</code>.
+    In the <code>[actions]</code> section, a path of the application was added.
+    Thereby, by accessing the path <code>/hello?user={user}</code> through a <code>GET</code> request,
+    the request treatment will be performed by the <code>Hello</code> class of the <code>org.debux.sample.actions</code> package
+    by calling the <code>sayHello</code> method.
 </p>
 
-<h3 id="creation-controleur">Création d'un contrôleur</h3>
+<h3 id="creation-controleur">Creation of a controller</h3>
 <p>
-    Tout contrôleur d'une application web utilisant WebMotion doit êtendre la classe <code>org.debux.webmotion.server.WebMotionController</code>.
-    Ainsi, créons notre classe <code>org.debux.sample.actions.Hello</code> :
+    Every controller of a web application using WebMotion must extend the class <code>org.debux.webmotion.server.WebMotionController</code>.
+    Thus, let's create our class <code>org.debux.sample.actions.Hello</code>:
 </p>
 <pre class="prettyprint">
 package org.debux.sample.action;
@@ -381,22 +382,22 @@ public class Hello extends WebMotionController {
 
     public Render sayHello(String user) {
         return renderView("hello.jsp",
-            "name", user); // couple clé = valeur
+            "name", user); // key = value pair
     }
 
 }
 </pre>
 <p>
-    Dans notre contrôleur, il faut remarquer la présence du paramètre <code>user</code>.
-    Il s'agit du même paramètre défini dans le fichier de mapping, à savoir :<br />
+    In our controller, you can notice the presence of the <code>user</code> parameter.
+    It is the same parameter as the one defined in the mapping file, which is:<br />
     <code>/hello?user=<b>{user}</b></code>.
-    Le contrôleur ici effectue l'action de rendre à vue à l'utilisateur, en lui précisant un modèle,
-    qui est une liste de paramètres constituant un ensemble de couples clé / valeur.
+    Here, the controller performs the action of rendering the view to the user, by specifying a model,
+    which is a list of parameters in the form of a set of key/value.
 </p>
 
-<h3 id="creation-vue">Création d'une nouvelle vue</h3>
+<h3 id="creation-vue">Creation of a new view</h3>
 <p>
-    À présent, créons notre page <code>hello.jsp</code>.
+    Now, let's create our page <code>hello.jsp</code>.
 </p>
 <pre class="prettyprint">
 &lt;!DOCTYPE html&gt;
@@ -410,32 +411,35 @@ public class Hello extends WebMotionController {
     &lt;/body&gt;
 &lt;/html&gt;
 </pre>
-<p>Il est à noter la présence du paramètre <code>name</code>, que l'on a défini comme clé du modèle transmis depuis le contrôleur.</p>
-
-<h3 id="tester-resultat">Tester le résultat</h3>
 <p>
-    Nous allons tester le résultat en passant différentes valeurs pour le paramètre <code>user</code> de la requête.
-    Commençons avec l'URL suivante : <code>http://localhost:8080/webmotion-sample/hello?user=<b>World</b></code>.
+    You can notice the presence of the parameter <code>name</code>,
+    that we defined as the key of the model transmitted from the controller.
+</p>
+
+<h3 id="tester-resultat">Test the result</h3>
+<p>
+    We are going to test the result by passing different values for the request parameter <code>user</code>.
+    Let's start with the following URL: <code>http://localhost:8080/webmotion-sample/hello?user=<b>World</b></code>.
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="display:inline-block; width:500px;">
-        <img src="media?name=hello_parameters_1.png" alt="Affichage de la page Hello World" title="Rendu de la page Hello World" />
+        <img src="media?name=hello_parameters_1.png" alt="Display of the Hello World page" title="Hello World page rendering" />
     </a>
 </div>
 <p>
-    Nous avons ici visiblement la même page que lorsque nous avons créé la page &laquo;&nbsp;Hello World!&nbsp;&raquo;.
-    Essayons maintenant de changer la valeur du paramètre <code>user</code>, comme suit :
+    Here we have obviously the same page as when we created the page &laquo;&nbsp;Hello World!&nbsp;&raquo;.
+    Now let's test to change the value of the <code>user</code> parameter as follows:
     <code>http://localhost:8080/webmotion-sample/hello?user=<b>you</b></code>.
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="display:inline-block; width:500px;">
-        <img src="media?name=hello_parameters_2.png" alt="Affichage de la page Hello you" title="Rendu de la page Hello you" />
+        <img src="media?name=hello_parameters_2.png" alt="Display of the Hello you page" title="Hello you page rendering" />
     </a>
 </div>
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
-    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
     <a class="btn primary large" style="float:right;" href="mapping">Mapping »</a>
 </div>
 
