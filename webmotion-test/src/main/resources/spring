@@ -1,6 +1,6 @@
 [config]
-package.base=org.debux.webmotion.showcase
-package.views=WEB-INF/org.debux.webmotion.showcase
+package.base=org.debux.webmotion.test
+package.views=WEB-INF/org.debux.webmotion.test
 server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
 
 [actions]

@@ -17,7 +17,7 @@ server.listener.class=org.debux.webmotion.test.Listener
 [errors]
 javax.validation.ConstraintViolationException           ErrorConstraint.display
 java.lang.NullPointerException                          view:serverError.jsp
-org.debux.webmotion.showcase.ServiceException           ErrorService.display
+org.debux.webmotion.test.ServiceException           ErrorService.display
 code:403                                                ErrorCode.display
 code:500                                                ErrorCode.display
 *                                                       ErrorCode.display

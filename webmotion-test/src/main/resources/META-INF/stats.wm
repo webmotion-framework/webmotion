@@ -1,0 +1,9 @@
+[config]
+package.base=org.debux.webmotion.test
+package.views=WEB-INF/org.debux.webmotion.test
+
+[filters]
+*           /*                                     Stats.count
+
+[actions]
+*           /stats                                 Stats.get

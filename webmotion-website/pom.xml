@@ -31,11 +31,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webmotion-spring</artifactId>
+            <artifactId>webmotion-test</artifactId>
             <version>${project.version}</version>
+            <type>war</type>
             <scope>runtime</scope>
         </dependency>
-        
+
         <!-- Utils -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -90,22 +91,6 @@
 
     <build>
         <finalName>webmotion-website</finalName>
-        
-        <resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-            </resource>
-            
-            <resource>
-                <directory>src/main/java/org/debux/webmotion/showcase/</directory>
-                <targetPath>src</targetPath>
-            </resource>
-            
-            <resource>
-                <directory>src/main/webapp/WEB-INF/org/debux/webmotion/showcase/</directory>
-                <targetPath>pages</targetPath>
-            </resource>
-        </resources>
         
         <plugins>
             <plugin>

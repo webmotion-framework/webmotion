@@ -36,6 +36,6 @@
         </script>
     </head>
     <body>
-        <script type="text/javascript" src="<c:url value="/showcase/action/jsonp"/>"></script>
+        <script type="text/javascript" src="<c:url value="/test/jsonp"/>"></script>
     </body>
 </html>

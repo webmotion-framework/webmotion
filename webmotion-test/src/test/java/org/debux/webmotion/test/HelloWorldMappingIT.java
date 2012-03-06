@@ -48,7 +48,7 @@ public class HelloWorldMappingIT {
     
     @Test
     public void testGetResourcesDirectory() throws IOException {
-        HttpGet request = new HttpGet("http://localhost:8080/webmotion-test/hello");
+        HttpGet request = new HttpGet("http://localhost:8090/webmotion-test/test/hello");
         HttpClient client = new DefaultHttpClient();
         
         HttpResponse response = client.execute(request);

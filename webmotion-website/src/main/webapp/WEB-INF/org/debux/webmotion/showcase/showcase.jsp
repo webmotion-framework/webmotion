@@ -235,9 +235,9 @@
                         <div class="tab-pane active fade in" id="demo">
                             <c:forEach var="path" items="${path_demo}">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
-                                    http://serverName:port/contextPath/<strong>${fn:substringAfter(path, '/showcase/action/')}</strong>
+                                    http://serverName:port/contextPath<strong>${path}</strong>
                                 </div>
-                                <iframe src="<c:url value="${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
+                                <iframe src="<c:url value="/test${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
                                 </iframe>
                             </c:forEach>
                         </div>

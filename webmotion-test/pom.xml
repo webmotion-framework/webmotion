@@ -87,6 +87,22 @@
     <build>
         <finalName>webmotion-test</finalName>
         
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+            </resource>
+            
+            <resource>
+                <directory>src/main/java/org/debux/webmotion/test/</directory>
+                <targetPath>src</targetPath>
+            </resource>
+            
+            <resource>
+                <directory>src/main/webapp/WEB-INF/org/debux/webmotion/test/</directory>
+                <targetPath>pages</targetPath>
+            </resource>
+        </resources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -110,9 +126,13 @@
                         <artifactId>jetty-maven-plugin</artifactId>
                         <configuration>
                             <scanIntervalSeconds>10</scanIntervalSeconds>
-                            <stopPort>8005</stopPort>
+                            <stopPort>8095</stopPort>
                             <stopKey>STOP</stopKey>
-                            <contextPath>/</contextPath>
+                            <connectors>
+                                <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                                    <port>8090</port>
+                                </connector>
+                            </connectors>
                         </configuration>
                         <executions>
                             <execution>

@@ -1,5 +1,0 @@
-[config]
-package.views=WEB-INF/org.debux.webmotion.showcase
-
-[actions]
-*           /index                                     view:blog.jsp

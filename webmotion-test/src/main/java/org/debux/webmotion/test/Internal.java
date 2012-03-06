@@ -35,7 +35,7 @@ import org.debux.webmotion.server.render.Render;
 public class Internal extends WebMotionController {
     
     public Render get() {
-        return renderActionURL("/showcase/action/internal/action", "param", "internal");
+        return renderActionURL("/test/internal/action", "param", "internal");
     }
     
     public Render action(String param) {

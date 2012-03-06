@@ -30,7 +30,7 @@
     </head>
     <body>
         <div class="header">
-            <jsp:include page="/showcase/action/header">
+            <jsp:include page="/test/header">
                 <jsp:param name="title" value="Lorem ipsum" />
             </jsp:include>
         </div>
@@ -38,7 +38,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.</p>
         </div>
         <div class="header">
-            <jsp:include page="/showcase/action/footer"/>
+            <jsp:include page="/test/footer"/>
         </div>
     </body>
 </html>
