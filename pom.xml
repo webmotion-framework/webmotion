@@ -58,6 +58,7 @@
             <organization>debox</organization>
             <organizationUrl>http://www.debox.fr</organizationUrl>
             <roles>
+                <role>user</role>
                 <role>reporter</role>
             </roles>        
             <timezone>+1</timezone>
