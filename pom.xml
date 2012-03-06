@@ -59,6 +59,12 @@
             <organizationUrl>http://www.debox.fr</organizationUrl>
             <timezone>+1</timezone>
         </contributor>
+        <contributor>
+            <name>Kevin Morin</name>
+            <email>dev@kevinmorin.net</email>
+            <url>http://www.kevinmorin.net</url>
+            <timezone>+1</timezone>
+        </contributor>
     </contributors>
     
     <scm>
