@@ -25,28 +25,29 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.AssertJUnit;
-import org.testng.annotations.Test;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
- * First IT.
- * 
  * @author julien
  */
-public class HelloWorldMappingIT extends AbstractIT {
+public class AbstractIT {
 
-    private static final Logger log = LoggerFactory.getLogger(HelloWorldMappingIT.class);
-    
-    @Test
-    public void hello() throws IOException {
-        String url = getAbsoluteUrl("hello");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+    public String getAbsoluteUrl(String url) {
+        return "http://localhost:8090/webmotion-test/test/" + url;
     }
     
+    public String execute(HttpUriRequest request) throws IOException {
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response = client.execute(request);
+        HttpEntity entity = response.getEntity();
+        InputStream content = entity.getContent();
+        String value = IOUtils.toString(content);
+        return value;
+    }
 }

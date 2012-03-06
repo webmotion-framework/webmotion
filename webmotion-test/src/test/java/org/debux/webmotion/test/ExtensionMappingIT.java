@@ -32,21 +32,39 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 /**
- * First IT.
+ * Test on mapping section extension.
  * 
  * @author julien
  */
-public class HelloWorldMappingIT extends AbstractIT {
+public class ExtensionMappingIT extends AbstractIT {
 
-    private static final Logger log = LoggerFactory.getLogger(HelloWorldMappingIT.class);
+    private static final Logger log = LoggerFactory.getLogger(ExtensionMappingIT.class);
     
     @Test
-    public void hello() throws IOException {
-        String url = getAbsoluteUrl("hello");
+    public void action() throws IOException {
+        String url = getAbsoluteUrl("blog/index");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result.contains("It is the blog in extension !"));
+    }
+    
+    @Test
+    public void spring() throws IOException {
+        String url = getAbsoluteUrl("spring/");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("Hello Spring !"));
+    }
+    
+    @Test
+    public void stats() throws IOException {
+        String url = getAbsoluteUrl("stats");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("count = "));
     }
     
 }
