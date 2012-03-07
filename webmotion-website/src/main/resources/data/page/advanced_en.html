@@ -39,7 +39,7 @@
 </p>
 
 <p>
-    The filter redirects the requests as follows: if the URL path does not contain an extension
+    The filter redirects the requests as follows: if the path of the URL does not contain an extension
     (ie if the URL does not ends with <code>.*</code>)
     then it redirects to an action which has been defined in the mapping file.
     Otherwise it redirects to a static resource.
@@ -62,7 +62,7 @@
     <h2 id="handler">How does WebMotion work?</h2>
 </div>
 <p>
-    The request treatment goes through different handlers to achieve web client request.
+    The treatment of the request goes through different handlers to achieve the request of the web client.
     The <code>MainHandler</code>, which is the main handler, is the scheduler of the other handlers.
     You can redefine it in the mapping file in the config section as follows:
 </p>
@@ -115,8 +115,8 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
 
 <p>
     Each handler must implement two methods: 
-    <code>init</code> called at the servlet initialization
-    and <code>handle</code> for the request treatment.
+    <code>init</code> called at the initialization of the servlet
+    and <code>handle</code> for the treatment of the request.
 </p>
 <pre class="prettyprint">
 public class MyHandler implements WebMotionHandler {
@@ -137,7 +137,7 @@ public class MyHandler implements WebMotionHandler {
     <h2 id="paranamer">Paranamer</h2>
 </div>
 <p>
-    WebMotion is based on a library to find the method paramater names.
+    WebMotion is based on a library to find the paramater names of the method.
     This library is <a href="http://paranamer.codehaus.org/">Paranamer</a>.
     By default, WebMotion with Paranamer uses the Java compilation in debug mode.
 </p>
@@ -180,11 +180,11 @@ javac.debug=false
     <h2 id="jmx">JMX</h2>
 </div>
 <p>
-    Using JMX enables to get information about WebMotion execution, namely:
+    Using JMX enables to get information about the execution of WebMotion, namely:
 </p>
 <ul>
-    <li>the general statistics about a request treatment</li>
-    <li>handler statistics about a request treatment</li>
+    <li>the general statistics about the treatment of a request</li>
+    <li>handler statistics about the treatment of a request</li>
 </ul>
 
 <p>

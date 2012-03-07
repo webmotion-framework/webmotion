@@ -24,68 +24,65 @@
   -->
 <div id="article">
 
-<h1>Configuration du fichier de mapping</h1>
+<h1>Configuration of the mapping file</h1>
 
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<h2 class="page-header">Principe</h2>
+<h2 class="page-header">Principle</h2>
 <p>
-    Le principe de WebMotion est d'exécuter une action par rapport à une URL 
-    ou un événement (par exemple, une exception).
-    Cette gestion est possible grâce à un fichier de mapping qui liste les 
-    différents liens entre des URL et des actions à réaliser.
-    Pour cela un fichier de mapping est utiliser pour faire le lien. 
+    The principle of WebMotion is to execute an action relative to a URL or an event (an exception for instance).
+    This management is possible thanks to a mapping file which lists the different links between URLs and action to perform.
+    A mapping file is used to do the connection.
 </p>
 <p>
-    Le fichier de mapping, nommé <code>mapping</code>, doit se trouver dans le classpath de l'application, 
-    il sera automatiquement détecté et chargé à son lancement. Il est possible d'avoir plusieurs fichiers 
-    de mapping dès lors que vous utilisez des modules complémentaires à WebMotion (appelés extensions).
-    Le fichier de mapping contient un ensemble de sections, toutes optionnelles, qui vont être décrites ci-après.
-    De manière générale, si une URL ou un événement correspond à plusieurs règles décrites dans le fichier de mapping,
-    c'est la première règle qui sera traitée. Les règles suivantes correspondantes seront ignorées, 
-    exception faite des filtres, dont les exécutions sont chainées.
+    The mapping file, named <code>mapping</code>, must be in the application classpath.
+    It will be automatically detected and loaded at launch.
+    You can have several mapping files if you are using additional WebMotion modules (called extensions).
+    The mapping file contains a set of sections, all of them optional, which wille be described hereafter.
+    In general, if a URL or an event matches several rules described in the mapping file, the first rule will be treated.
+    The following rules will be ignored, except for the filters whose executions are linked.
 </p>
 <p>
-    Comme nous l'avons évoqué <a href="begin#mapping">précédemment</a>, le fichier de mapping contient un certains nombres de sections :
+   As we evoked <a href="begin#mapping">previously</a>, the mapping file contains several sections:
 </p>
 <ul>
-    <li><code>[config]</code>&nbsp;<a href="#config">La configuration de l'application web</a></li>
-    <li><code>[errors]</code>&nbsp;<a href="#errors">Les actions liées aux erreurs (techniques et / ou applicatives)</a></li>
-    <li><code>[filters]</code>&nbsp;<a href="#filters">Les filtres de l'applications</a></li>
-    <li><code>[actions]</code>&nbsp;<a href="#actions">Les actions liées aux URL de l'application</a></li>
-    <li><code>[extensions]</code>&nbsp;<a href="#extensions">Les extensions utilisées par l'application</a></li>
+    <li><code>[config]</code>&nbsp;<a href="#config">The web application configuration</a></li>
+    <li><code>[errors]</code>&nbsp;<a href="#errors">The actions linked to the errors (technical and/or applicative)</a></li>
+    <li><code>[filters]</code>&nbsp;<a href="#filters">The application filters</a></li>
+    <li><code>[actions]</code>&nbsp;<a href="#actions">The actions linked to the application URLs</a></li>
+    <li><code>[extensions]</code>&nbsp;<a href="#extensions">The extensions used by the application</a></li>
 </ul>
 
-<h2 id="comment" class="page-header">Commentaires</h2>
+<h2 id="comment" class="page-header">Comments</h2>
 <p>
-    Vous pouvez mettre des commentaires dans le fichier mapping en préfixant vos ligne par un <code>#</code>.
+    You can add comments in the mapping file by prefixing your lines with <code>#</code>.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Commentaire multi-lignes :
+    <span class="label label-info">Example</span> Multi-line comment:
 </p>
 <pre>
 # Begin comment
 # End comment
 </pre>
 
-<h2 id="config" class="page-header">[config] Configuration de l'application web</h2>
+<h2 id="config" class="page-header">[config] The web application configuration</h2>
 <p>
-    Cette section permet de définir quelques éléments de fonctionnement et de valeurs par défaut pour WebMotion.
-    C'est ici que l'on précisera par exemple le répertoire contenant les pages de l'application 
-    ainsi que le packages Java correspondant aux contrôleurs de l'application.
+    This section enables to define some operation elements and defautl value for WebMotion.
+    For example, this is the section where to specify the directory containing the application pages
+    and the Java packages corresponding to the application controllers.
 </p>
 
-<h3>Syntaxe</h3>
+<h3>Syntax</h3>
 <p>
-    Les différentes propriétés de configuration se trouvent après le mot-clé <code>[config]</code>.
+    The different configuration properties can be found after the <code>[config]</code> keyword.
 </p>
 <pre>
 [config]
 </pre>
 
 <p>
-    Les propriétés sont définies dans un modèle <code>clé=valeur</code>, les clés autorisées sont les suivantes :
+    The properties are defined in a <code>key=value</code> model. The allowed keys are the following:
 </p>
 <ul>
     <li>package.views</li>
@@ -104,52 +101,53 @@
 
 <h3>package.views</h3>
 <p>
-    La propriété <strong>package.views</strong> permet de définir le chemin de l'ensemble des pages JSP, HTML, etc.
+    The <strong>package.views</strong> property enables to define the path of all the JSP, HTML, etc. pages.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur package.views est vide.
+    <span class="label">Default</span> By default, the value of package.views is empty.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Les pages seront cherchées dans le répertoire <code>pages</code> :
+    <span class="label label-info">Example</span> The pages will be searched in the <code>pages</code> directory:
 </p>
 <pre>package.views=pages</pre>
 <p>
-    <span class="label label-info">Exemple</span> Les pages seront cherchées dans le répertoire <code>WEB-INF/pages</code>, un réflexe simple pour rendre inaccessibles les JSP par accès direct :
+    <span class="label label-info">Example</span> The pages will be searched in the <code>WEB-INF/pages</code> directory,
+    a simple reflex to make the JSP pages unreachable for direct accesses:
 </p>
 <pre>package.views=WEB-INF/pages</pre>
 
 <h3>package.base</h3>
 <p>
-    La propriété <strong>package.base</strong> permet de définir le package Java par défaut de l'ensemble des classes Java de l'application (contrôleurs, filters, etc.). 
+    The <strong>package.base</strong> property enables to define the default Java package of all the application Java classes (controllers, filters, etc.).
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur package.base est vide.
+    <span class="label">Default</span> By default, the value of package.base is empty.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Les classes Java seront recherchées dans le package <code>org.debux.webmotion.sample</code> :
+    <span class="label label-info">Example</span> The Java classes will be searched in the <code>org.debux.webmotion.sample</code> package:
 </p>
 <pre>package.base=org.debux.webmotion.sample</pre>
 
 <h3>package.actions</h3>
 <p>
-    La propriété <strong>package.actions</strong> permet de définir le package par défaut des classes des contrôleurs de l'application. 
-    Si une valeur est définie pour la clé <code>package.base</code>, celle-ci préfixera la valeur définie pour la clé <code>package.actions</code>,
-    de la forme suivante : <code>package.base + "." + package.actions</code>.
+    The <strong>package.actions</strong> property enables to define the default package of classes of the application controllers.
+    If a value is defined for the <code>package.base</code> key, this value will prefix the value of the <code>package.actions</code> key
+    like this: <code>package.base + "." + package.actions</code>.
 </p>
 
 <p>
-    <span class="label">Default</span> Par défaut, la valeur package.actions est vide.
+    <span class="label">Default</span> By default, the value of package.actions is empty.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Les classes d'actions Java seront recherchées dans le package <code>org.debux.webmotion.sample.actions</code> :
+    <span class="label label-info">Example</span> The Java action classes will be searched in the <code>org.debux.webmotion.sample.actions</code> package:
 </p>
 <pre>
 package.actions=org.debux.webmotion.sample.actions
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Les classes d'actions Java seront recherchées dans le package <code>org.debux.webmotion.sample.actions</code> 
-    en utilisant un <code>package.base</code> :
+    <span class="label label-info">Example</span> The Java action classes will be searched in the <code>org.debux.webmotion.sample.actions</code> package
+    by using <code>package.base</code>:
 </p>
 <pre>
 package.base=org.debux.webmotion.sample
@@ -158,19 +156,20 @@ package.actions=actions
 
 <h3>package.filters</h3>
 <p>
-    La propriété <strong>package.filters</strong> permet de définir le package par défaut des classes des filtres de l'application.
-    Comme pour les actions, la valeur définie pour la clé <code>package.filters</code> sera concaténée à la valeur <code>package.base</code>, si elle est définie.
+    The <strong>package.filters</strong> property enables to define the default package of the classes of the application filters.
+    As for the actions, the value defined for the <code>package.filters</code> key will be concatenated to the value of <code>package.base</code>
+    if it is defined.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de package.filters est vide.
+    <span class="label">Default</span> By default the value of package.filters is empty.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Les classes de filtres seront recherchées dans le package <code>org.debux.webmotion.sample.filters</code> :
+    <span class="label label-info">Example</span> The filter classes will searched in the <code>org.debux.webmotion.sample.filters</code> package:
 </p>
 <pre>package.filters=org.debux.webmotion.sample.filters</pre>
 <p>
-    <span class="label label-info">Exemple</span> Les classes de filtres seront recherchées dans le package <code>org.debux.webmotion.sample.filters</code> 
-    en utilisant un <code>package.base</code> :
+    <span class="label label-info">Example</span> The filter classes will searched in the <code>org.debux.webmotion.sample.filters</code> package
+    by using <code>package.base</code> :
 </p>
 <pre>
 package.base=org.debux.webmotion.sample
@@ -179,19 +178,20 @@ package.action=filters
 
 <h3>package.errors</h3>
 <p>
-    La propriété <strong>package.errors</strong> permet de définir le paquetage par défaut des classes pour les erreurs Java. 
-    Comme pour les actions, la valeur définie pour la clé <code>package.errors</code> sera concaténée à la valeur <code>package.base</code>, si elle est définie.
+    The property <strong>package.errors</strong> enables to define the default package of the classes for the Java errors.
+    As for the actions, the value defined for the <code>package.errors</code> key will be concatenated to the value of <code>package.base</code>
+    if it is defined.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur package.errors est vide.
+    <span class="label">Default</span> By default the value of package.errors is empty.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Les classes d'erreurs seront recherchées dans le package <code>org.debux.webmotion.sample.errors</code> :
+    <span class="label label-info">Example</span> The error classes will searched in the <code>org.debux.webmotion.sample.errors</code> package :
 </p>
 <pre>package.errors=org.debux.webmotion.sample.errors</pre>
 <p>
-    <span class="label label-info">Exemple</span> Les classes d'erreurs Java seront rechercher dans le paquetage <code>org.debux.webmotion.sample.errors</code> 
-    en utilisant un <code>package.base</code> :
+    <span class="label label-info">Example</span> The error classes will searched in the <code>org.debux.webmotion.sample.errors</code> package
+    by using <code>package.base</code> :
 </p>
 <pre>
 package.base=org.debux.webmotion.sample
@@ -200,40 +200,40 @@ package.errors=errors
 
 <h3>javac.debug</h3>
 <p>
-    La propriété <strong>javac.debug</strong> permet de définir si l'application doit être compilée en mode debug.
-    Les valeurs possible sont <code>true</code> ou <code>false</code>.
-    Pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#paranamer">Avancé - Paranamer</a>.
+    The <strong>javac.debug</strong> property enables to define if the application must be compiled in debug mode.
+    The available values are <code>true</code> or <code>false</code>.
+    For more information, please refer to the <a href="advanced#paranamer">Advanced - Paranamer</a> section.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur javac.debug est <code>true</code>.
+    <span class="label">Default</span> By default, the value of javac.debug is <code>true</code>.
 </p>
 
 <h3>server.async</h3>
 <p>
-    La propriété <strong>server.async</strong> permet de mettre l'ensemble des 
-    actions en asynchrone. Les valeurs possible sont <code>true</code> ou 
-    <code>false</code>. Il est possible de préciser qu'une action est asynchrone ou inversement
-    dans la section des actions.
+    The <strong>server.async</strong> property enables to set all the actions in the asynchronious mode.
+    The available values are <code>true</code> or <code>false</code>.
+    You can specify that an action is asynchronious or vice versa in the action section.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur server.async est <code>false</code>.
+    <span class="label">Default</span> By default, the value of server.async is <code>false</code>.
 </p>
 
 <h3>server.encoding</h3>
 <p>
-    La propriété <strong>server.encoding</strong> permet de forcer l'encodage utilisé pour 
-    lire les paramètres de la requête HTTP et pour écrire la réponse HTTP. 
-    Pour plus de renseignements, veuillez vous reporter à la javadoc sur 
+    The <strong>server.encoding</strong> property enables to force the encoding used to read the parameters of the HTTP request
+    and to write the HTTP response.
+    For more information, please refer to the javadoc on
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#setCharacterEncoding(java.lang.String)">
-        ServletRequest.setCharacterEncoding(encoding)</a> et
+        ServletRequest.setCharacterEncoding(encoding)</a> and
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletResponse.html#setCharacterEncoding(java.lang.String)">
         ServletResponse.setCharacterEncoding(encoding)</a>.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de server.encoding est <code>UTF-8</code>.
+    <span class="label">Default</span> By default, the value of server.encoding is <code>UTF-8</code>.
 </p>
 <p>
-    <span class="label label-info">Note</span> Pour Tomcat, il est nécessaire d'ajouter l'attribut <code>URIEncoding="UTF-8"</code> au connecteur dans le server.xml :
+    <span class="label label-info">Note</span> For Tomcat, it is necessary to add the <code>URIEncoding="UTF-8"</code> attribute
+    to the connector in the server.xml file:
 </p>
 <pre class="prettyprint">
 &lt;Connector port="8080" protocol="HTTP/1.1"
@@ -244,51 +244,50 @@ package.errors=errors
 
 <h3>server.error.page</h3>
 <p>
-    La propriété <strong>server.error.page</strong> permet de préciser si la 
-    page d'erreur fourni par WebMotion est disponible. 
-    Les valeurs possible sont :
+    The <strong>server.error.page</strong> property enables to specify if the error page provided by WebMotion is available.
+    The available values are:
 </p>
 <ul>
-    <li><code>enabled</code> pour afficher la page d'erreur détailler si l'erreur n'est pas traité dans le mapping</li>
-    <li><code>disabled</code> pour afficher un message bref si l'erreur n'est pas traité dans le mapping</li>
-    <li><code>forced</code> pour afficher la page d'erreur détailler même si l'erreur est traité dans le mapping</li>
+    <li><code>enabled</code> to display the detailed error page if the error is not managed in the mapping</li>
+    <li><code>disabled</code> to display a short message if the error is not managed in the mapping</li>
+    <li><code>forced</code> to display the detailed error page even if the error is managed in the mapping</li>
 </ul>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de server.error.page est <code>enabled</code>.
+    <span class="label">Default</span> By default, the value of server.error.page is <code>enabled</code>.
 </p>
 <p>
-    <span class="label label-info">Note</span> Vous pouvez à tout moment modifier ce paramètre par la console JMX. 
-    Pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#jmx">Avancé - JMX</a>.
+    <span class="label label-info">Note</span> You can modify this property at any time with the JMX console.
+    For more information, please refer to the <a href="advanced#jmx">Advanced - JMX</a> section.
 </p>
 <p>
-    <span class="label label-info">Note</span> Il est aussi conseiller de mettre à <code>disabled</code> la propriété quand le serveur est déployé en production.
+    <span class="label label-info">Note</span> We advise you to set the property to <code>disabled</code> when the server is deployed in production.
 </p>
 
 <h3>server.controller.scope</h3>
 <p>
-    <strong>server.controller.scope</strong> permet de spécifier si l'application est en mode statefull ou stateless. 
-    Par défaut le mode est stateless, c'est-à-dire que l'ensemble des classes Java, sont les mêmes pour toutes les requêtes. 
-    Par conséquence il n'est pas possible de conserver des attributs dans la classe. Les valeurs possible sont :
+    The <strong>server.controller.scope</strong> property enables to specify if the application is in stateful or stateless mode.
+    By default, the stateless mode is activated, ie all the Java classes are the same for all the requests.
+    Consequently, you cannot keep attributes in the class. The available values are:
 </p>
 <ul>
-    <li><code>singleton</code> une seule instance de l'action est utilisée pour l'ensemble des requêtes</li>
-    <li><code>request</code> une instance de l'action est valade tout le long d'une requête</li>
-    <li><code>session</code> la même instance de l'action est utilisé pour toute les requêtes d'un utilisateur</li>
+    <li><code>singleton</code> one instance of the action is used for all the requests</li>
+    <li><code>request</code> an instance of the action is valid throughout a request</li>
+    <li><code>session</code> the same instance of the action is used for all the requests of a user</li>
 </ul>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur de server.controller.scope est <code>singleton</code>.
+    <span class="label">Default</span> By default, the value of server.controller.scope is <code>singleton</code>.
 </p>
 
 <h3>server.listener.class</h3>
 <p>
-    <strong>server.listener.class</strong> permet de définir un listener sur le démarrage et l'arrêt
-    du serveur. Comme valeur il est nécessaire de préciser le nom complet de la classe.
+    The <strong>server.listener.class</strong> property enables to define a listener on the start and stop of the server.
+    The value must be the fully qualified name of the class.
 </p>
 <p>
-    <span class="label">Default</span> Il n'y a pas de valeur par défaut.
+    <span class="label">Default</span> There is no default value.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Implantation d'un listener :
+    <span class="label label-info">Example</span> Implementation of a listener:
 </p>
 <pre class="prettyprint">
 public class Listener implements WebMotionServerListener {
@@ -308,13 +307,12 @@ public class Listener implements WebMotionServerListener {
 
 <h3>server.main.handler.class</h3>
 <p>
-    La propriété <strong>server.main.handler.class</strong> permet de définir la 
-    classe responsable du chaînage des actions en interne à WebMotion. 
-    Cette propriété est utile uniquement dans le but d'étendre le framework. 
-    Pour plus de renseignement, veuillez vous reporter à partie <a href="advanced#handler">Avancé - Comprendre le fonctionnement de WebMotion</a>.
+    The <strong>server.main.handler.class</strong> enables to define the class responsible for the action linking inside WebMotion.
+    This property is only useful to extend the framework.
+    For more information, please refer to the <a href="advanced#handler">Advanced - How does WebMotion work?</a> section.
 </p>
 <p>
-    <span class="label">Default</span> Par défaut, la valeur server.main.handler.class est <code>org.debux.webmotion.server.WebMotionMainHandler</code>
+    <span class="label">Default</span> By default, the value of server.main.handler.class is <code>org.debux.webmotion.server.WebMotionMainHandler</code>
 </p>
 
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
