@@ -210,9 +210,9 @@ package.errors=errors
 
 <h3>server.async</h3>
 <p>
-    The <strong>server.async</strong> property enables to set all the actions in the asynchronious mode.
+    The <strong>server.async</strong> property enables to set all the actions in the asynchronous mode.
     The available values are <code>true</code> or <code>false</code>.
-    You can specify that an action is asynchronious or vice versa in the action section.
+    You can specify that an action is asynchronous or vice versa in the action section.
 </p>
 <p>
     <span class="label">Default</span> By default, the value of server.async is <code>false</code>.
@@ -270,7 +270,7 @@ package.errors=errors
     Consequently, you cannot keep attributes in the class. The available values are:
 </p>
 <ul>
-    <li><code>singleton</code> one instance of the action is used for all the requests</li>
+    <li><code>singleton</code> a single instance of the action is used for all the requests</li>
     <li><code>request</code> an instance of the action is valid throughout a request</li>
     <li><code>session</code> the same instance of the action is used for all the requests of a user</li>
 </ul>
@@ -315,65 +315,65 @@ public class Listener implements WebMotionServerListener {
     <span class="label">Default</span> By default, the value of server.main.handler.class is <code>org.debux.webmotion.server.WebMotionMainHandler</code>
 </p>
 
-<h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
+<h2 id="actions" class="page-header">[actions] Action configuration</h2>
 <p>
-    Cette section permet de définir, pour une méthode HTTP et une URL données, une action à réaliser, comme l'affichage d'une vue, 
-    une redirection HTTP, ou l'exécution d'un contrôleur (méthode Java).
+    This section enables to define an action to perform for a HTTP method and a given URL, like a view display, a HTTP redirection or a controller execution (Java method).
 </p>
 
-<h3>Syntaxe</h3>
+<h3>Syntax</h3>
 <p>
-    Les différentes actions sont listées après le mot-clé <code>[actions]</code>. 
+    The different actions are listed after the <code>[actions]</code> keyword.
 </p>
 <pre>
 [actions]
 </pre>
 <p>
-    La définition d'une action se fait sur une seule ligne, divisée en 3 ou 4 sections, selon les cas :
+    The definition of an action is done on a single line divided into 3 or 4 sections, depending on the case:
 </p>
 <ol>
-    <li>La ou les méthodes HTTP acceptées pour l'URL spécifiée</li>
-    <li>L'URL dont on spécifie le traitement à effectuer</li>
-    <li>Le traitement à exécuter pour l'URL spécifiée</li>
-    <li>Définition des valeurs par défaut de certains paramètres</li>
+    <li>The HTTP method(s) accepted for the specified URL</li>
+    <li>The URL whose treatment to perform is specified</li>
+    <li>The treatment to perform for the specified URL</li>
+    <li>The definition of the default values of some parameters</li>
 </ol>
 
 <p>
-    Voici la syntaxe pour mapper une URL sur une vue :
+    Here is the syntax to map a URL with a view:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>view:</b>&lt;page_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une autre URL :
+    Here is the syntax to map a URL with another URL:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>url:</b>&lt;path&gt;
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une action Java (méthode d'un contrôleur) :
+    Here is the syntax to map a URL with a Java action (controller method):
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>action:</b>[&lt;package_name&gt].&lt;class_name&gt.&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    <span class="label label-info">Note</span> Le préfixe <code>action:</code> est facultatif pour les actions. Il est donc possible d'écrire comme suit :
+    <span class="label label-info">Note</span> The <code>action:</code> prefix is optional for the actions.
+    So you can write:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    &lt;method_name&gt;    [...]
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une action <strong>asynchrone</strong>
-    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code>.
-    Une requête asynchrone permet de traiter en différé une action qui nécessite un temps de traitements important 
-    (accès en base de données, accès à un webservice, ...) sans bloquer le serveur d'application :
+    Here the syntax to map a URL with an <strong>asynchronous</strong> action (controller method).
+    Override the behaviour defined by the <code>server.async</code> property in the <code>[config]</code> section.
+    An asynchronous request enables to differ the treatment of an action which needs an important treatment time
+    (database access, access to a webservice, ...) without blocking the application server:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>async:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    Voici la syntaxe pour mapper une URL sur une action <strong>synchrone</strong>
-    (méthode d'un contrôleur). Surcharge le comportement défini par la propriété <code>server.async</code> dans la section de <code>[config]</code> :
+    Here is the syntax to map a URL with a <strong>synchronous</strong> action (controller method).
+    Override the behaviour defined by the <code>server.async</code> property in the <code>[config]</code> section:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;url&gt;    <b>sync:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
