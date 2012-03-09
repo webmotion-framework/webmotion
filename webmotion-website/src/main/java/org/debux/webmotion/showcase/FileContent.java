@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * Present content of a file like java, jsp, ...
  * 
  * @author julien
  */
