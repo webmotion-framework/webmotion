@@ -25,17 +25,11 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -96,7 +90,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.contains("Book created"));
+        AssertJUnit.assertTrue(result.contains("Shop#create(arg0).title :"));
     }
     
     @Test
@@ -114,7 +108,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.contains("Comment saved"));
+        AssertJUnit.assertTrue(result.contains("Shop#comment(arg0).comment :"));
     }
     
     @Test
@@ -132,7 +126,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.contains("Not found"));
+        AssertJUnit.assertTrue(result.contains("Shop#search(arg0) :"));
     }
     
     @Test
