@@ -24,6 +24,12 @@
   #L%
   -->
 <project name="Webmotion">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.1</version>
+    </skin>
+  
     <bannerLeft>
         <name>${project.name}</name>
     </bannerLeft>
