@@ -17,7 +17,7 @@ server.listener.class=org.debux.webmotion.test.Listener
 [errors]
 javax.validation.ConstraintViolationException           ErrorConstraint.display
 java.lang.NullPointerException                          view:serverError.jsp
-org.debux.webmotion.test.ServiceException           ErrorService.display
+org.debux.webmotion.test.ServiceException               ErrorService.display
 code:403                                                ErrorCode.display
 code:500                                                ErrorCode.display
 *                                                       ErrorCode.display
@@ -91,3 +91,4 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /internal/action                            Internal.action
 *           /contact/view                               view:contact.jsp
 *           /company/view                               view:company.jsp
+*           /img                                        url:/static/wm_cloud.png

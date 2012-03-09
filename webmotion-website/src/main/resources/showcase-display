@@ -29,7 +29,7 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /load                                       Showcase.load
 *           /message                                    Showcase.message
 *           /calc                                       Showcase.calc
-*           /readme                                     Showcase.readme
+*           /static                                     Showcase.staticResources
 *           /form                                       Showcase.form
 *           /pattern                                    Showcase.pattern
 *           /page                                       Showcase.page

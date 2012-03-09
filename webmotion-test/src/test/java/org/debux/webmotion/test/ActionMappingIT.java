@@ -267,12 +267,21 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
-    public void staticResource() throws IOException {
+    public void staticResourceTexte() throws IOException {
         String url = getAbsoluteUrl("readme");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
         AssertJUnit.assertTrue(result.contains("Dummy readme"));
+    }
+    
+    @Test
+    public void staticResourceImg() throws IOException {
+        String url = getAbsoluteUrl("img");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertFalse(result.isEmpty());
     }
     
 }

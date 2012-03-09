@@ -233,9 +233,9 @@ public class WebMotionServer implements Filter {
             }
         };
 
-        // Dispatch on jsp servlet
+        // Dispatch on default servlet
         ServletContext servletContext = request.getServletContext();
-        RequestDispatcher dispatcher = servletContext.getNamedDispatcher("jsp");
+        RequestDispatcher dispatcher = servletContext.getNamedDispatcher("default");
         
         DispatcherType dispatcherType = request.getDispatcherType();
         if(dispatcherType == DispatcherType.INCLUDE) {

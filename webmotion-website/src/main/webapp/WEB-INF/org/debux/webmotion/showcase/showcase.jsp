@@ -145,7 +145,7 @@
                                         <li><a id="wikipedia" href="./wikipedia">Dynamic url</a></li>
                                         <li><a id="form" href="./form">Method</a></li>
                                         <li><a id="media" href="./media">Multiple method</a></li>
-                                        <li><a id="readme" href="./readme">Static resources</a></li>
+                                        <li><a id="static" href="./static">Static resources</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>Filter</strong>

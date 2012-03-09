@@ -511,17 +511,19 @@ public class Showcase extends WebMotionController {
         );
     }
     
-    public Render readme() throws IOException {
+    public Render staticResources() throws IOException {
         FileContent content = new FileContent("/src/main/webapp/README", "Dummy readme");
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/readme"
+                    "/readme",
+                    "/img"
                 ),
                 
                 "files", Arrays.asList(
                     getConfig(true, false, false, false)
-                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 32, 1)),
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 32, 1))
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 69, 1)),
                     content
                 )
         );
