@@ -106,12 +106,22 @@ public class Showcase extends WebMotionController {
     }
     
     protected String getMapping(String section, int index, int length) {
+        return getFirstMapping(section, index, length) + "\n";
+    }
+
+    protected String getFirstMapping(String section, int index, int length) {
         String content = "[" + section + "]\n";
+        content += getContentMapping(index, length);
+        return content;
+    }
+
+    protected String getContentMapping(int index, int length) {
+        String content = "";
         List<String> lines = mappingShowcase.subList(index - 1, index + length - 1);
         for (String line : lines) {
             content += line + "\n";
         }
-        return content + "\n";
+        return content;
     }
 
     public Render hello() throws IOException {
@@ -332,6 +342,8 @@ public class Showcase extends WebMotionController {
     }
     
     public Render stream() throws IOException {
+        FileContent img = new FileContent("/src/main/resources/Outlook.png", null);
+        
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
                     "/stream"
@@ -340,7 +352,8 @@ public class Showcase extends WebMotionController {
                 "files", Arrays.asList(
                     getConfig(false, true, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 15, 1)),
-                    getJavaContent("Stream.java")
+                    getJavaContent("Stream.java"),
+                    img
                 )
         );
     }
@@ -513,6 +526,7 @@ public class Showcase extends WebMotionController {
     
     public Render staticResources() throws IOException {
         FileContent content = new FileContent("/src/main/webapp/README", "Dummy readme");
+        FileContent img = new FileContent("/src/main/webapp/wm_cloud.png", null);
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
@@ -522,9 +536,10 @@ public class Showcase extends WebMotionController {
                 
                 "files", Arrays.asList(
                     getConfig(true, false, false, false)
-                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 32, 1))
-                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 69, 1)),
-                    content
+                        .addContent(getFirstMapping(SECTION_ACTIONS, INDEX_ACTIONS + 32, 1))
+                        .addContent(getContentMapping(INDEX_ACTIONS + 69, 1)),
+                    content,
+                    img
                 )
         );
     }

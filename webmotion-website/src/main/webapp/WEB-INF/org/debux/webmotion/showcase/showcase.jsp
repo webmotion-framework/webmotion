@@ -247,9 +247,19 @@
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
                                     <strong>Path :</strong> ${file.path}
                                 </div>
-                                <pre class="prettyprint" style="background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;">
+                                    <c:if test="${empty file.content}">
+                                        <c:set var="filePathSplit" value="${fn:split(file.path, '/')}"/>
+                                        <c:set var="filePathSplitLength" value="${fn:length(filePathSplit)}"/>
+                                        <c:forEach var="path" items="${filePathSplit}" begin ="${filePathSplitLength - 1}" end="${filePathSplitLength}">
+                                            <img src="<c:url value="/${path}"/>"/>
+                                        </c:forEach>
+
+                                    </c:if>
+                                    <c:if test="${not empty file.content}">
+                                        <pre class="prettyprint" style="background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;">
 ${file.content}
-                                </pre>
+                                        </pre>
+                                    </c:if>
                             </div>
                         </c:forEach>
                     </div>
