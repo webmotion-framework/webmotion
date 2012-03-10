@@ -120,9 +120,9 @@
         <profile>
             <id>jetty</id>
             
-<!--            <activation>
+            <activation>
                 <activeByDefault>true</activeByDefault>
-            </activation>-->
+            </activation>
             
             <build>
                 <plugins>
@@ -166,10 +166,6 @@
         
         <profile>
             <id>tomcat</id>
-            
-<!--            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>-->
             
             <build>
                 <plugins>
