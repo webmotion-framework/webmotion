@@ -122,11 +122,12 @@ public class WebMotionServer implements Filter {
         HttpServletResponse httpServletResponse = ((HttpServletResponse) response);
         httpServletRequest.getSession(true);
         
-        String uri;
+        String uri = null;
         DispatcherType dispatcherType = request.getDispatcherType();
         if (dispatcherType == DispatcherType.INCLUDE) {
             uri = (String) httpServletRequest.getAttribute(HttpContext.ATTRIBUTE_INCLUDE_REQUEST_URI);
-        } else {
+        }
+        if (uri == null) {
             uri = httpServletRequest.getRequestURI();
         }
         
