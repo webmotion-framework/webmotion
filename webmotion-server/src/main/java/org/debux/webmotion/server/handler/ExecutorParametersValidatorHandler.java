@@ -112,6 +112,10 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
+        if (methodValidator == null) {
+            return;
+        }
+        
         Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
         
         List<Executor> executors = call.getExecutors();
