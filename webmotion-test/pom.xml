@@ -200,6 +200,45 @@
                 </plugins>
             </build>
         </profile>
+        
+        <profile>
+            <id>glassfish</id>
+            
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.glassfish</groupId>
+                        <artifactId>maven-embedded-glassfish-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <configuration>
+                            <autoDelete>true</autoDelete> 
+                            <contextRoot>/${project.build.finalName}</contextRoot>
+                            <port>8090</port>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-glassfish</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-glassfish</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>undeploy</goal>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-    
+    <properties>
+        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+    </properties>
 </project>
