@@ -64,6 +64,10 @@ public class RenderActionUrl extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
+        if (url.startsWith("/")) {
+            url = context.getExtensionPath() + url;
+        }
+        
         String path = addModel(url, render.getModel());
         
         DispatcherType dispatcherType = request.getDispatcherType();
