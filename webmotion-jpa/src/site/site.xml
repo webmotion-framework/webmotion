@@ -58,6 +58,7 @@
             <item name="WikiMotion" href="../wikimotion/project-summary.html" />
             <item name="Spring" href="../webmotion-spring/project-summary.html" />
 <!--      <item name="JPA" href="../webmotion-jpa/project-summary.html" />-->
+            <item name="Feed" href="../webmotion-feed/project-summary.html" />
         </menu>
 
         <menu ref="reports"/>
