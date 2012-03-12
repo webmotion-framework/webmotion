@@ -64,17 +64,7 @@ public class Media extends WebMotionController {
     }
     
     public Render attach(String nameSpace) throws Exception {
-        HttpContext context = getContext();
-        
-        String url = "";
-        
-        String extensionPath = context.getExtensionPath();
-        if(!extensionPath.isEmpty()) {
-            url = "/" + extensionPath;
-        }
-        
-        url += "/media";
-        
+        String url = "/media";
         if(nameSpace != null) {
             url +=  "/" + nameSpace;
         }
@@ -99,17 +89,7 @@ public class Media extends WebMotionController {
     }
     
     public Render map(String nameSpace) throws Exception {
-        HttpContext context = getContext();
-        
-        String url = "";
-        
-        String extensionPath = context.getExtensionPath();
-        if(!extensionPath.isEmpty()) {
-            url = "/" + extensionPath;
-        }
-        
-        url += "/media";
-        
+        String url = "/media";
         if(nameSpace != null) {
             url += "/" + nameSpace;
         }

@@ -30,15 +30,18 @@
     </head>
     <body>
         <div class="header">
-            <jsp:include page="/test/header">
-                <jsp:param name="title" value="Lorem ipsum" />
+            <jsp:include page="/header">
+                <jsp:param name="title" value="Title lorem ipsum" />
             </jsp:include>
+        </div>
+        <div class="author">
+            <jsp:include page="./author.jsp"/>
         </div>
         <div class="content">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.</p>
         </div>
-        <div class="header">
-            <jsp:include page="/test/footer"/>
+        <div class="footer">
+            <jsp:include page="/footer"/>
         </div>
     </body>
 </html>

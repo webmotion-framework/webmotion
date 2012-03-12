@@ -50,7 +50,8 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Lorem ipsum"));
+        AssertJUnit.assertTrue(result.contains("Title lorem ipsum"));
+        AssertJUnit.assertTrue(result.contains("Author lorem ipsum"));
         AssertJUnit.assertTrue(result.contains("Powered by WikiMotion and WebMotion"));
     }
     

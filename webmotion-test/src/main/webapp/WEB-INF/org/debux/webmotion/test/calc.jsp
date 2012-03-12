@@ -45,7 +45,7 @@
                 $.ajax({
                     type : "POST",
                     dataType : "html",
-                    url: "<c:url value="/test/add"/>",
+                    url: "<c:url value="./add"/>",
                     data : {
                         value : $('#value').val(),
                         other : $('#other').val()

@@ -267,7 +267,7 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
-    public void staticResourceTexte() throws IOException {
+    public void staticResourceText() throws IOException {
         String url = getAbsoluteUrl("readme");
         HttpGet request = new HttpGet(url);
         

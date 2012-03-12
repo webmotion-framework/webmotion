@@ -35,7 +35,7 @@
         <!-- Frame use not block process -->
         <iframe id="uploadFrame" name="uploadFrame" height="0" width="0" frameborder="0" scrolling="yes"></iframe>
        
-        <form method="POST" action="<c:url value="/test/finish"/>"
+        <form method="POST" action="<c:url value="./finish"/>"
                target="uploadFrame" enctype="multipart/form-data" onsubmit="progress()">
             
             File : <input name="file" type="file"/>
@@ -48,7 +48,7 @@
            function progress() {
                $.ajax({
                     type : "GET",
-                    url: "<c:url value="/test/progress"/>",
+                    url: "<c:url value="./progress"/>",
                     dataType: 'json',
                     success: function(progression){
                         var bytesRead = progression.bytesRead;

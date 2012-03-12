@@ -585,6 +585,7 @@ public class Showcase extends WebMotionController {
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 38, 3)),
                     getJavaContent("Layout.java"),
                     getPageContent("page.jsp"),
+                    getPageContent("author.jsp"),
                     getPageContent("footer.html")
                 )
         );

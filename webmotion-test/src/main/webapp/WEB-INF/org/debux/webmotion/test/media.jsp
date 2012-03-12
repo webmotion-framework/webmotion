@@ -30,7 +30,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <form method="GET" action="<c:url value="/test/video"/>"><input type="submit" value="get"/></form>
-        <form method="POST" action="<c:url value="/test/video"/>"><input type="submit" value="post"/></form>
+        <form method="GET" action="<c:url value="./video"/>"><input type="submit" value="get"/></form>
+        <form method="POST" action="<c:url value="./video"/>"><input type="submit" value="post"/></form>
     </body>
 </html>

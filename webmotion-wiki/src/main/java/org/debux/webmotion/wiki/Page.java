@@ -69,19 +69,11 @@ public class Page extends WebMotionController {
     }
     
     public Render display(String nameSpace, String pageName) throws Exception {
-        HttpContext context = getContext();
-        
-        String url = "";
-        
-        String extensionPath = context.getExtensionPath();
-        if(!extensionPath.isEmpty()) {
-            url = "/" + extensionPath;
-        }
-        
+        String url = null;
         if(nameSpace != null) {
-            url += "/" + nameSpace + "/" + pageName;
+            url = "/" + nameSpace + "/" + pageName;
         } else {
-            url += "/" + pageName;
+            url = "/" + pageName;
         }
                 
         File page = service.findPage(nameSpace, pageName, getLanguage());
@@ -108,19 +100,11 @@ public class Page extends WebMotionController {
     }
 
     public Render edit(String nameSpace, String pageName) throws Exception {
-        HttpContext context = getContext();
-        
-        String url = "";
-        
-        String extensionPath = context.getExtensionPath();
-        if(!extensionPath.isEmpty()) {
-            url = "/" + extensionPath;
-        }
-        
+        String url = null;
         if(nameSpace != null) {
-            url += "/" + nameSpace + "/" + pageName;
+            url = "/" + nameSpace + "/" + pageName;
         } else {
-            url += "/" + pageName;
+            url = "/" + pageName;
         }
         
         String type = service.getType(nameSpace, pageName, getLanguage());
@@ -168,17 +152,9 @@ public class Page extends WebMotionController {
     }
     
     public Render map(String nameSpace) throws Exception {
-        HttpContext context = getContext();
-        
         String url = "";
-        
-        String extensionPath = context.getExtensionPath();
-        if(!extensionPath.isEmpty()) {
-            url = "/" + extensionPath;
-        }
-        
         if(nameSpace != null) {
-            url += "/" + nameSpace;
+            url = "/" + nameSpace;
         }
         
         Map<String, List<String>> map = service.getSiteMap(nameSpace);

@@ -83,6 +83,7 @@ public class HttpContext {
     
     public static final String ATTRIBUTE_ERROR_DATA = "errorData";
     public static final String ATTRIBUTE_FLASH_MESSAGES = "flashMessages";
+    public static final String ATTRIBUTE_EXTENSION_PATH = "extensionPath";
     
     /** Current HTTP request. */
     protected HttpServletRequest request;
@@ -100,7 +101,7 @@ public class HttpContext {
     protected FlashMessages flashMessages;
     
     /** Keep current path for extension */
-    protected String extensionPath = "";
+    protected String extensionPath;
 
     /**
      * Error data is utility to get information on error in attributes.
@@ -296,6 +297,7 @@ public class HttpContext {
         
         this.errorData = new ErrorData();
         this.flashMessages = new FlashMessages();
+        this.extensionPath = "";
         
         request.setAttribute(ATTRIBUTE_ERROR_DATA, errorData);
         request.setAttribute(ATTRIBUTE_FLASH_MESSAGES, flashMessages);
@@ -318,11 +320,13 @@ public class HttpContext {
     }
     
     public String getUrl() {
-        String url;
+        String url = null;
+        String currentExtension = null;
         
         DispatcherType dispatcherType = request.getDispatcherType();
         if (dispatcherType == DispatcherType.INCLUDE) {
             url = (String) request.getAttribute(ATTRIBUTE_INCLUDE_REQUEST_URI);
+            currentExtension = (String) request.getAttribute(ATTRIBUTE_EXTENSION_PATH);
             
         } else if (isError()) {
             url = errorData.getRequestUri();
@@ -331,12 +335,21 @@ public class HttpContext {
             url = request.getRequestURI();
         }
         
+        // Delete context path
         String contextPath = request.getContextPath();
         if (contextPath != null) {
-            url = url.replaceFirst(contextPath, "");
+            url = url.replaceFirst("^" + contextPath, "");
         }
-        url = url.replaceFirst("/deploy", "");
         
+        // Delete deploy path
+        url = url.replaceFirst("^/deploy", "");
+        
+        // Force old extension in url for include
+        if (currentExtension != null) {
+            url = currentExtension + url;
+        }
+        
+        // Delete current extension processed
         if (!extensionPath.isEmpty()) {
             url = url.replace(extensionPath, "");
         }
@@ -385,8 +398,17 @@ public class HttpContext {
         return extensionPath;
     }
 
-    public void setExtensionPath(String extensionPath) {
-        this.extensionPath = extensionPath;
+    public void addExtensionPath(String extensionPath) {
+        this.extensionPath += extensionPath;
+        
+        DispatcherType dispatcherType = request.getDispatcherType();
+        if (dispatcherType != DispatcherType.INCLUDE) {
+            request.setAttribute(ATTRIBUTE_EXTENSION_PATH, this.extensionPath);
+        }
+    }
+
+    public void removeExtensionPath(String extensionPath) {
+        this.extensionPath.replaceFirst(extensionPath + "$", "");
     }
 
     public ServletContext getServletContext() {

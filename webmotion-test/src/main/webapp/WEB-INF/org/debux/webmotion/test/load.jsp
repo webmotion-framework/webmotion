@@ -30,7 +30,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <a href="<c:url value="/test/reload"/>">Reload</a>
+        <a href="<c:url value="./reload"/>">Reload</a>
         <p>${param.content}</p>
     </body>
 </html>

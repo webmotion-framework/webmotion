@@ -150,9 +150,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
         
         // Determine the extension is used
         String url = context.getUrl();
-        String extensionPath = context.getExtensionPath();
         log.info("url = " + url);
-        log.info("extension path = " + extensionPath);
 
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensionsRules) {
@@ -163,7 +161,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
                 
                 // Not change path when the extension is mount on root
                 if(!"/".equals(path)) {
-                    context.setExtensionPath(extensionPath + path);
+                    context.addExtensionPath(path);
                 }
                 
                 Config newConfig = extensionMapping.getConfig();
@@ -172,7 +170,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
                 WebMotionHandler mainHandler = factory.getInstance(className);
                 mainHandler.handle(extensionMapping, call);
                 
-                context.setExtensionPath(extensionPath);
+                context.removeExtensionPath(path);
                 
                 // Stop if the first handler process the request
                 Rule rule = call.getRule();

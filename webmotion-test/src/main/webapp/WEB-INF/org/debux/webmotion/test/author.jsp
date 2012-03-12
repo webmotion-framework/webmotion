@@ -22,19 +22,4 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>File</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-        
-        <form method="POST" action="<c:url value="./download"/>" enctype="multipart/form-data">
-            File : <input name="file" type="file"/>
-            <input type="submit" value="upload"/>
-        </form>
-      
-    </body>
-</html>
+<p>Author lorem ipsum</p>

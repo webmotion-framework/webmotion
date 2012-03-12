@@ -31,6 +31,6 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     </head>
     <body>
-        <a href="<c:url value="/test/application/download"/>">Download</a>
+        <a href="<c:url value="./application/download"/>">Download</a>
     </body>
 </html>
