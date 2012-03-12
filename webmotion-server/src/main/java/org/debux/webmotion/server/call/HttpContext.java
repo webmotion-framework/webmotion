@@ -351,7 +351,7 @@ public class HttpContext {
         
         // Delete current extension processed
         if (!extensionPath.isEmpty()) {
-            url = url.replace(extensionPath, "");
+            url = url.replace("^" + extensionPath, "");
         }
         
         return url;
