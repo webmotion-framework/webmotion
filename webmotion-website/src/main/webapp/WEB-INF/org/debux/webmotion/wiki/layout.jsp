@@ -56,11 +56,6 @@
                 <c:set var="main_active" value="active"/>
             </c:if>
 
-            <c:url value="/news" var="news_url"/>
-            <c:if test="${layout_url == '/news'}" >
-                <c:set var="news_active" value="active"/>
-            </c:if>
-
             <c:url value="/documentation" var="documentation_url"/>
             <c:if test="${layout_url == '/documentation' 
                           || layout_url == '/begin'
@@ -90,9 +85,6 @@
             jQuery(document).ready(function () {
                 $('#main').addClass("${main_active}");
                 $("#main>a").attr("href", "${main_url}")
-                
-                $('#news').addClass("${news_active}");
-                $("#news>a").attr("href", "${news_url}")
                 
                 $('#documentation').addClass("${documentation_active}");
                 $("#documentation>a").attr("href", "${documentation_url}")
