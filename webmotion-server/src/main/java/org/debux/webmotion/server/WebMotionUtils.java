@@ -219,6 +219,16 @@ public class WebMotionUtils {
     }
     
     /**
+     * Find the regex in input
+     * @return true if the regex is found
+     */
+    public static boolean find(String regex, CharSequence input) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+    
+    /**
      * @return true if webmotion in tomcat container.
      */
     public static boolean isTomcatContainer(ServletRequest request) {

@@ -354,6 +354,10 @@ public class HttpContext {
             url = url.replaceFirst("^" + extensionPath, "");
         }
         
+        if (url.isEmpty()) {
+            url = "/";
+        }
+        
         return url;
     }
     

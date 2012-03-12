@@ -50,6 +50,7 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.mbean.HandlerStats;
+import org.nuiton.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,10 +158,11 @@ public class WebMotionMainHandler implements WebMotionHandler {
             
             String path = extensionMapping.getExtensionPath();
             log.info("path = " + path);
-            if(url.startsWith(path)) {
+            if ("/".equals(path) 
+                    || WebMotionUtils.find("^" + path + "(/|$)", url)) {
                 
                 // Not change path when the extension is mount on root
-                if(!"/".equals(path)) {
+                if (!"/".equals(path)) {
                     context.addExtensionPath(path);
                 }
                 
@@ -174,7 +176,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
                 
                 // Stop if the first handler process the request
                 Rule rule = call.getRule();
-                if(rule != null) {
+                if (rule != null) {
                     break;
                 }
             }
@@ -184,7 +186,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
         Rule rule = call.getRule();
         if (rule == null) {
             // Determine if the request contains an errors
-            if(context.isError()) {
+            if (context.isError()) {
                 ErrorData errorData = context.getErrorData();
                 log.error("Error " + errorData.getStatusCode() + " : " + errorData.getMessage() 
                         + " on " + errorData.getRequestUri(), errorData.getException());
