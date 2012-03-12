@@ -168,7 +168,6 @@
                                         <li><a id="blog" href="./blog">Action</a></li>
                                         <li><a id="stats" href="./stats">Pattern</a> <span class="label label-info">New</span></li>
                                         <li><a id="spring" href="./spring">Spring</a></li>
-                                        <li><a id="feed" href="./feed">Feed</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>

@@ -6,7 +6,6 @@ server.listener.class=org.debux.webmotion.test.Listener
 [extensions]
 /blog                                                   blog
 /spring                                                 spring
-/feed                                                   feed
 /                                                       META-INF/.*\.wm
 
 [filters]

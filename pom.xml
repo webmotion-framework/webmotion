@@ -32,7 +32,6 @@
         <module>webmotion-website</module>
         <module>webmotion-archetype</module>
         <module>webmotion-jpa</module>
-        <module>webmotion-feed</module>
   </modules>
 
     <developers>
