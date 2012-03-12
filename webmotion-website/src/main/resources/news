@@ -1,8 +1,0 @@
-[config]
-package.views=WEB-INF/org.debux.webmotion.news
-
-[extensions]
-/feed                                                        feed
-
-[actions]
-GET        /                                                 view:news.jsp
