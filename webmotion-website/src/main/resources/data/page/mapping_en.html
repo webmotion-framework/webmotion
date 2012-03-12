@@ -379,16 +379,16 @@ public class Listener implements WebMotionServerListener {
 &lt;http_method&gt;    &lt;url&gt;    <b>sync:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 
-<h3 id="http-methods">Les méthodes HTTP</h3>
+<h3 id="http-methods">HTTP methods</h3>
 <p>
-    Les différentes méthodes HTTP supportées par WebMotion sont :GET, POST, HEAD, PUT, et DELETE. 
+    The different HTTP methods supproted by WebMotion are: GET, POST, HEAD, PUT and DELETE.
 </p>
 <p>
-    Seules les méthodes HTTP GET et POST sont supportées dans les formulaires web (balise <code>&lt;form&gt;</code>), pour pouvoir bénificier 
-    des autres méthodes il faudra utiliser des requêtes AJAX.
+    Only the GET and POST methods are supported in the web form (<code>&lt;form&gt;</code> tag).
+    To be able to use the other methods, you will need to make AJAX requests.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Définition d'une action pour une seule méthode HTTP :
+    <span class="label label-info">Example</span> Definition of an action for d'une action for a single HTTP method:
 </p>
 <pre>
 GET         &lt;URL&gt;        &lt;action&gt;
@@ -398,103 +398,103 @@ DELETE      &lt;URL&gt;        &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Pour préciser que l'action est a réalisée 
-    quelque soit la méthode HTTP, il est possible d'utiliser l'astérisque :
+    <span class="label label-info">Example</span> To specify that the action is to perform whatever the HTTP method, you can use the asterisk:
 </p>
 <pre>
 *           &lt;URL&gt;        &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Pour appliquer une action sur un sous-ensemble de méthodes HTTP, il suffit de les séparer par une virgule :
+    <span class="label label-info">Example</span> To apply an action on a subset of HTTP methods, you just need to separate them with commas:
 </p>
 <pre>
 GET,POST    &lt;URL&gt;        &lt;action&gt;
 </pre>
 
-<h3>Configuration de l'URL qui sera traitée</h3>
+<h3>Configuration of the URL which will be treated</h3>
 
 <p>
-    Les URLs spécifiées sont toujours relatives par rapport au contexte de votre application et doit toujours commencer toujours par un slash. 
+    The specified URLs are always relative to your application context and must always start with a slash.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Pour traiter l'URL <code>http://localhost:8080/webmotion-sample/index</code>, il faudra écrire :
+    <span class="label label-info">Example</span> To treat the URL <code>http://localhost:8080/webmotion-sample/index</code>, you must write:
 </p>
 <pre>
 *           /index             &lt;action&gt;
 </pre>
 <p>
-    <span class="label label-info">Exemple</span> Pour traiter l'URL racine de votre application, il faudra écrire :
+    <span class="label label-info">Example</span> To treat the URL of the root of your application, you must write:
 </p>
 <pre>
 *           /                  &lt;action&gt;
 </pre>
 
 <p>
-    L'intégralité de l'URL est déterminante quant au choix de l'action à effectuer.
-    Il est possible de gérer de plusieurs manières les paramètres d'une requête :
+    The full URL is decisive for the choice of which action to perform.
+    You can manage in several ways the request parameters.
 </p>
 
-<h4>Traitement selon des valeurs prédéfinies des paramètres de la requête</h4>
+<h4>Treatment according to predefined values of the request parameters</h4>
 <p>
-    <span class="label label-info">Exemple</span> Il est possible de différencier le traitement à effectuer sur l'unique différence
-    de la valeur d'une paramètre de la requête :
+    <span class="label label-info">Example</span> You can differentiate the treatment to perform
+    according to the only difference of the value of a request parameter:
 </p>
 <pre>
 *           /user?action=save                  &lt;action1&gt;
 *           /user?action=display               &lt;action2&gt;
 </pre>
 
-<h4>Récupération de la valeur d'un paramètre pour traitement sur cette valeur</h4>
+<h4>Retrieving of the value of a parameter to treat this value</h4>
 <p>
-    <span class="label label-info">Exemple</span> Déclaration de paramètre dynamique :
+    <span class="label label-info">Example</span> Declaration of dynamic parameter:
 </p>
 <pre>
 *           /user?action={}                    &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Déclaration de paramètre dynamique avec renommage du paramètre action en value :
+    <span class="label label-info">Example</span> Declaration of dynamic parameter
+    with renaming of the action parameter into value:
 </p>
 <pre>
 *           /user?action={value}               &lt;action&gt;
 </pre>
 <p>
-    <span class="label label-info">Exemple</span> Déclaration de paramètre dynamique avec renommage
-    pour un paramètre dont la valeur ne contiendrait que des "a" (contrainte par expression régulière) :
+    <span class="label label-info">Example</span> Declaration of dynamic parameter
+    with renaming for a parameter whose value contaisn only "a"s (regular expression constraint):
 </p>
 <pre>
 *           /user?action={value:a*}            &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Note</span> Les URLs contenant des paramètres avec des contraintes de valeurs par
-    expression régulière sont plus restrictives que les URLs sans contraintes. Il faut donc faire attention à l'ordre
-    des URLs dans le fichier de mapping :
+    <span class="label label-info">Note</span> The URLs containing parameters with regular expression constraint
+    are more restrictive than URLs without constraints.
+    So be careful about the order of the URLs in the mapping file:
 </p>
 <pre>
 *           /user?action={value}            &lt;action1&gt;
-*           /user?action={value:a*}         &lt;action2&gt; // Ne sera jamais traitée, la ligne ci-avant est plus générique 
+*           /user?action={value:a*}         &lt;action2&gt; // Will never be treated, the previous line is more generic
 </pre>
 
-<h4>Morceaux d'URL dynamiques</h4>
+<h4>Pieces of dynamic URLs</h4>
 <p>
-    Vous disposer des mêmes fonctionnalités des paramètres mais directement dans le path de l'URL.
-    C'est à dire de la récupéreration d'un fragment de l'URL en tant que paramètre de votre action 
-    avec la possibilité de mettre une expression de type pattern Java.
+    You have the same parameter functionalities but directly in the URL path,
+    ie the retrieving of a URL fragment as a parameter of your action
+    with the possibility of a Java pattern type expression.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Déclaration de paramètre dynamique dans le path,
-    le paramètre <code>id</code> pourra ensuite être utilisé dans le traitement de l'URL (action, vue, etc.).
+    <span class="label label-info">Example</span> Declaration of dynamic parameter in the path,
+    the <code>id</code> parameter can then be used in the URL treatment (action, view, etc.).
 </p>
 <pre>
 *           /user/{id}                     &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Déclaration de paramètre dynamique dans le path avec un pattern.
-    La règle suivante traitera toutes les URLs commençant par <code>/user-</code>, et la valeur sera stockée dans
-    le paramètre <code>id</code>.
+    <span class="label label-info">Example</span> Declaration of dynamic parameter in the path with a pattern.
+    The following rule will treat all the URLs starting with <code>/user-</code>
+    and the value will be stored in the <code>id</code> parameter.
 </p>
 <pre>
 *           /{id:user-*}            &lt;action&gt;
@@ -507,13 +507,13 @@ GET,POST    &lt;URL&gt;        &lt;action&gt;
     Pour spécifier ce type de traitement, il suffit de préfixer le traitement (l'action) par <code>view:</code>
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Retourne la page d'index :
+    <span class="label label-info">Example</span> Retourne la page d'index :
 </p>
 <pre>
 GET         /index                              <b>view:</b>index.html
 </pre>
 <p>
-    <span class="label label-info">Exemple</span> Retourne la page d'index depuis le répertoire doc :
+    <span class="label label-info">Example</span> Retourne la page d'index depuis le répertoire doc :
 </p>
 <pre>
 GET         /doc/index                          <b>view:</b>doc/index.html
@@ -523,7 +523,7 @@ GET         /doc/index                          <b>view:</b>doc/index.html
     Des morceaux d'URL (morceau de chemin, paramètre) peuvent être réutilisés pour déterminer la vue à afficher.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Retourne le fichier texte demander en paramètre :
+    <span class="label label-info">Example</span> Retourne le fichier texte demander en paramètre :
 </p>
 <pre>
 *           /text?file={}                       <b>view:</b>{file}.txt
@@ -536,13 +536,13 @@ GET         /doc/index                          <b>view:</b>doc/index.html
     <code>url:</code>.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Redirection vers un autre site :
+    <span class="label label-info">Example</span> Redirection vers un autre site :
 </p>
 <pre>
 GET         /google                              <b>url:</b>http://www.google.com
 </pre>
 <p>
-    <span class="label label-info">Exemple</span> Redirection vers une URL de l'application :
+    <span class="label label-info">Example</span> Redirection vers une URL de l'application :
 </p>
 <pre>
 GET         /foo                                 <b>url:</b>/do?param=3
@@ -552,7 +552,7 @@ GET         /foo                                 <b>url:</b>/do?param=3
     Une fois encore, le traitement peut-être paramétrable selon l'URL traitée.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Réécriture de l'URL de wikipédia dans notre site :
+    <span class="label label-info">Example</span> Réécriture de l'URL de wikipédia dans notre site :
 </p>
 <pre>
 GET         /wikipedia/{page}                    <b>url:</b>http://www.wikipedia.org/wiki/{page}
@@ -568,14 +568,14 @@ GET         /wikipedia/{page}                    <b>url:</b>http://www.wikipedia
     Ce type de traitement est défini par la présence su préfixe <code>action:</code>, qui est cependant optionnel.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Exécute la méthode find de la classe User :
+    <span class="label label-info">Example</span> Exécute la méthode find de la classe User :
 </p>
 <pre>
 GET         /user/{id}                                  User.find
 POST        /user/{id}                           <b>action:</b>User.edit
 </pre>
 <p>
-    <span class="label label-info">Exemple</span> Exécute la méthode find de la classe User dans le paquetage user:
+    <span class="label label-info">Example</span> Exécute la méthode find de la classe User dans le paquetage user:
 </p>
 <pre>
 GET         /user/{id}                            user.User.find
@@ -585,7 +585,7 @@ GET         /user/{id}                            user.User.find
     Les paramètres peuvent être utilisé pour déterminer la redirection à effectuer.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Exécute la méthode de la classe récupérer en paramètre :
+    <span class="label label-info">Example</span> Exécute la méthode de la classe récupérer en paramètre :
 </p>
 <pre>
 *           /{class}/{method}                     {class}.{method}
@@ -643,7 +643,7 @@ public class User extends WebMotionController {
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Pour l'URL 
+    <span class="label label-info">Example</span> Pour l'URL
     <code>http://localhost/webmotion-sample/action?<strong>param=value</strong></code> vous aurez comme méthode :
 </p>
 <pre class="prettyprint">
@@ -656,7 +656,7 @@ public Render action(Type param) {
     Pour pouvoir obtenir une liste ou un tabeau de valeurs, il suffit de passer plusieurs fois le même paramètre dans l'URL.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Pour l'URL 
+    <span class="label label-info">Example</span> Pour l'URL
     <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> vous aurez comme méthode :
 </p>
 <pre class="prettyprint">
@@ -670,7 +670,7 @@ public Render action(Type[] param) {
     <code>&lt;nom du paramètre correspondant à la map&gt;.&lt;clé de la map&gt;=&lt;valeur correspondante à la clé&gt;</code>
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Pour l'URL 
+    <span class="label label-info">Example</span> Pour l'URL
     <code>http://localhost/webmotion-sample/action?<strong>param.key1=value1&amp;param.key2=value2</strong></code> vous aurez comme méthode :
 </p>
 <pre class="prettyprint">
@@ -687,7 +687,7 @@ public Render action(Map param) {
     <code>&lt;nom du paramètre correspondant à l'object&gt;.&lt;nom de l'attibut&gt;=&lt;valeur de l'attribut&gt;</code>
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Pour l'URL 
+    <span class="label label-info">Example</span> Pour l'URL
     <code>http://localhost/webmotion-sample/action?<strong>book.isbn=007&amp;book.title=James%20Bond</strong></code> vous aurez comme méthode :
 </p>
 <pre class="prettyprint">
@@ -742,7 +742,7 @@ public class Address {
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Exécute la méthode <code>exec</code> avec des paramètres par défaut :
+    <span class="label label-info">Example</span> Exécute la méthode <code>exec</code> avec des paramètres par défaut :
 </p>
 <pre>
 GET         /action           Action.exec    value=default,number=44
@@ -798,14 +798,14 @@ public class Action extends WebMotionController {
     Pour l'instant il n'est pas possible de filtrer selon les paramètres de la requête ou selon un pattern plus compliqué que l'astérisque.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Filtre l'ensemble des URLs :
+    <span class="label label-info">Example</span> Filtre l'ensemble des URLs :
 </p>
 <pre>
 *           /*                      &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Filtre l'ensemble des URLs pour la gestion des utilisateur :
+    <span class="label label-info">Example</span> Filtre l'ensemble des URLs pour la gestion des utilisateur :
 </p>
 <pre>
 *           /user/*                 &lt;action&gt;
@@ -827,7 +827,7 @@ public class Action extends WebMotionController {
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Filtre l'ensemble des URLs pour l'authentification :
+    <span class="label label-info">Example</span> Filtre l'ensemble des URLs pour l'authentification :
 </p>
 <pre>
 *           /admin/*                Filters.auth
@@ -849,7 +849,7 @@ public class Filters extends WebMotionFilter {
     L'appel a la méthode <code>doProcess</code> n'est pas obligatoire, mais cela impliquera qu'aucun rendu ne sera retourné pour l'URL courante.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Retourne vers une page si l'utilisateur n'est pas authentifié :
+    <span class="label label-info">Example</span> Retourne vers une page si l'utilisateur n'est pas authentifié :
 </p>
 <pre>
 *           /admin/*                Filters.auth
@@ -875,7 +875,7 @@ public class Filters extends WebMotionFilter {
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Exécute le filtre <code>decorate</code> avec des paramètres par défaut :
+    <span class="label label-info">Example</span> Exécute le filtre <code>decorate</code> avec des paramètres par défaut :
 </p>
 <pre>
 GET         /*           Decorator.decorate    value=default
@@ -939,7 +939,7 @@ TODO demander à Julien, il ne devrait pas y avoir de problèmes si la gestion d
     faire attention au cas où le code 500 est générer pour une exception sur le serveur.
 </p>-->
 <p>
-    <span class="label label-info">Exemple</span> Gère le code statut HTTP 404  :
+    <span class="label label-info">Example</span> Gère le code statut HTTP 404  :
 </p>
 <pre>
 <b>code:</b>404                &lt;action&gt;
@@ -958,14 +958,14 @@ TODO demander à Julien, il ne devrait pas y avoir de problèmes si la gestion d
 </ul>
 
 <p>
-    <span class="label label-info">Exemple</span> Gère l'ensemble des exceptions de l'application :
+    <span class="label label-info">Example</span> Gère l'ensemble des exceptions de l'application :
 </p>
 <pre>
 java.lang.Exception           &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Gère toutes les erreurs (exceptions, code HTTP)  :
+    <span class="label label-info">Example</span> Gère toutes les erreurs (exceptions, code HTTP)  :
 </p>
 <pre>
 *                       &lt;action&gt;
@@ -1041,7 +1041,7 @@ java.lang.Exception           Error.display
     Il est possible d'utiliser plusieurs fois la même extension pour plusieurs URLs.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Utilisation de l'extension wikimotion :
+    <span class="label label-info">Example</span> Utilisation de l'extension wikimotion :
 </p>
 <pre>
 /wiki                  &lt;wikimotion&gt;
@@ -1052,7 +1052,7 @@ java.lang.Exception           Error.display
     Le fichier de mapping de chaque extension doit être dans classpath de l'application.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Utilisation du fichier de mapping wikimotion :
+    <span class="label label-info">Example</span> Utilisation du fichier de mapping wikimotion :
 </p>
 <pre>
 /wiki                  wikimotion
@@ -1068,7 +1068,7 @@ java.lang.Exception           Error.display
     ce qui permet de charger des mappings de façon dynamique.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Chargement des extensions des fichiers 
+    <span class="label label-info">Example</span> Chargement des extensions des fichiers
     dans le répertoire <code>META-INF</code> avec comme extension <code>wm</code> :
 </p>
 <pre>
@@ -1080,7 +1080,7 @@ java.lang.Exception           Error.display
     par un ou plusieurs filtres avant d'être lancé par l'action définie dans le mapping applicatif. 
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Un module de mesure d'audience (statistiques) pourrait
+    <span class="label label-info">Example</span> Un module de mesure d'audience (statistiques) pourrait
     être utilisé par une application, qui contiendra le morceau de configuration suivant :
 </p>
 <pre>[extensions]
