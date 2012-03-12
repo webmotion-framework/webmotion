@@ -60,6 +60,7 @@
         
         <script type="text/javascript">
             <c:url value="/main" var="main_url"/>
+            <c:url value="/news" var="news_url"/>
             <c:url value="/documentation" var="documentation_url"/>
             <c:url value="/showcase/hello" var="showcase_url"/>
             <c:url value="/download" var="download_url"/>
@@ -69,6 +70,7 @@
                 $('#showcase').addClass("active");
                 
                 $("#main>a").attr("href", "${main_url}")
+                $("#news>a").attr("href", "${news_url}")
                 $("#documentation>a").attr("href", "${documentation_url}")
                 $("#showcase>a").attr("href", "${showcase_url}")
                 $("#download>a").attr("href", "${download_url}")
@@ -166,8 +168,9 @@
                                 <li><strong>Extension</strong>
                                     <ul>
                                         <li><a id="blog" href="./blog">Action</a></li>
-                                        <li><a id="spring" href="./spring">Spring</a></li>
                                         <li><a id="stats" href="./stats">Pattern</a> <span class="label label-info">New</span></li>
+                                        <li><a id="spring" href="./spring">Spring</a></li>
+                                        <li><a id="feed" href="./feed">Feed</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>

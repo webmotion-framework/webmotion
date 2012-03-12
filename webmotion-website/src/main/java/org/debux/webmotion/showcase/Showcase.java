@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 public class Showcase extends WebMotionController {
 
     protected static final int INDEX_EXTENSIONS = 6;
-    protected static final int INDEX_FILTERS = 11;
-    protected static final int INDEX_ERRORS = 17;
-    protected static final int INDEX_ACTIONS = 25;
+    protected static final int INDEX_FILTERS = 12;
+    protected static final int INDEX_ERRORS = 18;
+    protected static final int INDEX_ACTIONS = 26;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
@@ -840,7 +840,7 @@ public class Showcase extends WebMotionController {
                 
                 "files", Arrays.asList(
                     getConfig(false, false, false, false)
-                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 3, 1)),
+                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 4, 1)),
                     new FileContent("/src/main/resources/stats.wm", getFile("META-INF/stats.wm")),
                     getJavaContent("Stats.java")
                 )
@@ -890,6 +890,20 @@ public class Showcase extends WebMotionController {
                     getJavaContent("Decorator.java"),
                     getPageContent("contact.jsp"),
                     getPageContent("company.jsp")
+                )
+        );
+    }
+    
+    public Render feed() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/feed/atom?url=http://linuxfr.org/news.atom",
+                    "/feed/rss?url=http://fr.fxfeeds.mozilla.com/fr/firefox/headlines.xml"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, false, false, false)
+                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 3, 1))
                 )
         );
     }

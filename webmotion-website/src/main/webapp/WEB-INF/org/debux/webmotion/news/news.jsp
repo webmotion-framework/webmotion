@@ -1,7 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--
   #%L
-  Webmotion in test
+  Webmotion website
   
   $Id$
   $HeadURL$
@@ -22,17 +21,18 @@
   License along with this program.  If not, see
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
--->
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+  -->
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+ 
 <!DOCTYPE html>
-<html lang="${language}">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>${site_name}</title>
-        
+        <title>WebMotion</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
         <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
         
@@ -49,68 +49,38 @@
         <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
         <script type="text/javascript" src="<c:url value="/prettify/prettify.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
-    
+
+        <style type="text/css">
+            .tab-pane {
+                clear: both;
+                padding-left: 5px;
+                padding-top: 10px;
+            }
+        </style>
+        
         <script type="text/javascript">
             <c:url value="/main" var="main_url"/>
-            <c:if test="${layout_url == '/main'}" >
-                <c:set var="main_active" value="active"/>
-            </c:if>
-
             <c:url value="/news" var="news_url"/>
-            <c:if test="${layout_url == '/news'}" >
-                <c:set var="news_active" value="active"/>
-            </c:if>
-
             <c:url value="/documentation" var="documentation_url"/>
-            <c:if test="${layout_url == '/documentation' 
-                          || layout_url == '/begin'
-                          || layout_url == '/mapping'
-                          || layout_url == '/action'
-                          || layout_url == '/extensions'
-                          || layout_url == '/advanced'
-                          || layout_url == '/changelog'}" >
-                <c:set var="documentation_active" value="active"/>
-            </c:if>
-
             <c:url value="/showcase/hello" var="showcase_url"/>
-            <c:if test="${layout_url == '/showcase'}" >
-                <c:set var="showcase_active" value="active"/>
-            </c:if>
-
             <c:url value="/download" var="download_url"/>
-            <c:if test="${layout_url == '/download'}" >
-                <c:set var="download_active" value="active"/>
-            </c:if>
-
             <c:url value="/contacts" var="contacts_url"/>
-            <c:if test="${layout_url == '/contacts'}" >
-                <c:set var="contacts_active" value="active"/>
-            </c:if>
-                            
+
             jQuery(document).ready(function () {
-                $('#main').addClass("${main_active}");
+                $('#news').addClass("active");
+                
                 $("#main>a").attr("href", "${main_url}")
-                
-                $('#news').addClass("${news_active}");
                 $("#news>a").attr("href", "${news_url}")
-                
-                $('#documentation').addClass("${documentation_active}");
                 $("#documentation>a").attr("href", "${documentation_url}")
-                
-                $('#showcase').addClass("${showcase_active}");
                 $("#showcase>a").attr("href", "${showcase_url}")
-                
-                $('#download').addClass("${download_active}");
                 $("#download>a").attr("href", "${download_url}")
-                
-                $('#contacts').addClass("${contacts_active}");
                 $("#contacts>a").attr("href", "${contacts_url}")
             });
         </script>
     </head>
 
     <body onload="prettyPrint()">
-
+                
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -119,27 +89,29 @@
                         <span class="icon-bar"></span> 
                         <span class="icon-bar"></span> 
                     </a> 
-                    <a class="brand" href="<c:url value="/"/>">${site_name}</a>
+                    <a class="brand" href="<c:url value="/"/>">WebMotion</a>
 
                     <div class="nav-collapse">
                         <jsp:include page="/menu?sub=include" />
                         
                         <ul class="nav pull-right">
-                            <c:forEach items="${languages}" var="lang">
-                                <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
-                            </c:forEach>
+                            <li><a href="<c:url value="/?language=fr"/>">fr</a></li>
+                            <li><a href="<c:url value="/?language=en"/>">en</a></li>
                         </ul>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
 
         <div class="container">
             <div class="content">
-                <jsp:include page="${layout_url}" />
+                <div class="page-header page-header-icon">
+                    <h1 style="background: url('./img/URL_History.png') no-repeat;">Actualités <small>Dernières actualités sur WebMotion</small></h1>
+                </div>
+                <jsp:include page="/feed/atom?url=http://projects.debux.org/projects/webmotion/news.atom?key=dc265eb5724019b905604e959d420686e3bba50b"/>
             </div>
         </div>
-            
+        
         <hr/>
         <footer style="text-align: center">
             <p>Powered by WikiMotion and WebMotion</p>

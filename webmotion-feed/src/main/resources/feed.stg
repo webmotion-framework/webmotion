@@ -1,0 +1,13 @@
+render(model) ::= <<
+$model.feeds.values:feed()$
+>>
+
+feed(feed) ::= <<
+<h2 class="feed_title"><a href="$feed.link$">$feed.title$</a></h2>
+<p class="feed_date">
+    $feed.date$
+</p>
+<p class="feed_content">
+    $feed.content$
+</p>
+>>

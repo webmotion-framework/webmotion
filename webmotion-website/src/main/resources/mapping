@@ -1,4 +1,5 @@
 [extensions]
+/news                                                            news
 /test                                                            test
 /showcase                                                        showcase-display
 /                                                                wikimotion

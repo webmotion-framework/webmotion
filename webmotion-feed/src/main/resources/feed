@@ -1,0 +1,7 @@
+[config]
+package.views=WEB-INF/org.debux.webmotion.feed
+package.base=org.debux.webmotion.feed
+
+[actions]
+*         /atom?url={}             FeedParser.atom
+*         /rss?url={}              FeedParser.rss
