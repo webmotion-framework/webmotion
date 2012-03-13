@@ -27,6 +27,7 @@ package.actions=org.debux.webmotion.showcase
 package.views=WEB-INF/org.debux.webmotion.showcase
 
 [actions]
+*           /                                           url:/deploy/hello
 *           /hello                                      Showcase.hello
 *           /helloModel                                 Showcase.helloModel
 *           /helloParameters                            Showcase.helloParameters
