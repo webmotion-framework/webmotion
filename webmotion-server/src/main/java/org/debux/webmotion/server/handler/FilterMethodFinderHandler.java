@@ -65,9 +65,10 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
 
             for (FilterRule filterRule : filterRules) {
                 Action action = filterRule.getAction();
-
-                Config config = mapping.getConfig();
-                String packageName = config.getPackageFilters();
+                
+                Mapping mappingRule = filterRule.getMapping();
+                Config configRule = mappingRule.getConfig();
+                String packageName = configRule.getPackageFilters();
                 String className = action.getClassName();
                 String fullQualifiedName = packageName + "." + className;
 
