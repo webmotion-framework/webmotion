@@ -25,9 +25,7 @@
 [config]
 package.base=org.debux.webmotion.test
 package.views=WEB-INF/org.debux.webmotion.test
-
-[filters]
-*           /*                                     Stats.count
+server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
 
 [actions]
-*           /stats                                 Stats.get
+*           /                                     Spring.sayHello

@@ -57,8 +57,8 @@ public class Showcase extends WebMotionController {
     protected List<String> mappingShowcase;
     
     public Showcase() throws IOException {
-        InputStream stream = Showcase.class.getClassLoader().getResourceAsStream("/test");
-        mappingShowcase = IOUtils.readLines(stream);
+        String content = getFile("/test.wm");
+        mappingShowcase = Arrays.asList(content.split("\n"));
     }
 
     protected String getFile(String name) throws IOException {
@@ -70,6 +70,9 @@ public class Showcase extends WebMotionController {
         }
         if(content.contains("#L%\n  -->\n")) {
             content = StringUtils.substringAfter(content, "#L%\n  -->\n");
+        }
+        if(content.contains("# #L%\n###\n")) {
+            content = StringUtils.substringAfter(content, "# #L%\n###\n");
         }
         return content;
     }
@@ -654,7 +657,7 @@ public class Showcase extends WebMotionController {
                 "files", Arrays.asList(
                     getConfig(false, false, false, false)
                         .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 1, 1)),
-                    new FileContent("/src/main/resources/blog", getFile("blog")),
+                    new FileContent("/src/main/resources/blog.wm", getFile("blog.wm")),
                     getPageContent("blog.jsp")
                 )
         );
@@ -762,7 +765,7 @@ public class Showcase extends WebMotionController {
                 "files", Arrays.asList(
                     getConfig(false, false, false, false)
                         .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 2, 1)),
-                    new FileContent("/src/main/resources/spring", getFile("spring")),
+                    new FileContent("/src/main/resources/spring.wm", getFile("spring.wm")),
                     getJavaContent("Spring.java"),
                     getJavaContent("Bean.java"),
                     getPageContent("spring.jsp")

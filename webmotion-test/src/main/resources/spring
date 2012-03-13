@@ -1,7 +1,0 @@
-[config]
-package.base=org.debux.webmotion.test
-package.views=WEB-INF/org.debux.webmotion.test
-server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
-
-[actions]
-*           /                                     Spring.sayHello
