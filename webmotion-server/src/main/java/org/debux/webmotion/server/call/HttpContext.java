@@ -341,12 +341,13 @@ public class HttpContext {
             url = url.replaceFirst("^" + contextPath, "");
         }
         
-        // Delete deploy path
-        url = url.replaceFirst("^/deploy", "");
-        
         // Force old extension in url for include
-        if (currentExtension != null) {
+        if (!url.startsWith("/deploy") && currentExtension != null) {
             url = currentExtension + url;
+            
+        } else {
+            // Delete deploy path
+            url = url.replaceFirst("^/deploy", "");
         }
         
         // Delete current extension processed
@@ -403,7 +404,10 @@ public class HttpContext {
     }
 
     public void addExtensionPath(String extensionPath) {
-        this.extensionPath += extensionPath;
+        // Not change path when the extension is mount on root
+        if (!"/".equals(extensionPath)) {
+            this.extensionPath += extensionPath;
+        }
         
         DispatcherType dispatcherType = request.getDispatcherType();
         if (dispatcherType != DispatcherType.INCLUDE) {
@@ -412,7 +416,7 @@ public class HttpContext {
     }
 
     public void removeExtensionPath(String extensionPath) {
-        this.extensionPath.replaceFirst(extensionPath + "$", "");
+        this.extensionPath = this.extensionPath.replaceFirst(extensionPath + "$", "");
     }
 
     public ServletContext getServletContext() {

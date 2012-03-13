@@ -160,10 +160,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
             if ("/".equals(path) 
                     || WebMotionUtils.find("^" + path + "(/|$)", url)) {
                 
-                // Not change path when the extension is mount on root
-                if (!"/".equals(path)) {
-                    context.addExtensionPath(path);
-                }
+                context.addExtensionPath(path);
                 
                 Config newConfig = extensionMapping.getConfig();
                 String className = newConfig.getMainHandler();
