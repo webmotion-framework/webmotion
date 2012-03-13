@@ -63,7 +63,7 @@ public class RenderUrl extends Render {
         HttpServletRequest request = context.getRequest();
         
         if (url.startsWith("/")) {
-            if (!url.startsWith("/static")) {
+            if (!url.startsWith("/static") && !url.startsWith("/deploy")) {
                 url = context.getExtensionPath() + url;
             }
             url = request.getContextPath() + url;

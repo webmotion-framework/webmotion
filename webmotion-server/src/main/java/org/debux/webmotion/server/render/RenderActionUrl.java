@@ -64,7 +64,7 @@ public class RenderActionUrl extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        if (url.startsWith("/")) {
+        if (url.startsWith("/") && !url.startsWith("/deploy")) {
             url = context.getExtensionPath() + url;
         }
         
