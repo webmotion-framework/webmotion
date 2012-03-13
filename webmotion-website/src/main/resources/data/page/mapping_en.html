@@ -500,102 +500,101 @@ GET,POST    &lt;URL&gt;        &lt;action&gt;
 *           /{id:user-*}            &lt;action&gt;
 </pre>
 
-<h3>Traitement de type affichage d'une vue</h3>
+<h3>View display treatment</h3>
 <p>
-    Ce type de traitement permet de renvoyer une page directement par rapport à l'URL. 
-    Il peut s'agir de n'importe quel type de page / contenu : HTML, JSP, fichier texte, etc.
-    Pour spécifier ce type de traitement, il suffit de préfixer le traitement (l'action) par <code>view:</code>
+    This kind of treatment enables to return directly a page according to the URL.
+    It can be any kind of page / rendering: HTML, JSP, text file, etc.
+    To specify this kind of treatment, you just need to prefix the treatment (the action) by <code>view:</code>
 </p>
 <p>
-    <span class="label label-info">Example</span> Retourne la page d'index :
+    <span class="label label-info">Example</span> Returns the index page:
 </p>
 <pre>
 GET         /index                              <b>view:</b>index.html
 </pre>
 <p>
-    <span class="label label-info">Example</span> Retourne la page d'index depuis le répertoire doc :
+    <span class="label label-info">Example</span> Returns the index page from the doc directory:
 </p>
 <pre>
 GET         /doc/index                          <b>view:</b>doc/index.html
 </pre>
 
 <p>
-    Des morceaux d'URL (morceau de chemin, paramètre) peuvent être réutilisés pour déterminer la vue à afficher.
+    Pieces of URL (pieces of path, parameters) can be reused to determinethe view to display.
 </p>
 <p>
-    <span class="label label-info">Example</span> Retourne le fichier texte demander en paramètre :
+    <span class="label label-info">Example</span> Returns the text file requested in the parameters:
 </p>
 <pre>
 *           /text?file={}                       <b>view:</b>{file}.txt
 </pre>
 
-<h3>Redirections HTTP</h3>
+<h3>HTTP redirections</h3>
 <p>
-    Il est possible de définir des redirections HTTP, vers des URLs absolues (en général, vers un autre domaine)
-    ou relatives à l'application. Pour définir une redirection, il suffit de préfixer le traitement de l'URL par
-    <code>url:</code>.
+    You can define HTTP redirections to absolute URLs (generally to another domain) or relative to the application.
+    To define a redirection, you just need to prefix the treatment by <code>url:</code>.
 </p>
 <p>
-    <span class="label label-info">Example</span> Redirection vers un autre site :
+    <span class="label label-info">Example</span> Redirection to another website:
 </p>
 <pre>
 GET         /google                              <b>url:</b>http://www.google.com
 </pre>
 <p>
-    <span class="label label-info">Example</span> Redirection vers une URL de l'application :
+    <span class="label label-info">Example</span> Redirection to a URL of the application:
 </p>
 <pre>
 GET         /foo                                 <b>url:</b>/do?param=3
 </pre>
 
 <p>
-    Une fois encore, le traitement peut-être paramétrable selon l'URL traitée.
+    Once again, the treatment can be configurable according to the treated URL.
 </p>
 <p>
-    <span class="label label-info">Example</span> Réécriture de l'URL de wikipédia dans notre site :
+    <span class="label label-info">Example</span> Wikipedia URL rewriting in our website:
 </p>
 <pre>
 GET         /wikipedia/{page}                    <b>url:</b>http://www.wikipedia.org/wiki/{page}
 </pre>
 
-<h3>Traitement Java</h3>
+<h3>Java treatment</h3>
 <p>
-    Ce type de traitement est le plus courant, il s'agit d'exécuter une méthode Java (du code métier),
-    qui finira son traitement en retournant un rendu (flux JSON, XML, une page JSP, etc.).
-    La classe Java devra impérativement étendre la classe <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>.
-    À l'intérieur d'un contrôleur, il est possible d'accéder à des éléments tels que la requête, la réponse, le contexte web, la session, etc.
-    Pour plus de détails, voir la section <a href="action#context">Actions Java - Contexte web</a>.
-    Ce type de traitement est défini par la présence su préfixe <code>action:</code>, qui est cependant optionnel.
+    This kind of treatment is the most common. It is to execute a Java method (business code)
+    which will finish its treatment by returning a rendering (JSON or XML stream, a JSP page, etc.).
+    The Java class must imperatively extend the <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a> class.
+    Inside the controller, you can access elements such as the request, the response, the web context, the session, etc.
+    For more information, please refer to the <a href="action#context">Java actions - Web context</a> section.
+    This kind of treatment is defined by the presence of the <code>action:</code> prefix, which is however optional.
 </p>
 <p>
-    <span class="label label-info">Example</span> Exécute la méthode find de la classe User :
+    <span class="label label-info">Example</span> Execute the find method of the User class:
 </p>
 <pre>
 GET         /user/{id}                                  User.find
 POST        /user/{id}                           <b>action:</b>User.edit
 </pre>
 <p>
-    <span class="label label-info">Example</span> Exécute la méthode find de la classe User dans le paquetage user:
+    <span class="label label-info">Example</span> Execute the find method of the User class in the user package:
 </p>
 <pre>
 GET         /user/{id}                            user.User.find
 </pre>
 
 <p>
-    Les paramètres peuvent être utilisé pour déterminer la redirection à effectuer.
+    The parameters can be used to determine the redirection to perform.
 </p>
 <p>
-    <span class="label label-info">Example</span> Exécute la méthode de la classe récupérer en paramètre :
+    <span class="label label-info">Example</span> Execute the method of the class specified in the parameters:
 </p>
 <pre>
 *           /{class}/{method}                     {class}.{method}
 </pre>
 <p>
-    Dans l'exemple ci-dessus, un appel à l'URL <code>/User/list</code> lancera l'exécution de la méthode <code>list</code>
-    du contrôleur <code>User</code>.
+    In the example above, a call to the <code>/User/list</code> URL will launch
+    the execution of the <code>list</code> method of the <code>User</code> controller.
 </p>
 
-<h4>Exemples de contrôleurs</h4>
+<h4>Examples of controllers</h4>
 <pre class="prettyprint">
 public class User extends WebMotionController {
     public Render find(String id) {
@@ -606,13 +605,13 @@ public class User extends WebMotionController {
 }
 </pre>
 
-<h4>Traitement des paramètres</h4>
+<h4>Parameters treatment</h4>
 <p>
-    Tous les paramêtres sont disponibles, même si ils n'ont pas été définis dans l'URL dans le fichier de mapping.
+    All the parameters are available, even if they are not defined in the URL in the mapping file.
 </p>
 <p>
-    WebMotion permet de faire de l'autoconvertion de paramètres basé sur <a href="http://commons.apache.org/beanutils/">Apache Commons BeanUtils</a>. 
-    Ce qui permet d'avoir l'ensemble des conversions suivantes :
+    Webmotion makes it possible to do parameter autoconversion based on <a href="http://commons.apache.org/beanutils/">Apache Commons BeanUtils</a>,
+    which enables to have the following conversions:
 </p>
 <ul> 
     <li>java.lang.BigDecimal (no default value)</li> 
@@ -639,12 +638,12 @@ public class User extends WebMotionController {
     <li>Arrays (no default value)</li> 
 </ul>
 <p>
-    Si un paramètre ne peut être converti dans le type demandé par la méthode Java, c'est la valeur par défaut qui sera utilisée.
+    If a parameter cannot be converted in the type requested by the Java method, the default value will be used.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Pour l'URL
-    <code>http://localhost/webmotion-sample/action?<strong>param=value</strong></code> vous aurez comme méthode :
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value</strong></code> URL,
+     you will have the method:
 </p>
 <pre class="prettyprint">
 public Render action(Type param) {
@@ -653,11 +652,11 @@ public Render action(Type param) {
 </pre>
 
 <p>
-    Pour pouvoir obtenir une liste ou un tabeau de valeurs, il suffit de passer plusieurs fois le même paramètre dans l'URL.
+    To get a list or array of values, you just need to pass several times the same parameter in the URL.
 </p>
 <p>
-    <span class="label label-info">Example</span> Pour l'URL
-    <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> vous aurez comme méthode :
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> URL,
+    you will have the following method:
 </p>
 <pre class="prettyprint">
 public Render action(Type[] param) {
@@ -666,12 +665,12 @@ public Render action(Type[] param) {
 </pre>
 
 <p>
-    Pour obtenir une Map, il faut utiliser la notation pointée respectant la syntaxe suivante : <br />
-    <code>&lt;nom du paramètre correspondant à la map&gt;.&lt;clé de la map&gt;=&lt;valeur correspondante à la clé&gt;</code>
+    To get a Map, you need to use the pointed notation which respects the following syntax: <br />
+    <code>&lt;name of the parameter corresponding to the map&gt;.&lt;key of the map&gt;=&lt;value corresponding to the key&gt;</code>
 </p>
 <p>
-    <span class="label label-info">Example</span> Pour l'URL
-    <code>http://localhost/webmotion-sample/action?<strong>param.key1=value1&amp;param.key2=value2</strong></code> vous aurez comme méthode :
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param.key1=value1&amp;param.key2=value2</strong></code> URL,
+    you will have the following method:
 </p>
 <pre class="prettyprint">
 public Render action(Map param) {
@@ -683,12 +682,12 @@ public Render action(Map param) {
 </pre>
 
 <p>
-    Pour obtenir un objet simple, il faut également utilisée la notation pointée : <br />
-    <code>&lt;nom du paramètre correspondant à l'object&gt;.&lt;nom de l'attibut&gt;=&lt;valeur de l'attribut&gt;</code>
+    To get a simple object, you also need to use the pointed notation: <br />
+    <code>&lt;name of the parameter corresponding to the object&gt;.&lt;name of the attribute&gt;=&lt;value of the attribute&gt;</code>
 </p>
 <p>
-    <span class="label label-info">Example</span> Pour l'URL
-    <code>http://localhost/webmotion-sample/action?<strong>book.isbn=007&amp;book.title=James%20Bond</strong></code> vous aurez comme méthode :
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>book.isbn=007&amp;book.title=James%20Bond</strong></code> URL,
+    you will have the following method:
 </p>
 <pre class="prettyprint">
 public Render action(Book book) {
@@ -696,7 +695,7 @@ public Render action(Book book) {
 }
 </pre>
 
-<p>Avec la classe Book suivante :</p>
+<p>With the following Book class:</p>
 <pre class="prettyprint">
 public class Book {
     protected String isbn;
@@ -707,18 +706,18 @@ public class Book {
 </pre>
 
 <p>
-    <span class="label label-info">Note</span> 
-    Il est possible de combiner les types, c'est-à-dire avoir des listes d'objet ou des objets en association avec d'autres objets.
-    Pour l'URL <code>http://localhost/webmotion-sample/action?<strong>users.user1.name=titi&amp;users.user1.age=10
-            &amp;users.user1.address.country=ici&amp;users.user2.name=toto&amp;users.user2.age=12&amp;users.user2.address.country=la</strong></code>
-    vous aurez comme méthode :
+    <span class="label label-info">Note</span>
+    You can combine the types, ie have lists of objects or objects associated to other objects.
+    For the <code>http://localhost/webmotion-sample/action?<strong>users.user1.name=titi&amp;users.user1.age=10
+    &amp;users.user1.address.country=ici&amp;users.user2.name=toto&amp;users.user2.age=12&amp;users.user2.address.country=la</strong></code> URL,
+    you will have the following method:
 </p>
 <pre class="prettyprint">
 public Render action(List&lt;User&gt; users) {
     return ...
 }
 </pre>
-<p>Avec la classe User suivante :</p>
+<p>With the following User class:</p>
 <pre class="prettyprint">
 public class User {
     protected String name;
@@ -735,19 +734,19 @@ public class Address {
 }
 </pre>
 
-<h4>Valeurs par défaut des paramètres</h4>
+<h4>Default values of the parameters</h4>
 <p>
-    Il est possible de passer des paramètres aux méthodes Java ou des vues sans qu'ils n'existent dans l'URL. 
-    Vous pouvez utiliser la notation pointée pour passer des objets.
+    You can pass parameters to Java methods or to views without the parameters are specified in the URL.
+    You can use the pointed notation to pass objects.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Exécute la méthode <code>exec</code> avec des paramètres par défaut :
+    <span class="label label-info">Example</span> Execute the <code>exec</code> method with default parameters:
 </p>
 <pre>
 GET         /action           Action.exec    value=default,number=44
 </pre>
-<p>Avec la classe Action suivante :</p>
+<p>With the following Action class:</p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
     public Render exec(String value, int number) {
