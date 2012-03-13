@@ -372,6 +372,9 @@
                         <configuration>
                             <licenseName>lgpl_v3</licenseName>
                             <addSvnKeyWords>true</addSvnKeyWords>
+                            <extraExtensions>
+                                <wm>properties</wm>
+                            </extraExtensions>
                         </configuration>
                         <phase>process-resources</phase>
                     </execution>
