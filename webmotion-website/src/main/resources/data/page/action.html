@@ -122,6 +122,8 @@ Value = ${name}
     Ce type de rendu permet de rediriger le client web vers une autre URL.
     Il peut s'agir aussi bien d'une URL absolue (domaine externe, par exemple)
     que d'une URL relative au chemin courant.
+    Par défaut les urls sont relatives à l'extension, pour appeler un path en dehors de l'extension,
+    il faut préciser <code>/deploy</code> en début de votre url.
 </p>
 <p>
     Une redirection HTTP peut être utile pour rediriger l'utilisateur après la soumission d'un formulaire.
@@ -195,6 +197,8 @@ public class Call extends WebMotionController {
     Le forward vers un autre contrôleur permet d'enchaîner plusieurs actions et de retourner
     le rendu du dernier contrôleur en utilisant une url dans le mapping, sans redirection au niveau du client.
     Dans ce cas là, le modèle passé en paramètre se retrouve directement en paramètre du contrôleur appelé.
+    Par défaut les urls sont relatives à l'extension, pour appeler un path en dehors de l'extension,
+    il faut préciser <code>/deploy</code> en début de votre url.
 </p>
 
 <p>
