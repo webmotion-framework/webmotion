@@ -50,7 +50,6 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.mbean.HandlerStats;
-import org.nuiton.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
