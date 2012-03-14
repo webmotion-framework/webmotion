@@ -758,53 +758,54 @@ public class Action extends WebMotionController {
 }
 </pre>
 
-<h2 id="filters" class="page-header">[filters] Configuration des filtres de l'application</h2>
+<h2 id="filters" class="page-header">[filters] Configuration of the filters of the application</h2>
 <p>
-    La section destinée aux filtres permet d'exécuter du traitement avant et/ou après l'action principale. 
-    Les exemples classiques d'utilisation de filtres sont l'authentification, la journalisation, la géolocalisation, etc.
+    The section for the filters enables to perform treatment before and/or after the main action.
+    The classical example of use of filters are authentication, logging, geolocation, etc.
 </p>
 
-<h3>Syntaxe</h3>
+<h3>Syntax</h3>
 <p>
-    La configuration se trouve après le mot clé <code>[filters]</code> dans le fichier de mapping.
+    The configuration is after the <code>[filters]</code> keywordin the mapping file.
 </p>
 <pre>
 [filters]
 </pre>
 
 <p>
-    Voici la syntaxe pour filtrer des URLs sur une action Java :
+    Here is the syntax to filter URLs on a Java action:
 </p>
 <pre>
 &lt;http_method&gt;    &lt;URL_filter&gt;    <b>action:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    <span class="label label-info">Note</span> Comme pour la section <code>[actions]</code>, le préfixe <code>action:</code> est facultatif pour les actions Java.
+    <span class="label label-info">Note</span> As for the <code>[actions]</code> section,
+    the <code>action:</code> prefix is optional for the Java actions.
 </p>
 
-<h3>Méthode HTTP</h3>
+<h3>HTTP method</h3>
 <p>
-    La syntaxe des méthodes HTTP supportées pour les filtres dans WebMotion sont décrites dans <a href="#http-methods">la section [actions]</a>.
+    The syntax of the HTTP methods supported for the filters in WebMotion are described in <a href="#http-methods">the [actions] section</a> .
 </p>
 
 <h3>URL</h3>
 <p>
-    Les URLs traitées par les filtres ont une syntaxe similaire aux URL pattern des <code>FilterServlet</code> dans le fichier <code>web.xml</code>.
-    Il commence par un slash et peut comporter l'astérisque comme wildcard. 
+    The URLs treated by the filters have a syntax similar to the URL patterns of the <code>FilterServlet</code> in the <code>web.xml</code>.
+    It starts with a slash and can contain asterisks as wildcards.
 </p>
 <p>
-    <span class="label label-warning">Attention</span> 
-    Pour l'instant il n'est pas possible de filtrer selon les paramètres de la requête ou selon un pattern plus compliqué que l'astérisque.
+    <span class="label label-warning">Warning</span>
+    For now, you cannot filter according to the parameters of the request or to a pattern more complex than the asterisk.
 </p>
 <p>
-    <span class="label label-info">Example</span> Filtre l'ensemble des URLs :
+    <span class="label label-info">Example</span> Filter all the URLs:
 </p>
 <pre>
 *           /*                      &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Filtre l'ensemble des URLs pour la gestion des utilisateur :
+    <span class="label label-info">Example</span> Filter all the URLs for the user management:
 </p>
 <pre>
 *           /user/*                 &lt;action&gt;
