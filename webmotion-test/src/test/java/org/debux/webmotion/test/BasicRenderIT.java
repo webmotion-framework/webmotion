@@ -103,6 +103,15 @@ public class BasicRenderIT extends AbstractIT {
     }
     
     @Test
+    public void absoluteActionUrl() throws IOException {
+        String url = getAbsoluteUrl("redirect");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("Hello internal !"));
+    }
+    
+    @Test
     public void content() throws IOException {
         String url = getAbsoluteUrl("content");
         HttpGet request = new HttpGet(url);
