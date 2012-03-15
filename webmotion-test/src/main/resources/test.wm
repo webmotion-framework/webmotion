@@ -116,3 +116,6 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /contact/view                               view:contact.jsp
 *           /company/view                               view:company.jsp
 *           /img                                        url:/static/wm_cloud.png
+*           /include                                    async:Include.index
+*           /include/header                               async:Include.header
+*           /include/footer                               async:Include.footer
