@@ -71,9 +71,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorMethodInvokerHandler.class);
 
-    /** Attribute name use to stop asynchronous request after a dispatch to execute the includes to synchronous */
-    public static final String ASYNC_STOPED_ATTRIBUTE_NAME = "org.debux.webmotion.server.ASYNC_STOPED";
-    
     protected WebMotionContextable contextable;
     
     protected ExecutorService threadPool;
@@ -106,7 +103,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             Config config = mapping.getConfig();
             Boolean async = action.getAsync();
             
-            isSyncRequest = request.getAttribute(ASYNC_STOPED_ATTRIBUTE_NAME) != null
+            isSyncRequest = request.getDispatcherType() == DispatcherType.INCLUDE 
                     || async == null && !config.isAsync()
                     || async != null && !async;
         }
@@ -123,8 +120,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             
         } else {
             // Only the first request is execute at async mode
-            request.setAttribute(ASYNC_STOPED_ATTRIBUTE_NAME, true);
-            
             AsyncContext asyncContext;
             if (WebMotionUtils.isTomcatContainer(request)) {
                 request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
@@ -137,10 +132,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 } , response);
                 
             } else {
-                asyncContext = request.startAsync(request, response);
+                
+                asyncContext = request.startAsync();
             }
             
-            asyncContext.setTimeout(0);
+            // Set timeout to negatif value otherwise no run glassfish server
+            asyncContext.setTimeout(-1);
             asyncContext.addListener(new AsyncListener() {
                 @Override
                 public void onComplete(AsyncEvent event) throws IOException {

@@ -120,7 +120,6 @@ public class WebMotionServer implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = ((HttpServletRequest) request);
         HttpServletResponse httpServletResponse = ((HttpServletResponse) response);
-        httpServletRequest.getSession(true);
         
         String uri = null;
         DispatcherType dispatcherType = request.getDispatcherType();

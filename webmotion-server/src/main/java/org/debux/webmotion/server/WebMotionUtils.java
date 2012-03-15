@@ -229,10 +229,27 @@ public class WebMotionUtils {
     }
     
     /**
-     * @return true if webmotion in tomcat container.
+     * @return true if webmotion in Tomcat container.
      */
     public static boolean isTomcatContainer(ServletRequest request) {
-        return request.getServletContext().getClass().getName().equals("org.apache.catalina.core.ApplicationContextFacade");
+        String serverInfo = request.getServletContext().getServerInfo();
+        return serverInfo.contains("Tomcat");
+    }
+
+    /**
+     * @return true if webmotion in Glassfish container.
+     */
+    public static boolean isGlassfishContainer(ServletRequest request) {
+        String serverInfo = request.getServletContext().getServerInfo();
+        return serverInfo.contains("GlassFish");
+    }
+
+    /**
+     * @return true if webmotion in Jetty container.
+     */
+    public static boolean isJettyContainer(ServletRequest request) {
+        String serverInfo = request.getServletContext().getServerInfo();
+        return serverInfo.contains("Jetty");
     }
 
     /**
