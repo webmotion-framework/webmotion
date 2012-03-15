@@ -69,6 +69,24 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
+    public void redirectRelativeUrl() throws IOException {
+        String url = getAbsoluteUrl("redirect/relative");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("Hello world !"));
+    }
+    
+    @Test
+    public void redirectAbsoluteUrl() throws IOException {
+        String url = getAbsoluteUrl("redirect/absolute");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("Hello world !"));
+    }
+    
+    @Test
     public void helloParametersYou() throws IOException {
         String url = getAbsoluteUrl("helloParameters?who=you");
         HttpGet request = new HttpGet(url);
