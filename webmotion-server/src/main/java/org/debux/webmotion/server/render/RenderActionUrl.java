@@ -31,6 +31,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -64,7 +65,11 @@ public class RenderActionUrl extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        if (url.startsWith("/") && !url.startsWith("/deploy")) {
+        if (!url.startsWith("/")) {
+            throw new WebMotionException("The url <" + url + "> must be started with /", call.getRule());
+        }
+                
+        if (!url.startsWith("/deploy")) {
             url = context.getExtensionPath() + url;
         }
         
