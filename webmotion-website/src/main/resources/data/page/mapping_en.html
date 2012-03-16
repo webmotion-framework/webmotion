@@ -813,26 +813,25 @@ public class Action extends WebMotionController {
 
 <h3>Action</h3>
 <p>
-    Le traitement effectué sur une URL filtrée est obligatoirement un traitement Java, par l'exécution d'une méthode d'une classe 
-    héritant de la classe <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionFilter.html">WebMotionFilter</a>.
-    Le traitement du filtre peut s'exécuter avant et / ou après l'action principale
-    (définie par le choix d'une régle dans la sections <code>[actions]</code>).
-    À l'intérieur de la fonction exécutée, c'est l'appel à la méthode <code>doProcess()</code> qui permet d'enchaîner avec l'exécution
-    de l'action principale.
+    The treatment performed on a filtered URL is mandatorily a Java treatment 
+    (execution of a method of a class inheriting the
+    <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionFilter.html">WebMotionFilter</a> class).
+    The treament of the filter can be executed before and/or after the main action.
+    This is defined by the choice of a rule in the <code>[actions]</code> section.
+    Inside the executed function, the call to the <code>doProcess()</code> method enables to move on with the execution of the main action.
 </p>
 <p>
-    De la même manière que dans un contrôleur, 
-    il est possible d'accéder aux paramètres de la requête, 
-    ainsi qu'aux divers éléments du contexte web (requête, réponse, session, etc.).
+    In the same way as in a controller, you can access the parameters of the request,
+    as well as various elements of the web context (request, response, session, etc.).
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Filtre l'ensemble des URLs pour l'authentification :
+    <span class="label label-info">Example</span> Filter all the URLs for authentication:
 </p>
 <pre>
 *           /admin/*                Filters.auth
 </pre>
-<p>Avec la classe Filter suivante :</p>
+<p>With the following Filter class:</p>
 <pre class="prettyprint">
 public class Filters extends WebMotionFilter {
     public void auth(String token) {
@@ -844,17 +843,17 @@ public class Filters extends WebMotionFilter {
 </pre>
 
 <p>
-    Dans un filtre, il est possible de retourner un rendu (une page, par exemple) au lieu d'appeler la méthode <code>doProcess</code>.
-    Si un rendu est renvoyé par le filtre, l'exécution s'arrête, le traitement de l'action principale ne sera pas lancé.
-    L'appel a la méthode <code>doProcess</code> n'est pas obligatoire, mais cela impliquera qu'aucun rendu ne sera retourné pour l'URL courante.
+    In a filter, you can return a rendering (e.g. a page) instead of calling the <code>doProcess</code> method.
+    If a rendering is returned by the filter, the execution stops and the treatment of the main action will not be launched.
+    The call to the <code>doProcess</code> method is not mandatory, but this will imply that no rendering will be returned for the current URL.
 </p>
 <p>
-    <span class="label label-info">Example</span> Retourne vers une page si l'utilisateur n'est pas authentifié :
+    <span class="label label-info">Example</span> Returns to a page if the user is not authenticated:
 </p>
 <pre>
 *           /admin/*                Filters.auth
 </pre>
-<p>Avec la classe Filter suivante :</p>
+<p>With the following Filter class:</p>
 <pre class="prettyprint">
 public class Filters extends WebMotionFilter {
     public Render auth(String token) {
@@ -868,19 +867,19 @@ public class Filters extends WebMotionFilter {
 }
 </pre>
 
-<h3>Valeurs par défaut des paramètres</h3>
+<h3>Default values of the parameters</h3>
 <p>
-    Il est possible de passer des paramètres aux méthodes Java sans qu'ils n'existent dans l'URL. 
-    Vous pouvez utiliser la notation pointée pour passer des objets.
+    You can pass parameters to the Java methods without these parameters exist in the URL.
+    You can use the ponted notation to pass these objects.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Exécute le filtre <code>decorate</code> avec des paramètres par défaut :
+    <span class="label label-info">Example</span> Execute the <code>decorate</code> filter with the default parameters:
 </p>
 <pre>
 GET         /*           Decorator.decorate    value=default
 </pre>
-<p>Avec le filtre Decorator suivante :</p>
+<p>With the following Decorator filter:</p>
 <pre class="prettyprint">
 public class Decorator extends WebMotionFilter {
     public void decorate(String value) {
@@ -893,14 +892,16 @@ public class Decorator extends WebMotionFilter {
 }
 </pre>
 <p>
-    <span class="label label-warning">Attention</span> Si les paramètres par défaut ont les mêmes noms entre le filtre et l'action,
-    les valeurs contenues pour ces paramètres seront celles définies au niveau action, et écraseront les valeurs définies au niveau filtre.
+    <span class="label label-warning">Warning</span>
+    If the default parameters have the same names between the filter and the action,
+    the contained values for these parameters are the ones defined at the action level,
+    and will override the values defined at the filter level.
 </p>
 
-<h2 id="errors" class="page-header">[errors] Gestion des erreurs (exceptions, erreurs HTTP)</h2>
+<h2 id="errors" class="page-header">[errors] Error management (exceptions, HTTP errors)</h2>
 <p>
-    La section <code>[errors]</code> permet d'effectuer un traitement particulier si une exception Java est levée
-    ou si un retour d'erreur HTTP est rencontré.
+    The <code>[errors]</code> section enables to perform a particular treatment
+    if a Java exception is thrown or if a HTTP error is returned.
 </p>
 
 <h3>Syntaxe</h3>
