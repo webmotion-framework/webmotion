@@ -904,69 +904,62 @@ public class Decorator extends WebMotionFilter {
     if a Java exception is thrown or if a HTTP error is returned.
 </p>
 
-<h3>Syntaxe</h3>
+<h3>Syntax</h3>
 <p>
-    La configuration se trouve après le mot clé <code>[errors]</code> dans le fichier de mapping.
+    The configuration is after the <code>[errors]</code> keyword in the mapping file.
 </p>
 <pre>
 [errors]
 </pre>
 
 <p>
-    Voici la syntaxe pour mapper une erreur sur une vue :
+    Here is the syntax to map an error on a view:
 </p>
 <pre>
 &lt;error&gt;    view:&lt;page_name&gt;
 </pre>
 <p>
-    Voici la syntaxe pour mapper une erreur sur une autre URL :
+    Here is the syntax to map an error on another URL:
 </p>
 <pre>
 &lt;error&gt;    url:&lt;path&gt;
 </pre>
 <p>
-    Voici la syntaxe pour mapper une erreur sur une action Java :
+    Here is the syntax to map an error on a Java action:
 </p>
 <pre>
 &lt;error&gt;    [action:]&lt;method_name&gt;
 </pre>
 
-<h3>Erreurs</h3>
-<!--
-TODO demander à Julien, il ne devrait pas y avoir de problèmes si la gestion des erreurs est faite au bon endroit
+<h3>Errors</h3>
 <p>
-    Il est possible de préciser les codes http ou une exception Java comme déclencheur.
-    Les erreurs sont priorisés par rapport à l'ordre dans le fichier, il faut 
-    faire attention au cas où le code 500 est générer pour une exception sur le serveur.
-</p>-->
-<p>
-    <span class="label label-info">Example</span> Gère le code statut HTTP 404  :
+    <span class="label label-info">Example</span> Manage the HTTP status code 404:
 </p>
 <pre>
 <b>code:</b>404                &lt;action&gt;
 </pre>
 
 <p>
-    Voici la liste des codes HTTP gérés :
+    Here is the list of the managed HTTP codes:
 </p>
 <ul>
-    <li><strong>400</strong> La syntaxe de la requête est erronée</li>
-    <li><strong>401</strong> Une authentification est nécessaire pour accéder à la ressource</li>
-    <li><strong>403</strong> L’authentification est refusée</li>
-    <li><strong>404</strong> Document non trouvé</li>
-    <li><strong>408</strong> Temps d’attente d’une réponse du serveur écoulé</li>
-    <li><strong>500</strong> Erreur interne du serveur</li>
+    <li><strong>400</strong> The syntax of the request is wrong</li>
+    <li><strong>401</strong> Authentication is needed to access the resource</li>
+    <li><strong>403</strong> Authentication failed</li>
+    <li><strong>404</strong> Document not found</li>
+    <li><strong>408</strong> Server response timeout</li>
+    <li><strong>500</strong> Internal error of the server</li>
 </ul>
 
 <p>
-    <span class="label label-info">Example</span> Gère l'ensemble des exceptions de l'application :
+    <span class="label label-info">Example</span> Manage all the exceptions of the application:
 </p>
 <pre>
 java.lang.Exception           &lt;action&gt;
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Gère toutes les erreurs (exceptions, code HTTP)  :
+    <span class="label label-info">Example</span> Manage all the errors (exceptions, HTTP code):
 </p>
 <pre>
 *                       &lt;action&gt;
@@ -974,10 +967,10 @@ java.lang.Exception           &lt;action&gt;
 
 <h3>Action</h3>
 <p>
-    Les actions pour les erreurs peuvent être une vue, une URL ou une méthode Java.
-    La classe Java de gestion des erreurs doit, comme pour la section <code>[actions]</code>,
-    étendre la classe <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>. Cependant, dans ce contexte, il est possible d'accéder
-    aux informations de l'erreur rencontrée.
+    The actions for the errors can be a view, a URL or a Java method.
+    As for the <code>[actions]</code> section, the error management Java class must extend
+    the <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>
+    class. However, in this context, you can access the information about the thrown error.
 </p>
 <pre class="prettyprint">
 public class Error extends WebMotionController {
@@ -990,7 +983,7 @@ public class Error extends WebMotionController {
 </pre>
 
 <p>
-    Il est également possible de récupérer direction l'exception en paramètre de l'action :
+    You can also get directly the exception in the parameters of the action:
 </p>
 <pre class="prettyprint">
 public class Error extends WebMotionController {
@@ -1001,94 +994,96 @@ public class Error extends WebMotionController {
 
 }
 </pre>
-<p>Avec, comme définition dans le fichier de mapping :</p>
+<p>
+    With the following definition in the mapping file:
+</p>
 <pre>[errors]
 java.lang.Exception           Error.display
 </pre>
 
-<h2 id="extensions" class="page-header">[extensions] Gestion des extensions de l'application</h2>
+<h2 id="extensions" class="page-header">[extensions] Management of the extensions of the application</h2>
 <p>
-    Il est possible de créer des morceaux applicatifs, avec des fichiers de mapping dédiés, et de les appliquer sur un
-    sous contexte applicatif (un chemin spécifié, relatif à l'application courante). Ces morceaux applicatifs sont appelés
-    des <strong>extensions</strong>. Dans une application, il est possible d'utiliser une ou plusieurs extensions 
-    au sein d'un même projet.
+    You can create applicative pieces, with dedicated mapping files, and apply them to an applicative subcontext
+    (a specified path, relative to the current application). These applicative pieces are called <strong>extensions</strong>.
+    In an application, you can use one or several extensions within the same project.
 </p>
 <p>
-    Pour plus de détails concernant la théorie sur les extensions et des exemples concrets, rendez-vous à la rubrique <a href="extensions">Extensions</a>
+    For more information about the extension theory and concrete examples, 
+    please refer to the <a href="extensions">Extensions</a> rubrick.
 </p>
 
-<h3>Syntaxe</h3>
+<h3>Syntax</h3>
 <p>
-    La configuration se trouve après le mot clé <code>[extensions]</code> dans le fichier de mapping.
+    The configuration is after the <code>[extensions]</code> keyword in the mapping file.
 </p>
 <pre>
 [extensions]
 </pre>
 
 <p>
-    Voici la syntaxe pour monter une extension :
+    Here is the syntax to mount an extension:
 </p>
 <pre>
-&lt;URL&gt;    &lt;nom du fichier de mapping de l'extension&gt;
+&lt;URL&gt;    &lt;name of the mapping file of the extension&gt;
 </pre>
 
 <h3>URL</h3>
 <p>
-    Une extension est appliquée sur un path donné. 
-    Si une extension ne retourne aucun rendu (page, flux JSON, etc.), 
-    le traitement continue sur l'extension suivante.
-    Les extensions peuvent être monter sur un même URL, 
-    c'est la première extension qui renvoi un rendu sera prise en compte.
-    Il est possible d'utiliser plusieurs fois la même extension pour plusieurs URLs.
+    An extension is applied to a given path.
+    If an extension returns no rendering (page, JSON stream, etc.),
+    the treatment goes on to the following extension.
+    The extensions can be mounted on the same URL;
+    the first extension which returns a rendering will be taken into account.
+    You can use several times the same extension for several URLs.
 </p>
 <p>
-    <span class="label label-info">Example</span> Utilisation de l'extension wikimotion :
+    <span class="label label-info">Example</span> Use of the wikimotion extension:
 </p>
 <pre>
 /wiki                  &lt;wikimotion&gt;
 </pre>
 
-<h3>Fichier de mapping</h3>
+<h3>Mapping file</h3>
 <p>
-    Le fichier de mapping de chaque extension doit être dans classpath de l'application.
+    The mapping file of each extension must be in the classpath of the application.
 </p>
 <p>
-    <span class="label label-info">Example</span> Utilisation du fichier de mapping wikimotion :
+    <span class="label label-info">Example</span> Use of the mapping file of wikimotion:
 </p>
 <pre>
 /wiki                  wikimotion
 </pre>
 <p>
-    Dans le cas ci-dessus, le fichier <code>wikimotion</code>, qui doit être présent
-    dans le classpath de l'application, contient toutes les règles de mapping
-    de l'extension, qui seront appliquées relativement au chemin <code>/wiki</code>
+    In the case above, the <code>wikimotion</code> file, which must be in the classpath of the application,
+    contains all the mapping rules of the extension, which will be applied relatively to the <code>/wiki</code> path.
 </p>
 
 <p>
-    L'url de l'extension peut être un pattern sur des fichiers , 
-    ce qui permet de charger des mappings de façon dynamique.
+    The URL of the extension can be a pattern on files, which enables to load mappings dynamically.
 </p>
 <p>
-    <span class="label label-info">Example</span> Chargement des extensions des fichiers
-    dans le répertoire <code>META-INF</code> avec comme extension <code>wm</code> :
+    <span class="label label-info">Example</span> Loading extensions of the files
+    in the <code>META-INF</code> directory with the <code>wm</code> extension:
 </p>
 <pre>
 /                      META-INF/.*\.wm
 </pre>
 
 <p>
-    Les filtres des extensions sont cumulables. Cela signifie qu'il est possible que le traitement d'une requête passe 
-    par un ou plusieurs filtres avant d'être lancé par l'action définie dans le mapping applicatif. 
+    The extension filters are accumulative. This means that the treatment of a request can pass
+    through one or several filters before being launched by the action defined in the applicative mapping.
 </p>
 <p>
-    <span class="label label-info">Example</span> Un module de mesure d'audience (statistiques) pourrait
-    être utilisé par une application, qui contiendra le morceau de configuration suivant :
+    <span class="label label-info">Example</span> An audience measurement module (statistics)
+    could be used by an application which would contain the following piece of configuration:
 </p>
 <pre>[extensions]
-/                  statistiques
+/                  statistics
 </pre>
 
-<p>Avec le fichier de mapping du module, nommé statistiques, comme-suit :</p>
+<p>
+    With the following mapping file of the module, named statistics:
+</p>
 <pre>
 [config]
 package.base=org.debux.webmotion.stats
@@ -1099,8 +1094,8 @@ package.base=org.debux.webmotion.stats
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
-    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
-    <a class="btn primary large" style="float:right;" href="action">Action Java »</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="action">Java action »</a>
 </div>
 
 </div>
