@@ -5,10 +5,10 @@ package.base=org.debux.webmotion.jpa
 *         /*                          Transaction.manage
 
 [actions]
-*         /{entityName}/create            Entity.create
-*         /{entityName}/read?id={}        Entity.read
-*         /{entityName}/update            Entity.update
-*         /{entityName}/delete?id={}      Entity.delete
+PUT         /{entityName}                  Entity.create
+GET         /{entityName}/{id}             Entity.read
+POST        /{entityName}/{id}             Entity.update
+DELETE      /{entityName}/{id}             Entity.delete
 
 #*         /{entityName}/get               Entity.get
 #*         /{entityName}/list              Entity.list

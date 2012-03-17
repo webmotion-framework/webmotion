@@ -62,8 +62,8 @@
         </dependency>
             
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
         </dependency>
         
         <dependency>
@@ -91,7 +91,6 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         
         <!-- Logger -->
@@ -110,7 +109,6 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <scope>test</scope>
         </dependency>
         
     </dependencies>
@@ -193,6 +191,10 @@
         <profile>
             <id>tomcat</id>
             
+<!--            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>-->
+            
             <build>
                 <plugins>
                     <plugin>
@@ -229,6 +231,10 @@
         
         <profile>
             <id>glassfish</id>
+            
+<!--            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>-->
             
             <build>
                 <plugins>

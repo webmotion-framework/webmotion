@@ -203,6 +203,12 @@
         
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.2-beta1</version>
+            </dependency>
+        
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>4.2-beta1</version>
             </dependency>
@@ -243,6 +249,12 @@
                 <version>1.2.5</version>
             </dependency>
         
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk16</artifactId>
+                <version>1.46</version>
+            </dependency>
+
             <!-- Logger -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -269,12 +281,21 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlet</artifactId>
                 <version>8.1.0.v20120127</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>3.0.20100224</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>6.0</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>
@@ -296,6 +317,7 @@
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>6.3.1</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- Serializer -->
@@ -509,13 +531,9 @@
         <profile>
             <id>analyze-dependencies</id>
             <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <build>
-                <defaultGoal>verify</defaultGoal>
                 <plugins>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
