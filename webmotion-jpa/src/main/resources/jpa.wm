@@ -1,0 +1,43 @@
+###
+# #%L
+# WebMotion JPA
+# 
+# $Id$
+# $HeadURL$
+# %%
+# Copyright (C) 2011 - 2012 Debux
+# %%
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as 
+# published by the Free Software Foundation, either version 3 of the 
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Lesser Public License for more details.
+# 
+# You should have received a copy of the GNU General Lesser Public 
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/lgpl-3.0.html>.
+# #L%
+###
+[config]
+package.base=org.debux.webmotion.jpa
+
+[filters]
+*         /*                          Transaction.manage
+
+[actions]
+GET         /{entityName}/{id}?type=content     Display.content
+GET         /{entityName}/{id}?type=json        Display.json
+
+GET         /{entityName}?action=create                  Manager.create
+GET         /{entityName}/{id}?action=read               Manager.read
+GET         /{entityName}/{id}?action=update             Manager.update
+GET         /{entityName}/{id}?action=delete             Manager.delete
+
+PUT         /{entityName}                  Manager.create
+GET         /{entityName}/{id}             Manager.read
+POST        /{entityName}/{id}             Manager.update
+DELETE      /{entityName}/{id}             Manager.delete

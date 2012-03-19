@@ -24,6 +24,10 @@
  */
 package org.debux.webmotion.jpa;
 
+import java.lang.reflect.Field;
+import javax.persistence.EntityManager;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;
@@ -33,8 +37,37 @@ public class Display extends WebMotionController {
 
     private static final Logger log = LoggerFactory.getLogger(Display.class);
     
-    public Render index() {
-        return renderView("index.jsp");
+    protected BeanUtilsBean beanUtil;
+    
+    public Display() {
+        beanUtil = BeanUtilsBean.getInstance();
+    }
+    
+    protected Object findEntity(EntityManager manager, String entityName, String id) throws Exception {
+        Class<?> entityClass = Class.forName(entityName);
+        return manager.find(entityClass, id);
+    }
+        
+    public Render json(EntityManager manager, String entityName, String id) throws Exception {
+        Object entity = findEntity(manager, entityName, id);
+        manager.detach(entity);
+        
+        return renderJSON(entity);
+    }
+    
+    public Render content(EntityManager manager, String entityName, String id) throws Exception {
+        Object entity = findEntity(manager, entityName, id);
+        manager.detach(entity);
+        
+        String content = "";
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            String value = beanUtil.getProperty(entity, name);
+            content += "<div>" + name + " : " + value + "</div>\n";
+        }
+        
+        return renderContent(content, "text/html");
     }
     
 }

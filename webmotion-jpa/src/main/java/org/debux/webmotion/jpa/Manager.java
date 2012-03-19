@@ -35,14 +35,14 @@ import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Entity extends WebMotionController {
+public class Manager extends WebMotionController {
 
-    private static final Logger log = LoggerFactory.getLogger(Entity.class);
+    private static final Logger log = LoggerFactory.getLogger(Manager.class);
 
     protected BeanUtilsBean beanUtil;
     protected ConvertUtilsBean convertUtils;
     
-    public Entity() {
+    public Manager() {
         beanUtil = BeanUtilsBean.getInstance();
         convertUtils = beanUtil.getConvertUtils();
     }
@@ -77,6 +77,10 @@ public class Entity extends WebMotionController {
         for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
             String name = entry.getKey();
             String[] values = entry.getValue();
+            
+            if ("action".equals(name)) {
+                continue;
+            }
             
             Field field = entityClass.getDeclaredField(name);
             Class<?> type = field.getType();

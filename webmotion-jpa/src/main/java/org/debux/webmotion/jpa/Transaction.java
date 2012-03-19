@@ -52,8 +52,6 @@ public class Transaction extends WebMotionFilter {
         EntityTransaction transaction = manager.getTransaction();
         transaction.begin();
         
-        parameters.put("transaction", transaction);
-        
         doProcess();
         
         transaction.commit();
