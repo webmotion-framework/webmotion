@@ -30,7 +30,7 @@
     <artifactId>webmotion-project</artifactId>
   
     <packaging>pom</packaging>
-    <version>2.1</version>
+    <version>2.2-SNAPSHOT</version>
     <name>WebMotion project</name>
     <url>www.webmotion-framework.org</url>
       
@@ -99,9 +99,9 @@
     </contributors>
     
     <scm>
-        <url>http://projects.debux.org/projects/webmotion/tags/webmotion-project-2.1</url>
-        <connection>scm:svn:http://svn.debux.org/webmotion/tags/webmotion-project-2.1</connection>
-        <developerConnection>scm:svn:https://svn.debux.org/webmotion/tags/webmotion-project-2.1</developerConnection>
+        <url>http://projects.debux.org/projects/webmotion</url>
+        <connection>scm:svn:http://svn.debux.org/webmotion</connection>
+        <developerConnection>scm:svn:https://svn.debux.org/webmotion/trunk</developerConnection>
     </scm>
     
     <issueManagement>
