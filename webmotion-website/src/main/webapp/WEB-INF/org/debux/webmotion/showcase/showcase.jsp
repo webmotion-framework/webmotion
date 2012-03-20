@@ -27,7 +27,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
  
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <title>WebMotion</title>
         <meta name="description" content="">
@@ -68,14 +68,17 @@
             jQuery(document).ready(function () {
                 $('#showcase').addClass("active");
                 
-                $("#main>a").attr("href", "${main_url}")
-                $("#documentation>a").attr("href", "${documentation_url}")
-                $("#showcase>a").attr("href", "${showcase_url}")
-                $("#download>a").attr("href", "${download_url}")
-                $("#contacts>a").attr("href", "${contacts_url}")
+                $("#main>a").attr("href", "${main_url}");
+                $("#documentation>a").attr("href", "${documentation_url}");
+                $("#showcase>a").attr("href", "${showcase_url}");
+                $("#download>a").attr("href", "${download_url}");
+                $("#contacts>a").attr("href", "${contacts_url}");
                 
                 var end = /[^/]+$/g;
-                var id = '#' + end.exec(window.location.pathname)[0];
+                var endValue = end.exec(window.location.pathname)[0];
+                
+                $("#twitter").attr("data-url", "http://www.webmotion-framework.org/showcase/" + endValue);
+                var id = '#' + endValue;
                 $(id).addClass("label select");
                 
                 var tab = $(id).parents("div");
@@ -83,6 +86,7 @@
                 $('#tab_' + tab[0].id).addClass("active");
                 
                 var value = $(id).text();
+                $('#title').text($("#showcase>a").text());
                 $('#subtitle').text(value);
             });
         </script>
@@ -104,6 +108,10 @@
                         <jsp:include page="/deploy/menu?sub=include" />
                         
                         <ul class="nav pull-right">
+                            <li style="margin-top: 5px;">
+                                <a id="twitter" style="display: none;" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                            </li>
                             <li><a href="<c:url value="/?language=fr"/>">fr</a></li>
                             <li><a href="<c:url value="/?language=en"/>">en</a></li>
                         </ul>
@@ -114,7 +122,7 @@
 
         <div class="container-fluid">
             <div class="page-header page-header-icon" style="border: none;">
-                <h1 style="background: url('<c:url value="/img/My_Computer.png"/>') no-repeat;">Démonstration <small><span id="subtitle"></span></small></h1>
+                <h1 style="background: url('<c:url value="/img/My_Computer.png"/>') no-repeat;"><span id="title"></span> <small><span id="subtitle"></span></small></h1>
             </div>
 
             <div class="row-fluid">

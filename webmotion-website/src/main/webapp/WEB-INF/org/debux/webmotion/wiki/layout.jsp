@@ -117,10 +117,15 @@
                         <jsp:include page="/menu?sub=include" />
                         
                         <ul class="nav pull-right">
+                            <li style="margin-top: 5px;">
+                                <a style="display: none;" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org${layout_url}" data-size="large">Tweet</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                            </li>
                             <c:forEach items="${languages}" var="lang">
                                 <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
                             </c:forEach>
                         </ul>
+                        
                     </div>
                 </div> 
             </div>
