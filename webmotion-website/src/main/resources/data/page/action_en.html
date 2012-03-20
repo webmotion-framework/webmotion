@@ -262,15 +262,15 @@ InputStream stream = classLoader.getResourceAsStream("logo.png");
 return renderStream(stream, "image/png");
 </pre>
 
-<h3>Rendu pour le téléchargement : renderDownload</h3>
+<h3>Rendering for download: renderDownload</h3>
 <p>
-    La méthode <code>renderDownload(InputStream stream, String name, String mimeType)</code>
-    permet de retourner le flux en attachement dans la réponse pour provoquer le téléchargement
-    du fichier par le navigateur.
+    The <code>renderDownload(InputStream stream, String name, String mimeType)</code> method
+    enables to return the stream as an attachment in the response to provoke the downloading
+    of the file by the browser.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Retourne un document PDF présent dans le classpath :
+    <span class="label label-info">Example</span> Returns a PDF document in the classpath:
 </p>
 <pre class="prettyprint">
 ClassLoader classLoader = Stream.class.getClassLoader();
@@ -279,7 +279,7 @@ return renderDownload(stream, "file.pdf", "application/pdf");
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Retourne une image présente dans le classpath :
+    <span class="label label-info">Example</span> Returns an image in the classpath:
 </p>
 <pre class="prettyprint">
 ClassLoader classLoader = Stream.class.getClassLoader();
@@ -287,70 +287,68 @@ InputStream stream = classLoader.getResourceAsStream("logo.png");
 return renderDownload(stream, "image.pdf", "image/png");
 </pre>
 
-<h3>Rechargement de page : renderLastPage</h3>
+<h3>Page reloading: renderLastPage</h3>
 <p>
-    La méthode <code>renderLastPage()</code> permet de rafraîchir la page courante, 
-    elle utilise le referer dans le header HTTP de la requête.
+    The <code>renderLastPage()</code> method enables to refresh the current page.
+    It uses the referer in the HTTP request header.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Recharge la page :
+    <span class="label label-info">Example</span> Reload the page:
 </p>
 <pre class="prettyprint">
 return renderLastPage();
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Recharge la page en passant des paramètres supplémentaires :
+    <span class="label label-info">Example</span> Reload the page and pass additional parameters:
 </p>
 <pre class="prettyprint">
 return renderLastPage("id", 122345);
 </pre>
 
-<h3>Retour de code HTTP : renderStatus</h3>
+<h3>HTTP code return: renderStatus</h3>
 <p>
-    La méthode <code>renderStatus(int status)</code> permet de retourner
-    au client un code statut HTTP. Il est possible d'utiliser les constantes 
-    présentes dans l'interface
+    The <code>renderStatus(int status)</code> method enables to return a HTTP status code
+    to the client. You can use the constants in the interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
         HttpServletResponse
     </a>.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Retourne un 200 comme ping :
+    <span class="label label-info">Example</span> Returns a 200 as ping:
 </p>
 <pre class="prettyprint">
 return renderStatus(HttpServletResponse.SC_OK);
 </pre>
 
-<h3>Retour d'erreur : renderError</h3>
+<h3>Error return: renderError</h3>
 <p>
-    La méthode <code>renderError(int status, String message)</code> permet de retourner
-    au client un code d'erreur HTTP. Il est possible d'utiliser les constantes 
-    présentes dans l'interface
+    The <code>renderError(int status, String message)</code> method enables to return
+    a HTTP error code to the client. You can use the constants in the interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
         HttpServletResponse
     </a>.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Retourne une erreur 404 à l'utilisateur :
+    <span class="label label-info">Example</span> Returns a 404 error to the user:
 </p>
 <pre class="prettyprint">
 return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
 </pre>
 
-<h3>Rendu de flux XML : renderXML</h3>
+<h3>XML stream rendering: renderXML</h3>
 <p>
-    La méthode <code>renderXML</code> permet de retourner
-    au client la représentation XML de l'objet Java passé en paramètre.
-    La sérialisation XML est effectuée à l'aide de la bibliothèque 
-    <a href="http://xstream.codehaus.org/">XStream</a>.
+    The <code>renderXML</code> method enables to return the XML representation
+    of the Java object in the parameters to the client.
+    The XML serialization is performed thanks to the
+    <a href="http://xstream.codehaus.org/">XStream</a> library.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Retourne un objet en xml :
+    <span class="label label-info">Example</span> Returns an object as XML:
 </p>
 <pre class="prettyprint">
 User user = new User("John", "Brown");
@@ -358,60 +356,59 @@ return renderXML(user);
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Retourne une map :
+    <span class="label label-info">Example</span> Returns a map:
 </p>
 <pre class="prettyprint">
 return renderXML("key", user);
 </pre>
 
-<h3>Rendu de flux JSON : renderJSON</h3>
+<h3>JSON stream rendering: renderJSON</h3>
 <p>
-    La méthode <code>renderJSON</code> permet de retourner
-    au client la représentation JSON de l'objet Java passé en paramètre.
-    La sérialisation JSON est effectuée à l'aide de la bibliothèque 
-    <a href="https://code.google.com/p/google-gson/">Gson</a>.
+    The <code>renderJSON</code> method enables to return the JSON representation
+    of the Java object in the parameters to the client.
+    The JSON serialization is performed thanks to the
+    <a href="https://code.google.com/p/google-gson/">Gson</a> library.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Retourne un objet en JSON :
+    <span class="label label-info">Example</span> Returns a object as JSON:
 </p>
 <pre class="prettyprint">
 return renderJSON(user);
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Retourne une map :
+    <span class="label label-info">Example</span> Returns a map:
 </p>
 <pre class="prettyprint">
 return renderJSON("key", user);
 </pre>
 
-<h3>Rendu de script javascript : renderJSONP</h3>
+<h3>Javascript script rendering: renderJSONP</h3>
 <p>
-    La méthode <code>renderJSONP</code>
-    permet de retourner au client un script Javascript qui exécutera une 
-    fonction en prenant en paramètre le modèle qui sera passé.
-    Pour plus de détails à propos de JSONP, voir la
-    <a href="http://en.wikipedia.org/wiki/JSONP">page Wikipedia traitant de JSONP</a>.
+    The <code>renderJSONP</code> method enables to return to the client
+    a Javascript script which will execute a function by taking the passed model as parameter.
+    For more information about JSONP, please refer to the 
+    <a href="http://en.wikipedia.org/wiki/JSONP">Wikipedia page about JSONP</a>.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Lance la fonction test avec l'objet user en paramètre :
+    <span class="label label-info">Example</span> Launches the test function with the user object as parameter:
 </p>
 <pre class="prettyprint">
 return renderJSONP("myCallbackFuncton", user);
 </pre>
 
-<h3>Rendu d'un template : renderStringTemplate</h3>
+<h3>Template rendering: renderStringTemplate</h3>
 <p>
-    La méthode <code>renderStringTemplate</code>
-    permet de retourner au client un template basé sur <a href="http://stringtemplate.org/">StringTemplate</a>.
-    Le template de base doit contenir un groupe de la façon suivante <code>render(model) ::= &lt;&lt; ... &gt;&gt;</code>.
-    Le délimitateur des attributs est <code>$</code>.
+    The <code>renderStringTemplate</code> method enables to return a template
+    based on <a href="http://stringtemplate.org/">StringTemplate</a> to the client.
+    The base template must contain a group as follows: <code>render(model) ::= &lt;&lt; ... &gt;&gt;</code>.
+    The attribute delimiter is <code>$</code>.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Example d'une creation de page  :
+    <span class="label label-info">Example</span> Example of the creation of a page:
 </p>
 <pre class="prettyprint">
 return renderStringTemplate("template.stg", "text/html",
@@ -419,7 +416,7 @@ return renderStringTemplate("template.stg", "text/html",
         "content", "bla bla bla ...");
 </pre>
 <p>
-    Avec comme template :
+    With the followng template:
 </p>
 <pre class="prettyprint">
 render(model) ::= &lt;&lt;
@@ -436,14 +433,15 @@ strong(value) ::= "&lt;strong&gt;$value$&lt;/strong&gt;"
 </pre>
 
 
-<h3>Créer son propre moteur de rendu</h3>
+<h3>Create your own renderer</h3>
 <p>
-    Pour créer un nouveau moteur de rendu, il faut créer une classe héritant de la classe Render et
-    réimplémenter la méthode <code>create</code>.
+    To create a new renderer, you need to create a class inheriting the Render class
+    and implementing the <code>create</code> method.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Rendu XML ou JSON selon l'en-tête <code>Accept</code> de la requête :
+    <span class="label label-info">Example</span> XML or JSON rendering
+            according to the <code>Accept</code> header of the request:
 </p>
 <pre class="prettyprint">
 public class RenderAccept extends Render {
@@ -485,15 +483,15 @@ public class RenderAccept extends Render {
 </pre>
 
 <div class="page-header">
-    <h2 id="context">Contexte web</h2>
+    <h2 id="context">Web context</h2>
 </div>
 <p>
-    Tous les contrôleurs de l'application ont accès au contexte web de l'application,
-    soit par le biais de la méthode <code>getContext</code> soit directement en paramètre de la méthode.
+    All the controllers of the application can access the web context of the application,
+    whether by calling the <code>getContext</code> method or directly in the method parameters.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Recupération du context par paramètre :
+    <span class="label label-info">Example</span> Retrieving of the context in the parameters:
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -506,7 +504,7 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Recupération du context par méthode :
+    <span class="label label-info">Example</span> Retrieving of the context by calling the method:
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -520,28 +518,29 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    Il est possible d'accéder à un certains nombre de données directement en paramètre des méthodes.
-    Dès lors qu'un paramètre de l'un des types suivants apparaît dans la liste des paramètres d'une méthode
-    d'un contrôleur, l'instance sera automatiquement définie par WebMotion. Il est à noter que seule la présence
-    du type provoque la définition dynamique de l'objet, le nom du paramètre n'influe pas. 
+    You can access some data directly in the parameters of the methods.
+    Once a parameter of on of the following types appears in the parameter list of a method of a controller,
+    the instance will be automatically defined by WebMotion.
+    You can notice that the only presence of a type provokes the dynamic definition of the object,
+    the name of the parameter does not impact.
 </p>
 <ul>
-    <li><strong>HttpContext : </strong>contexte web de l'application</li>
-    <li><strong>HttpSession : </strong>session utilisateur</li>
-    <li><strong>HttpServletRequest</strong> ou <strong>ServletRequest</strong> : requête appelant le serveur</li>
-    <li><strong>HttpServletResponse</strong> ou <strong>ServletResponse</strong> : réponse retournée au client</li>
-    <li><strong>ServletContext : </strong> contexte de la servlet</li>
-    <li><strong>ServerContext : </strong> contexte du serveur</li>
-    <li><strong>ErrorData : </strong>en cas d'erreur, des informations complémentaires</li>
-    <li><strong>Exception : </strong>en cas d'erreur, l'exception responsable de l'erreur</li>
-    <li><strong>FileProgressListener : </strong>permet de suivre la progression de chargement de fichier</li>
-    <li><strong>Mapping : </strong>l'instance applicative du mapping</li>
-    <li><strong>Config : </strong>la configuration du mapping applicatif</li>
-    <li><strong>Call : </strong>le contexte d'appel des actions</li>
+    <li><strong>HttpContext: </strong>web context of the application</li>
+    <li><strong>HttpSession: </strong>user session</li>
+    <li><strong>HttpServletRequest</strong> or <strong>ServletRequest</strong>: request calling the server</li>
+    <li><strong>HttpServletResponse</strong> or <strong>ServletResponse</strong>: response returned to the client</li>
+    <li><strong>ServletContext: </strong> context of the servlet</li>
+    <li><strong>ServerContext: </strong> context of the server</li>
+    <li><strong>ErrorData: </strong>in case of error, additional information</li>
+    <li><strong>Exception: </strong>in case of error, the exception which causes the error</li>
+    <li><strong>FileProgressListener: </strong>enables to follow the loading progress of a file</li>
+    <li><strong>Mapping: </strong>the applicative instance of the mapping</li>
+    <li><strong>Config: </strong>the configuration of the applicative mapping</li>
+    <li><strong>Call: </strong>the call context of the actions</li>
 </ul>
 
 <p>
-    <span class="label label-info">Example</span> Recupération de la session :
+    <span class="label label-info">Example</span> Retrieving of the session:
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -554,7 +553,7 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Recupération d'une exception :
+    <span class="label label-info">Example</span> Retrieving of an exception:
 </p>
 <pre class="prettyprint">
 public class Error extends WebMotionController {
@@ -567,16 +566,17 @@ public class Error extends WebMotionController {
 </pre>
 
 <div class="page-header">
-    <h2 id="flashmessage">Messages flash</h2>
+    <h2 id="flashmessage">Flash messages</h2>
 </div>
 <p>
-    L'une des difficultés lors d'une redirection HTTP est de compléter la réponse pour informer l'utilisateur d'une information temporaire. 
-    Les messages flash ont ce but, et sont disponibles dans le contexte HTTP. Les messages flash peuvent être de différents types : info, error, warning et misc.
-    Ils sont récupérables dans la requête par l'attibut <code>flashMessages</code>.
+    One of the difficulties of a HTTP redirection is to complete the response to inform the user
+    about some temporary information. This is the goal of the flash messages,
+    which are available in the HTTP context. The flash messages can be of different types:
+    info, error, warning and misc. You can find them in the request as the <code>flashMessages</code> attribute.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Message d'info :
+    <span class="label label-info">Example</span> Info message:
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -586,13 +586,13 @@ public Render send() {
 }
 </pre>
 
-<p>Avec comme récupération dans la request du message en JSP :</p>
+<p>With the following JSP message in the request:</p>
 <pre class="prettyprint">
 ${flashMessages.infos.my_message}
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Message d'erreur :
+    <span class="label label-info">Example</span> Error message:
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -603,13 +603,13 @@ public Render send() {
 }
 </pre>
 
-<p>Avec comme récupération dans la request du message en JSP :</p>
+<p>With the following JSP message in the request:</p>
 <pre class="prettyprint">
 ${flashMessages.errors.my_message}
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Message d'avertissement :
+    <span class="label label-info">Example</span> Warning message:
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -619,13 +619,13 @@ public Render send() {
 }
 </pre>
 
-<p>Avec comme récupération dans la request du message en JSP :</p>
+<p>With the following JSP message in the request:</p>
 <pre class="prettyprint">
 ${flashMessages.warnings.my_message}
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Message divers :
+    <span class="label label-info">Example</span> Miscellaneous message:
 </p>
 <pre class="prettyprint">
 public Render send() {
@@ -635,33 +635,33 @@ public Render send() {
 }
 </pre>
 
-<p>Avec comme récupération dans la request du message en JSP :</p>
+<p>With the following JSP message in the request:</p>
 <pre class="prettyprint">
 ${flashMessages.miscs.my_message}
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Récupérations de l'ensemble des messages en jsp :
+    <span class="label label-info">Example</span> Retrieving of all the JSP messages:
 </p>
 <pre class="prettyprint">
 ${flashMessages.messages}
 </pre>
 
 <div class="page-header">
-    <h2 id="validation">Validation des paramètres des contrôleurs</h2>
+    <h2 id="validation">Validation of the parameters of the controllers</h2>
 </div>
 <p>
-    WebMotion propose une validation des paramètres des actions Java, sur la JSR 303.
-    Pour plus de renseignement sur la JSR, vous pouvez consulter le site <a href="http://jcp.org/">jcp</a>.
-    Un bean ne sera validé uniquement si les annotations <code>@Valid</code> ou <code>@ValidGroup</code>
-    apparaissent sur le paramètre correspondant dans la méthode appellée.
-    Il faut noter que <code>@ValidGroup</code> est la seule annotation 
-    propre au framework qui permet la validation du bean sur un groupe.
-    Il est possible de créer ses propres annotations de validation et les utiliser avec WebMotion.
+    WebMotion offers a validation of the parameters of the Java actions, according to the 303 JSR.
+    For more information about this JSR, please refer to the <a href="http://jcp.org/">jcp</a> website.
+    A bean is validated only if the <code>@Valid</code> or <code>@ValidGroup</code> annotations
+    appears on the parameter corresponding to the called method.
+    You can notice that <code>@ValidGroup</code> is the only specific annotation of the framework
+    which enables the bean validation on a group.
+    You can create your own validation annotations and use them with WebMotion.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Validation simple :
+    <span class="label label-info">Example</span> Simple validation:
 </p>
 <pre class="prettyprint">
 public Render search(@NotNull String query) {
@@ -670,7 +670,7 @@ public Render search(@NotNull String query) {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Validation sur un bean, attention il peut être null :
+    <span class="label label-info">Example</span> Bean validation (warning, it can be null):
 </p>
 <pre class="prettyprint">
 public Render create(@Valid Book book) {
@@ -679,7 +679,7 @@ public Render create(@Valid Book book) {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Validation sur un bean, en précisant qu'il ne peut être null :
+    <span class="label label-info">Example</span> Bean validation, specifying it cannot be null:
 </p>
 <pre class="prettyprint">
 public Render create(@Valid @NotNull Book book) {
@@ -688,7 +688,7 @@ public Render create(@Valid @NotNull Book book) {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Validation d'un groupe sur un bean  :
+    <span class="label label-info">Example</span> Validation of the group of a bean:
 </p>
 <pre class="prettyprint">
 public Render comment(@ValidGroup(MyGroup.class) Book book) {
@@ -698,22 +698,21 @@ public Render comment(@ValidGroup(MyGroup.class) Book book) {
 
 <div class="alert alert-warning">
     <p>
-        <span class="label label-warning">Attention</span>&nbsp; GlassFish supporte la validation sur les méthodes qu'à partir de la version 3.1.2.
+        <span class="label label-warning">Warning</span>&nbsp; GlassFish supports the validation of the methods only since the 3.1.2 version.
 </div>
 
 <div class="page-header">
-    <h2 id="file">Chargement de fichiers</h2>
+    <h2 id="file">File loading</h2>
 </div>
 <p>
-    Les fichiers sont gérés comme des paramètres simples. WebMotion s'occupe avec l'aide
-    de <a href="http://commons.apache.org/fileupload/">FileUpload</a> de faire le traitement 
-    pour la récupération multi-part. Il est possible d'utiliser, comme type de paramètre, soit la classe File, 
-    soit le wrapper proposer par WebMotion pour récupérer des informations complémentaires sur le fichier, à savoir
-    son nom, sa taille et son type mime.
+    The files are managed like simple parameters. WebMotion takes care of the treatment
+    for the mutli-part retrieving with <a href="http://commons.apache.org/fileupload/">FileUpload</a>.
+    You can use as parameter type whether the File class or the wrapper offered by WebMotion 
+    to retrieve additional information about the file, ie its name, its size and its MIME type.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Récupération simple du fichier  :
+    <span class="label label-info">Example</span> Simple retrieving of the file:
 </p>
 <pre class="prettyprint">
 public Render upload(File file) {
@@ -722,7 +721,7 @@ public Render upload(File file) {
 </pre>
 
 <p>
-    <span class="label label-info">Example</span> Récupération par le wrapper  :
+    <span class="label label-info">Example</span> Retrieving in the wrapper:
 </p>
 <pre class="prettyprint">
 public Render upload(UploadFile file) {
@@ -732,12 +731,11 @@ public Render upload(UploadFile file) {
 </pre>
 
 <p>
-    Il est possible de suivre l'évolution du téléchargement par le biais d'un 
-    écouteur mis à disposition dans la session de l'utilisateur.
+    You can follow the evolution of the dowloading via a listener in the user session.
 </p>
 
 <p>
-    <span class="label label-info">Example</span> Récupération des informations de progression en format JSON  :
+    <span class="label label-info">Example</span> Retrieving of information about the progress in JSON:
 </p>
 <pre class="prettyprint">
 public Render progress(FileProgressListener listener) {
@@ -747,7 +745,7 @@ public Render progress(FileProgressListener listener) {
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
-    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
     <a class="btn primary large" style="float:right;" href="extensions">Extensions »</a>
 </div>
 
