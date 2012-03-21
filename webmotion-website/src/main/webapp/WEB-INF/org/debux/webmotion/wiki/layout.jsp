@@ -122,7 +122,7 @@
                                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                             </li>
                             <c:forEach items="${languages}" var="lang">
-                                <li><a href="<c:url value="/?language=${lang}"/>">${lang}</a></li>
+                                <li><a href="<c:url value="/?language=${lang}"/>"><img alt="${lang}" src="<c:url value="/img/${lang}.png"/>"/></a></li>
                             </c:forEach>
                         </ul>
                         

@@ -112,8 +112,8 @@
                                 <a id="twitter" style="display: none;" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
                                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                             </li>
-                            <li><a href="<c:url value="/?language=fr"/>">fr</a></li>
-                            <li><a href="<c:url value="/?language=en"/>">en</a></li>
+                            <li><a href="<c:url value="/?language=fr"/>"><img alt="fr" src="<c:url value="/img/fr.png"/>"/></a></li>
+                            <li><a href="<c:url value="/?language=en"/>"><img alt="en" src="<c:url value="/img/en.png"/>"/></a></li>
                         </ul>
                     </div>
                 </div>
