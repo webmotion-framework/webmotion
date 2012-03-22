@@ -106,14 +106,15 @@
 
                     <div class="nav-collapse">
                         <jsp:include page="/deploy/menu?sub=include" />
-                        
                         <ul class="nav pull-right">
-                            <li style="margin-top: 5px;">
-                                <a id="twitter" style="display: none;" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
+                            <li>
+                                <a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
                                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                             </li>
-                            <li><a href="<c:url value="/?language=fr"/>"><img alt="fr" src="<c:url value="/img/fr.png"/>"/></a></li>
-                            <li><a href="<c:url value="/?language=en"/>"><img alt="en" src="<c:url value="/img/en.png"/>"/></a></li>
+                            <li>
+                                <a href="<c:url value="/?language=fr"/>"><img alt="fr" src="<c:url value="/img/fr.png"/>"/></a>
+                                <a href="<c:url value="/?language=en"/>"><img alt="en" src="<c:url value="/img/en.png"/>"/></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -230,7 +231,7 @@
                     </div>
                 </div>
 
-                <div class="span9">
+                <div class="span8">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#demo" data-toggle="tab">Démo</a></li>
                         <c:forEach var="file" items="${files}" varStatus="status">
