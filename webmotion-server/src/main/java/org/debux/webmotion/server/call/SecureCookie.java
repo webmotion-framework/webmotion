@@ -81,15 +81,35 @@ public class SecureCookie {
         this.ssl = ssl;
     }
     
+    /**
+     * Generate a new secret key.
+     * 
+     * @return secret key;
+     */
     protected String generateSecret() {
         return RandomStringUtils.random(31, true, true);
     }
-    
+
+    /**
+     * Create a new cookie secured.
+     * 
+     * @param name cookie name
+     * @param value cookie value
+     * @param username username
+     * @param expiry max age
+     * @return wrapper a cookie
+     */
     public SecureCookieEntity create(String name, String value, String username, int expiry) {
         SecureCookieEntity wrapper = new SecureCookieEntity(name, value, username, expiry);
         return wrapper;
     }
 
+    /**
+     * Wrap the cookie to get value.
+     * 
+     * @param cookie cookie
+     * @return wrapper a cookie
+     */
     public SecureCookieEntity wrap(Cookie cookie) {
         SecureCookieEntity wrapper = new SecureCookieEntity(cookie);
         return wrapper;
