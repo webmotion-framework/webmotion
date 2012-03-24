@@ -66,8 +66,7 @@ public class SecureCookieTest {
     @Test
     public void testSecureValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie();
-        cookie.setEncrypt(false);
+        SecureCookie cookie = new SecureCookie(false, true);
         
         String secureValue = cookie.getSecureValue(value, "username", -1);
         log.info("secureValue : " + secureValue);
@@ -81,8 +80,7 @@ public class SecureCookieTest {
     @Test
     public void testEncryptSecureValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie();
-        cookie.setEncrypt(true);
+        SecureCookie cookie = new SecureCookie(true, true);
         
         String secureValue = cookie.getSecureValue(value, "username", -1);
         log.info("secureValue : " + secureValue);
@@ -96,8 +94,7 @@ public class SecureCookieTest {
     @Test
     public void testInvalidKey() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie();
-        cookie.setEncrypt(true);
+        SecureCookie cookie = new SecureCookie(true, true);
         
         String secureValue = cookie.getSecureValue(value, "username", -1);
         log.info("secureValue : " + secureValue);
@@ -116,8 +113,7 @@ public class SecureCookieTest {
     @Test
     public void testInvalidValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie();
-        cookie.setEncrypt(true);
+        SecureCookie cookie = new SecureCookie(true, true);
         
         String secureValue = cookie.getSecureValue(value, "username", -1);
         log.info("secureValue : " + secureValue);
