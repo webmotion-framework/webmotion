@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletRequest;
+import org.apache.commons.lang.RandomStringUtils;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -271,6 +272,15 @@ public class WebMotionUtils {
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
             return super.size() > max;
         }
+    }
+    
+    /**
+     * Generate a new secret key.
+     * 
+     * @return secret key;
+     */
+    public static String generateSecret() {
+        return RandomStringUtils.random(31, true, true);
     }
 
 }

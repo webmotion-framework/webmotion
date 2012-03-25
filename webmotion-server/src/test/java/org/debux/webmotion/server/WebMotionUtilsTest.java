@@ -108,5 +108,12 @@ public class WebMotionUtilsTest {
         List<URL> resources = Resource.getResources("mapping/.*");
         AssertJUnit.assertFalse(resources.isEmpty());
     }
+
+    @Test
+    public void testGenerateSecret() throws IOException, URISyntaxException {
+        String generateSecret = WebMotionUtils.generateSecret();
+        AssertJUnit.assertNotNull(generateSecret);
+        AssertJUnit.assertFalse(generateSecret.isEmpty());
+    }
     
 }

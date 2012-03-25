@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -78,6 +79,9 @@ public class ServerContext {
     /** Current servlet context */
     protected ServletContext servletContext;
     
+    /** Secret key use in encryt cookie value */
+    protected String secret;
+    
     /**
      * Initialize the context.
      * 
@@ -124,6 +128,9 @@ public class ServerContext {
         String className = config.getMainHandler();
         
         mainHandler = handlers.getInstance(className);
+        
+        // Read secret otherwise generate it
+        secret = WebMotionUtils.generateSecret();
         
         // Init handlers
         mainHandler.init(mapping, this);
@@ -175,4 +182,13 @@ public class ServerContext {
     public ServletContext getServletContext() {
         return servletContext;
     }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
 }

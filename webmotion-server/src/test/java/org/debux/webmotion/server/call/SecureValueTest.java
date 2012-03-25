@@ -26,24 +26,27 @@ package org.debux.webmotion.server.call;
 
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.*;
+import org.debux.webmotion.server.call.CookieManger.SecureValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 /**
- * Test on SecureCookie .
+ * Test on SecureValue.
  * 
  * @author julien
  */
-public class SecureCookieTest {
+public class SecureValueTest {
    
     private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
 
+    public static String secret = WebMotionUtils.generateSecret();
+    
     @Test
     public void testHashSha1() {
-        SecureCookie cookie = new SecureCookie();
-        String result = cookie.hashSha1("test", "test");
+        SecureValue secured = new SecureValue(secret, "username", true, true);
+        String result = secured.hashSha1("test", "test");
         log.info("result : " + result);
         AssertJUnit.assertNotNull(result);
     }
@@ -52,13 +55,13 @@ public class SecureCookieTest {
     public void testRijndael() {
         String key = "0123456789abcdef0123456789abcdef";
         String value = "test";
-        SecureCookie cookie = new SecureCookie();
+        SecureValue secured = new SecureValue(secret, "username", true, true);
         
-        String encryptValue = cookie.encryptRijndael("test", key);
+        String encryptValue = secured.encryptRijndael("test", key);
         log.info("encryptValue : " + encryptValue);
         AssertJUnit.assertNotNull(encryptValue);
         
-        String decryptValue = cookie.decryptRijndael(encryptValue, key);
+        String decryptValue = secured.decryptRijndael(encryptValue, key);
         log.info("decryptValue : " + decryptValue);
         AssertJUnit.assertEquals(value, decryptValue);
     }
@@ -66,13 +69,13 @@ public class SecureCookieTest {
     @Test
     public void testSecureValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie(false, true);
+        SecureValue secured = new SecureValue(secret, "username", false, true);
         
-        String secureValue = cookie.getSecureValue(value, "username", -1);
+        String secureValue = secured.getSecureValue(value, -1);
         log.info("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
-        String unsecureValue = cookie.getUnsecureValue(secureValue);
+        String unsecureValue = secured.getUnsecureValue(secureValue);
         log.info("unsecureValue : " + unsecureValue);
         AssertJUnit.assertEquals(value, unsecureValue);
     }
@@ -80,13 +83,13 @@ public class SecureCookieTest {
     @Test
     public void testEncryptSecureValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie(true, true);
+        SecureValue secured = new SecureValue(secret, "username", true, true);
         
-        String secureValue = cookie.getSecureValue(value, "username", -1);
+        String secureValue = secured.getSecureValue(value, -1);
         log.info("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
-        String unsecureValue = cookie.getUnsecureValue(secureValue);
+        String unsecureValue = secured.getUnsecureValue(secureValue);
         log.info("unsecureValue : " + unsecureValue);
         AssertJUnit.assertEquals(value, unsecureValue);
     }
@@ -94,9 +97,9 @@ public class SecureCookieTest {
     @Test
     public void testInvalidKey() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie(true, true);
+        SecureValue secured = new SecureValue(secret, "username", true, true);
         
-        String secureValue = cookie.getSecureValue(value, "username", -1);
+        String secureValue = secured.getSecureValue(value, -1);
         log.info("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
@@ -105,7 +108,7 @@ public class SecureCookieTest {
         split[3] = "invalid key";
         secureValue = StringUtils.join(split, "|");
         
-        String unsecureValue = cookie.getUnsecureValue(secureValue);
+        String unsecureValue = secured.getUnsecureValue(secureValue);
         log.info("unsecureValue : " + unsecureValue);
         AssertJUnit.assertNull(unsecureValue);
     }
@@ -113,9 +116,9 @@ public class SecureCookieTest {
     @Test
     public void testInvalidValue() {
         String value = "test";
-        SecureCookie cookie = new SecureCookie(true, true);
+        SecureValue secured = new SecureValue(secret, "username", true, true);
         
-        String secureValue = cookie.getSecureValue(value, "username", -1);
+        String secureValue = secured.getSecureValue(value, -1);
         log.info("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
@@ -124,7 +127,7 @@ public class SecureCookieTest {
         split[2] = "Ij7J7G33H5xE9K5vaTiEypPnjJPuDdZ0C9QyvcIj/ZI=";
         secureValue = StringUtils.join(split, "|");
         
-        String unsecureValue = cookie.getUnsecureValue(secureValue);
+        String unsecureValue = secured.getUnsecureValue(secureValue);
         log.info("unsecureValue : " + unsecureValue);
         AssertJUnit.assertNull(unsecureValue);
     }
