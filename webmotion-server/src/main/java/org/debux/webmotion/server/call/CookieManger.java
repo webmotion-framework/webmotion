@@ -79,10 +79,13 @@ public class CookieManger {
             String name = cookie.getName();
             this.cookies.put(name, cookie);
         }
+        
+        secured = new DummySecureValue();
     }
     
     /**
-     * Create secured cookie manager for a user.
+     * Create secured cookie manager for a user. Username is optionnal, it uses 
+     * only to create cookie not to read.
      * @param context http context
      * @param username username used to create a verified key
      * @param encrypt if value is encrypt
@@ -174,22 +177,12 @@ public class CookieManger {
             maxAge = cookie.getMaxAge();
             secure = cookie.getSecure();
             
-            if (secured != null) {
-                String secureValue = cookie.getValue();
-                value = secured.getUnsecureValue(secureValue);
-                
-            } else {
-                value = cookie.getValue();
-            }
+            String secureValue = cookie.getValue();
+            value = secured.getUnsecureValue(secureValue);
         }
         
         public Cookie toCookie() {
-            String cookieValue = null;
-            if (secured != null && value != null) {
-                cookieValue = secured.getSecureValue(value, maxAge);
-            } else {
-                cookieValue = value;
-            }
+            String cookieValue = secured.getSecureValue(value, maxAge);
             
             Cookie cookie = new Cookie(name, cookieValue);
             cookie.setPath(path);
@@ -284,6 +277,9 @@ public class CookieManger {
         /** Use as key */
         protected String username;
 
+        protected SecureValue() {
+        }
+        
         public SecureValue(String secret, String username, boolean encrypt, boolean ssl) {
             this.secret = secret;
             this.username = username;
@@ -319,6 +315,10 @@ public class CookieManger {
          * @return secure value
          */
         public String getSecureValue(String value, int expiry) {
+            if (value == null) {
+                return null;
+            }
+            
             long expire = -1;
             if (expiry > 0) {
                 expire = System.currentTimeMillis() + expiry;
@@ -492,5 +492,19 @@ public class CookieManger {
                 throw new WebMotionException("Hash failed", e);
             }
         }
+    }
+    
+    public static class DummySecureValue extends SecureValue {
+
+        @Override
+        public String getSecureValue(String value, int expiry) {
+            return value;
+        }
+
+        @Override
+        public String getUnsecureValue(String secureValue) {
+            return secureValue;
+        }
+        
     }
 }

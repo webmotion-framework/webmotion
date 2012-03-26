@@ -94,11 +94,14 @@ public class HttpContext {
     /** Current server context */
     protected ServerContext serverContext;
             
-    /** Information on error contained in request. */
+    /** Information on error contained in request */
     protected ErrorData errorData;
     
-    /** Contains all message for the user. */
+    /** Contains all message for the user */
     protected FlashMessages flashMessages;
+    
+    /** Helper to manage cookies */
+    protected CookieManger cookieManger;
     
     /** Keep current path for extension */
     protected String extensionPath;
@@ -297,28 +300,51 @@ public class HttpContext {
         
         this.errorData = new ErrorData();
         this.flashMessages = new FlashMessages();
+        this.cookieManger = new CookieManger(this);
         this.extensionPath = "";
         
         request.setAttribute(ATTRIBUTE_ERROR_DATA, errorData);
         request.setAttribute(ATTRIBUTE_FLASH_MESSAGES, flashMessages);
     }
 
+    /**
+     * @return current request
+     */
     public HttpServletRequest getRequest() {
         return request;
     }
 
+    /**
+     * @return current response
+     */
     public HttpServletResponse getResponse() {
         return response;
     }
 
+    /**
+     * @return current session
+     */
     public HttpSession getSession() {
         return request.getSession();
     }
     
+    /**
+     * @return get cookies use getCookieManager to manage easily cookie 
+     */
     public Cookie[] getCookies() {
         return request.getCookies();
     }
     
+    /**
+     * @return helper to manage cookie
+     */
+    public CookieManger getCookieManger() {
+        return cookieManger;
+    }
+    
+    /**
+     * @return get real url corresponding in mapping
+     */
     public String getUrl() {
         String url = null;
         String currentExtension = null;
@@ -362,6 +388,9 @@ public class HttpContext {
         return url;
     }
     
+    /**
+     * @return true if error path otherwise false
+     */
     public boolean isError() {
         String url = null;
         
@@ -379,30 +408,52 @@ public class HttpContext {
         return url != null && (url.startsWith("/error") || url.startsWith("/deploy/error"));
     }
         
+    /**
+     * @return get http method
+     */
     public String getMethod() {
         return request.getMethod();
     }
     
+    /**
+     * @return get writer on response
+     */
     public PrintWriter getOut() throws IOException {
         return response.getWriter();
     }
 
+    /**
+     * @return get parameters in request
+     */
     public Map<String, String[]> getParameters() {
         return request.getParameterMap();
     }
 
+    /**
+     * @return header value for name
+     */
     public String getHeader(String name) {
         return request.getHeader(name);
     }
     
+    /**
+     * @return get bean contains error data
+     */
     public ErrorData getErrorData() {
         return errorData;
     }
 
+    /**
+     * @return current extension path
+     */
     public String getExtensionPath() {
         return extensionPath;
     }
 
+    /**
+     * Add extension path
+     * @param extensionPath path
+     */
     public void addExtensionPath(String extensionPath) {
         // Not change path when the extension is mount on root
         if (!"/".equals(extensionPath)) {
@@ -415,14 +466,24 @@ public class HttpContext {
         }
     }
 
+    /**
+     * Remove extension path
+     * @param extensionPath path
+     */
     public void removeExtensionPath(String extensionPath) {
         this.extensionPath = this.extensionPath.replaceFirst(extensionPath + "$", "");
     }
 
+    /**
+     * @return get servlet context
+     */
     public ServletContext getServletContext() {
         return request.getServletContext();
     }
     
+    /**
+     * @return get server context
+     */
     public ServerContext getServerContext() {
         return serverContext;
     }
