@@ -540,6 +540,7 @@ public class Action extends WebMotionController {
     <li><strong>Mapping : </strong>l'instance applicative du mapping</li>
     <li><strong>Config : </strong>la configuration du mapping applicatif</li>
     <li><strong>Call : </strong>le contexte d'appel des actions</li>
+    <li><strong>CookieManager : </strong>le gestionnaire des cookies</li>
 </ul>
 
 <p>
@@ -745,6 +746,68 @@ public Render upload(UploadFile file) {
 public Render progress(FileProgressListener listener) {
     return renderJSON(listener);
 }
+</pre>
+
+<div class="page-header">
+    <h2 id="cookie">Gestion des cookies</h2>
+</div>
+
+<p>
+    Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
+    en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
+    la suppression d'un cookie, la sécurisation, ...
+    Il se situe dans le context http ou est récupérable dans les paramètres de la méthode.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Création d'un nouveau cookie :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+
+CookieEntity cookie = manager.create("name", "value");
+cookie.setPath("/index.html");
+
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'une valeur :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+
+CookieEntity cookie = manager.get("name");
+String value = cookie.getValue();
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Suppression d'un cookie :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+manager.remove("name");
+</pre>
+
+<p>
+    Il est possible de gérer des cookies sécurisés, c'est à dire de les protèger sur :
+</p>
+<ul>
+    <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
+    <li>l'intégrité des données, en créant un hash des données</li>
+    <li>le replay attacks, en intégrant l'identifiant de session ssl</li>
+    <li>le volume attack, en intégrant le nom de l'utilisateur</li>
+</ul>
+<p>
+    Une clé secrète est utilisé pour garantir la sécurité des cookies. Elle est 
+    auto-générée si elle n'est pas défini dans le fichier de mapping.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'un gestionnaire de cookie complétement sécurisé :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager("username", true, true);
 </pre>
 
 <div class="well" style="text-align: center;">
