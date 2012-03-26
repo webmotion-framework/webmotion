@@ -49,7 +49,8 @@ import org.debux.webmotion.server.WebMotionException;
  * Use in http context to manage cookie. The cookie can be secured.
  * It is secure on :
  * <ul>
- * <li>Confidentiality</li>
+ * <li>Data integrity</li>
+ * <li>Data confidentiality</li>
  * <li>Replay Attacks</li>
  * <li>Volume Attacks</li>
  * </ul>
@@ -277,7 +278,8 @@ public class CookieManger {
     /**
      * Utils class use to store secure cookie. It is secure on :
      * <ul>
-     * <li>Confidentiality</li>
+     * <li>Data integrity</li>
+     * <li>Data confidentiality</li>
      * <li>Replay Attacks</li>
      * <li>Volume Attacks</li>
      * </ul>
