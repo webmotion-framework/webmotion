@@ -36,6 +36,7 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.CookieManger;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.HttpContext;
@@ -60,6 +61,7 @@ import org.slf4j.LoggerFactory;
  * <li>ErrorData</li>
  * <li>Exception</li>
  * <li>FileProgressListener</li>
+ * <li>CookieManager</li>
  * </ul>
  * @author jruchaud
  */
@@ -157,6 +159,9 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
         } else if (FileProgressListener.class.isAssignableFrom(type)) {
             value = context.getSession().getAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
+            
+        } else if (CookieManger.class.isAssignableFrom(type)) {
+            value = context.getCookieManger();
         }
         
         return value;
