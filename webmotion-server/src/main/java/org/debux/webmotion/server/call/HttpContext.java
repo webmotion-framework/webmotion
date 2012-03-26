@@ -26,6 +26,7 @@ package org.debux.webmotion.server.call;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.DispatcherType;
@@ -34,6 +35,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.debux.webmotion.server.call.CookieManger.CookieEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,14 +96,14 @@ public class HttpContext {
     /** Current server context */
     protected ServerContext serverContext;
             
+    /** Helper to manage cookies */
+    protected CookieManger cookieManger;
+    
     /** Information on error contained in request */
     protected ErrorData errorData;
     
     /** Contains all message for the user */
     protected FlashMessages flashMessages;
-    
-    /** Helper to manage cookies */
-    protected CookieManger cookieManger;
     
     /** Keep current path for extension */
     protected String extensionPath;
@@ -175,36 +177,34 @@ public class HttpContext {
             warnings = new HashMap<String, String>();
             miscs = new HashMap<String, String>();
             
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    String name = cookie.getName();
+            Collection<String> names = cookieManger.getNames();
+            for (String name : names) {
+                String prefix = null;
+                Map<String, String> messages = null;
+
+                if (name.startsWith(PREFIX_FLASH_MESSAGES_INFOS)) {
+                    prefix = PREFIX_FLASH_MESSAGES_INFOS;
+                    messages = infos;
+
+                } else if (name.startsWith(PREFIX_FLASH_MESSAGES_ERRORS)) {
+                    prefix = PREFIX_FLASH_MESSAGES_ERRORS;
+                    messages = errors;
+
+                } else if (name.startsWith(PREFIX_FLASH_MESSAGES_WARNINGS)) {
+                    prefix = PREFIX_FLASH_MESSAGES_WARNINGS;
+                    messages = warnings;
+
+                } else if (name.startsWith(PREFIX_FLASH_MESSAGES_MISCS)) {
+                    prefix = PREFIX_FLASH_MESSAGES_MISCS;
+                    messages = miscs;
+                }
+
+                if(prefix != null) {
+                    CookieEntity cookie = cookieManger.get(name);
                     String value = cookie.getValue();
                     
-                    String prefix = null;
-                    Map<String, String> messages = null;
-                    
-                    if (name.startsWith(PREFIX_FLASH_MESSAGES_INFOS)) {
-                        prefix = PREFIX_FLASH_MESSAGES_INFOS;
-                        messages = infos;
-                        
-                    } else if (name.startsWith(PREFIX_FLASH_MESSAGES_ERRORS)) {
-                        prefix = PREFIX_FLASH_MESSAGES_ERRORS;
-                        messages = errors;
-                        
-                    } else if (name.startsWith(PREFIX_FLASH_MESSAGES_WARNINGS)) {
-                        prefix = PREFIX_FLASH_MESSAGES_WARNINGS;
-                        messages = warnings;
-                        
-                    } else if (name.startsWith(PREFIX_FLASH_MESSAGES_MISCS)) {
-                        prefix = PREFIX_FLASH_MESSAGES_MISCS;
-                        messages = miscs;
-                    }
-                    
-                    if(prefix != null) {
-                        name = name.replaceFirst(prefix, "");
-                        messages.put(name, value);
-                    }
+                    name = name.replaceFirst(prefix, "");
+                    messages.put(name, value);
                 }
             }
         }
@@ -227,10 +227,10 @@ public class HttpContext {
         
         public void add(Map<String, String> map, String prefix, String key, String value) {
             // Store value if do redirect the request
-            Cookie cookie = new Cookie(prefix + key, value);
+            CookieEntity cookie = cookieManger.create(prefix + key, value);
             cookie.setMaxAge(10); // 10s
             cookie.setPath("/");
-            response.addCookie(cookie);
+            cookieManger.add(cookie);
             
             // Store value if do forward the request
             map.put(key, value);
@@ -298,9 +298,9 @@ public class HttpContext {
         this.request = request;
         this.response = response;
         
+        this.cookieManger = new CookieManger(this);
         this.errorData = new ErrorData();
         this.flashMessages = new FlashMessages();
-        this.cookieManger = new CookieManger(this);
         this.extensionPath = "";
         
         request.setAttribute(ATTRIBUTE_ERROR_DATA, errorData);
@@ -340,6 +340,13 @@ public class HttpContext {
      */
     public CookieManger getCookieManger() {
         return cookieManger;
+    }
+    
+    /**
+     * @return helper to manage secure cookie
+     */
+    public CookieManger getCookieManger(String username, boolean encrypt, boolean ssl) {
+        return new CookieManger(this, username, encrypt, ssl);
     }
     
     /**
