@@ -25,8 +25,10 @@
 package org.debux.webmotion.server.call;
 
 import java.security.Security;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -75,9 +77,12 @@ public class CookieManger {
         
         this.cookies = new HashMap<String, Cookie>();
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            String name = cookie.getName();
-            this.cookies.put(name, cookie);
+        if (cookies != null) {
+            
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                this.cookies.put(name, cookie);
+            }
         }
         
         secured = new DummySecureValue();
@@ -139,6 +144,15 @@ public class CookieManger {
     }
     
     /**
+     * Get all names.
+     * @return names
+     */
+    public Collection<String> getNames() {
+        Set<String> names = cookies.keySet();
+        return names;
+    }
+    
+    /**
      * Remove a cookie.
      * @param name name
      */
@@ -161,8 +175,8 @@ public class CookieManger {
         protected String path;
         protected String domain;
         protected String comment;
-        protected int maxAge;
-        protected boolean secure;
+        protected Integer maxAge;
+        protected Boolean secure;
         
         public CookieEntity(String name, String value) {
             this.name = name;
@@ -185,11 +199,21 @@ public class CookieManger {
             String cookieValue = secured.getSecureValue(value, maxAge);
             
             Cookie cookie = new Cookie(name, cookieValue);
-            cookie.setPath(path);
-            cookie.setDomain(domain);
-            cookie.setComment(comment);
-            cookie.setMaxAge(maxAge);
-            cookie.setSecure(secure);
+            if (path != null) {
+                cookie.setPath(path);
+            }
+            if (domain != null) {
+                cookie.setDomain(domain);
+            }
+            if (comment != null) {
+                cookie.setComment(comment);
+            }
+            if (maxAge != null) {
+                cookie.setMaxAge(maxAge);
+            }
+            if (secure != null) {
+                cookie.setSecure(secure);
+            }
             return cookie;
         }
 
