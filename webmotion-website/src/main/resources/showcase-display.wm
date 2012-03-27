@@ -77,3 +77,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /application                                Showcase.application
 *           /internal                                   Showcase.internal
 *           /decorator                                  Showcase.decorator
+*           /cookie                                     Showcase.cookie

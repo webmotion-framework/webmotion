@@ -161,7 +161,7 @@
                                     <ul>
                                         <li><a id="filter" href="./filter">Do process</a></li>
                                         <li><a id="condition" href="./condition">Render</a></li>
-                                        <li><a id="decorator" href="./decorator">Default parameters</a> <span class="label label-info">New</span></li>
+                                        <li><a id="decorator" href="./decorator">Default parameters</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>Error</strong>
@@ -175,7 +175,7 @@
                                 <li><strong>Extension</strong>
                                     <ul>
                                         <li><a id="blog" href="./blog">Action</a></li>
-                                        <li><a id="stats" href="./stats">Pattern</a> <span class="label label-info">New</span></li>
+                                        <li><a id="stats" href="./stats">Pattern</a></li>
                                         <li><a id="spring" href="./spring">Spring</a></li>
                                     </ul>
                                 </li>
@@ -189,10 +189,10 @@
                                         <li><a id="helloModel" href="./helloModel">Model</a></li>
                                         <li><a id="save" href="./save">Url</a></li>
                                         <li><a id="first" href="./first">Action</a></li>
-                                        <li><a id="internal" href="./internal">Action url</a> <span class="label label-info">New</span></li>
+                                        <li><a id="internal" href="./internal">Action url</a></li>
                                         <li><a id="content" href="./content">Content</a></li>
                                         <li><a id="stream" href="./stream">Stream</a></li>
-                                        <li><a id="application" href="./application">Download</a> <span class="label label-info">New</span></li>
+                                        <li><a id="application" href="./application">Download</a></li>
                                         <li><a id="load" href="./load">Reload page</a></li>
                                         <li><a id="forbidden" href="./forbidden">Error</a></li>
                                         <li><a id="nocontent" href="./nocontent">Status</a></li>
@@ -203,7 +203,7 @@
                                         <li><a id="xml" href="./xml">XML</a></li>
                                         <li><a id="json" href="./json">JSON</a></li>
                                         <li><a id="jsonp" href="./jsonp">JSONP</a></li>
-                                        <li><a id="template" href="./template">StringTemplate</a> <span class="label label-info">New</span></li>
+                                        <li><a id="template" href="./template">StringTemplate</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -215,9 +215,10 @@
                                         <li><a id="page" href="./page">Include</a></li>
                                         <li><a id="calc" href="./calc">AJAX</a></li>
                                         <li><a id="message" href="./message">Flash message</a></li>
+                                        <li><a id="cookie" href="./cookie">Cookie manager</a> <span class="label label-info">New</span></li>
                                         <li><a id="shop" href="./shop">Validation</a></li>
-                                        <li><a id="async" href="./async">Async</a> <span class="label label-info">New</span></li>
-                                        <li><a id="listener" href="./listener">Server listener</a> <span class="label label-info">New</span></li>
+                                        <li><a id="async" href="./async">Async</a></li>
+                                        <li><a id="listener" href="./listener">Server listener</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>File</strong>
