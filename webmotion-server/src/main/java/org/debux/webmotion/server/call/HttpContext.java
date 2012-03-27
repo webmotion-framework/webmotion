@@ -482,6 +482,13 @@ public class HttpContext {
     }
 
     /**
+     * @return get context path
+     */
+    public String getContextPath() {
+        return request.getContextPath();
+    }
+    
+    /**
      * @return get servlet context
      */
     public ServletContext getServletContext() {
