@@ -3,6 +3,7 @@ package.views=WEB-INF/
 package.filters=org.debox.web.filter
 package.actions=org.debox.web.action
 package.errors=org.debox.web.error
+server.secret=012345678901234567890123456789_
 
 #javac.debug=true
 #server.controller.scope=singleton

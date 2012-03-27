@@ -130,7 +130,10 @@ public class ServerContext {
         mainHandler = handlers.getInstance(className);
         
         // Read secret otherwise generate it
-        secret = WebMotionUtils.generateSecret();
+        secret = config.getSecret();
+        if (secret == null || secret.length() < Config.SERVER_SECRET_MIN_SIZE) {
+            secret = WebMotionUtils.generateSecret();
+        }
         
         // Init handlers
         mainHandler.init(mapping, this);

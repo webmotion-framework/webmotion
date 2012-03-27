@@ -44,6 +44,8 @@ public class Config {
         FORCED
     }
     
+    public static int SERVER_SECRET_MIN_SIZE = 31;
+    
     // Config names
     public static String PACKAGE_VIEWS = "package.views";
     public static String PACKAGE_BASE = "package.base";
@@ -57,6 +59,7 @@ public class Config {
     public static String SERVER_ERROR_PAGE = "server.error.page";
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
     public static String SERVER_MAIN_HANDLER_CLASS = "server.main.handler.class";
+    public static String SERVER_SECRET = "server.secret";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -93,6 +96,9 @@ public class Config {
     
     /** Listener on start/stop server */
     protected String serverListener = null;
+    
+    /** Secret use to manage secure on server */
+    protected String secret;
     
     /** Default contructor. */
     public Config() {
@@ -203,4 +209,13 @@ public class Config {
     public void setServerListener(String serverListener) {
         this.serverListener = serverListener;
     }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
 }

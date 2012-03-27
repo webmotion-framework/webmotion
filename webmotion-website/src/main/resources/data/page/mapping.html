@@ -317,6 +317,18 @@ public class Listener implements WebMotionServerListener {
     <span class="label">Default</span> Par défaut, la valeur server.main.handler.class est <code>org.debux.webmotion.server.WebMotionMainHandler</code>
 </p>
 
+<h3>server.secret</h3>
+<p>
+    La propriété <strong>server.secret</strong> permet de définir la clé secret qui
+    permet la sécurisation des données (les cookies, ...). Elle est à définir si vous
+    utilisez WebMotion sur différents serveurs pour une même application. Elle doit contenir
+    au moins 31 charactères. Si la clé n'est pas défini une clé est automatiquement créée. 
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Définition d'une clé :
+</p>
+<pre>server.secret=012345678901234567890123456789_</pre>
+
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
 <p>
     Cette section permet de définir, pour une méthode HTTP et une URL données, une action à réaliser, comme l'affichage d'une vue, 

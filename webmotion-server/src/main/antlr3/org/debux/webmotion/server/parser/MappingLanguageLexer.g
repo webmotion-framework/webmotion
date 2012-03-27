@@ -36,6 +36,7 @@ CONFIG_SERVER_ERROR_PAGE:'server.error.page';
 CONFIG_SERVER_CONTROLLER_SCOPE:'server.controller.scope';
 CONFIG_SERVER_LISTENER_CLASS:'server.listener.class';
 CONFIG_SERVER_MAIN_HANDLER_CLASS:'server.main.handler.class';
+CONFIG_SERVER_SECRET:'server.secret';
 
 ACTION:'action:';
 ACTION_ASYNC:'async:';

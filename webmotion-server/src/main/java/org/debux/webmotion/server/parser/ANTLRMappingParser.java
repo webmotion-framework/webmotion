@@ -297,6 +297,11 @@ public class ANTLRMappingParser extends MappingParser {
                     config.setErrorPage(State.valueOf(value.toUpperCase()));
                 } else if (Config.SERVER_LISTENER_CLASS.equals(name)) {
                     config.setServerListener(value);
+                } else if (Config.SERVER_SECRET.equals(name)) {
+                    if (value.length() < Config.SERVER_SECRET_MIN_SIZE) {
+                        throw new WebMotionException("Secret is too short, the value must contain more 31 characters.");
+                    }
+                    config.setSecret(value);
                 }
             }
         });
