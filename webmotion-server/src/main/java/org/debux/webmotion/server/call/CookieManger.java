@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -255,6 +256,19 @@ public class CookieManger {
         }
 
         public void setPath(String path) {
+            this.path = "";
+            String contextPath = context.getContextPath();
+            if (contextPath != null && !contextPath.isEmpty()) {
+                this.path += contextPath;
+            }
+            String extensionPath = context.getExtensionPath();
+            if (extensionPath != null && !extensionPath.isEmpty()) {
+                this.path += extensionPath;
+            }
+            this.path += path;
+        }
+
+        public void setAbsolutePath(String path) {
             this.path = path;
         }
 
@@ -332,7 +346,7 @@ public class CookieManger {
         /**
          * Get a secure value.
          * value = username|expiration time|(value)k|HMAC(username|expiration time|value|SSL session key, k) 
-         * where k = HMAC(user|expire, sk)
+         * where k = HMAC(user|expiration time, sk)
          * and sk is server's secret key
          * (value)k is the result an cryptographic function
          * 
@@ -340,13 +354,13 @@ public class CookieManger {
          * @param expiry expiry
          * @return secure value
          */
-        public String getSecureValue(String value, int expiry) {
+        public String getSecureValue(String value, Integer expiry) {
             if (value == null) {
                 return null;
             }
             
             long expire = -1;
-            if (expiry > 0) {
+            if (expiry != null && expiry > 0) {
                 expire = System.currentTimeMillis() + expiry;
             }
 
@@ -523,7 +537,7 @@ public class CookieManger {
     public static class DummySecureValue extends SecureValue {
 
         @Override
-        public String getSecureValue(String value, int expiry) {
+        public String getSecureValue(String value, Integer expiry) {
             return value;
         }
 
