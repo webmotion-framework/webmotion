@@ -122,3 +122,5 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /redirect/relative                          url:/hello
 *           /redirect/absolute                          url:/deploy/test/hello
 *           /redirect                                   Dispatcher.redirect
+*           /cookie/create                              CookieService.create
+*           /cookie/read                                CookieService.read

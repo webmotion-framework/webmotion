@@ -88,6 +88,27 @@ public class ActionMiscIT extends AbstractIT {
     }
     
     @Test
+    public void cookieManager() throws IOException {
+        String url = getAbsoluteUrl("cookie/create");
+        HttpGet request = new HttpGet(url);
+        
+        DefaultHttpClient client = new DefaultHttpClient();
+        client.execute(request);
+        
+        CookieStore cookieStore = client.getCookieStore();
+        List<Cookie> cookies = cookieStore.getCookies();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            String value = cookie.getValue();
+            if ("a_name".equals(name)) {
+                AssertJUnit.assertTrue(value.startsWith("me|-1"));
+                return;
+            }
+        }
+        throw new RuntimeException("Invalid cookie");
+    }
+    
+    @Test
     public void validationBean() throws IOException {
         String url = getAbsoluteUrl("create?book.isbn=007&book.title=James%20Bond");
         HttpGet request = new HttpGet(url);
