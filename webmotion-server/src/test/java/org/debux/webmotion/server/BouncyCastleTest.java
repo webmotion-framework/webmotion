@@ -53,7 +53,7 @@ import org.testng.annotations.Test;
  */
 public class BouncyCastleTest {
    
-    private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(BouncyCastleTest.class);
 
     @Test
     public void testEncryptRijndael() throws DataLengthException, IllegalStateException, InvalidCipherTextException {
