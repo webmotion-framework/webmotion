@@ -24,7 +24,11 @@
  */
 package org.debux.webmotion.server.call;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Array;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +36,10 @@ import java.util.Set;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.collections.CollectionUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.engines.RijndaelEngine;
@@ -69,6 +73,9 @@ public class CookieManger {
     /** Cookies in request */
     protected Map<String, Cookie> cookies;
     
+    /** Json serializer to store object */
+    protected Gson gson;
+    
     /**
      * Create basic cookie manager not secured.
      * @param context http context
@@ -88,6 +95,7 @@ public class CookieManger {
         }
         
         secured = new DummySecureValue();
+        gson = new Gson();
     }
     
     /**
@@ -197,6 +205,9 @@ public class CookieManger {
             value = secured.getUnsecureValue(secureValue);
         }
         
+        /**
+         * @return a cookie
+         */
         public Cookie toCookie() {
             String cookieValue = secured.getSecureValue(value, maxAge);
             
@@ -219,42 +230,73 @@ public class CookieManger {
             return cookie;
         }
 
+        /**
+         * @See Cookie.getComment
+         */
         public String getComment() {
             return comment;
         }
 
+        /**
+         * @See Cookie.setComment
+         */
         public void setComment(String comment) {
             this.comment = comment;
         }
 
+        /**
+         * @See Cookie.getDomain
+         */
         public String getDomain() {
             return domain;
         }
 
+        /**
+         * @See Cookie.setDomain
+         */
         public void setDomain(String domain) {
             this.domain = domain;
         }
 
+        /**
+         * @See Cookie.getMaxAge
+         */
         public int getMaxAge() {
             return maxAge;
         }
 
+        /**
+         * @See Cookie.setMaxAge
+         */
         public void setMaxAge(int maxAge) {
             this.maxAge = maxAge;
         }
 
+        /**
+         * @See Cookie.getName
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * @See Cookie.setName
+         */
         public void setName(String name) {
             this.name = name;
         }
 
+        /**
+         * @See Cookie.getPath
+         */
         public String getPath() {
             return path;
         }
 
+        /**
+         * Set a path relatif in extension et context path
+         * @param path path
+         */
         public void setPath(String path) {
             this.path = "";
             String contextPath = context.getContextPath();
@@ -268,24 +310,76 @@ public class CookieManger {
             this.path += path;
         }
 
+        /**
+         * Set a path absolute
+         * @param path path
+         */
         public void setAbsolutePath(String path) {
             this.path = path;
         }
 
+        /**
+         * @See Cookie.isSecure
+         */
         public boolean isSecure() {
             return secure;
         }
 
+        /**
+         * @See Cookie.setSecure
+         */
         public void setSecure(boolean secure) {
             this.secure = secure;
         }
 
+        /**
+         * @See Cookie.getValue
+         */
         public String getValue() {
             return value;
         }
 
+        /**
+         * @See Cookie.setValue
+         */
         public void setValue(String value) {
             this.value = value;
+        }
+        
+        /**
+         * Set object value, the method serializes the object to json format.
+         * @param value value
+         */
+        public void setValue(Object value) {
+            this.value = gson.toJson(value);
+        }
+        
+        /**
+         * Get the value as object representation. It is not possible to deserialize 
+         * collection with objects of arbitrary types, in this case getValue 
+         * as String and use JsonParser.
+         * For example get int array, pass <code>int[].class</code> as class.
+         * @param <T>
+         * @param clazz class to value
+         * @return object
+         */
+        public <T> T getValue(Class<T> clazz) {
+            T fromJson = gson.fromJson(this.value, clazz);
+            return fromJson;
+        }
+        
+        /**
+         * Get value as collection. It is not possible to deserialize 
+         * collection with objects of arbitrary types, in this case getValue 
+         * as String and use JsonParser.
+         * @param <T>
+         * @param clazz object class in collection
+         * @return collection of values
+         */
+        public <T> Collection<T> getValues(Class<T> clazz) {
+            Class arrayClass = Array.newInstance(clazz, 0).getClass();
+            T[] fromJson = (T[]) gson.fromJson(this.value, arrayClass);
+            return Arrays.asList(fromJson);
         }
     }
     

@@ -102,4 +102,12 @@ public class GsonTest {
         AssertJUnit.assertEquals(int[].class, intArrayClass);
     }
     
+    @Test
+    public void testArray() {
+        Gson gson = new Gson();
+        Class arrayClass = Array.newInstance(Integer.class, 0).getClass();
+        Integer[] fromJson = (Integer[]) gson.fromJson("[1,2,3,4,5]", arrayClass);
+        AssertJUnit.assertEquals((Integer) 3, fromJson[2]);
+    }
+    
 }
