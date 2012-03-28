@@ -127,6 +127,17 @@ public class CookieManger {
     }
     
     /**
+     * Create a new cookie, it is not store in response until call add method.
+     * @param name name
+     * @param value value
+     * @return cookie
+     */
+    public CookieEntity create(String name, Object value) {
+        CookieEntity cookieEntity = new CookieEntity(name, value);
+        return cookieEntity;
+    }
+    
+    /**
      * Store cookie in response.
      * @param cookieEntity cookie
      */
@@ -188,11 +199,30 @@ public class CookieManger {
         protected Integer maxAge;
         protected Boolean secure;
         
+        /**
+         * Create a cookie with a name and string value.
+         * @param name name
+         * @param value value
+         */
         public CookieEntity(String name, String value) {
             this.name = name;
             this.value = value;
         }
         
+        /**
+         * Create a cookie with a name and object value.
+         * @param name name
+         * @param value value
+         */
+        public CookieEntity(String name, Object value) {
+            this.name = name;
+            this.value = gson.toJson(value);
+        }
+        
+        /**
+         * Wrap a cookie
+         * @param cookie cookie
+         */
         public CookieEntity(Cookie cookie) {
             name = cookie.getName();
             path = cookie.getPath();

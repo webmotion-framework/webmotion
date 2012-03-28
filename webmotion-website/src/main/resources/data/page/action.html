@@ -755,7 +755,7 @@ public Render progress(FileProgressListener listener) {
 <p>
     Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
     en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
-    la suppression d'un cookie, la sécurisation, ...
+    la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, ...
     Il se situe dans le context http ou est récupérable dans les paramètres de la méthode.
 </p>
 
@@ -764,10 +764,8 @@ public Render progress(FileProgressListener listener) {
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-
 CookieEntity cookie = manager.create("name", "value");
 cookie.setPath("/index.html");
-
 manager.add(cookie);
 </pre>
 
@@ -776,8 +774,7 @@ manager.add(cookie);
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-
-CookieEntity cookie = manager.get("name");
+CookieEntity cookie = manager.get("a_name");
 String value = cookie.getValue();
 </pre>
 
@@ -786,7 +783,24 @@ String value = cookie.getValue();
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-manager.remove("name");
+manager.remove("a_name");
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Enregistrement d'un objet comme valeur :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.create("a_name", new User("John"));
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'un objet comme valeur :
+</p>
+<pre class="prettyprint">
+CookieEntity cookie = manager.get("a_name");
+User user = cookie.getValue(User.class);
 </pre>
 
 <p>
