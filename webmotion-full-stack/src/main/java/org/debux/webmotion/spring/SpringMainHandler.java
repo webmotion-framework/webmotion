@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion extension spring
+ * WebMotion full stack
  * 
  * $Id$
  * $HeadURL$

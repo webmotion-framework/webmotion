@@ -1,6 +1,6 @@
 /*
  * #%L
- * WebMotion JPA
+ * WebMotion full stack
  * 
  * $Id$
  * $HeadURL$
@@ -27,7 +27,6 @@ package org.debux.webmotion.jpa;
 import java.lang.reflect.Field;
 import javax.persistence.EntityManager;
 import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;

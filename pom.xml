@@ -50,12 +50,11 @@
 
     <modules>
         <module>webmotion-server</module>
+        <module>webmotion-full-stack</module>
         <module>webmotion-wiki</module>
-        <module>webmotion-spring</module>
         <module>webmotion-test</module>
         <module>webmotion-website</module>
         <module>webmotion-archetype</module>
-        <module>webmotion-jpa</module>
   </modules>
 
     <developers>
