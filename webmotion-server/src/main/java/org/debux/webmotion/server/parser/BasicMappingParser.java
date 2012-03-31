@@ -67,9 +67,14 @@ public class BasicMappingParser extends MappingParser {
     protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
     protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
+    protected Mapping mapping;
+    
+    public BasicMappingParser() {
+        mapping = new Mapping();
+    }
+
     @Override
     protected Mapping parse(URL url) {
-        Mapping mapping = new Mapping();
         mapping.setName(url.toExternalForm());
         
         Config config = mapping.getConfig();

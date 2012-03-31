@@ -33,16 +33,20 @@ import org.debux.webmotion.server.mapping.Mapping;
  * @author jruchaud
  */
 public abstract class MappingParser {
-    
-    /** The absolute path to the mapping file */
-    public static String MAPPING_FILE_NAME = "/mapping";
+
+    /**
+     * @return true if the file exists otherwise false
+     */
+    public boolean exists(String fileName) {
+        return getClass().getResource(fileName) != null;
+    }
     
     /**
      * Parse a mapping file
      * @return the representation of the file
      */
-    public Mapping parse() {
-        URL url = getClass().getResource(MappingParser.MAPPING_FILE_NAME);
+    public Mapping parse(String fileName) {
+        URL url = getClass().getResource(fileName);
         return parse(url);
     }
     

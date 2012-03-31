@@ -199,11 +199,12 @@ public class ANTLRMappingParser extends MappingParser {
      */
     public ANTLRMappingParser() {
         initVisit();
+        
+        mapping = new Mapping();
     }
     
     @Override
     protected Mapping parse(URL url) {
-        mapping = new Mapping();
         mapping.setName(url.toExternalForm());
         
         stack = new LinkedList<Object>();

@@ -61,6 +61,12 @@ public class WebMotionServer implements Filter {
     
     private static final Logger log = LoggerFactory.getLogger(WebMotionServer.class);
 
+    /** Filter parameter to configure mapping file name by default is mapping */
+    protected final static String PARAM_MAPPING_FILE_NAME = "mapping_file_name";
+            
+    /** Filter parameter to configure default mapping file name by default is default_mapping */
+    protected final static String PARAM_DEFAULT_MAPPING_FILE_NAME = "default_mapping_file_name";
+            
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
@@ -92,6 +98,12 @@ public class WebMotionServer implements Filter {
      */
     protected ServerContext initServerContext(FilterConfig filterConfig) {
         ServerContext instance = new ServerContext();
+        
+        String mappingFileName = filterConfig.getInitParameter(PARAM_MAPPING_FILE_NAME);
+        instance.setMappingFileName(mappingFileName);
+        
+        String defaultMappingFileName = filterConfig.getInitParameter(PARAM_DEFAULT_MAPPING_FILE_NAME);
+        instance.setDefaultMappingFileName(defaultMappingFileName);
         
         ServletContext servletContext = filterConfig.getServletContext();
         instance.contextInitialized(servletContext);

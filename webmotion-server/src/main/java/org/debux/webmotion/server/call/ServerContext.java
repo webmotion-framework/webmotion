@@ -82,6 +82,12 @@ public class ServerContext {
     /** Secret key use in encryt cookie value */
     protected String secret;
     
+    /** Main mapping file name to parse */
+    protected String mappingFileName;
+    
+    /** Default mapping file name to parse */
+    protected String defaultMappingFileName;
+    
     /**
      * Initialize the context.
      * 
@@ -121,7 +127,12 @@ public class ServerContext {
     public void loadMapping() {
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
-        mapping = parser.parse();
+        
+        if (parser.exists(defaultMappingFileName)) {
+            parser.parse(defaultMappingFileName);
+        }
+        
+        mapping = parser.parse(mappingFileName);
 
         // Create the handler factory
         Config config = mapping.getConfig();
@@ -194,4 +205,20 @@ public class ServerContext {
         this.secret = secret;
     }
 
+    public String getDefaultMappingFileName() {
+        return defaultMappingFileName;
+    }
+
+    public void setDefaultMappingFileName(String defaultMappingFileName) {
+        this.defaultMappingFileName = defaultMappingFileName;
+    }
+
+    public String getMappingFileName() {
+        return mappingFileName;
+    }
+
+    public void setMappingFileName(String mappingFileName) {
+        this.mappingFileName = mappingFileName;
+    }
+    
 }

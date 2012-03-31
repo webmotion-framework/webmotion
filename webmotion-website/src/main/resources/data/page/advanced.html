@@ -58,6 +58,28 @@
 *           /readme                                     url:/static/README
 </pre>
 
+<p>
+    Vous pouvez aussi modifier le nom du fichier de mapping charger et le nom du 
+    fichier de mapping utilisé pour définir une configuration par défaut en redéfinissant 
+    le filtre de WebMotion ainsi :
+</p>
+
+<pre class="prettyprint">
+&lt;filter&gt;
+    &lt;filter-name&gt;WebMotionServer&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.debux.webmotion.server.WebMotionServer&lt;/filter-class&gt;
+    &lt;async-supported&gt;true&lt;/async-supported&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;mapping_file_name&lt;/param-name&gt;
+        &lt;param-value&gt;/mapping&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;default_mapping_file_name&lt;/param-name&gt;
+        &lt;param-value&gt;/default_mapping&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+</pre>
+
 <div class="page-header">
     <h2 id="handler">Comprendre le fonctionnement de WebMotion</h2>
 </div>
