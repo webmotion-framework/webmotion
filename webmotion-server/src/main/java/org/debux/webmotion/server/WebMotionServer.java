@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import java.util.Enumeration;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -64,9 +65,6 @@ public class WebMotionServer implements Filter {
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping_file_name";
             
-    /** Filter parameter to configure default mapping file name by default is default_mapping */
-    protected final static String PARAM_DEFAULT_MAPPING_FILE_NAME = "default_mapping_file_name";
-            
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
 
@@ -100,10 +98,12 @@ public class WebMotionServer implements Filter {
         ServerContext instance = new ServerContext();
         
         String mappingFileName = filterConfig.getInitParameter(PARAM_MAPPING_FILE_NAME);
-        instance.setMappingFileName(mappingFileName);
+        if (mappingFileName != null && !mappingFileName.isEmpty()) {
+            instance.setMappingFileName(mappingFileName);
+        }
         
-        String defaultMappingFileName = filterConfig.getInitParameter(PARAM_DEFAULT_MAPPING_FILE_NAME);
-        instance.setDefaultMappingFileName(defaultMappingFileName);
+        Config defaultConfig = getDefaultConfig(filterConfig);
+        instance.setDefaultConfig(defaultConfig);
         
         ServletContext servletContext = filterConfig.getServletContext();
         instance.contextInitialized(servletContext);
@@ -111,6 +111,22 @@ public class WebMotionServer implements Filter {
         return instance;
     }
 
+    /**
+     * Create a default config from parameters contains in filter
+     * @param filterConfig filter config
+     * @return default config
+     */
+    protected Config getDefaultConfig(FilterConfig filterConfig) {
+        Config config = new Config();
+        Enumeration<String> initParameterNames = filterConfig.getInitParameterNames();
+        while (initParameterNames.hasMoreElements()) {
+            String name = initParameterNames.nextElement();
+            String value = filterConfig.getInitParameter(name);
+            config.set(name, value);
+        }
+        return config;
+    }
+    
     @Override
     public void destroy() {
         // Fire onStop

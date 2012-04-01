@@ -37,14 +37,6 @@
         <filter-name>WebMotionServer</filter-name>
         <filter-class>org.debux.webmotion.server.WebMotionServer</filter-class>
         <async-supported>true</async-supported>
-        <init-param>
-            <param-name>mapping_file_name</param-name>
-            <param-value>/mapping</param-value>
-        </init-param>
-        <init-param>
-            <param-name>default_mapping_file_name</param-name>
-            <param-value>/default_mapping</param-value>
-        </init-param>
     </filter>
     
     <filter-mapping>

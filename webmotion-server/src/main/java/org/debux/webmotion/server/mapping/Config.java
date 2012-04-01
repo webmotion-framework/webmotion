@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.mapping;
 
+import org.debux.webmotion.server.WebMotionException;
+
 /**
  * Contains all configuration for run the server like the package name for view,
  * action, filter and error.
@@ -102,8 +104,70 @@ public class Config {
     
     /** Default contructor. */
     public Config() {
+        this(null);
+    }
+    
+    /**
+     * Use a default config
+     * @param defaultConfig default config 
+     */
+    public Config(Config defaultConfig) {
+        if (defaultConfig != null) {
+            
+            packageViews = defaultConfig.getPackageViews();
+            packageBase = defaultConfig.getPackageBase();
+            packageActions = defaultConfig.getPackageActions();
+            packageFilters = defaultConfig.getPackageFilters();
+            packageErrors = defaultConfig.getPackageErrors();
+            encoding = defaultConfig.getEncoding();
+            async = defaultConfig.isAsync();
+            javacDebug = defaultConfig.isJavacDebug();
+            controllerScope = defaultConfig.getControllerScope();
+            mainHandler = defaultConfig.getMainHandler();
+            errorPage = defaultConfig.getErrorPage();
+            serverListener = defaultConfig.getServerListener();
+            secret = defaultConfig.getSecret();
+        }
     }
 
+    /**
+     * Set the value from name
+     * @param name name
+     * @param value value
+     */
+    public void set(String name, String value) {
+        if (PACKAGE_BASE.equals(name)) {
+            setPackageBase(value);
+        } else if (PACKAGE_ACTIONS.equals(name)) {
+            setPackageActions(value);
+        } else if (PACKAGE_ERRORS.equals(name)) {
+            setPackageErrors(value);
+        } else if (PACKAGE_FILTERS.equals(name)) {
+            setPackageFilters(value);
+        } else if (PACKAGE_VIEWS.equals(name)) {
+            setPackageViews(value);
+        } else if (SERVER_ENCODING.equals(name)) {
+            setEncoding(value);
+        } else if (SERVER_ASYNC.equals(name)) {
+            setAsync(Boolean.valueOf(value));
+        } else if (JAVAC_DEBUG.equals(name)) {
+            setJavacDebug(Boolean.valueOf(value));
+        } else if (SERVER_CONTROLLER_SCOPE.equals(name)) {
+            setControllerScope(Scope.valueOf(value.toUpperCase()));
+        } else if (SERVER_MAIN_HANDLER_CLASS.equals(name)) {
+            setMainHandler(value);
+        } else if (SERVER_ERROR_PAGE.equals(name)) {
+            setErrorPage(State.valueOf(value.toUpperCase()));
+        } else if (SERVER_LISTENER_CLASS.equals(name)) {
+            setServerListener(value);
+        } else if (SERVER_SECRET.equals(name)) {
+            if (value.length() < Config.SERVER_SECRET_MIN_SIZE) {
+                throw new WebMotionException("Secret is too short, the value must contain more 31 characters.");
+            }
+            setSecret(value);
+        }
+    }
+    
     protected String getPackage(String packageName) {
         String result = packageBase;
         if(!packageBase.isEmpty() && !packageName.isEmpty()) {

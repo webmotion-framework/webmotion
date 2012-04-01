@@ -57,16 +57,6 @@
     <li><code>[extensions]</code>&nbsp;<a href="#extensions">Les extensions utilisées par l'application</a></li>
 </ul>
 
-<p>
-    Il vous est possible de définir un fichier <code>default_mapping</code> pour 
-    définir la configuration par défaut de vos fichiers de mapping. Le fichier 
-    peut être inclu dans une librairie externe à votre application. Seules les propriétes de la section 
-    <code>[config]</code> sont écrasées, si ces propriétés sont redéfinies dans le fichier 
-    de <code>mapping</code> principal. Pour les autres sections <code>[errors]</code>, 
-    <code>[filters]</code>, <code>[actions]</code> et <code>[extensions]</code>, les règles sont cumulées entre les 
-    deux fichiers.
-</p>
-
 <h2 id="comment" class="page-header">Commentaires</h2>
 <p>
     Vous pouvez mettre des commentaires dans le fichier mapping en préfixant vos ligne par un <code>#</code>.
@@ -84,6 +74,11 @@
     Cette section permet de définir quelques éléments de fonctionnement et de valeurs par défaut pour WebMotion.
     C'est ici que l'on précisera par exemple le répertoire contenant les pages de l'application 
     ainsi que le packages Java correspondant aux contrôleurs de l'application.
+</p>
+
+<p>
+    Il vous est possible de définir les valeurs par défaut directement dans le fichier <code>web.xml</code>
+    pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#servlet">Avancé - Architecture des servlets</a>.
 </p>
 
 <h3>Syntaxe</h3>

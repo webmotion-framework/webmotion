@@ -67,14 +67,23 @@ public class BasicMappingParser extends MappingParser {
     protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
     protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
 
-    protected Mapping mapping;
-    
+    /**
+     * Default contructor
+     */
     public BasicMappingParser() {
-        mapping = new Mapping();
+        super();
     }
 
+    /**
+     * Default contructor
+     */
+    public BasicMappingParser(Config defaultConfig) {
+        super(defaultConfig);
+    }
+    
     @Override
     protected Mapping parse(URL url) {
+        Mapping mapping = new Mapping(defaultConfig);
         mapping.setName(url.toExternalForm());
         
         Config config = mapping.getConfig();
@@ -282,7 +291,7 @@ public class BasicMappingParser extends MappingParser {
             ClassLoader classLoader = getClass().getClassLoader();
             List<URL> resources = Resource.getResources(name, classLoader);
             for (URL resource : resources) {
-                BasicMappingParser parser = new BasicMappingParser();
+                BasicMappingParser parser = new BasicMappingParser(defaultConfig);
                 
                 Mapping extensionMapping = parser.parse(resource);
                 extensionMapping.setExtensionPath(path);

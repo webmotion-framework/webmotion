@@ -59,8 +59,8 @@
 </pre>
 
 <p>
-    Vous pouvez aussi modifier le nom du fichier de mapping charger et le nom du 
-    fichier de mapping utilisé pour définir une configuration par défaut en redéfinissant 
+    Vous pouvez aussi modifier le nom du fichier de mapping charger et les 
+    valeurs par défaut pour la section <code>[config]</code> en redéfinissant 
     le filtre de WebMotion ainsi :
 </p>
 
@@ -74,11 +74,19 @@
         &lt;param-value&gt;/mapping&lt;/param-value&gt;
     &lt;/init-param&gt;
     &lt;init-param&gt;
-        &lt;param-name&gt;default_mapping_file_name&lt;/param-name&gt;
-        &lt;param-value&gt;/default_mapping&lt;/param-value&gt;
+        &lt;param-name&gt;server.error.page&lt;/param-name&gt;
+        &lt;param-value&gt;disabled&lt;/param-value&gt;
     &lt;/init-param&gt;
 &lt;/filter&gt;
 </pre>
+
+<p>
+    L'intérêt de mettre des valeurs par défaut dans le <code>web.xml</code> est 
+    à la non nécessité de les redéfinir à chaque fois dans votre fichier 
+    de <code>mapping</code>. Ainsi vous pouvez créer des comportements supplémentaires 
+    par le biais des handlers et les définir comme fonctionnalitées principales de vos
+    applications.
+</p>
 
 <div class="page-header">
     <h2 id="handler">Comprendre le fonctionnement de WebMotion</h2>

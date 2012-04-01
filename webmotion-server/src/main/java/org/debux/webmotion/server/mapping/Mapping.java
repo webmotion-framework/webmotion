@@ -57,14 +57,18 @@ public class Mapping {
     /** Informations if the extension is use as an extension */
     protected String extensionPath;
     
-    public Mapping() {
-        this.config = new Config();
+    public Mapping(Config defaultConfig) {
+        this.config = new Config(defaultConfig);
         this.errorRules = new ArrayList<ErrorRule>();
         this.filterRules = new ArrayList<FilterRule>();
         this.actionRules = new ArrayList<ActionRule>();
         this.extensionsRules = new LinkedList<Mapping>();
     }
-
+    
+    public Mapping() {
+        this(null);
+    }
+    
     public Config getConfig() {
         return config;
     }
