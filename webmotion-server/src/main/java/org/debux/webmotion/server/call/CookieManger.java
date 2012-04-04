@@ -181,6 +181,8 @@ public class CookieManger {
             cookieEntity.setMaxAge(0);
             cookieEntity.setValue(null);
             add(cookieEntity);
+            
+            cookies.remove(name);
         }
     }
     
