@@ -27,36 +27,37 @@ package org.debux.webmotion.test;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.CookieManger;
 import org.debux.webmotion.server.call.CookieManger.CookieEntity;
-import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 
 /**
- * Use cookie
+ * Use cookie with object value.
  * 
  * @author julien
  */
-public class CookieService extends WebMotionController {
+public class CookieObject extends WebMotionController {
     
-    public Render create(HttpContext context) {
-        CookieManger manger = context.getCookieManger("me", true, true);
-        CookieEntity cookie = manger.create("a_name", "a_value");
-        cookie.setPath("/cookie");
+    public Render read(CookieManger manger) {
+        CookieEntity cookie = manger.get("user_cookie");
+        if (cookie != null) {
+            UserCookie userCookie = cookie.getValue(UserCookie.class);
+            String value = userCookie.getValue();
+            return renderContent("<div>current value = " + value + "</div>", "text/html");
+        } else {
+            return renderContent("<div>current value is empty</div>", "text/html");
+        }
+    }
+    
+    public Render create(CookieManger manger, String value) {
+        CookieEntity cookie = manger.create("user_cookie", new UserCookie(value));
+        cookie.setPath("/cookie/object");
         manger.add(cookie);
         
-        return renderURL("/cookie/read");
+        return renderURL("/cookie/object/read");
     }
     
-    public Render read(HttpContext context) {
-        CookieManger basicManger = context.getCookieManger();
-        CookieEntity secureCookie = basicManger.get("a_name");
-        String secureValue = secureCookie.getValue();
+    public Render remove(CookieManger manger) {
+        manger.remove("user_cookie");
         
-        CookieManger manger = context.getCookieManger(null, true, true);
-        CookieEntity cookie = manger.get("a_name");
-        String value = cookie.getValue();
-        
-        return renderContent("<div>secure value = " + secureValue + "</div>" +
-                "<div>value = " + value + "</div>", "text/html");
+        return renderURL("/cookie/object/read");
     }
-    
 }

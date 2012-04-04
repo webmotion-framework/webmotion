@@ -91,6 +91,16 @@
             <artifactId>javaee-api</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        
         <!-- Logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
