@@ -97,8 +97,8 @@
         </dependency>
         
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
         </dependency>
         
         <!-- Logger -->
