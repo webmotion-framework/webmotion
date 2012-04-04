@@ -37,26 +37,32 @@ import org.debux.webmotion.server.render.Render;
  */
 public class CookieService extends WebMotionController {
     
-    public Render create(HttpContext context) {
-        CookieManger manger = context.getCookieManger("me", true, true);
-        CookieEntity cookie = manger.create("a_name", "a_value");
+    public Render create(HttpContext context, boolean secured) {
+        String name = secured ? "secured_name" : "name";
+        
+        CookieManger manger = getCookieManger(context, secured);
+        CookieEntity cookie = manger.create(name, "a_value");
         cookie.setPath("/cookie");
         manger.add(cookie);
         
-        return renderURL("/cookie/read");
+        return renderURL("/cookie/read", "secured", secured);
     }
     
-    public Render read(HttpContext context) {
-        CookieManger basicManger = context.getCookieManger();
-        CookieEntity cookie = basicManger.get("a_name");
-        String securedValue = cookie.getValue();
+    public Render read(HttpContext context, boolean secured) {
+        String name = secured ? "secured_name" : "name";
         
-        CookieManger securedManger = context.getCookieManger(null, true, true);
-        CookieEntity securedCookie = securedManger.get("a_name");
-        String value = securedCookie.getValue();
+        CookieManger manger = getCookieManger(context, secured);
+        CookieEntity cookie = manger.get(name);
+        String value = cookie.getValue();
         
-        return renderContent("<div>Secured value = " + securedValue + "</div>" +
-                "<div>Value = " + value + "</div>", "text/html");
+        return renderContent("<div>Value = " + value + "</div>", "text/html");
     }
     
+    protected CookieManger getCookieManger(HttpContext context, boolean secured) {
+        if (secured) {
+            return context.getCookieManger("me", true, true);
+        } else {
+            return context.getCookieManger();
+        }
+    }
 }

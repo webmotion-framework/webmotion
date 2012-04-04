@@ -900,13 +900,30 @@ public class Showcase extends WebMotionController {
     public Render cookie() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/cookie/create"
+                    "/cookie/create?secured=false",
+                    "/cookie/create?secured=true"
                 ),
                 
                 "files", Arrays.asList(
                     getConfig(false, true, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 76, 2)),
                     getJavaContent("CookieService.java")
+                )
+        );
+    }
+    
+    public Render cookieObject() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/cookie/object"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 78, 4)),
+                    getJavaContent("CookieObject.java"),
+                    getJavaContent("UserCookie.java"),
+                    getPageContent("cookieObject.jsp")
                 )
         );
     }

@@ -95,18 +95,23 @@ public class ActionMiscIT extends AbstractIT {
     
     @Test
     public void cookieManagerCreate() throws IOException {
-        String url = getAbsoluteUrl("cookie/create");
+        String url = getAbsoluteUrl("cookie/create?secured=true");
         HttpGet request = new HttpGet(url);
         
         DefaultHttpClient client = new DefaultHttpClient();
-        client.execute(request);
+        HttpResponse response = client.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        InputStream content = entity.getContent();
+        String result = IOUtils.toString(content);
+        AssertJUnit.assertTrue(result.contains("Value = a_value"));
         
         CookieStore cookieStore = client.getCookieStore();
         List<Cookie> cookies = cookieStore.getCookies();
         for (Cookie cookie : cookies) {
             String name = cookie.getName();
             String value = cookie.getValue();
-            if ("a_name".equals(name)) {
+            if ("secured_name".equals(name)) {
                 AssertJUnit.assertTrue(value.startsWith("me|-1"));
                 return;
             }
@@ -116,14 +121,14 @@ public class ActionMiscIT extends AbstractIT {
     
     @Test
     public void cookieManagerRead() throws IOException {
-        String url = getAbsoluteUrl("cookie/read");
+        String url = getAbsoluteUrl("cookie/read?secured=false");
         HttpGet request = new HttpGet(url);
         
         DefaultHttpClient client = new DefaultHttpClient();
         CookieStore cookieStore = new BasicCookieStore();
         client.setCookieStore(cookieStore);
         
-        BasicClientCookie initialCookie = new BasicClientCookie("a_name", "test");
+        BasicClientCookie initialCookie = new BasicClientCookie("name", "test");
         initialCookie.setVersion(1);
         initialCookie.setDomain("localhost");
         initialCookie.setPath("/webmotion-test/test/cookie");
@@ -134,7 +139,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpEntity entity = response.getEntity();
         InputStream content = entity.getContent();
         String result = IOUtils.toString(content);
-        AssertJUnit.assertTrue(result.contains("Secured value = test"));
+        AssertJUnit.assertTrue(result.contains("Value = test"));
     }
     
     @Test

@@ -216,6 +216,7 @@
                                         <li><a id="calc" href="./calc">AJAX</a></li>
                                         <li><a id="message" href="./message">Flash message</a></li>
                                         <li><a id="cookie" href="./cookie">Cookie manager</a> <span class="label label-info">New</span></li>
+                                        <li><a id="cookie_object" href="./cookie_object">Cookie manager<br/>(object)</a> <span class="label label-info">New</span></li>
                                         <li><a id="shop" href="./shop">Validation</a></li>
                                         <li><a id="async" href="./async">Async</a></li>
                                         <li><a id="listener" href="./listener">Server listener</a></li>
