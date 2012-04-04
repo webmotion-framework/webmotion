@@ -41,9 +41,9 @@ public class CookieObject extends WebMotionController {
         if (cookie != null) {
             UserCookie userCookie = cookie.getValue(UserCookie.class);
             String value = userCookie.getValue();
-            return renderContent("<div>current value = " + value + "</div>", "text/html");
+            return renderContent("<div>Current value = " + value + "</div>", "text/html");
         } else {
-            return renderContent("<div>current value is empty</div>", "text/html");
+            return renderContent("<div>Current value is empty</div>", "text/html");
         }
     }
     

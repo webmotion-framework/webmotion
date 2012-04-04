@@ -25,11 +25,17 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -88,7 +94,7 @@ public class ActionMiscIT extends AbstractIT {
     }
     
     @Test
-    public void cookieManager() throws IOException {
+    public void cookieManagerCreate() throws IOException {
         String url = getAbsoluteUrl("cookie/create");
         HttpGet request = new HttpGet(url);
         
@@ -108,6 +114,108 @@ public class ActionMiscIT extends AbstractIT {
         throw new RuntimeException("Invalid cookie");
     }
     
+    @Test
+    public void cookieManagerRead() throws IOException {
+        String url = getAbsoluteUrl("cookie/read");
+        HttpGet request = new HttpGet(url);
+        
+        DefaultHttpClient client = new DefaultHttpClient();
+        CookieStore cookieStore = new BasicCookieStore();
+        client.setCookieStore(cookieStore);
+        
+        BasicClientCookie initialCookie = new BasicClientCookie("a_name", "test");
+        initialCookie.setVersion(1);
+        initialCookie.setDomain("localhost");
+        initialCookie.setPath("/webmotion-test/test/cookie");
+        cookieStore.addCookie(initialCookie);
+        
+        HttpResponse response = client.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        InputStream content = entity.getContent();
+        String result = IOUtils.toString(content);
+        AssertJUnit.assertTrue(result.contains("Secured value = test"));
+    }
+    
+    @Test
+    public void cookieManagerObjectCreate() throws IOException {
+        String url = getAbsoluteUrl("cookie/object/create?value=test");
+        HttpGet request = new HttpGet(url);
+        
+        DefaultHttpClient client = new DefaultHttpClient();
+        client.execute(request);
+        
+        CookieStore cookieStore = client.getCookieStore();
+        List<Cookie> cookies = cookieStore.getCookies();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            String value = cookie.getValue();
+            if ("user_cookie".equals(name)) {
+                AssertJUnit.assertEquals("{\\\"value\\\":\\\"test\\\"}", value);
+                return;
+            }
+        }
+        throw new RuntimeException("Invalid cookie");
+    }
+    
+    @Test
+    public void cookieManagerObjectRemove() throws IOException {
+        String url = getAbsoluteUrl("cookie/object/remove");
+        HttpGet request = new HttpGet(url);
+        
+        DefaultHttpClient client = new DefaultHttpClient();
+        CookieStore cookieStore = new BasicCookieStore();
+        client.setCookieStore(cookieStore);
+        
+        BasicClientCookie initialCookie = new BasicClientCookie("user_cookie", "{}");
+        initialCookie.setVersion(1);
+        initialCookie.setDomain("localhost");
+        initialCookie.setPath("/webmotion-test/test/cookie/object");
+        cookieStore.addCookie(initialCookie);
+        
+        client.execute(request);
+
+        List<Cookie> cookies = cookieStore.getCookies();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            if ("user_cookie".equals(name)) {
+                throw new RuntimeException("Invalid cookie");
+            }
+        }
+    }
+    
+    @Test
+    public void cookieManagerObjectRead() throws IOException {
+        String url = getAbsoluteUrl("cookie/object/read");
+        HttpGet request = new HttpGet(url);
+        
+        DefaultHttpClient client = new DefaultHttpClient();
+        CookieStore cookieStore = new BasicCookieStore();
+        client.setCookieStore(cookieStore);
+        
+        BasicClientCookie initialCookie = new BasicClientCookie("user_cookie", "{\\\"value\\\":\\\"test\\\"}");
+        initialCookie.setVersion(1);
+        initialCookie.setDomain("localhost");
+        initialCookie.setPath("/webmotion-test/test/cookie/object");
+        cookieStore.addCookie(initialCookie);
+        
+        HttpResponse response = client.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        InputStream content = entity.getContent();
+        String result = IOUtils.toString(content);
+        AssertJUnit.assertTrue(result.contains("Current value = test"));
+    }
+    
+    @Test
+    public void cookieManagerNullObjectRead() throws IOException {
+        String url = getAbsoluteUrl("cookie/object/read");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("Current value is empty"));
+    }
+        
     @Test
     public void validationBean() throws IOException {
         String url = getAbsoluteUrl("create?book.isbn=007&book.title=James%20Bond");

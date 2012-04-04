@@ -48,15 +48,15 @@ public class CookieService extends WebMotionController {
     
     public Render read(HttpContext context) {
         CookieManger basicManger = context.getCookieManger();
-        CookieEntity secureCookie = basicManger.get("a_name");
-        String secureValue = secureCookie.getValue();
+        CookieEntity cookie = basicManger.get("a_name");
+        String securedValue = cookie.getValue();
         
-        CookieManger manger = context.getCookieManger(null, true, true);
-        CookieEntity cookie = manger.get("a_name");
-        String value = cookie.getValue();
+        CookieManger securedManger = context.getCookieManger(null, true, true);
+        CookieEntity securedCookie = securedManger.get("a_name");
+        String value = securedCookie.getValue();
         
-        return renderContent("<div>secure value = " + secureValue + "</div>" +
-                "<div>value = " + value + "</div>", "text/html");
+        return renderContent("<div>Secured value = " + securedValue + "</div>" +
+                "<div>Value = " + value + "</div>", "text/html");
     }
     
 }
