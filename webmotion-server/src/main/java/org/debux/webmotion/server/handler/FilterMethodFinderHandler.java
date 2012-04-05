@@ -61,35 +61,43 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
         if (rule != null) {
             
             List<FilterRule> filterRules = call.getFilterRules();
-            List<Executor> filters = call.getFilters();
 
             for (FilterRule filterRule : filterRules) {
-                Action action = filterRule.getAction();
-                
-                Mapping mappingRule = filterRule.getMapping();
-                Config configRule = mappingRule.getConfig();
-                String packageName = configRule.getPackageFilters();
-                String className = action.getClassName();
-                String fullQualifiedName = packageName + "." + className;
-
-                try {
-                    Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
-
-                    String methodName = action.getMethodName();
-                    Method method = WebMotionUtils.getMethod(clazz, methodName);
-                    if (method == null) {
-                        throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, filterRule);
-                    }
-
-                    Executor executor = new Executor();
-                    executor.setClazz(clazz);
-                    executor.setMethod(method);
-                    filters.add(executor);
-
-                } catch (ClassNotFoundException clnfe) {
-                    throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, filterRule);
-                }
+                handle(mapping, call, filterRule);
             }
+        }
+    }
+
+    /**
+     * Process one filter.
+     */
+    protected void handle(Mapping mapping, Call call, FilterRule filterRule) throws WebMotionException {
+        Action action = filterRule.getAction();
+        
+        Mapping mappingRule = filterRule.getMapping();
+        Config configRule = mappingRule.getConfig();
+        String packageName = configRule.getPackageFilters();
+        String className = action.getClassName();
+        String fullQualifiedName = packageName + "." + className;
+
+        try {
+            Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+
+            String methodName = action.getMethodName();
+            Method method = WebMotionUtils.getMethod(clazz, methodName);
+            if (method == null) {
+                throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, filterRule);
+            }
+
+            Executor executor = new Executor();
+            executor.setClazz(clazz);
+            executor.setMethod(method);
+            
+            List<Executor> filters = call.getFilters();
+            filters.add(executor);
+
+        } catch (ClassNotFoundException clnfe) {
+            throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, filterRule);
         }
     }
 }

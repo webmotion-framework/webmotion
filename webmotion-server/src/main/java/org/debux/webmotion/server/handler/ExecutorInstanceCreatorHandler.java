@@ -60,15 +60,22 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         List<Executor> executors = call.getExecutors();
         for (Executor executor : executors) {
-            // You must test mode here to manage correctly extension, otherwise
-            // you risk to have only the factory define in init method.
-            
-            SingletonFactory<WebMotionController> factory = getControllerFactory(mapping, call);
-            Class<? extends WebMotionController> actionClass = executor.getClazz();
-            
-            WebMotionController instance = factory.getInstance(actionClass);
-            executor.setInstance(instance);
+            handle(mapping, call, executor);
         }
+    }
+
+    /**
+     * Process one executor.
+     */
+    protected void handle(Mapping mapping, Call call, Executor executor) {
+        // You must test mode here to manage correctly extension, otherwise
+        // you risk to have only the factory define in init method.
+        
+        SingletonFactory<WebMotionController> factory = getControllerFactory(mapping, call);
+        Class<? extends WebMotionController> actionClass = executor.getClazz();
+        
+        WebMotionController instance = factory.getInstance(actionClass);
+        executor.setInstance(instance);
     }
     
     /** Attribute name use to store controller factory in the session or the request */
