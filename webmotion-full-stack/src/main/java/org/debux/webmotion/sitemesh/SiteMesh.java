@@ -26,6 +26,8 @@ package org.debux.webmotion.sitemesh;
 
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
  * Put the layouts in request attribute. Use by the filter to decorate page.
@@ -36,8 +38,19 @@ public class SiteMesh extends WebMotionFilter {
     
     public static final String LAYOUTS = "sitemesh_layouts";
     
-    public void decorate(HttpServletRequest request, String[] layouts) {
-        request.setAttribute(LAYOUTS, layouts);
+    public void decorate(HttpServletRequest request, String layout) {
+        Mapping mapping = contextable.getMapping();
+        Config config = mapping.getConfig();
+        
+        String path = "/" + layout;
+        String packageName = config.getPackageViews().replaceAll("\\.", "/");
+        if (packageName != null && !packageName.isEmpty()) {
+            path = "/" + packageName + path;
+        }
+        
+        request.setAttribute(LAYOUTS, new String[]{path});
+        
+        doProcess();
     }
     
 }
