@@ -152,9 +152,9 @@
         <profile>
             <id>jetty</id>
             
-<!--            <activation>
+            <activation>
                 <activeByDefault>true</activeByDefault>
-            </activation>-->
+            </activation>
             
             <build>
                 <plugins>
