@@ -97,15 +97,15 @@ public class WebMotionServer implements Filter {
     protected ServerContext initServerContext(FilterConfig filterConfig) {
         ServerContext instance = new ServerContext();
         
-        String mappingFileName = filterConfig.getInitParameter(PARAM_MAPPING_FILE_NAME);
+        ServletContext servletContext = filterConfig.getServletContext();
+        String mappingFileName = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileName != null && !mappingFileName.isEmpty()) {
             instance.setMappingFileName(mappingFileName);
         }
         
-        Config defaultConfig = getDefaultConfig(filterConfig);
+        Config defaultConfig = getDefaultConfig(servletContext);
         instance.setDefaultConfig(defaultConfig);
         
-        ServletContext servletContext = filterConfig.getServletContext();
         instance.contextInitialized(servletContext);
         
         return instance;
@@ -113,17 +113,16 @@ public class WebMotionServer implements Filter {
 
     /**
      * Create a default config from parameters contains in filter
-     * @param filterConfig filter config
+     * @param servletContext servlet context
      * @return default config
      */
-    protected Config getDefaultConfig(FilterConfig filterConfig) {
-        ServletContext servletContext = filterConfig.getServletContext();
+    protected Config getDefaultConfig(ServletContext servletContext) {
         Enumeration<String> initParameterNames = servletContext.getInitParameterNames();
 
         Config config = new Config();
         while (initParameterNames.hasMoreElements()) {
             String name = initParameterNames.nextElement();
-            String value = filterConfig.getInitParameter(name);
+            String value = servletContext.getInitParameter(name);
             config.set(name, value);
         }
         return config;
