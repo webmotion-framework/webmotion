@@ -79,3 +79,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /decorator                                  Showcase.decorator
 *           /cookie                                     Showcase.cookie
 *           /cookie_object                              Showcase.cookieObject
+*           /sitemesh                                   Showcase.sitemesh

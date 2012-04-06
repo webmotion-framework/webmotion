@@ -177,6 +177,7 @@
                                         <li><a id="blog" href="./blog">Action</a></li>
                                         <li><a id="stats" href="./stats">Pattern</a></li>
                                         <li><a id="spring" href="./spring">Spring</a></li>
+                                        <li><a id="sitemesh" href="./sitemesh">SiteMesh</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>
