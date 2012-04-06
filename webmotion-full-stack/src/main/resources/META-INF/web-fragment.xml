@@ -22,13 +22,21 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
-<web-fragment>
-  
-    <name>WebMotion-full-stack</name>
+<web-fragment version="3.0"
+              xmlns="http://java.sun.com/xml/ns/javaee" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+ 
+    <name>webmotion-full-stack</name>
   
     <context-param>
+        <param-name>server.main.handler.class</param-name>
+        <param-value>org.debux.webmotion.WebMotionFullStackMainHandler</param-value>
+    </context-param>
+    
+    <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:webmotion-spring.xml,/WEB-INF/applicationContext*.xml</param-value>
+        <param-value>/WEB-INF/applicationContext*.xml</param-value>
     </context-param>
 
     <listener>

@@ -22,7 +22,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.spring;
+package org.debux.webmotion.sitemesh;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,25 +31,25 @@ import org.debux.webmotion.server.WebMotionMainHandler;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
 import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
+import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
 import org.debux.webmotion.server.handler.FilterFinderHandler;
-import org.debux.webmotion.server.handler.FilterMethodFinderHandler;
 import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add SpringInstanceCreatorHandler with use bean in Spring
+ * Add SiteMeshFilterMethodFinderHandler with use SiteMesh
  * 
  * @author julien
  */
-public class SpringMainHandler extends WebMotionMainHandler {
+public class SiteMeshMainHandler extends WebMotionMainHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringMainHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(SiteMeshMainHandler.class);
 
     @Override
     public List<Class<? extends WebMotionHandler>> getActionHandlers() {
@@ -60,8 +60,8 @@ public class SpringMainHandler extends WebMotionMainHandler {
                     ParametersExtractorHandler.class,
                     ActionExecuteRenderHandler.class,
                     ActionMethodFinderHandler.class,
-                    FilterMethodFinderHandler.class,
-                    SpringInstanceCreatorHandler.class, // Add here replace ExecutorInstanceCreatorHandler
+                    SiteMeshFilterMethodFinderHandler.class, // Add here replace FilterMethodFinderHandler
+                    ExecutorInstanceCreatorHandler.class,
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
                     ExecutorParametersValidatorHandler.class,

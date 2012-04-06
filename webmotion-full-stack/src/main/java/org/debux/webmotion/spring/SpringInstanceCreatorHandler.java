@@ -26,7 +26,7 @@ package org.debux.webmotion.spring;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;
@@ -36,8 +36,8 @@ import org.debux.webmotion.server.mapping.Mapping;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Create instance with spring.
@@ -50,13 +50,10 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
 
     protected ApplicationContext applicationContext;
 
-    @Inject
-    public void SpringInstanceCreatorHandler(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
     @Override
     public void init(Mapping mapping, ServerContext context) {
+        ServletContext servletContext = context.getServletContext();
+        applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
     }
 
     @Override
