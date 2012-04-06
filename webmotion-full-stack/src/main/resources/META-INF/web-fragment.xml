@@ -30,11 +30,6 @@
     <name>webmotion-full-stack</name>
   
     <context-param>
-        <param-name>server.main.handler.class</param-name>
-        <param-value>org.debux.webmotion.WebMotionFullStackMainHandler</param-value>
-    </context-param>
-    
-    <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext*.xml</param-value>
     </context-param>

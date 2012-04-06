@@ -59,19 +59,14 @@
 </pre>
 
 <p>
-    Vous pouvez aussi modifier le nom du fichier de mapping charger et les 
-    valeurs par défaut pour la section <code>[config]</code> en redéfinissant 
-    les paramètres du contexte ainsi :
+    Vous pouvez aussi modifier le nom du fichier de mapping charger en positonnant 
+    le paramètre <code>mapping.file.name</code> dans le web.xml ainsi :
 </p>
 
 <pre class="prettyprint">
 &lt;context-param&gt;
-    &lt;param-name&gt;mapping_file_name&lt;/param-name&gt;
+    &lt;param-name&gt;mapping.file.name&lt;/param-name&gt;
     &lt;param-value&gt;/mapping&lt;/param-value&gt;
-&lt;/context-param&gt;
-&lt;context-param&gt;
-    &lt;param-name&gt;server.error.page&lt;/param-name&gt;
-    &lt;param-value&gt;disabled&lt;/param-value&gt;
 &lt;/context-param&gt;
 </pre>
 

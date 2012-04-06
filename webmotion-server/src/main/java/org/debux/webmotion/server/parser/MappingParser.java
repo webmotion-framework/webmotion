@@ -25,7 +25,6 @@
 package org.debux.webmotion.server.parser;
 
 import java.net.URL;
-import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
@@ -35,17 +34,6 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public abstract class MappingParser {
 
-    /** Default config for the mapping */
-    protected Config defaultConfig;
-
-    public MappingParser() {
-        this(null);
-    }
-
-    public MappingParser(Config defaultConfig) {
-        this.defaultConfig = defaultConfig;
-    }
-    
     /**
      * @return true if the file exists otherwise false
      */

@@ -85,9 +85,6 @@ public class ServerContext {
     /** Main mapping file name to parse */
     protected String mappingFileName = "/mapping";
     
-    /** Default config use by the mapping extract from filter parameters*/
-    protected Config defaultConfig;
-    
     /**
      * Initialize the context.
      * 
@@ -149,7 +146,7 @@ public class ServerContext {
      * @return the instance of mapping parser
      */
     protected ANTLRMappingParser getMappingParser() {
-        return new ANTLRMappingParser(defaultConfig);
+        return new ANTLRMappingParser();
     }
         
     public SingletonFactory<WebMotionController> getControllers() {
@@ -206,14 +203,6 @@ public class ServerContext {
 
     public void setMappingFileName(String mappingFileName) {
         this.mappingFileName = mappingFileName;
-    }
-
-    public Config getDefaultConfig() {
-        return defaultConfig;
-    }
-
-    public void setDefaultConfig(Config defaultConfig) {
-        this.defaultConfig = defaultConfig;
     }
     
 }

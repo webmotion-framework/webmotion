@@ -63,7 +63,7 @@ public class WebMotionServer implements Filter {
     private static final Logger log = LoggerFactory.getLogger(WebMotionServer.class);
 
     /** Filter parameter to configure mapping file name by default is mapping */
-    protected final static String PARAM_MAPPING_FILE_NAME = "mapping_file_name";
+    protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
             
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
@@ -97,37 +97,17 @@ public class WebMotionServer implements Filter {
     protected ServerContext initServerContext(FilterConfig filterConfig) {
         ServerContext instance = new ServerContext();
         
+        // Get file name mapping in context param
         ServletContext servletContext = filterConfig.getServletContext();
         String mappingFileName = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileName != null && !mappingFileName.isEmpty()) {
             instance.setMappingFileName(mappingFileName);
         }
         
-        Config defaultConfig = getDefaultConfig(servletContext);
-        instance.setDefaultConfig(defaultConfig);
-        
         instance.contextInitialized(servletContext);
-        
         return instance;
     }
 
-    /**
-     * Create a default config from parameters contains in filter
-     * @param servletContext servlet context
-     * @return default config
-     */
-    protected Config getDefaultConfig(ServletContext servletContext) {
-        Enumeration<String> initParameterNames = servletContext.getInitParameterNames();
-
-        Config config = new Config();
-        while (initParameterNames.hasMoreElements()) {
-            String name = initParameterNames.nextElement();
-            String value = servletContext.getInitParameter(name);
-            config.set(name, value);
-        }
-        return config;
-    }
-    
     @Override
     public void destroy() {
         // Fire onStop

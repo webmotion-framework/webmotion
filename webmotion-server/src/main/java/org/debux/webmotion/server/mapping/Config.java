@@ -104,30 +104,6 @@ public class Config {
     
     /** Default contructor. */
     public Config() {
-        this(null);
-    }
-    
-    /**
-     * Use a default config
-     * @param defaultConfig default config 
-     */
-    public Config(Config defaultConfig) {
-        if (defaultConfig != null) {
-            
-            packageViews = defaultConfig.getPackageViews();
-            packageBase = defaultConfig.getPackageBase();
-            packageActions = defaultConfig.getPackageActions();
-            packageFilters = defaultConfig.getPackageFilters();
-            packageErrors = defaultConfig.getPackageErrors();
-            encoding = defaultConfig.getEncoding();
-            async = defaultConfig.isAsync();
-            javacDebug = defaultConfig.isJavacDebug();
-            controllerScope = defaultConfig.getControllerScope();
-            mainHandler = defaultConfig.getMainHandler();
-            errorPage = defaultConfig.getErrorPage();
-            serverListener = defaultConfig.getServerListener();
-            secret = defaultConfig.getSecret();
-        }
     }
 
     /**

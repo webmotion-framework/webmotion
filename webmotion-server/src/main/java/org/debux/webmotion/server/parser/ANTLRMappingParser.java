@@ -598,7 +598,7 @@ public class ANTLRMappingParser extends MappingParser {
                         ClassLoader classLoader = getClass().getClassLoader();
                         List<URL> resources = Resource.getResources(value, classLoader);
                         for (URL resource : resources) {
-                            ANTLRMappingParser parser = new ANTLRMappingParser(defaultConfig);
+                            ANTLRMappingParser parser = new ANTLRMappingParser();
 
                             Mapping extensionMapping = parser.parse(resource);
                             extensionMapping.setExtensionPath(path);
@@ -670,23 +670,9 @@ public class ANTLRMappingParser extends MappingParser {
         }
     }
 
-    /**
-     * Default contructor
-     */
-    public ANTLRMappingParser() {
-        super();
-    }
-    
-    /**
-     * Default contructor
-     */
-    public ANTLRMappingParser(Config defaultConfig) {
-        super(defaultConfig);
-    }
-    
     @Override
     protected Mapping parse(URL url) {
-        Mapping mapping = new Mapping(defaultConfig);
+        Mapping mapping = new Mapping();
         mapping.setName(url.toExternalForm());
                 
         try {
