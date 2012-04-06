@@ -117,8 +117,10 @@ public class WebMotionServer implements Filter {
      * @return default config
      */
     protected Config getDefaultConfig(FilterConfig filterConfig) {
+        ServletContext servletContext = filterConfig.getServletContext();
+        Enumeration<String> initParameterNames = servletContext.getInitParameterNames();
+
         Config config = new Config();
-        Enumeration<String> initParameterNames = filterConfig.getInitParameterNames();
         while (initParameterNames.hasMoreElements()) {
             String name = initParameterNames.nextElement();
             String value = filterConfig.getInitParameter(name);

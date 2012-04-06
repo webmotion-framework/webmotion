@@ -61,23 +61,18 @@
 <p>
     Vous pouvez aussi modifier le nom du fichier de mapping charger et les 
     valeurs par défaut pour la section <code>[config]</code> en redéfinissant 
-    le filtre de WebMotion ainsi :
+    les paramètres du contexte ainsi :
 </p>
 
 <pre class="prettyprint">
-&lt;filter&gt;
-    &lt;filter-name&gt;WebMotionServer&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.debux.webmotion.server.WebMotionServer&lt;/filter-class&gt;
-    &lt;async-supported&gt;true&lt;/async-supported&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;mapping_file_name&lt;/param-name&gt;
-        &lt;param-value&gt;/mapping&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;server.error.page&lt;/param-name&gt;
-        &lt;param-value&gt;disabled&lt;/param-value&gt;
-    &lt;/init-param&gt;
-&lt;/filter&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;mapping_file_name&lt;/param-name&gt;
+    &lt;param-value&gt;/mapping&lt;/param-value&gt;
+&lt;/context-param&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;server.error.page&lt;/param-name&gt;
+    &lt;param-value&gt;disabled&lt;/param-value&gt;
+&lt;/context-param&gt;
 </pre>
 
 <p>
