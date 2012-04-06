@@ -51,7 +51,7 @@ public class ExtensionMappingIT extends AbstractIT {
     
     @Test
     public void spring() throws IOException {
-        String url = getAbsoluteUrl("spring/");
+        String url = getAbsoluteUrl("spring");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
@@ -65,6 +65,15 @@ public class ExtensionMappingIT extends AbstractIT {
         
         String result = execute(request);
         AssertJUnit.assertTrue(result.contains("count = "));
+    }
+    
+    @Test
+    public void sitemesh() throws IOException {
+        String url = getAbsoluteUrl("sitemesh/content");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("SiteMesh example site"));
     }
     
 }
