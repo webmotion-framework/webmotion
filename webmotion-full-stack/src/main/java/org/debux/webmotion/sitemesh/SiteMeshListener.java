@@ -79,7 +79,7 @@ public class SiteMeshListener implements ServletContextListener {
             
             ServletContext servletContext = event.getServletContext();
             FilterRegistration registration = servletContext.addFilter("sitemesh", filter);
-            registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+            registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE), true, "/*");
         }
     }
 
