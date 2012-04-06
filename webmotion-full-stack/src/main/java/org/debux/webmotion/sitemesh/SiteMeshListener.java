@@ -48,33 +48,39 @@ import org.sitemesh.webapp.WebAppContext;
  */
 @WebListener
 public class SiteMeshListener implements ServletContextListener {
+
+    protected ConfigurableSiteMeshFilter filter;
     
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        ServletContext servletContext = event.getServletContext();
-        FilterRegistration registration = servletContext.addFilter("sitemesh", 
-                new ConfigurableSiteMeshFilter() {
-                    @Override
-                    protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
-                        builder.setCustomDecoratorSelector(new PathBasedDecoratorSelector<WebAppContext>() {
+        if (filter == null) {
+            
+            filter = new ConfigurableSiteMeshFilter() {
+                        @Override
+                        protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
+                            builder.setCustomDecoratorSelector(new PathBasedDecoratorSelector<WebAppContext>() {
 
-                            @Override
-                            public String[] selectDecoratorPaths(Content content, WebAppContext siteMeshContext) throws IOException {
-                                HttpServletRequest request = siteMeshContext.getRequest();
-                                String[] layouts = (String[]) request.getAttribute(SiteMesh.LAYOUTS);
-                                if (layouts != null) {
-                                    return layouts;
+                                @Override
+                                public String[] selectDecoratorPaths(Content content, WebAppContext siteMeshContext) throws IOException {
+                                    HttpServletRequest request = siteMeshContext.getRequest();
+                                    String[] layouts = (String[]) request.getAttribute(SiteMesh.LAYOUTS);
+                                    if (layouts != null) {
+                                        return layouts;
 
-                                } else {
+                                    } else {
 
-                                    String[] selectDecoratorPaths = super.selectDecoratorPaths(content, siteMeshContext);
-                                    return selectDecoratorPaths;
+                                        String[] selectDecoratorPaths = super.selectDecoratorPaths(content, siteMeshContext);
+                                        return selectDecoratorPaths;
+                                    }
                                 }
-                            }
-                        });
-                    }
-                });
-        registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+                            });
+                        }
+                    };
+            
+            ServletContext servletContext = event.getServletContext();
+            FilterRegistration registration = servletContext.addFilter("sitemesh", filter);
+            registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        }
     }
 
     @Override
