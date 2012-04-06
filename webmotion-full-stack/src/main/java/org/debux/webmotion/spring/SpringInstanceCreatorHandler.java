@@ -53,7 +53,7 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
     @Override
     public void init(Mapping mapping, ServerContext context) {
         ServletContext servletContext = context.getServletContext();
-        applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+        applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
     }
 
     @Override
