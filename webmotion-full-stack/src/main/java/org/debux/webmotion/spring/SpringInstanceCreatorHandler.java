@@ -29,6 +29,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
@@ -48,19 +49,20 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SpringInstanceCreatorHandler.class);
 
-    protected ApplicationContext applicationContext;
-
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        ServletContext servletContext = context.getServletContext();
-        applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        // Do nothing
     }
 
     @Override
     public void handle(Mapping mapping, Call call) {
+        HttpContext context = call.getContext();
+        ServletContext servletContext = context.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        
         List<Executor> executors = call.getExecutors();
         for (Executor executor : executors) {
-
+            
             Class<? extends WebMotionController> actionClass = executor.getClazz();
             WebMotionController instance = applicationContext.getBean(actionClass);
             executor.setInstance(instance);
