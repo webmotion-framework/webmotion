@@ -28,15 +28,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -65,11 +62,6 @@ public class RenderAction extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderAction render = (RenderAction) call.getRender();
-        HttpContext context = call.getContext();
-        HttpServletResponse response = context.getResponse();
-        HttpServletRequest request = context.getRequest();
-        
         String className = StringUtils.substringBeforeLast(action, ".");
         String methodName = StringUtils.substringAfterLast(action, ".");
         

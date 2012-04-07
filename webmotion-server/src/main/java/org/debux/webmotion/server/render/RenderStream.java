@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.call.Call;
@@ -67,10 +66,8 @@ public class RenderStream extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderStream render = (RenderStream) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
-        HttpServletRequest request = context.getRequest();
         
         if (mimeType != null) {
             response.setContentType(mimeType);
@@ -87,13 +84,12 @@ public class RenderStream extends Render {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
         }
         
-        InputStream inputStream = render.getStream();
         ServletOutputStream outputStream = response.getOutputStream();
         try {
-            IOUtils.copy(inputStream, outputStream);
-            inputStream.close();
+            IOUtils.copy(stream, outputStream);
+            stream.close();
         } finally {
-            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(stream);
         }
     }
     

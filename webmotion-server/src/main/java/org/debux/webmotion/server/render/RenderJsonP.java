@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
@@ -59,10 +58,8 @@ public class RenderJsonP extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderJsonP render = (RenderJsonP) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
-        HttpServletRequest request = context.getRequest();
         
         Object object = model;
         if (model != null && model.size() == 1 

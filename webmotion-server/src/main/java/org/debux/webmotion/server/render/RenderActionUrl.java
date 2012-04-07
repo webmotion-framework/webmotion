@@ -60,7 +60,6 @@ public class RenderActionUrl extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderActionUrl render = (RenderActionUrl) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
@@ -73,7 +72,7 @@ public class RenderActionUrl extends Render {
             url = context.getExtensionPath() + url;
         }
         
-        String path = addModel(url, render.getModel());
+        String path = addModel(url, model);
         
         DispatcherType dispatcherType = request.getDispatcherType();
 

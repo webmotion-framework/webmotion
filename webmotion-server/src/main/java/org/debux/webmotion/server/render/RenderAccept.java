@@ -40,10 +40,8 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public class RenderAccept extends Render {
     protected Map<String, Object> model;
-    Render outer;
 
-    public RenderAccept(Map<String, Object> model, Render outer) {
-        this.outer = outer;
+    public RenderAccept(Map<String, Object> model) {
         this.model = model;
     }
 
@@ -70,7 +68,7 @@ public class RenderAccept extends Render {
         }
         
         // Create the real render
-        outer.create(mapping, call);
+        render.create(mapping, call);
     }
     
 }

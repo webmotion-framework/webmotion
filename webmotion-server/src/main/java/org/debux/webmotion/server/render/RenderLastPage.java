@@ -27,7 +27,6 @@ package org.debux.webmotion.server.render;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.Call;
@@ -52,10 +51,8 @@ public class RenderLastPage extends Render {
 
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
-        RenderLastPage render = (RenderLastPage) call.getRender();
         HttpContext context = call.getContext();
         HttpServletResponse response = context.getResponse();
-        HttpServletRequest request = context.getRequest();
         
         String path = context.getHeader(HttpContext.HEADER_REFERER);
         if (path == null) {
