@@ -37,17 +37,16 @@ public class Transaction extends WebMotionFilter {
 
     private static final Logger log = LoggerFactory.getLogger(Transaction.class);
 
-    protected EntityManagerFactory factory;
-
-    public Transaction() {
-        factory = Persistence.createEntityManagerFactory("webmotion");
-    }
-    
-    public void manage() {
+    public void manage(String persistenceUnitName, String entityName) {
+        //jru 20120705 : TODO Separate two filters
         Map<String, Object> parameters = getParameters();
         
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
         EntityManager manager = factory.createEntityManager();
         parameters.put("manager", manager);
+        
+        GenericDAO dao = new GenericDAO(manager, entityName);
+        parameters.put("dao", dao);
         
         EntityTransaction transaction = manager.getTransaction();
         transaction.begin();
