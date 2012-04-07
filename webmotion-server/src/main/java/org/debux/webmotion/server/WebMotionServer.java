@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server;
 
-import java.util.Enumeration;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
