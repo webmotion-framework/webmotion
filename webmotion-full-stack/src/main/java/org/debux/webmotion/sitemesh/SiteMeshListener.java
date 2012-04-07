@@ -31,7 +31,6 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
@@ -46,7 +45,6 @@ import org.sitemesh.webapp.WebAppContext;
  * 
  * @author julien
  */
-@WebListener
 public class SiteMeshListener implements ServletContextListener {
 
     protected ConfigurableSiteMeshFilter filter;
