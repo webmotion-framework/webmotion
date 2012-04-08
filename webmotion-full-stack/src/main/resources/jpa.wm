@@ -26,18 +26,12 @@
 package.base=org.debux.webmotion.jpa
 
 [filters]
-*         /*                          Transaction.manage
+*         /*                          Jpa.tx                 persistenceUnitName=webmotion
 
 [actions]
-GET         /{entityName}/{id}?type=content     Display.content
-GET         /{entityName}/{id}?type=json        Display.json
+GET         /{entityName}?action={}        Jpa.all
 
-GET         /{entityName}?action=create                  Manager.create
-GET         /{entityName}/{id}?action=read               Manager.read
-GET         /{entityName}/{id}?action=update             Manager.update
-GET         /{entityName}/{id}?action=delete             Manager.delete
-
-PUT         /{entityName}                  Manager.create
-GET         /{entityName}/{id}             Manager.read
-POST        /{entityName}/{id}             Manager.update
-DELETE      /{entityName}/{id}             Manager.delete
+PUT         /{entityName}                  Jpa.create
+GET         /{entityName}/{id}             Jpa.read
+POST        /{entityName}/{id}             Jpa.update
+DELETE      /{entityName}/{id}             Jpa.delete

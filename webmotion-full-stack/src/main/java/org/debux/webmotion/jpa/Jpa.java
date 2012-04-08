@@ -27,16 +27,39 @@ package org.debux.webmotion.jpa;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Jpa extends WebMotionController {
+/**
+ * Main class to manage entity with JPA.
+ * 
+ * @author julien
+ */
+public class Jpa extends Transactional {
 
     private static final Logger log = LoggerFactory.getLogger(Jpa.class);
 
-    public void all(GenericDAO dao, HttpServletRequest request, String action) {
+    public Render all(GenericDAO dao, HttpServletRequest request, String action,
+            String id, String name) {
+        
+        if ("create".equals(action)) {
+            create(dao, request);
+            
+        } else if ("read".equals(action)) {
+            return read(dao, id);
+            
+        } else if ("query".equals(action)) {
+            return query(dao, name);
+            
+        } else if ("update".equals(action)) {
+            update(dao, request);
+            
+        } else if ("delete".equals(action)) {
+            delete(dao, id);
+        }
+        
+        return null;
     }
     
     public void create(GenericDAO dao, HttpServletRequest request) {

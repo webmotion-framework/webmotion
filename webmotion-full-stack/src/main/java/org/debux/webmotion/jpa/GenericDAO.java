@@ -48,14 +48,15 @@ public class GenericDAO {
     protected Class<? extends IdentifiableEntity> entityClass;
     
     public GenericDAO(EntityManager manager, String entityName) {
-        beanUtil = BeanUtilsBean.getInstance();
-        convertUtils = beanUtil.getConvertUtils();
-        
+        this.manager = manager;
         try {
-            entityClass = (Class<? extends IdentifiableEntity>) Class.forName(entityName);
+            this.entityClass = (Class<? extends IdentifiableEntity>) Class.forName(entityName);
         } catch (ClassNotFoundException cnfe) {
             throw new WebMotionException("Invalid class name", cnfe);
         }
+        
+        this.beanUtil = BeanUtilsBean.getInstance();
+        this.convertUtils = beanUtil.getConvertUtils();
     }
     
     public void create(Map<String, String[]> parameters) {

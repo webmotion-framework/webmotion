@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.jpa;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,28 +34,46 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Transaction extends WebMotionFilter {
+/**
+ * Manage the transaction during execute the request.
+ * 
+ * @author julien
+ */
+public abstract class Transactional extends WebMotionFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(Transaction.class);
+    private static final Logger log = LoggerFactory.getLogger(Transactional.class);
 
-    public void manage(String persistenceUnitName, String entityName) {
-        //jru 20120705 : TODO Separate two filters
-        Map<String, Object> parameters = getParameters();
+    protected Map<String, EntityManagerFactory> factories;
+
+    public Transactional() {
+        factories = new HashMap<String, EntityManagerFactory>();
+    }
+    
+    public void tx(String persistenceUnitName, String entityName) {
         
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+        EntityManagerFactory factory = factories.get(persistenceUnitName);
+        if (factory == null) {
+            factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+        }
         EntityManager manager = factory.createEntityManager();
-        parameters.put("manager", manager);
         
-        GenericDAO dao = new GenericDAO(manager, entityName);
-        parameters.put("dao", dao);
-        
-        EntityTransaction transaction = manager.getTransaction();
-        transaction.begin();
-        
-        doProcess();
-        
-        transaction.commit();
-        manager.close();
+        if (entityName != null) {
+            
+            GenericDAO dao = new GenericDAO(manager, entityName);
+            Map<String, Object> parameters = getParameters();
+            parameters.put("dao", dao);
+
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+
+            doProcess();
+
+            transaction.commit();
+            manager.close();
+            
+        } else { // continue without transaction
+            doProcess();
+        }
     }
     
 }

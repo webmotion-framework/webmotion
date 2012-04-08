@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.jpa;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,7 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class IdentifiableEntity {
+public abstract class IdentifiableEntity implements Serializable {
     
     @Id
     @GeneratedValue(generator = "system-uuid")
