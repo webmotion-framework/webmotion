@@ -118,12 +118,15 @@ public class GenericDAO {
                 Class<?> type = field.getType();
                 String[] values = parameters.get(name);
 
-                if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
+                if (values == null) {
+                    beanUtil.setProperty(entity, name, null);
+                    
+                } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
                     for (String value : values) {
                         Object reference = manager.find(type, value);
                         beanUtil.setProperty(entity, name, reference);
                     }
-
+                    
                 } else {
                     Object converted = convertUtils.convert(values, type);
                     beanUtil.setProperty(entity, name, converted);
