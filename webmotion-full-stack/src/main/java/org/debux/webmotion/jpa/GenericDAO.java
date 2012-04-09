@@ -24,11 +24,11 @@
  */
 package org.debux.webmotion.jpa;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -129,7 +129,25 @@ public class GenericDAO {
                         Object reference = manager.find(type, value);
                         references.add(reference);
                     }
-                    beanUtil.setProperty(entity, name, references.toArray());
+                    
+                    Object converted = null;
+                    if (List.class.isAssignableFrom(type)) {
+                        converted = references;
+                        
+                    } else if (Set.class.isAssignableFrom(type)) {
+                        converted = new HashSet<Object>(references);
+                        
+                    } else if (type.isArray()) {
+                        converted = references.toArray();
+
+                    } else if (Map.class.isAssignableFrom(type)) {
+                        throw new UnsupportedOperationException("Map is not supported");
+                        
+                    } else if (!references.isEmpty()) {
+                        converted = references.get(0);
+                    }
+                    
+                    beanUtil.setProperty(entity, name, converted);
                     
                 } else {
                     Object converted = convertUtils.convert(values, type);
