@@ -27,6 +27,7 @@ package.base=org.debux.webmotion.jpa
 
 [filters]
 *         /*                          Jpa.tx                 persistenceUnitName=webmotion
+*         /*                          Jpa.generateDAO
 
 [actions]
 GET         /{entityName}?action={}        Jpa.all

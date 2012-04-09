@@ -30,6 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,37 +44,62 @@ public abstract class Transactional extends WebMotionFilter {
 
     private static final Logger log = LoggerFactory.getLogger(Transactional.class);
 
+    public static String CURRENT_ENTITY_MANAGER = "wm_current_entity_manager";
+    public static String CURRENT_ENTITY_TRANSACTION = "wm_current_entity_transaction";
+    
     protected Map<String, EntityManagerFactory> factories;
 
     public Transactional() {
         factories = new HashMap<String, EntityManagerFactory>();
     }
     
-    public void tx(String persistenceUnitName, String entityName) {
-        
+    /**
+     * Create the transaction.
+     * 
+     * @param request
+     * @param persistenceUnitName 
+     */
+    public void tx(HttpServletRequest request, String persistenceUnitName) {
         EntityManagerFactory factory = factories.get(persistenceUnitName);
         if (factory == null) {
             factory = Persistence.createEntityManagerFactory(persistenceUnitName);
         }
         EntityManager manager = factory.createEntityManager();
+        request.setAttribute(CURRENT_ENTITY_MANAGER, manager);
+        
+        EntityTransaction transaction = manager.getTransaction();
+        request.setAttribute(CURRENT_ENTITY_TRANSACTION, transaction);
+        
+        transaction.begin();
+
+        doProcess();
+
+        if (transaction.isActive()) {
+            transaction.commit();
+        }
+        manager.close();
+    }
+    
+    /**
+     * Create the generic dao with the transaction.
+     * 
+     * @param request
+     * @param persistenceUnitName
+     * @param entityName 
+     */
+    public void generateDAO(HttpServletRequest request, 
+            String persistenceUnitName, String entityName) {
         
         if (entityName != null) {
+            EntityManager manager = (EntityManager) request.getAttribute(CURRENT_ENTITY_MANAGER);
             
             GenericDAO dao = new GenericDAO(manager, entityName);
             Map<String, Object> parameters = getParameters();
             parameters.put("dao", dao);
-
-            EntityTransaction transaction = manager.getTransaction();
-            transaction.begin();
-
-            doProcess();
-
-            transaction.commit();
-            manager.close();
-            
-        } else { // continue without transaction
-            doProcess();
         }
+        
+        doProcess();
     }
     
 }
+
