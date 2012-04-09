@@ -77,6 +77,36 @@ public class GenericDAO {
         manager.remove(entity);
     }
     
+    public IdentifiableEntity find(String id) {
+        IdentifiableEntity entity = manager.find(entityClass, id);
+        manager.detach(entity);
+        return entity;
+    }
+    
+    public List query(String name, Map<String, String[]> parameters) {
+        Query query = manager.createNamedQuery(name);
+        
+        Set<Parameter<?>> queryParameters = query.getParameters();
+        for (Parameter<?> parameter : queryParameters) {
+            String parameterName = parameter.getName();
+            Class<?> parameterType = parameter.getParameterType();
+            
+            String[] values = parameters.get(parameterName);
+            Object converted = null;
+            
+            if (Collection.class.isAssignableFrom(parameterType) || parameterType.isArray()) {
+                converted = convertUtils.convert(values, parameterType);
+                
+            } else if (values != null && values.length == 1) {
+                converted = convertUtils.convert(values[0], parameterType);
+            }
+            
+            query.setParameter(parameterName, converted);
+        }
+        
+        return query.getResultList();
+    }
+    
     protected IdentifiableEntity extract(Map<String, String[]> parameters) {
         try {
             IdentifiableEntity entity = entityClass.newInstance();
@@ -109,36 +139,6 @@ public class GenericDAO {
         } catch (InvocationTargetException ite) {
             throw new WebMotionException("Error during set field on instance", ite);
         }
-    }
-    
-    protected IdentifiableEntity find(String id) {
-        IdentifiableEntity entity = manager.find(entityClass, id);
-        manager.detach(entity);
-        return entity;
-    }
-    
-    protected List query(String name, Map<String, String[]> parameters) {
-        Query query = manager.createNamedQuery(name);
-        
-        Set<Parameter<?>> queryParameters = query.getParameters();
-        for (Parameter<?> parameter : queryParameters) {
-            String parameterName = parameter.getName();
-            Class<?> parameterType = parameter.getParameterType();
-            
-            String[] values = parameters.get(parameterName);
-            Object converted = null;
-            
-            if (Collection.class.isAssignableFrom(parameterType) || parameterType.isArray()) {
-                converted = convertUtils.convert(values, parameterType);
-                
-            } else if (values != null && values.length == 1) {
-                converted = convertUtils.convert(values[0], parameterType);
-            }
-            
-            query.setParameter(parameterName, converted);
-        }
-        
-        return query.getResultList();
     }
     
 }

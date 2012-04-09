@@ -46,8 +46,8 @@ public class Jpa extends Transactional {
         if ("create".equals(action)) {
             create(dao, request);
             
-        } else if ("read".equals(action)) {
-            return read(dao, id);
+        } else if ("find".equals(action)) {
+            return find(dao, id);
             
         } else if ("query".equals(action)) {
             return query(dao, request, name);
@@ -67,7 +67,7 @@ public class Jpa extends Transactional {
         dao.create(parameters);
     }
 
-    public Render read(GenericDAO dao, String id) {
+    public Render find(GenericDAO dao, String id) {
         IdentifiableEntity entity = dao.find(id);
         return renderJSON(entity);
     }

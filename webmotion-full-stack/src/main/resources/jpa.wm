@@ -33,6 +33,7 @@ package.base=org.debux.webmotion.jpa
 GET         /{entityName}?action={}        Jpa.all
 
 PUT         /{entityName}                  Jpa.create
-GET         /{entityName}/{id}             Jpa.read
+GET         /{entityName}?query={name}     Jpa.query
+GET         /{entityName}/{id}             Jpa.find
 POST        /{entityName}/{id}             Jpa.update
 DELETE      /{entityName}/{id}             Jpa.delete
