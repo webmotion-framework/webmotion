@@ -24,8 +24,10 @@
  */
 package org.debux.webmotion.jpa;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +124,12 @@ public class GenericDAO {
                     beanUtil.setProperty(entity, name, null);
                     
                 } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
+                    List<Object> references = new ArrayList<Object>(values.length);
                     for (String value : values) {
                         Object reference = manager.find(type, value);
-                        beanUtil.setProperty(entity, name, reference);
+                        references.add(reference);
                     }
+                    beanUtil.setProperty(entity, name, references.toArray());
                     
                 } else {
                     Object converted = convertUtils.convert(values, type);
