@@ -102,4 +102,3 @@ public abstract class Transactional extends WebMotionFilter {
     }
     
 }
-

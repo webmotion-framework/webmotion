@@ -50,7 +50,7 @@ public class Jpa extends Transactional {
             return read(dao, id);
             
         } else if ("query".equals(action)) {
-            return query(dao, name);
+            return query(dao, request, name);
             
         } else if ("update".equals(action)) {
             update(dao, request);
@@ -72,8 +72,9 @@ public class Jpa extends Transactional {
         return renderJSON(entity);
     }
     
-    public Render query(GenericDAO dao, String name) {
-        List query = dao.query(name);
+    public Render query(GenericDAO dao, HttpServletRequest request, String name) {
+        Map<String, String[]> parameters = request.getParameterMap();
+        List query = dao.query(name, parameters);
         return renderJSON(query);
     }
     

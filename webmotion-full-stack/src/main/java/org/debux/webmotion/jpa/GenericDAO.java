@@ -26,9 +26,12 @@ package org.debux.webmotion.jpa;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.Query;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
@@ -114,8 +117,27 @@ public class GenericDAO {
         return entity;
     }
     
-    protected List query(String name) {
+    protected List query(String name, Map<String, String[]> parameters) {
         Query query = manager.createNamedQuery(name);
+        
+        Set<Parameter<?>> queryParameters = query.getParameters();
+        for (Parameter<?> parameter : queryParameters) {
+            String parameterName = parameter.getName();
+            Class<?> parameterType = parameter.getParameterType();
+            
+            String[] values = parameters.get(parameterName);
+            Object converted = null;
+            
+            if (Collection.class.isAssignableFrom(parameterType) || parameterType.isArray()) {
+                converted = convertUtils.convert(values, parameterType);
+                
+            } else if (values != null && values.length == 1) {
+                converted = convertUtils.convert(values[0], parameterType);
+            }
+            
+            query.setParameter(parameterName, converted);
+        }
+        
         return query.getResultList();
     }
     
