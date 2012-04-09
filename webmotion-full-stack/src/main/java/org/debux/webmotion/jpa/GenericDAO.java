@@ -27,6 +27,7 @@ package org.debux.webmotion.jpa;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -91,18 +92,8 @@ public class GenericDAO {
         Set<Parameter<?>> queryParameters = query.getParameters();
         for (Parameter<?> parameter : queryParameters) {
             String parameterName = parameter.getName();
-            Class<?> parameterType = parameter.getParameterType();
-            
             String[] values = parameters.get(parameterName);
-            Object converted = null;
-            
-            if (Collection.class.isAssignableFrom(parameterType) || parameterType.isArray()) {
-                converted = convertUtils.convert(values, parameterType);
-                
-            } else if (values != null && values.length == 1) {
-                converted = convertUtils.convert(values[0], parameterType);
-            }
-            
+            List<String> converted = Arrays.asList(values);
             query.setParameter(parameterName, converted);
         }
         
