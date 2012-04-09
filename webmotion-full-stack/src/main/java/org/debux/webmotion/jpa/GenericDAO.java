@@ -26,18 +26,25 @@ package org.debux.webmotion.jpa;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.EntityManager;
+import javax.persistence.MapKey;
 import javax.persistence.Parameter;
 import javax.persistence.Query;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.debux.webmotion.server.WebMotionException;
 
 /**
@@ -48,6 +55,7 @@ public class GenericDAO {
     
     protected BeanUtilsBean beanUtil;
     protected ConvertUtilsBean convertUtils;
+    protected PropertyUtilsBean propertyUtils;
 
     protected EntityManager manager;
     protected String entityName;
@@ -63,6 +71,7 @@ public class GenericDAO {
         
         this.beanUtil = BeanUtilsBean.getInstance();
         this.convertUtils = beanUtil.getConvertUtils();
+        this.propertyUtils = beanUtil.getPropertyUtils();
     }
     
     public void create(Map<String, String[]> parameters) {
@@ -93,6 +102,7 @@ public class GenericDAO {
         for (Parameter<?> parameter : queryParameters) {
             String parameterName = parameter.getName();
             String[] values = parameters.get(parameterName);
+            
             List<String> converted = Arrays.asList(values);
             query.setParameter(parameterName, converted);
         }
@@ -128,11 +138,28 @@ public class GenericDAO {
                     } else if (Set.class.isAssignableFrom(type)) {
                         converted = new HashSet<Object>(references);
                         
+                    } else if (SortedSet.class.isAssignableFrom(type)) {
+                        converted = new TreeSet<Object>(references);
+                        
                     } else if (type.isArray()) {
                         converted = references.toArray();
 
                     } else if (Map.class.isAssignableFrom(type)) {
-                        throw new UnsupportedOperationException("Map is not supported");
+                        String keyName = "id";
+                        MapKey annotation = type.getAnnotation(MapKey.class);
+                        if (annotation != null) {
+                            String annotationName = annotation.name();
+                            if (annotationName != null && !annotationName.isEmpty()) {
+                                keyName = annotationName;
+                            }
+                        }
+                        
+                        Map<Object, Object> map = new HashMap<Object, Object>();
+                        for (Object object : references) {
+                            Object key = propertyUtils.getProperty(object, keyName);
+                            map.put(key, object);
+                        }
+                        converted = map;
                         
                     } else if (!references.isEmpty()) {
                         converted = references.get(0);
@@ -141,8 +168,38 @@ public class GenericDAO {
                     beanUtil.setProperty(entity, name, converted);
                     
                 } else {
-                    Object converted = convertUtils.convert(values, type);
-                    beanUtil.setProperty(entity, name, converted);
+                    
+                    if (Collection.class.isAssignableFrom(type)) {
+                        Class convertType = String.class;
+                        Type genericType = field.getGenericType();
+                        if(genericType != null && genericType instanceof ParameterizedType) {
+                            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+                            convertType = (Class) parameterizedType.getActualTypeArguments()[0];
+                        }
+
+                        Collection<Object> collection = null;
+                        if (Set.class.isAssignableFrom(type)) {
+                            collection = new HashSet<Object>();
+                        } else if (SortedSet.class.isAssignableFrom(type)) {
+                            collection = new TreeSet();
+                        } else {
+                            collection = new ArrayList<Object>();
+                        }
+                        
+                        for (Object object : values) {
+                            Object convertedObject = convertUtils.convert(object, convertType);
+                            collection.add(convertedObject);
+                        }
+                        
+                        beanUtil.setProperty(entity, name, collection);
+                        
+                    } else if (Map.class.isAssignableFrom(type)) {
+                        throw new UnsupportedOperationException("Map is not supported, you must create a specific entity.");
+                        
+                    } else {
+                        Object converted = convertUtils.convert(values, type);
+                        beanUtil.setProperty(entity, name, converted);
+                    }
                 }
             }
 
@@ -154,6 +211,8 @@ public class GenericDAO {
             throw new WebMotionException("Error during create instance", iae);
         } catch (InvocationTargetException ite) {
             throw new WebMotionException("Error during set field on instance", ite);
+        } catch (NoSuchMethodException nsme) {
+            throw new WebMotionException("Error during set field on instance", nsme);
         }
     }
     
