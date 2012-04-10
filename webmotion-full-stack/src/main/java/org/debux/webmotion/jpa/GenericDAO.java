@@ -145,7 +145,7 @@ public class GenericDAO {
                         converted = references.toArray();
 
                     } else if (Map.class.isAssignableFrom(type)) {
-                        String keyName = "id";
+                        String keyName = IdentifiableEntity.ATTRIBUTE_NAME_ID;
                         MapKey annotation = type.getAnnotation(MapKey.class);
                         if (annotation != null) {
                             String annotationName = annotation.name();

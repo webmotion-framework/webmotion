@@ -74,6 +74,8 @@ public abstract class Transactional extends WebMotionFilter {
 
         doProcess();
 
+        //jru 20120410 : Manage rollback
+        
         if (transaction.isActive()) {
             transaction.commit();
         }

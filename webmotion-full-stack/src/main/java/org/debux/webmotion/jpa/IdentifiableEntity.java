@@ -40,6 +40,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class IdentifiableEntity implements Serializable {
     
+    public static String ATTRIBUTE_NAME_ID = "id";
+    
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name ="system-uuid", strategy = "uuid")
