@@ -53,7 +53,7 @@ public class Jpa extends Transactional {
             return query(dao, request, name);
             
         } else if ("update".equals(action)) {
-            update(dao, request);
+            update(dao, id, request);
             
         } else if ("delete".equals(action)) {
             delete(dao, id);
@@ -78,9 +78,9 @@ public class Jpa extends Transactional {
         return renderJSON(query);
     }
     
-    public void update(GenericDAO dao, HttpServletRequest request) {
+    public void update(GenericDAO dao, String id, HttpServletRequest request) {
         Map<String, String[]> parameters = request.getParameterMap();
-        dao.update(parameters);
+        dao.update(id, parameters);
     }
     
     public void delete(GenericDAO dao, String id) {

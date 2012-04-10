@@ -61,6 +61,15 @@ public class GenericDAO {
     protected String entityName;
     protected Class<? extends IdentifiableEntity> entityClass;
     
+    public GenericDAO(EntityManager manager, Class<? extends IdentifiableEntity> entityClass) {
+        this.manager = manager;
+        this.entityClass = entityClass;
+        
+        this.beanUtil = BeanUtilsBean.getInstance();
+        this.convertUtils = beanUtil.getConvertUtils();
+        this.propertyUtils = beanUtil.getPropertyUtils();
+    }
+    
     public GenericDAO(EntityManager manager, String entityName) {
         this.manager = manager;
         try {
@@ -74,18 +83,21 @@ public class GenericDAO {
         this.propertyUtils = beanUtil.getPropertyUtils();
     }
     
-    public void create(Map<String, String[]> parameters) {
+    public IdentifiableEntity create(Map<String, String[]> parameters) {
         IdentifiableEntity entity = extract(parameters);
         manager.persist(entity);
+        return entity;
     }
             
-    public void update(Map<String, String[]> parameters) {
-        IdentifiableEntity entity = extract(parameters);
+    public IdentifiableEntity update(String id, Map<String, String[]> parameters) {
+        IdentifiableEntity entity = manager.find(entityClass, id);
+        entity = extract(entity, parameters);
         manager.merge(entity);
+        return entity;
     }
     
     public void delete(String id) {
-        IdentifiableEntity entity = find(id);
+        IdentifiableEntity entity = manager.find(entityClass, id);
         manager.remove(entity);
     }
     
@@ -113,7 +125,17 @@ public class GenericDAO {
     protected IdentifiableEntity extract(Map<String, String[]> parameters) {
         try {
             IdentifiableEntity entity = entityClass.newInstance();
-
+            return extract(entity, parameters);
+            
+        } catch (IllegalAccessException iae) {
+            throw new WebMotionException("Error during create instance", iae);
+        } catch (InstantiationException ie) {
+            throw new WebMotionException("Not default constructor", ie);
+        }
+    }
+    
+    protected IdentifiableEntity extract(IdentifiableEntity entity, Map<String, String[]> parameters) {
+        try {
             Field[] fields = entityClass.getDeclaredFields();
             for (Field field : fields) {
 
@@ -121,92 +143,93 @@ public class GenericDAO {
                 Class<?> type = field.getType();
                 String[] values = parameters.get(name);
 
-                if (values == null) {
-                    beanUtil.setProperty(entity, name, null);
+                if (!IdentifiableEntity.ATTRIBUTE_NAME_ID.equals(name)) {
                     
-                } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
-                    List<Object> references = new ArrayList<Object>(values.length);
-                    for (String value : values) {
-                        Object reference = manager.find(type, value);
-                        references.add(reference);
-                    }
-                    
-                    Object converted = null;
-                    if (List.class.isAssignableFrom(type)) {
-                        converted = references;
-                        
-                    } else if (Set.class.isAssignableFrom(type)) {
-                        converted = new HashSet<Object>(references);
-                        
-                    } else if (SortedSet.class.isAssignableFrom(type)) {
-                        converted = new TreeSet<Object>(references);
-                        
-                    } else if (type.isArray()) {
-                        converted = references.toArray();
+                    if (values == null) {
+                        beanUtil.setProperty(entity, name, null);
 
-                    } else if (Map.class.isAssignableFrom(type)) {
-                        String keyName = IdentifiableEntity.ATTRIBUTE_NAME_ID;
-                        MapKey annotation = type.getAnnotation(MapKey.class);
-                        if (annotation != null) {
-                            String annotationName = annotation.name();
-                            if (annotationName != null && !annotationName.isEmpty()) {
-                                keyName = annotationName;
-                            }
-                        }
-                        
-                        Map<Object, Object> map = new HashMap<Object, Object>();
-                        for (Object object : references) {
-                            Object key = propertyUtils.getProperty(object, keyName);
-                            map.put(key, object);
-                        }
-                        converted = map;
-                        
-                    } else if (!references.isEmpty()) {
-                        converted = references.get(0);
-                    }
-                    
-                    beanUtil.setProperty(entity, name, converted);
-                    
-                } else {
-                    
-                    if (Collection.class.isAssignableFrom(type)) {
-                        Class convertType = String.class;
-                        Type genericType = field.getGenericType();
-                        if(genericType != null && genericType instanceof ParameterizedType) {
-                            ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                            convertType = (Class) parameterizedType.getActualTypeArguments()[0];
+                    } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
+                        List<Object> references = new ArrayList<Object>(values.length);
+                        for (String value : values) {
+                            Object reference = manager.find(type, value);
+                            references.add(reference);
                         }
 
-                        Collection<Object> collection = null;
-                        if (Set.class.isAssignableFrom(type)) {
-                            collection = new HashSet<Object>();
+                        Object converted = null;
+                        if (List.class.isAssignableFrom(type)) {
+                            converted = references;
+
+                        } else if (Set.class.isAssignableFrom(type)) {
+                            converted = new HashSet<Object>(references);
+
                         } else if (SortedSet.class.isAssignableFrom(type)) {
-                            collection = new TreeSet();
-                        } else {
-                            collection = new ArrayList<Object>();
+                            converted = new TreeSet<Object>(references);
+
+                        } else if (type.isArray()) {
+                            converted = references.toArray();
+
+                        } else if (Map.class.isAssignableFrom(type)) {
+                            String keyName = IdentifiableEntity.ATTRIBUTE_NAME_ID;
+                            MapKey annotation = type.getAnnotation(MapKey.class);
+                            if (annotation != null) {
+                                String annotationName = annotation.name();
+                                if (annotationName != null && !annotationName.isEmpty()) {
+                                    keyName = annotationName;
+                                }
+                            }
+
+                            Map<Object, Object> map = new HashMap<Object, Object>();
+                            for (Object object : references) {
+                                Object key = propertyUtils.getProperty(object, keyName);
+                                map.put(key, object);
+                            }
+                            converted = map;
+
+                        } else if (!references.isEmpty()) {
+                            converted = references.get(0);
                         }
-                        
-                        for (Object object : values) {
-                            Object convertedObject = convertUtils.convert(object, convertType);
-                            collection.add(convertedObject);
-                        }
-                        
-                        beanUtil.setProperty(entity, name, collection);
-                        
-                    } else if (Map.class.isAssignableFrom(type)) {
-                        throw new UnsupportedOperationException("Map is not supported, you must create a specific entity.");
-                        
-                    } else {
-                        Object converted = convertUtils.convert(values, type);
+
                         beanUtil.setProperty(entity, name, converted);
+
+                    } else {
+
+                        if (Collection.class.isAssignableFrom(type)) {
+                            Class convertType = String.class;
+                            Type genericType = field.getGenericType();
+                            if(genericType != null && genericType instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) genericType;
+                                convertType = (Class) parameterizedType.getActualTypeArguments()[0];
+                            }
+
+                            Collection<Object> collection = null;
+                            if (Set.class.isAssignableFrom(type)) {
+                                collection = new HashSet<Object>();
+                            } else if (SortedSet.class.isAssignableFrom(type)) {
+                                collection = new TreeSet();
+                            } else {
+                                collection = new ArrayList<Object>();
+                            }
+
+                            for (Object object : values) {
+                                Object convertedObject = convertUtils.convert(object, convertType);
+                                collection.add(convertedObject);
+                            }
+
+                            beanUtil.setProperty(entity, name, collection);
+
+                        } else if (Map.class.isAssignableFrom(type)) {
+                            throw new UnsupportedOperationException("Map is not supported, you must create a specific entity.");
+
+                        } else {
+                            Object converted = convertUtils.convert(values, type);
+                            beanUtil.setProperty(entity, name, converted);
+                        }
                     }
                 }
             }
 
             return entity;
             
-        } catch (InstantiationException ie) {
-            throw new WebMotionException("Not default constructor", ie);
         } catch (IllegalAccessException iae) {
             throw new WebMotionException("Error during create instance", iae);
         } catch (InvocationTargetException ite) {
