@@ -91,14 +91,18 @@ public class GenericDAO {
             
     public IdentifiableEntity update(String id, Map<String, String[]> parameters) {
         IdentifiableEntity entity = manager.find(entityClass, id);
-        entity = extract(entity, parameters);
-        manager.merge(entity);
+        if (entity != null) {
+            entity = extract(entity, parameters);
+            manager.merge(entity);
+        }
         return entity;
     }
     
     public void delete(String id) {
         IdentifiableEntity entity = manager.find(entityClass, id);
-        manager.remove(entity);
+        if (entity != null) {
+            manager.remove(entity);
+        }
     }
     
     public IdentifiableEntity find(String id) {

@@ -83,7 +83,6 @@ public class GenericDAOTest {
     
     @AfterMethod
     public void tearDown() {
-        
         manager.close();
         factory.close();
     }
@@ -137,6 +136,13 @@ public class GenericDAOTest {
     }
     
     @Test
+    public void testInvalidDelete() {
+        dao.delete("invalid");
+        Comment entity = manager.find(Comment.class, "invalid");
+        AssertJUnit.assertNull(entity);
+    }
+    
+    @Test
     public void testUpdate() {
         String id = comment1.getId();
         
@@ -146,6 +152,16 @@ public class GenericDAOTest {
         
         Comment entity = manager.find(Comment.class, id);
         AssertJUnit.assertEquals("test", entity.getUsername());
+    }
+    
+    @Test
+    public void testInvalidUpdate() {
+        Map<String, String[]> parameters = new HashMap<String, String[]>();
+        parameters.put("username", new String[]{"test"});
+        dao.update("invalid", parameters);
+        
+        Comment entity = manager.find(Comment.class, "invalid");
+        AssertJUnit.assertNull(entity);
     }
     
     @Test
