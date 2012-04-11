@@ -86,12 +86,9 @@ public abstract class Transactional extends WebMotionFilter {
      * Create the generic dao with the transaction.
      * 
      * @param request
-     * @param persistenceUnitName
      * @param entityName 
      */
-    public void generateDAO(HttpServletRequest request, 
-            String persistenceUnitName, String entityName) {
-        
+    public void generateDAO(HttpServletRequest request, String entityName) {
         if (entityName != null) {
             EntityManager manager = (EntityManager) request.getAttribute(CURRENT_ENTITY_MANAGER);
             
