@@ -29,16 +29,16 @@
       
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.debux.webmotion</groupId>
-    <artifactId>webmotion-test</artifactId>
+    <artifactId>webmotion-test-tomcat</artifactId>
   
     <packaging>war</packaging>
-    <name>WebMotion test</name>
+    <name>WebMotion test tomcat</name>
     <url>www.webmotion-framework.org</url>
     
     <parent>
         <groupId>org.debux</groupId>
         <artifactId>webmotion-project</artifactId>
-        <version>2.2-SNAPSHOT</version>
+        <version>@pom.version@</version>
     </parent>
     
     <dependencies>
@@ -46,12 +46,21 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>webmotion</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webmotion-full-stack</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webmotion-test</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
             <scope>runtime</scope>
         </dependency>
 
@@ -74,17 +83,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-            
-        <dependency>
-            <groupId>javax.inject</groupId>  
-            <artifactId>javax.inject</artifactId>  
-            <version>1</version>  
         </dependency>
         
         <!-- Servlet -->
@@ -112,7 +110,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- Test -->
@@ -126,67 +124,48 @@
     <build>
         <finalName>webmotion-test</finalName>
         
-        <resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-            </resource>
-            
-            <resource>
-                <directory>src/main/java/org/debux/webmotion/test/</directory>
-                <targetPath>src</targetPath>
-            </resource>
-            
-            <resource>
-                <directory>src/main/webapp/WEB-INF/org/debux/webmotion/test/</directory>
-                <targetPath>pages</targetPath>
-            </resource>
-        </resources>
-        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-test</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <copy todir="target/it/glassfish/src/test">
-                                    <fileset dir="src/test"/>
-                                </copy>
-                                <copy todir="target/it/jetty/src/test">
-                                    <fileset dir="src/test"/>
-                                </copy>
-                                <copy todir="target/it/tomcat/src/test">
-                                    <fileset dir="src/test"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-invoker-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                    <projectsDirectory>src/it</projectsDirectory>
-                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                    <goals>
-                        <goal>verify</goal>
-                    </goals>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
+                <configuration>
+                    <path>/${project.build.finalName}</path>
+                    <port>8090</port>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-tomcat</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run-war-only</goal>
+                        </goals>
+                        <configuration>
+                            <fork>true</fork>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-tomcat</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>shutdown</goal>
                         </goals>
                     </execution>
                 </executions>

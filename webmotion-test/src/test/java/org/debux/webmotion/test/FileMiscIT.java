@@ -52,14 +52,14 @@ public class FileMiscIT extends AbstractIT {
         
         MultipartEntity entity = new MultipartEntity();
         
-        URI path = getClass().getClassLoader().getResource("Outlook.png").toURI();
+        URI path = getClass().getClassLoader().getResource("logback.xml").toURI();
         File file = new File(path);
         entity.addPart("file", new FileBody(file));
         
         request.setEntity(entity);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Outlook.png is uploaded"));
+        AssertJUnit.assertTrue(result.contains("logback.xml is uploaded"));
     }
     
 }
