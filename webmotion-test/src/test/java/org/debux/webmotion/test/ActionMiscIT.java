@@ -156,7 +156,8 @@ public class ActionMiscIT extends AbstractIT {
             String name = cookie.getName();
             String value = cookie.getValue();
             if ("user_cookie".equals(name)) {
-                AssertJUnit.assertEquals("{\\\"value\\\":\\\"test\\\"}", value);
+                value = value.replaceAll("\\\\", "");
+                AssertJUnit.assertEquals("{\"value\":\"test\"}", value);
                 return;
             }
         }
