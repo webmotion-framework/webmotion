@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.ServerContext;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,12 +83,15 @@ public class WebMotionMainHandler implements WebMotionHandler {
     /** All handlers use to process an error */
     protected List<WebMotionHandler> errorHandlers;
 
+    /** All handlers use to process an executor */
+    protected List<WebMotionHandler> executorHandlers;
+
     @Override
     public void init(Mapping mapping, ServerContext context) {
         factory = context.getHandlers();
         handlerStats = context.getHandlerStats();
         
-        if (actionHandlers == null && errorHandlers == null) {
+        if (actionHandlers == null && errorHandlers == null && executorHandlers == null) {
             initHandlers(mapping, context);
         }
         
@@ -103,6 +107,9 @@ public class WebMotionMainHandler implements WebMotionHandler {
 
         List<Class<? extends WebMotionHandler>> errorClasses = getErrorHandlers();
         errorHandlers = initHandlers(mapping, context, errorClasses);
+        
+        List<Class<? extends WebMotionHandler>> executorClasses = getExecutorHandlers();
+        executorHandlers = initHandlers(mapping, context, executorClasses);
     }
     
     /**
@@ -145,54 +152,63 @@ public class WebMotionMainHandler implements WebMotionHandler {
     
     @Override
     public void handle(Mapping mapping, Call call) {
-        long start = System.currentTimeMillis();
-        HttpContext context = call.getContext();
-        
-        // Determine the extension is used
-        String url = context.getUrl();
-        log.info("url = " + url);
-
-        List<Mapping> extensionsRules = mapping.getExtensionsRules();
-        for (Mapping extensionMapping : extensionsRules) {
+        Executor current = call.getCurrent();
+        if (current != null) {
+            chainHandlers(executorHandlers, mapping, call);
             
-            String path = extensionMapping.getExtensionPath();
-            log.info("path = " + path);
-            if ("/".equals(path) 
-                    || WebMotionUtils.find("^" + path + "(/|$)", url)) {
-                
-                context.addExtensionPath(path);
-                
-                Config newConfig = extensionMapping.getConfig();
-                String className = newConfig.getMainHandler();
-                
-                WebMotionHandler mainHandler = factory.getInstance(className);
-                mainHandler.handle(extensionMapping, call);
-                
-                context.removeExtensionPath(path);
-                
-                // Stop if the first handler process the request
-                Rule rule = call.getRule();
-                if (rule != null) {
-                    break;
+        } else {
+            
+            long start = System.currentTimeMillis();
+            HttpContext context = call.getContext();
+
+            // Determine the extension is used
+            String url = context.getUrl();
+            log.info("url = " + url);
+
+            List<Mapping> extensionsRules = mapping.getExtensionsRules();
+            for (Mapping extensionMapping : extensionsRules) {
+
+                String path = extensionMapping.getExtensionPath();
+                log.info("path = " + path);
+                if ("/".equals(path) 
+                        || WebMotionUtils.find("^" + path + "(/|$)", url)) {
+
+                    context.addExtensionPath(path);
+
+                    Config newConfig = extensionMapping.getConfig();
+                    String className = newConfig.getMainHandler();
+
+                    WebMotionHandler mainHandler = factory.getInstance(className);
+                    mainHandler.handle(extensionMapping, call);
+
+                    context.removeExtensionPath(path);
+
+                    // Stop if the first handler process the request
+                    Rule rule = call.getRule();
+                    if (rule != null) {
+                        break;
+                    }
                 }
             }
-        }
-        
-        // Search in mapping
-        Rule rule = call.getRule();
-        if (rule == null) {
-            // Determine if the request contains an errors
-            if (context.isError()) {
-                ErrorData errorData = context.getErrorData();
-                log.error("Error " + errorData.getStatusCode() + " : " + errorData.getMessage() 
-                        + " on " + errorData.getRequestUri(), errorData.getException());
-                chainHandlers(errorHandlers, mapping, call);
-            } else {
-                chainHandlers(actionHandlers, mapping, call);
+
+            // Search in mapping
+            Rule rule = call.getRule();
+            if (rule == null) {
+                call.setMainHandler(this);
+
+                // Determine if the request contains an errors
+                if (context.isError()) {
+                    ErrorData errorData = context.getErrorData();
+                    log.error("Error " + errorData.getStatusCode() + " : " + errorData.getMessage() 
+                            + " on " + errorData.getRequestUri(), errorData.getException());
+                    chainHandlers(errorHandlers, mapping, call);
+                } else {
+                    chainHandlers(actionHandlers, mapping, call);
+                }
             }
+
+            handlerStats.registerHandlerTime(this.getClass().getName(), start);
         }
-        
-        handlerStats.registerHandlerTime(this.getClass().getName(), start);
     }
 
     /**
@@ -205,7 +221,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
             handlerStats.registerHandlerTime(handler.getClass().getName(), start);
         }
     }
-
+    
     /**
      * @return list of {@see WebMotionHandler} that will be processed for action handling
      */
@@ -218,10 +234,6 @@ public class WebMotionMainHandler implements WebMotionHandler {
                     ActionExecuteRenderHandler.class,
                     ActionMethodFinderHandler.class,
                     FilterMethodFinderHandler.class,
-                    ExecutorInstanceCreatorHandler.class,
-                    ExecutorParametersConvertorHandler.class,
-                    ExecutorParametersInjectorHandler.class,
-                    ExecutorParametersValidatorHandler.class,
                     ExecutorMethodInvokerHandler.class
                 );
     }
@@ -235,10 +247,19 @@ public class WebMotionMainHandler implements WebMotionHandler {
                     ErrorFinderHandler.class,
                     ActionExecuteRenderHandler.class,
                     ErrorMethodFinderHandler.class,
+                    ExecutorMethodInvokerHandler.class
+                );
+    }
+    
+    /**
+     * @return list of {@see WebMotionHandler} that will be processed for executor
+     */
+    public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
+        return Arrays.asList(
                     ExecutorInstanceCreatorHandler.class,
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
-                    ExecutorMethodInvokerHandler.class
+                    ExecutorParametersValidatorHandler.class
                 );
     }
     

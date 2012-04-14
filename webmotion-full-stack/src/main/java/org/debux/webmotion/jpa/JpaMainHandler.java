@@ -24,8 +24,16 @@
  */
 package org.debux.webmotion.jpa;
 
+import java.lang.reflect.Type;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionMainHandler;
+import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,5 +52,58 @@ public class JpaMainHandler extends WebMotionMainHandler {
         super.initHandlers(mapping, context);
         
         context.addGlobalController(Jpa.class);
+        
+        context.addInjector(getGenericDaoInjector());
+        context.addInjector(getEntityManagerInjector());
+        context.addInjector(getEntityTransactionManager());
     }
+
+    public Injector getEntityTransactionManager() {
+        return new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                if (EntityTransaction.class.isAssignableFrom(type)) {
+                    HttpContext httpContext = call.getContext();
+                    HttpServletRequest request = httpContext.getRequest();
+                    return request.getAttribute(Transactional.CURRENT_ENTITY_TRANSACTION);
+                }
+                return null;
+            }
+        };
+    }
+
+    public Injector getEntityManagerInjector() {
+        return new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                if (EntityManager.class.isAssignableFrom(type)) {
+                    HttpContext httpContext = call.getContext();
+                    HttpServletRequest request = httpContext.getRequest();
+                    return request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
+                }
+                return null;
+            }
+        };
+    }
+
+    public Injector getGenericDaoInjector() {
+        return new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                if (GenericDAO.class.isAssignableFrom(type)) {
+                    HttpContext httpContext = call.getContext();
+                    HttpServletRequest request = httpContext.getRequest();
+
+                    Map<String, Object> parameters = call.getAliasParameters();
+                    String[] entityName = (String[]) parameters.get("entityName");
+                    if (entityName != null && entityName.length > 0) {
+                        EntityManager manager = (EntityManager) request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
+                        return new GenericDAO(manager, entityName[0]);
+                    }
+                }
+                return null;
+            }
+        };
+    }
+
 }

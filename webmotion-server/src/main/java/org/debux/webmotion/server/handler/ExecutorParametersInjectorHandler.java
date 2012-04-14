@@ -82,36 +82,34 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        List<Executor> executors = call.getExecutors();
-        for (Executor executor : executors) {
-            
-            Method executorMethod = executor.getMethod();
-            Class<?>[] parameterTypes = executorMethod.getParameterTypes();
-            Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
-            Map<String, Object> parameters = executor.getParameters();
-            
-            // Search a value with a type
-            int index = 0;
-            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-                String name = entry.getKey();
-                Object value = entry.getValue();
-                
-                if (value == null) {
-                    Class<?> type = parameterTypes[index];
-                    Type generic = genericParameterTypes[index];
-                    
-                    for (Injector injector : injectors) {
-                        Object inject = injector.getValue(mapping, call, type, generic);
-                        
-                        if (inject != null) {
-                            log.info("Inject " + name + " for type " + type + " the value " + inject);
-                            parameters.put(name, inject);
-                        }
+        Executor executor = call.getCurrent();
+        
+        Method executorMethod = executor.getMethod();
+        Class<?>[] parameterTypes = executorMethod.getParameterTypes();
+        Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
+        Map<String, Object> parameters = executor.getParameters();
+
+        // Search a value with a type
+        int index = 0;
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            String name = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value == null) {
+                Class<?> type = parameterTypes[index];
+                Type generic = genericParameterTypes[index];
+
+                for (Injector injector : injectors) {
+                    Object inject = injector.getValue(mapping, call, type, generic);
+
+                    if (inject != null) {
+                        log.info("Inject " + name + " for type " + type + " the value " + inject);
+                        parameters.put(name, inject);
                     }
                 }
-                
-                index ++;
             }
+
+            index ++;
         }
     }
     

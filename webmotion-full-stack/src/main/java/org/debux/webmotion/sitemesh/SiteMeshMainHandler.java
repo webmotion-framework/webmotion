@@ -42,6 +42,7 @@ public class SiteMeshMainHandler extends WebMotionMainHandler {
     @Override
     protected void initHandlers(Mapping mapping, ServerContext context) {
         super.initHandlers(mapping, context);
+        
         context.addGlobalController(SiteMesh.class);
     }
 

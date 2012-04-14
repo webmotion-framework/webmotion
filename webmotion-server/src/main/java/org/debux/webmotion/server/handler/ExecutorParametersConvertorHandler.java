@@ -103,36 +103,34 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        List<Executor> executors = call.getExecutors();
-        for (Executor executor : executors) {
+        Executor executor = call.getCurrent();
 
-            Method executorMethod = executor.getMethod();
-            String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
+        Method executorMethod = executor.getMethod();
+        String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
 
-            // Sort parameters and convert
-            Map<String, Object> parameters = call.getAliasParameters();
-            Class<?>[] parameterTypes = executorMethod.getParameterTypes();
-            Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
+        // Sort parameters and convert
+        Map<String, Object> parameters = call.getAliasParameters();
+        Class<?>[] parameterTypes = executorMethod.getParameterTypes();
+        Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
 
-            // Save object in call
-            Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
-            executor.setParameters(convertedParameters);
+        // Save object in call
+        Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
+        executor.setParameters(convertedParameters);
 
-            for (int position = 0; position < parameterNames.length; position ++) {
-                String name = parameterNames[position];
-                Object value = parameters.get(name);
-                Class<?> type = parameterTypes[position];
-                Type genericType = genericParameterTypes[position];
+        for (int position = 0; position < parameterNames.length; position ++) {
+            String name = parameterNames[position];
+            Object value = parameters.get(name);
+            Class<?> type = parameterTypes[position];
+            Type genericType = genericParameterTypes[position];
 
-                try {
-                    value = convert(value, type, genericType);
-                    convertedParameters.put(name, value);
+            try {
+                value = convert(value, type, genericType);
+                convertedParameters.put(name, value);
 
-                } catch (Exception ex) {
-                    throw new WebMotionException("Error during converting parameter " 
-                            + name + " with value " + value 
-                            + " before invoke the method", ex);
-                }
+            } catch (Exception ex) {
+                throw new WebMotionException("Error during converting parameter " 
+                        + name + " with value " + value 
+                        + " before invoke the method", ex);
             }
         }
     }

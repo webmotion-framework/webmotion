@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Rule;
 
@@ -66,6 +67,12 @@ public class Call {
     
     /** Information to execute the filters. */
     protected List<Executor> filters;
+    
+    /** Current executor is processed */
+    protected Executor current;
+    
+    /** The main handler handle */
+    protected WebMotionHandler mainHandler;
     
     /** The final render for user. */
     protected Render render;
@@ -184,4 +191,20 @@ public class Call {
         this.async = async;
     }
 
+    public Executor getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Executor current) {
+        this.current = current;
+    }
+
+    public WebMotionHandler getMainHandler() {
+        return mainHandler;
+    }
+
+    public void setMainHandler(WebMotionHandler mainHandler) {
+        this.mainHandler = mainHandler;
+    }
+    
 }

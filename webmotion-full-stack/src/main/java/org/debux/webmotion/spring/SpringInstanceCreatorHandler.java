@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.spring;
 
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
@@ -60,13 +59,10 @@ public class SpringInstanceCreatorHandler implements WebMotionHandler {
         ServletContext servletContext = context.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
         
-        List<Executor> executors = call.getExecutors();
-        for (Executor executor : executors) {
-            
-            Class<? extends WebMotionController> actionClass = executor.getClazz();
-            WebMotionController instance = applicationContext.getBean(actionClass);
-            executor.setInstance(instance);
-        }
+        Executor executor = call.getCurrent();
+        Class<? extends WebMotionController> actionClass = executor.getClazz();
+        WebMotionController instance = applicationContext.getBean(actionClass);
+        executor.setInstance(instance);
     }
 
 }

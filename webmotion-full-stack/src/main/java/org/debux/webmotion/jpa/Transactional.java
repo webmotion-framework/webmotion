@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.jpa;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -33,8 +32,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionFilter;
-import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,25 +80,5 @@ public abstract class Transactional extends WebMotionFilter {
             transaction.commit();
         }
         manager.close();
-    }
-    
-    /**
-     * Inject transaction in controller.
-     * 
-     * @param request
-     * @param entityName 
-     */
-    public void inject(HttpServletRequest request, String entityName) {
-        if (entityName != null) {
-            EntityManager manager = (EntityManager) request.getAttribute(CURRENT_ENTITY_MANAGER);
-            GenericDAO dao = new GenericDAO(manager, entityName);
-          
-            Map<String, Object> parameters = getParameters();
-            if(parameters.containsKey("dao")) {
-                parameters.put("dao", dao);
-            }
-        }
-        
-        doProcess();
     }
 }

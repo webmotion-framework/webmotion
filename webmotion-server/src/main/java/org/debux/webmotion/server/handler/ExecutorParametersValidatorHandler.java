@@ -33,7 +33,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.validation.Constraint;
@@ -117,23 +116,20 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
         }
         
         Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
-        
-        List<Executor> executors = call.getExecutors();
-        for (Executor executor : executors) {
+        Executor executor = call.getCurrent();
             
-            Method method = executor.getMethod();
-            WebMotionController instance = executor.getInstance();
+        Method method = executor.getMethod();
+        WebMotionController instance = executor.getInstance();
 
-            int parameterIndex = 0;
-            Map<String, Object> parameters = executor.getParameters();
-            Collection<Object> values = parameters.values();
-            for (Object parameterValue : values) {
-                
-                // Test validation on method
-                violations.addAll(methodValidator.validateParameter(instance, method, parameterValue, parameterIndex));
-                
-                parameterIndex++;
-            }
+        int parameterIndex = 0;
+        Map<String, Object> parameters = executor.getParameters();
+        Collection<Object> values = parameters.values();
+        for (Object parameterValue : values) {
+
+            // Test validation on method
+            violations.addAll(methodValidator.validateParameter(instance, method, parameterValue, parameterIndex));
+
+            parameterIndex++;
         }
         
         if (!violations.isEmpty()) {

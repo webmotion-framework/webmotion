@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionController;
@@ -58,19 +57,10 @@ public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        List<Executor> executors = call.getExecutors();
-        for (Executor executor : executors) {
-            handle(mapping, call, executor);
-        }
-    }
-
-    /**
-     * Process one executor.
-     */
-    protected void handle(Mapping mapping, Call call, Executor executor) {
+        Executor executor = call.getCurrent();
+        
         // You must test mode here to manage correctly extension, otherwise
         // you risk to have only the factory define in init method.
-        
         SingletonFactory<WebMotionController> factory = getControllerFactory(mapping, call);
         Class<? extends WebMotionController> actionClass = executor.getClazz();
         

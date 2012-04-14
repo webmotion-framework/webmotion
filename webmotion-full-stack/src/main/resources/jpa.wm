@@ -28,7 +28,6 @@ server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
 
 [filters]
 *         /*                          Jpa.tx                 persistenceUnitName=webmotion
-*         /*                          Jpa.inject
 
 [actions]
 GET         /{entityName}?action={}        Jpa.all

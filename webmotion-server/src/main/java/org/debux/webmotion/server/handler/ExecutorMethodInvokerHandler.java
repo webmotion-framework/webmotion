@@ -39,6 +39,8 @@ import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -53,6 +55,7 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
@@ -71,8 +74,10 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorMethodInvokerHandler.class);
 
+    /** Context in controller */
     protected WebMotionContextable contextable;
     
+    /** Pool async request */
     protected ExecutorService threadPool;
 
     public ExecutorMethodInvokerHandler(WebMotionContextable contextable, ExecutorService threadPool) {
@@ -87,6 +92,10 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
     @Override
     public void init(Mapping mapping, ServerContext context) {
         // do nothing
+    }
+    
+    public void setThreadPool(ExecutorService threadPool) {
+        this.threadPool = threadPool;
     }
 
     @Override
@@ -218,7 +227,11 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         
         public void processAction(Mapping mapping, Call call) {
             Executor executor = call.getExecutor();
+            call.setCurrent(executor);
+            processHandlers(mapping, call);
+            
             try {
+                
                 WebMotionController instance = executor.getInstance();
                 contextable.create(this, mapping, call);
                 instance.setContextable(contextable);
@@ -261,8 +274,9 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
         public void processFilter(Mapping mapping, Call call) {
             Executor executor = filtersIterator.next();
-            filtersIndex ++;
-            
+            call.setCurrent(executor);
+            processHandlers(mapping, call);
+                
             try {
                 WebMotionFilter filterInstance = (WebMotionFilter) executor.getInstance();
                 contextable.create(this, mapping, call);
@@ -285,10 +299,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     processRender(mapping, call);
                 }
                 
+                filtersIndex ++;
+                
             } catch (IllegalAccessException ex) {
                 contextable.remove();
                 
-                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                 throw new WebMotionException("Error during invoke method for filter " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
@@ -296,7 +312,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             } catch (IllegalArgumentException ex) {
                 contextable.remove();
                 
-                FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                 throw new WebMotionException("Error during invoke method for filter " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
@@ -309,7 +325,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     throw (WebMotionException) cause;
                     
                 } else {
-                    FilterRule filterRule = call.getFilterRules().get(filtersIndex - 1);
+                    FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                     throw new WebMotionException("Error during invoke method for filter " 
                             + executor.getClazz().getName() 
                             + " on method " + executor.getMethod().getName(),
@@ -343,5 +359,13 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
     
+        /**
+         * TODO: 20121504 Improve: maybe create an specific interface and remove
+         * current executor in Call.
+         */
+        public void processHandlers(Mapping mapping, Call call) {
+            WebMotionHandler mainHandler = call.getMainHandler();
+            mainHandler.handle(mapping, call);
+        }
     }
 }

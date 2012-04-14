@@ -28,17 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionMainHandler;
-import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
-import org.debux.webmotion.server.handler.ActionFinderHandler;
-import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
-import org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
-import org.debux.webmotion.server.handler.FilterFinderHandler;
-import org.debux.webmotion.server.handler.FilterMethodFinderHandler;
-import org.debux.webmotion.server.handler.ParametersExtractorHandler;
-import org.debux.webmotion.server.handler.ParametersMultipartHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,20 +44,12 @@ public class SpringMainHandler extends WebMotionMainHandler {
     private static final Logger log = LoggerFactory.getLogger(SpringMainHandler.class);
 
     @Override
-    public List<Class<? extends WebMotionHandler>> getActionHandlers() {
+    public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
         return Arrays.asList(
-                    ParametersMultipartHandler.class,
-                    ActionFinderHandler.class,
-                    FilterFinderHandler.class,
-                    ParametersExtractorHandler.class,
-                    ActionExecuteRenderHandler.class,
-                    ActionMethodFinderHandler.class,
-                    FilterMethodFinderHandler.class,
-                    SpringInstanceCreatorHandler.class, // Add here replace ExecutorInstanceCreatorHandler
+                    SpringInstanceCreatorHandler.class,
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
-                    ExecutorParametersValidatorHandler.class,
-                    ExecutorMethodInvokerHandler.class
+                    ExecutorParametersValidatorHandler.class
                 );
     }
     
