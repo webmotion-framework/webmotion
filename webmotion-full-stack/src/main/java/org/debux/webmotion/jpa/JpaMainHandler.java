@@ -22,7 +22,7 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.sitemesh;
+package org.debux.webmotion.jpa;
 
 import org.debux.webmotion.server.WebMotionMainHandler;
 import org.debux.webmotion.server.call.ServerContext;
@@ -35,14 +35,14 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class SiteMeshMainHandler extends WebMotionMainHandler {
+public class JpaMainHandler extends WebMotionMainHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(SiteMeshMainHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(JpaMainHandler.class);
 
     @Override
     protected void initHandlers(Mapping mapping, ServerContext context) {
         super.initHandlers(mapping, context);
-        context.addGlobalController(SiteMesh.class);
+        
+        context.addGlobalController(Jpa.class);
     }
-
 }

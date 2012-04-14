@@ -27,8 +27,10 @@ package org.debux.webmotion;
 import org.debux.webmotion.sitemesh.*;
 import java.util.Arrays;
 import java.util.List;
+import org.debux.webmotion.jpa.Jpa;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionMainHandler;
+import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.handler.ActionExecuteRenderHandler;
 import org.debux.webmotion.server.handler.ActionFinderHandler;
 import org.debux.webmotion.server.handler.ActionMethodFinderHandler;
@@ -37,8 +39,10 @@ import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
 import org.debux.webmotion.server.handler.FilterFinderHandler;
+import org.debux.webmotion.server.handler.FilterMethodFinderHandler;
 import org.debux.webmotion.server.handler.ParametersExtractorHandler;
 import org.debux.webmotion.server.handler.ParametersMultipartHandler;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.spring.SpringInstanceCreatorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +57,14 @@ public class WebMotionFullStackMainHandler extends WebMotionMainHandler {
     private static final Logger log = LoggerFactory.getLogger(WebMotionFullStackMainHandler.class);
 
     @Override
+    protected void initHandlers(Mapping mapping, ServerContext context) {
+        super.initHandlers(mapping, context);
+        
+        context.addGlobalController(SiteMesh.class);
+        context.addGlobalController(Jpa.class);
+    }
+    
+    @Override
     public List<Class<? extends WebMotionHandler>> getActionHandlers() {
         return Arrays.asList(
                     ParametersMultipartHandler.class,
@@ -61,7 +73,7 @@ public class WebMotionFullStackMainHandler extends WebMotionMainHandler {
                     ParametersExtractorHandler.class,
                     ActionExecuteRenderHandler.class,
                     ActionMethodFinderHandler.class,
-                    SiteMeshFilterMethodFinderHandler.class, // Add here replace FilterMethodFinderHandler
+                    FilterMethodFinderHandler.class,
                     SpringInstanceCreatorHandler.class, // Add here replace ExecutorInstanceCreatorHandler
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
