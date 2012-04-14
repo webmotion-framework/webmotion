@@ -24,13 +24,18 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mbean.HandlerStats;
@@ -57,6 +62,18 @@ public class ServerContext {
     
     /** Factory of handelrs */
     protected SingletonFactory<WebMotionHandler> handlers;
+    
+    /** Contain contoller which are accessible in all mapping */
+    protected Map<String, Class<WebMotionController>> globalControllers;
+    
+    /** Contain injector use in ExecutorParametersInjectorHandler */
+    protected List<Injector> injectors;
+            
+    /** Bean utils use in handler */
+    protected BeanUtilsBean beanUtil;
+    
+    /** Convert utils use in handler */
+    protected ConvertUtilsBean converter;
     
     /** MBean for server stats */
     protected ServerStats serverStats;
@@ -95,7 +112,12 @@ public class ServerContext {
         this.attributes = new HashMap<String, Object>();
         this.handlers = new SingletonFactory<WebMotionHandler>();
         this.controllers = new SingletonFactory<WebMotionController>();
-
+        this.globalControllers = new HashMap<String, Class<WebMotionController>>();
+        this.injectors = new ArrayList<Injector>();
+        
+        this.beanUtil = BeanUtilsBean.getInstance();
+        this.converter = beanUtil.getConvertUtils();
+                
         // Register MBeans
         this.serverStats = new ServerStats();
         this.handlerStats = new HandlerStats();
@@ -157,6 +179,46 @@ public class ServerContext {
         return handlers;
     }
 
+    public Map<String, Class<WebMotionController>> getGlobalControllers() {
+        return globalControllers;
+    }
+
+    public void setGlobalControllers(Map<String, Class<WebMotionController>> globalControllers) {
+        this.globalControllers = globalControllers;
+    }
+
+    public List<Injector> getInjectors() {
+        return injectors;
+    }
+
+    public void setInjectors(List<Injector> injectors) {
+        this.injectors = injectors;
+    }
+
+    public BeanUtilsBean getBeanUtil() {
+        return beanUtil;
+    }
+
+    public void setBeanUtil(BeanUtilsBean beanUtil) {
+        this.beanUtil = beanUtil;
+    }
+
+    public ConvertUtilsBean getConverter() {
+        return converter;
+    }
+
+    public void setConverter(ConvertUtilsBean converter) {
+        this.converter = converter;
+    }
+
+    public ServerContextManager getServerManager() {
+        return serverManager;
+    }
+
+    public void setServerManager(ServerContextManager serverManager) {
+        this.serverManager = serverManager;
+    }
+    
     public HandlerStats getHandlerStats() {
         return handlerStats;
     }

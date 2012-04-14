@@ -236,6 +236,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
                     ActionExecuteRenderHandler.class,
                     ErrorMethodFinderHandler.class,
                     ExecutorInstanceCreatorHandler.class,
+                    ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
                     ExecutorMethodInvokerHandler.class
                 );

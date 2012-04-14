@@ -31,6 +31,7 @@ import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
+import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -44,15 +45,20 @@ import org.slf4j.LoggerFactory;
 /**
  * Find the filter class reprensent by name given in mapping.
  * 
+ * You can add global controller in server context.
+ * 
  * @author julien
  */
 public class FilterMethodFinderHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(FilterMethodFinderHandler.class);
 
+    /** Global action in server context */
+    protected Map<String, Class<WebMotionController>> globalControllers;
+    
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        // do nothing
+        globalControllers = context.getGlobalControllers();
     }
 
     @Override
@@ -87,7 +93,10 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
         }
             
         try {
-            Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+            Class<WebMotionController> clazz = globalControllers.get(className);
+            if (clazz == null) {
+                clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+            }
 
             String methodName = action.getMethodName();
             Method method = WebMotionUtils.getMethod(clazz, methodName);

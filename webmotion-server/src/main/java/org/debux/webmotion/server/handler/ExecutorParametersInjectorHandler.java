@@ -25,7 +25,8 @@
 package org.debux.webmotion.server.handler;
 
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
@@ -33,7 +34,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.CookieManger;
@@ -63,15 +63,21 @@ import org.slf4j.LoggerFactory;
  * <li>FileProgressListener</li>
  * <li>CookieManager</li>
  * </ul>
+ * 
+ * You can add injector in server context.
+ * 
  * @author jruchaud
  */
 public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersInjectorHandler.class);
 
+    protected List<Injector> injectors;
+    
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        // do nothing
+        injectors = context.getInjectors();
+        injectors.addAll(getBasicInjector());
     }
 
     @Override
@@ -81,18 +87,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
             
             Method executorMethod = executor.getMethod();
             Class<?>[] parameterTypes = executorMethod.getParameterTypes();
+            Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
             Map<String, Object> parameters = executor.getParameters();
-            
-            // When the call is an error, create a basic map.
-            HttpContext context = call.getContext();
-            if(context.isError()) {
-                String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
-                parameters = new LinkedHashMap<String, Object>(parameterNames.length);
-                for (String name : parameterNames) {
-                    parameters.put(name, null);
-                }
-                executor.setParameters(parameters);
-            }
             
             // Search a value with a type
             int index = 0;
@@ -102,10 +98,16 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                 
                 if (value == null) {
                     Class<?> type = parameterTypes[index];
+                    Type generic = genericParameterTypes[index];
                     
-                    Object inject = inject(mapping, call, type);
-                    log.info("Inject " + name + " for type " + type + " the value " + inject);
-                    parameters.put(name, inject);
+                    for (Injector injector : injectors) {
+                        Object inject = injector.getValue(mapping, call, type, generic);
+                        
+                        if (inject != null) {
+                            log.info("Inject " + name + " for type " + type + " the value " + inject);
+                            parameters.put(name, inject);
+                        }
+                    }
                 }
                 
                 index ++;
@@ -114,57 +116,149 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
     }
     
     /**
-     * Search the value to inject from a parameter type.
+     * Use to determine if inject the value in the parameter. 
      */
-    public Object inject(Mapping mapping, Call call, Class<?> type) {
-
-        HttpContext context = call.getContext();
-        ErrorData errorData = context.getErrorData();
-        Throwable cause = errorData.getCause();
+    public static interface Injector {
         
-        Object value = null;
+        /**
+         * Get the value to inject.
+         * 
+         * @param mapping mapping
+         * @param call call
+         * @param type
+         * @param generic of type
+         * @return value
+         */
+        Object getValue(Mapping mapping, Call call, Class<?> type, Type generic);
+    }
 
-        if (Mapping.class.isAssignableFrom(type)) {
-            value = mapping;
-
-        } else if (Config.class.isAssignableFrom(type)) {
-            value = mapping.getConfig();
-
-        } else if (Call.class.isAssignableFrom(type)) {
-            value = call;
-
-        } else if (HttpContext.class.isAssignableFrom(type)) {
-            value = context;
-
-        } else if (HttpSession.class.isAssignableFrom(type)) {
-            value = context.getSession();
-
-        } else if (ServletRequest.class.isAssignableFrom(type)) {
-            value = context.getRequest();
-
-        } else if (ServletResponse.class.isAssignableFrom(type)) {
-            value = context.getResponse();
-
-        } else if (ServerContext.class.isAssignableFrom(type)) {
-            value = context.getServerContext();
-
-        } else if (ServletContext.class.isAssignableFrom(type)) {
-            value = context.getServletContext();
-
-        } else if (HttpContext.ErrorData.class.isAssignableFrom(type)) {
-            value = errorData;
-
-        } else if (cause != null && cause.getClass().isAssignableFrom(type)) {
-            value = cause;
-
-        } else if (FileProgressListener.class.isAssignableFrom(type)) {
-            value = context.getSession().getAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
-            
-        } else if (CookieManger.class.isAssignableFrom(type)) {
-            value = context.getCookieManger();
-        }
+    /**
+     * @return All basic injector.
+     */
+    protected List<Injector> getBasicInjector() {
+        return Arrays.asList(
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (Mapping.class.isAssignableFrom(type)) {
+                        return mapping;
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (Config.class.isAssignableFrom(type)) {
+                        return mapping.getConfig();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (Call.class.isAssignableFrom(type)) {
+                        return call;
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (HttpContext.class.isAssignableFrom(type)) {
+                        return call.getContext();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (HttpSession.class.isAssignableFrom(type)) {
+                        return call.getContext().getSession();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (ServletRequest.class.isAssignableFrom(type)) {
+                        return call.getContext().getRequest();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (ServletResponse.class.isAssignableFrom(type)) {
+                        return call.getContext().getResponse();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (ServerContext.class.isAssignableFrom(type)) {
+                        return call.getContext().getServerContext();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (ServletContext.class.isAssignableFrom(type)) {
+                        return call.getContext().getServletContext();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (HttpContext.ErrorData.class.isAssignableFrom(type)) {
+                        return call.getContext().getErrorData();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    HttpContext context = call.getContext();
+                    ErrorData errorData = context.getErrorData();
+                    Throwable cause = errorData.getCause();
         
-        return value;
+                    if (cause != null && cause.getClass().isAssignableFrom(type)) {
+                        return cause;
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (FileProgressListener.class.isAssignableFrom(type)) {
+                        return call.getContext().getSession().getAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (CookieManger.class.isAssignableFrom(type)) {
+                        return call.getContext().getCookieManger();
+                    }
+                    return null;
+                }
+            }
+        );
     }
     
 }

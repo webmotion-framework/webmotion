@@ -28,6 +28,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
+import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -44,15 +45,20 @@ import org.slf4j.LoggerFactory;
  * Find the error class reprensent by name given in mapping. If it directly 
  * mapped on view or url, tthe executor is null but the render is informed.
  *
+ * You can add global controller in server context.
+ * 
  * @author julien
  */
 public class ErrorMethodFinderHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ErrorMethodFinderHandler.class);
 
+    /** Global action in server context */
+    protected Map<String, Class<WebMotionController>> globalControllers;
+    
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        // do nothing
+        globalControllers = context.getGlobalControllers();
     }
 
     @Override
@@ -70,7 +76,10 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
             String fullQualifiedName = packageName + "." + className;
 
             try {
-                Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+                Class<WebMotionController> clazz = globalControllers.get(className);
+                if (clazz == null) {
+                    clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+                }
 
                 String methodName = action.getMethodName();
                 Method method = WebMotionUtils.getMethod(clazz, methodName);

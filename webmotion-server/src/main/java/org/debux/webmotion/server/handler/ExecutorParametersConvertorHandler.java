@@ -84,81 +84,75 @@ import org.slf4j.LoggerFactory;
  * <li>Arrays (no default value)</li>
  * </ul>
  * 
+ * You can add injector in server context.
+ * 
  * @author julien
  */
 public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersConvertorHandler.class);
 
-    protected ConvertUtilsBean converter;
     protected BeanUtilsBean beanUtil;
-
-    public ExecutorParametersConvertorHandler() {
-        this(BeanUtilsBean.getInstance());
-    }
-
-    public ExecutorParametersConvertorHandler(BeanUtilsBean beanUtil) {
-        this.beanUtil = beanUtil;
-        this.converter = beanUtil.getConvertUtils();
-    }
+    protected ConvertUtilsBean converter;
 
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        // do nothing
+        beanUtil = context.getBeanUtil();
+        converter = context.getConverter();
     }
 
     @Override
     public void handle(Mapping mapping, Call call) {
-            List<Executor> executors = call.getExecutors();
-            for (Executor executor : executors) {
+        List<Executor> executors = call.getExecutors();
+        for (Executor executor : executors) {
 
-                Method executorMethod = executor.getMethod();
-                String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
+            Method executorMethod = executor.getMethod();
+            String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
 
-                // Sort parameters and convert
-                Map<String, Object> parameters = call.getAliasParameters();
-                Class<?>[] parameterTypes = executorMethod.getParameterTypes();
-                Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
+            // Sort parameters and convert
+            Map<String, Object> parameters = call.getAliasParameters();
+            Class<?>[] parameterTypes = executorMethod.getParameterTypes();
+            Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
 
-                // Save object in call
-                Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
-                executor.setParameters(convertedParameters);
+            // Save object in call
+            Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
+            executor.setParameters(convertedParameters);
 
-                for (int position = 0; position < parameterNames.length; position ++) {
-                    String name = parameterNames[position];
-                    Object value = parameters.get(name);
-                    Class<?> type = parameterTypes[position];
-                    Type genericType = genericParameterTypes[position];
+            for (int position = 0; position < parameterNames.length; position ++) {
+                String name = parameterNames[position];
+                Object value = parameters.get(name);
+                Class<?> type = parameterTypes[position];
+                Type genericType = genericParameterTypes[position];
 
-                    try {
-                        value = convert(value, type, genericType);
-                        convertedParameters.put(name, value);
-                        
-                    } catch (Exception ex) {
-                        throw new WebMotionException("Error during converting parameter " 
-                                + name + " with value " + value 
-                                + " before invoke the method", ex);
-                    }
+                try {
+                    value = convert(value, type, genericType);
+                    convertedParameters.put(name, value);
+
+                } catch (Exception ex) {
+                    throw new WebMotionException("Error during converting parameter " 
+                            + name + " with value " + value 
+                            + " before invoke the method", ex);
                 }
             }
+        }
     }
     
     protected Object convert(Object value, Class<?> type, Type genericType) throws Exception {
         Object result = null;
 
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         
-        if(genericType == null) {
+        if (genericType == null) {
             genericType = type.getGenericSuperclass();
         }
         
         // Manage collection
-        if(Collection.class.isAssignableFrom(type)) {
+        if (Collection.class.isAssignableFrom(type)) {
 
             Collection instance;
-            if(type.isInterface()) {
+            if (type.isInterface()) {
                 if(List.class.isAssignableFrom(type)) {
                     instance = new ArrayList();
 
@@ -172,16 +166,16 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                     instance = new ArrayList();
                 }
             } else {
-               instance  = (Collection) type.newInstance();
+               instance = (Collection) type.newInstance();
             }
 
             Class convertType = String.class;
-            if(genericType != null && genericType instanceof ParameterizedType) {
+            if (genericType != null && genericType instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) genericType;
                 convertType = (Class) parameterizedType.getActualTypeArguments()[0];
             }
 
-            if(value instanceof Map) {
+            if (value instanceof Map) {
                 Map<?, ?> map = (Map) value;
                 for (Map.Entry<?, ?> entry : map.entrySet()) {
                     Object object = entry.getValue();
@@ -199,7 +193,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             result = instance;
 
         // Manage map
-        } else if(Map.class.isAssignableFrom(type)) {
+        } else if (Map.class.isAssignableFrom(type)) {
             Map instance;
             if(type.isInterface()) {
                 if(SortedMap.class.isAssignableFrom(type)) {
@@ -214,7 +208,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             Class convertKeyType = String.class;
             Class convertValueType = String.class;
-            if(genericType != null && genericType instanceof ParameterizedType) {
+            if (genericType != null && genericType instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) genericType;
                 convertKeyType = (Class) parameterizedType.getActualTypeArguments()[0];
                 convertValueType = (Class) parameterizedType.getActualTypeArguments()[1];
@@ -234,10 +228,10 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             result = instance;
 
         // Manage simple object
-        } else if(type.isArray()) {
+        } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
             
-            if(value instanceof Map) {
+            if (value instanceof Map) {
                 Map<?, ?> map = (Map) value;
                 Object[] tabConverted = (Object[]) Array.newInstance(componentType, map.size());
                 result = tabConverted;
@@ -263,7 +257,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             }
             
         // Manage simple object
-        } else if(value instanceof Map) {
+        } else if (value instanceof Map) {
             Object instance = type.newInstance();
             
             Map<String, ?> attributes = (Map) value;
@@ -281,8 +275,8 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             
             result = instance;
 
-        } else if(value instanceof UploadFile) {
-            if(File.class.isAssignableFrom(type)) {
+        } else if (value instanceof UploadFile) {
+            if (File.class.isAssignableFrom(type)) {
                 UploadFile uploadFile = (UploadFile) value;
                 result = uploadFile.getFile();
             } else {

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -49,7 +50,8 @@ public class ExecutorParametersConvertorHandlerTest {
     @BeforeMethod
     public void createHandler() {
         handler = new ExecutorParametersConvertorHandler();
-        handler.init(null, null);
+        handler.beanUtil = BeanUtilsBean.getInstance();
+        handler.converter = handler.beanUtil.getConvertUtils();
     }
     
     public <T> T[] toArray(T ... values) {

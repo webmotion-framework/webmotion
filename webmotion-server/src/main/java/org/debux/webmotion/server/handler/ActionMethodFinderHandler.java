@@ -45,15 +45,20 @@ import org.slf4j.LoggerFactory;
  * Find the action class reprensent by name given in mapping. If it directly 
  * mapped on view or url, the executor is null but the render is informed.
  * 
+ * You can add global controller in server context.
+ * 
  * @author julien
  */
 public class ActionMethodFinderHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ActionMethodFinderHandler.class);
 
+    /** Global action in server context */
+    protected Map<String, Class<WebMotionController>> globalControllers;
+    
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        // do nothing
+        globalControllers = context.getGlobalControllers();
     }
 
     @Override
@@ -81,7 +86,10 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
             }
 
             try {
-                Class<WebMotionController> clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+                Class<WebMotionController> clazz = globalControllers.get(className);
+                if (clazz == null) {
+                    clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+                }
 
                 String methodName = action.getMethodName();
                 methodName = WebMotionUtils.replaceDynamicName(methodName, parameters);
