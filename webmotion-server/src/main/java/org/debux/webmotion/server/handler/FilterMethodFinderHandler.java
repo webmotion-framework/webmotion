@@ -54,7 +54,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(FilterMethodFinderHandler.class);
 
     /** Global action in server context */
-    protected Map<String, Class<WebMotionController>> globalControllers;
+    protected Map<String, Class<? extends WebMotionController>> globalControllers;
     
     @Override
     public void init(Mapping mapping, ServerContext context) {
@@ -93,7 +93,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
         }
             
         try {
-            Class<WebMotionController> clazz = globalControllers.get(className);
+            Class<? extends WebMotionController> clazz = globalControllers.get(className);
             if (clazz == null) {
                 clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
             }

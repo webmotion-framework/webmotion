@@ -64,7 +64,7 @@ public class ServerContext {
     protected SingletonFactory<WebMotionHandler> handlers;
     
     /** Contain contoller which are accessible in all mapping */
-    protected Map<String, Class<WebMotionController>> globalControllers;
+    protected Map<String, Class<? extends WebMotionController>> globalControllers;
     
     /** Contain injector use in ExecutorParametersInjectorHandler */
     protected List<Injector> injectors;
@@ -112,7 +112,7 @@ public class ServerContext {
         this.attributes = new HashMap<String, Object>();
         this.handlers = new SingletonFactory<WebMotionHandler>();
         this.controllers = new SingletonFactory<WebMotionController>();
-        this.globalControllers = new HashMap<String, Class<WebMotionController>>();
+        this.globalControllers = new HashMap<String, Class<? extends WebMotionController>>();
         this.injectors = new ArrayList<Injector>();
         
         this.beanUtil = BeanUtilsBean.getInstance();
@@ -179,20 +179,28 @@ public class ServerContext {
         return handlers;
     }
 
-    public Map<String, Class<WebMotionController>> getGlobalControllers() {
+    public Map<String, Class<? extends WebMotionController>> getGlobalControllers() {
         return globalControllers;
     }
 
-    public void setGlobalControllers(Map<String, Class<WebMotionController>> globalControllers) {
+    public void setGlobalControllers(Map<String, Class<? extends WebMotionController>> globalControllers) {
         this.globalControllers = globalControllers;
     }
-
+    
+    public void addGlobalController(Class<? extends WebMotionController> clazz) {
+        globalControllers.put(clazz.getSimpleName(), clazz);
+    }
+    
     public List<Injector> getInjectors() {
         return injectors;
     }
 
     public void setInjectors(List<Injector> injectors) {
         this.injectors = injectors;
+    }
+    
+    public void addInjector(Injector injector) {
+        injectors.add(injector);
     }
 
     public BeanUtilsBean getBeanUtil() {

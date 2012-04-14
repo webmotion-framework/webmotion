@@ -54,7 +54,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(ActionMethodFinderHandler.class);
 
     /** Global action in server context */
-    protected Map<String, Class<WebMotionController>> globalControllers;
+    protected Map<String, Class<? extends WebMotionController>> globalControllers;
     
     @Override
     public void init(Mapping mapping, ServerContext context) {
@@ -86,7 +86,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
             }
 
             try {
-                Class<WebMotionController> clazz = globalControllers.get(className);
+                Class<? extends WebMotionController> clazz = globalControllers.get(className);
                 if (clazz == null) {
                     clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
                 }

@@ -54,7 +54,7 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(ErrorMethodFinderHandler.class);
 
     /** Global action in server context */
-    protected Map<String, Class<WebMotionController>> globalControllers;
+    protected Map<String, Class<? extends WebMotionController>> globalControllers;
     
     @Override
     public void init(Mapping mapping, ServerContext context) {
@@ -76,7 +76,7 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
             String fullQualifiedName = packageName + "." + className;
 
             try {
-                Class<WebMotionController> clazz = globalControllers.get(className);
+                Class<? extends WebMotionController> clazz = globalControllers.get(className);
                 if (clazz == null) {
                     clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
                 }
