@@ -208,18 +208,31 @@ public class WebMotionController {
     }
 
     /**
-     * Forward the user to an URL. The model is put as parameters in url;
+     * Forward the user to an URL. The model is put as parameters in url.
      * 
      * @param url the forward URL.
      * @param model data used, either just one object, either key/value pairs.
      * @return render represents the next step for user
      */
     public Render renderActionURL(String url, Object ... model) {
-        return new RenderActionUrl(url, toMap(model));
+        return new RenderActionUrl(url, toMap(model), null);
     }
 
     /**
-     * Redirect the user to an URL. The model is put as parameters in url;
+     * Forward the user to an URL. The parameters is put as parameters in url and
+     * attributes is put as attribute in request.
+     * 
+     * @param url the forward URL.
+     * @param parameters data used as parameter in url, either just one object, either key/value pairs.
+     * @param attributes data used as attribute in request, either just one object, either key/value pairs.
+     * @return render represents the next step for user
+     */
+    public Render renderActionURL(String url, Object[] parameters, Object[] attributes) {
+        return new RenderActionUrl(url, toMap(parameters), toMap(attributes));
+    }
+
+    /**
+     * Redirect the user to an URL. The model is put as parameters in url.
      * 
      * @param url the redirect URL.
      * @param model data used, either just one object, either key/value pairs.
@@ -302,6 +315,10 @@ public class WebMotionController {
      * @return map The transformed model.
      */
     protected Map<String, Object> toMap(Object ... model) {
+        if (model == null) {
+            return null;
+        }
+        
         Map<String, Object> map = new LinkedHashMap<String, Object>(model.length / 2);
         
         if(model.length == 1) {

@@ -215,6 +215,13 @@ public Render action(String param) {
 }
 </pre>
 
+<p>
+    <span class="label label-info">Exemple</span> Call of an internal action via the URL with attributes:
+</p>
+<pre class="prettyprint">
+return renderActionURL("/internal/action", new Object[]{"param", "internal"}, new Object[]{"att", "value"});
+</pre>
+
 <h3>Rendering of contents: renderContent</h3>
 <p>
     The <code>renderContent(String content, String mimeType)</code> method enables to return

@@ -43,21 +43,27 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public class RenderActionUrl extends Render {
     protected String url;
-    protected Map<String, Object> model;
+    protected Map<String, Object> parameters;
+    protected Map<String, Object> attributes;
 
-    public RenderActionUrl(String url, Map<String, Object> model) {
+    public RenderActionUrl(String url, Map<String, Object> parameters, Map<String, Object> attributes) {
         this.url = url;
-        this.model = model;
+        this.parameters = parameters;
+        this.attributes = attributes;
     }
 
-    public Map<String, Object> getModel() {
-        return model;
+    public Map<String, Object> getParameters() {
+        return parameters;
     }
 
     public String getUrl() {
         return url;
     }
 
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+    
     @Override
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
         HttpContext context = call.getContext();
@@ -67,12 +73,14 @@ public class RenderActionUrl extends Render {
         if (!url.startsWith("/")) {
             throw new WebMotionException("The url <" + url + "> must be started with /", call.getRule());
         }
-                
+               
+        String path = url;
         if (!url.startsWith("/deploy")) {
-            url = context.getExtensionPath() + url;
+            path = context.getExtensionPath() + url;
         }
         
-        String path = addModel(url, model);
+        path = addModel(path, parameters);
+        addModel(call, attributes);
         
         DispatcherType dispatcherType = request.getDispatcherType();
 
