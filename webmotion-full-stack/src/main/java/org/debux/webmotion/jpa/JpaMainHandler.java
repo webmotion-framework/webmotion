@@ -53,57 +53,51 @@ public class JpaMainHandler extends WebMotionMainHandler {
         
         context.addGlobalController(Jpa.class);
         
-        context.addInjector(getGenericDaoInjector());
-        context.addInjector(getEntityManagerInjector());
-        context.addInjector(getEntityTransactionManager());
+        context.addInjector(new GenericDaoInjector());
+        context.addInjector(new EntityManagerInjector());
+        context.addInjector(new EntityTransactionManager());
     }
 
-    public Injector getEntityTransactionManager() {
-        return new Injector() {
-            @Override
-            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
-                if (EntityTransaction.class.isAssignableFrom(type)) {
-                    HttpContext httpContext = call.getContext();
-                    HttpServletRequest request = httpContext.getRequest();
-                    return request.getAttribute(Transactional.CURRENT_ENTITY_TRANSACTION);
-                }
-                return null;
+    public static class EntityTransactionManager implements Injector {
+        @Override
+        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+            if (EntityTransaction.class.isAssignableFrom(type)) {
+                HttpContext httpContext = call.getContext();
+                HttpServletRequest request = httpContext.getRequest();
+                return request.getAttribute(Transactional.CURRENT_ENTITY_TRANSACTION);
             }
-        };
+            return null;
+        }
     }
 
-    public Injector getEntityManagerInjector() {
-        return new Injector() {
-            @Override
-            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
-                if (EntityManager.class.isAssignableFrom(type)) {
-                    HttpContext httpContext = call.getContext();
-                    HttpServletRequest request = httpContext.getRequest();
-                    return request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
-                }
-                return null;
+    public static class EntityManagerInjector implements Injector {
+        @Override
+        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+            if (EntityManager.class.isAssignableFrom(type)) {
+                HttpContext httpContext = call.getContext();
+                HttpServletRequest request = httpContext.getRequest();
+                return request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
             }
-        };
+            return null;
+        }
     }
 
-    public Injector getGenericDaoInjector() {
-        return new Injector() {
-            @Override
-            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
-                if (GenericDAO.class.isAssignableFrom(type)) {
-                    HttpContext httpContext = call.getContext();
-                    HttpServletRequest request = httpContext.getRequest();
+    public static class GenericDaoInjector implements Injector {
+        @Override
+        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+            if (GenericDAO.class.isAssignableFrom(type)) {
+                HttpContext httpContext = call.getContext();
+                HttpServletRequest request = httpContext.getRequest();
 
-                    Map<String, Object> parameters = call.getAliasParameters();
-                    String[] entityName = (String[]) parameters.get("entityName");
-                    if (entityName != null && entityName.length > 0) {
-                        EntityManager manager = (EntityManager) request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
-                        return new GenericDAO(manager, entityName[0]);
-                    }
+                Map<String, Object> parameters = call.getAliasParameters();
+                String[] entityName = (String[]) parameters.get("entityName");
+                if (entityName != null && entityName.length > 0) {
+                    EntityManager manager = (EntityManager) request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
+                    return new GenericDAO(manager, entityName[0]);
                 }
-                return null;
             }
-        };
+            return null;
+        }
     }
 
 }

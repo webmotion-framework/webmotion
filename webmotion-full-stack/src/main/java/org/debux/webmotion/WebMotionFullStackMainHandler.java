@@ -28,6 +28,9 @@ import org.debux.webmotion.sitemesh.*;
 import java.util.Arrays;
 import java.util.List;
 import org.debux.webmotion.jpa.Jpa;
+import org.debux.webmotion.jpa.JpaMainHandler.EntityManagerInjector;
+import org.debux.webmotion.jpa.JpaMainHandler.EntityTransactionManager;
+import org.debux.webmotion.jpa.JpaMainHandler.GenericDaoInjector;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionMainHandler;
 import org.debux.webmotion.server.call.ServerContext;
@@ -54,6 +57,10 @@ public class WebMotionFullStackMainHandler extends WebMotionMainHandler {
         
         context.addGlobalController(SiteMesh.class);
         context.addGlobalController(Jpa.class);
+        
+        context.addInjector(new GenericDaoInjector());
+        context.addInjector(new EntityManagerInjector());
+        context.addInjector(new EntityTransactionManager());
     }
 
     @Override
