@@ -25,7 +25,6 @@
 package org.debux.webmotion.jpa;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add SiteMeshFilterMethodFinderHandler with use SiteMesh
+ * Add configuration to use Jpa.
  * 
  * @author julien
  */
@@ -88,13 +87,7 @@ public class JpaMainHandler extends WebMotionMainHandler {
             if (GenericDAO.class.isAssignableFrom(type)) {
                 HttpContext httpContext = call.getContext();
                 HttpServletRequest request = httpContext.getRequest();
-
-                Map<String, Object> parameters = call.getAliasParameters();
-                String[] entityName = (String[]) parameters.get("entityName");
-                if (entityName != null && entityName.length > 0) {
-                    EntityManager manager = (EntityManager) request.getAttribute(Transactional.CURRENT_ENTITY_MANAGER);
-                    return new GenericDAO(manager, entityName[0]);
-                }
+                return request.getAttribute(Transactional.CURRENT_GENERIC_DAO);
             }
             return null;
         }

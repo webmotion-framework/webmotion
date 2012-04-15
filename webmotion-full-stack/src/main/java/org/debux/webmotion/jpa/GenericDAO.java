@@ -83,13 +83,69 @@ public class GenericDAO {
         this.propertyUtils = beanUtil.getPropertyUtils();
     }
     
-    public IdentifiableEntity create(Map<String, String[]> parameters) {
+    /**
+     * Helper to create dynamic parameter for the GenericDAO.
+     */
+    public static class Parameters {
+        protected Map<String, Object[]> parameters;
+
+        public Parameters() {
+            this(new HashMap<String, Object[]>());
+        }
+
+        public Parameters(Map<String, Object[]> parameters) {
+            this.parameters = parameters;
+        }
+        
+        public static Parameters create() {
+            return new Parameters();
+        }
+        
+        protected static Parameters create(Map parameters) {
+            return new Parameters(parameters);
+        }
+        
+        public Parameters addAll(Map<String, Object[]> parameters) {
+            this.parameters.putAll(parameters);
+            return this;
+        }
+        
+        public Parameters add(String name, Object[] values) {
+            parameters.put(name, values);
+            return this;
+        }
+        
+        public Parameters add(String name, Object value) {
+            Object[] values = parameters.get(name);
+            if (values == null) {
+                values = new Object[]{value};
+                
+            } else {
+                int length = values.length;
+                values = Arrays.copyOf(values, length + 1);
+                values[length] = value;
+            }
+            
+            parameters.put(name, values);
+            return this;
+        }
+
+        public Map<String, Object[]> getParameters() {
+            return parameters;
+        }
+        
+        public Object[] get(String name) {
+            return parameters.get(name);
+        }
+    }
+    
+    public IdentifiableEntity create(Parameters parameters) {
         IdentifiableEntity entity = extract(parameters);
         manager.persist(entity);
         return entity;
     }
             
-    public IdentifiableEntity update(String id, Map<String, String[]> parameters) {
+    public IdentifiableEntity update(String id, Parameters parameters) {
         IdentifiableEntity entity = manager.find(entityClass, id);
         if (entity != null) {
             entity = extract(entity, parameters);
@@ -98,11 +154,13 @@ public class GenericDAO {
         return entity;
     }
     
-    public void delete(String id) {
+    public boolean delete(String id) {
         IdentifiableEntity entity = manager.find(entityClass, id);
         if (entity != null) {
             manager.remove(entity);
+            return true;
         }
+        return false;
     }
     
     public IdentifiableEntity find(String id) {
@@ -111,22 +169,22 @@ public class GenericDAO {
         return entity;
     }
     
-    public List query(String name, Map<String, String[]> parameters) {
+    public List query(String name, Parameters parameters) {
         Query query = manager.createNamedQuery(name);
         
         Set<Parameter<?>> queryParameters = query.getParameters();
         for (Parameter<?> parameter : queryParameters) {
             String parameterName = parameter.getName();
-            String[] values = parameters.get(parameterName);
+            Object[] values = parameters.get(parameterName);
             
-            List<String> converted = Arrays.asList(values);
+            List<Object> converted = Arrays.asList(values);
             query.setParameter(parameterName, converted);
         }
         
         return query.getResultList();
     }
     
-    protected IdentifiableEntity extract(Map<String, String[]> parameters) {
+    protected IdentifiableEntity extract(Parameters parameters) {
         try {
             IdentifiableEntity entity = entityClass.newInstance();
             return extract(entity, parameters);
@@ -138,14 +196,14 @@ public class GenericDAO {
         }
     }
     
-    protected IdentifiableEntity extract(IdentifiableEntity entity, Map<String, String[]> parameters) {
+    protected IdentifiableEntity extract(IdentifiableEntity entity, Parameters parameters) {
         try {
             Field[] fields = entityClass.getDeclaredFields();
             for (Field field : fields) {
 
                 String name = field.getName();
                 Class<?> type = field.getType();
-                String[] values = parameters.get(name);
+                Object[] values = parameters.get(name);
 
                 if (!IdentifiableEntity.ATTRIBUTE_NAME_ID.equals(name)) {
                     
@@ -154,7 +212,7 @@ public class GenericDAO {
 
                     } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
                         List<Object> references = new ArrayList<Object>(values.length);
-                        for (String value : values) {
+                        for (Object value : values) {
                             Object reference = manager.find(type, value);
                             references.add(reference);
                         }

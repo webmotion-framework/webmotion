@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add SiteMesh and Spring.
+ * Add configuration to use Jpa, SiteMesh and Spring.
  * 
  * @author julien
  */

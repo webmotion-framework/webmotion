@@ -46,6 +46,7 @@ public abstract class Transactional extends WebMotionFilter {
 
     public static String CURRENT_ENTITY_MANAGER = "wm_current_entity_manager";
     public static String CURRENT_ENTITY_TRANSACTION = "wm_current_entity_transaction";
+    public static String CURRENT_GENERIC_DAO = "wm_current_generic_dao";
     
     protected Map<String, EntityManagerFactory> factories;
 
@@ -59,7 +60,9 @@ public abstract class Transactional extends WebMotionFilter {
      * @param request
      * @param persistenceUnitName 
      */
-    public void tx(HttpServletRequest request, String persistenceUnitName) {
+    public void tx(HttpServletRequest request, String persistenceUnitName,
+            String packageEntityName, String entityName) throws Exception {
+        
         EntityManagerFactory factory = factories.get(persistenceUnitName);
         if (factory == null) {
             factory = Persistence.createEntityManagerFactory(persistenceUnitName);
@@ -70,12 +73,29 @@ public abstract class Transactional extends WebMotionFilter {
         EntityTransaction transaction = manager.getTransaction();
         request.setAttribute(CURRENT_ENTITY_TRANSACTION, transaction);
         
+        if (entityName != null) {
+            String fullEntityName = null;
+            if (packageEntityName != null) {
+                fullEntityName = packageEntityName + "." + entityName;
+            } else {
+                fullEntityName = entityName;
+            }
+            
+            GenericDAO genericDAO = new GenericDAO(manager, fullEntityName);
+            request.setAttribute(CURRENT_GENERIC_DAO, genericDAO);
+        }
+        
         transaction.begin();
 
-        doProcess();
+        try {
+            doProcess();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        }
 
-        //jru 20120410 : Manage rollback
-        
         if (transaction.isActive()) {
             transaction.commit();
         }

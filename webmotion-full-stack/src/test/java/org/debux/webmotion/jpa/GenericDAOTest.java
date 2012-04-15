@@ -24,9 +24,7 @@
  */
 package org.debux.webmotion.jpa;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -35,6 +33,7 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.debux.webmotion.jpa.GenericDAO.Parameters;
 
 /**
  * Test the generic dao.
@@ -87,21 +86,23 @@ public class GenericDAOTest {
         factory.close();
     }
     
-    protected Map<String, String[]> createData() {
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put("username", new String[]{"test"});
-        parameters.put("comment", new String[]{"bla bla bla"});
-        parameters.put("note", new String[]{"10"});
-        parameters.put("tags", new String[]{"java", "jee", "wm"});
-        parameters.put("parent", new String[]{comment1.getId()});
-        parameters.put("threads", new String[]{comment2.getId(), comment3.getId()});
-        parameters.put("unused", new String[]{"unused"});
+    protected Parameters createData() {
+        Parameters parameters = Parameters.create()
+                .add("username", "test")
+                .add("comment", "bla bla bla")
+                .add("note", "10")
+                .add("tags", "java")
+                .add("tags", "jee")
+                .add("tags", "wm")
+                .add("parent", comment1.getId())
+                .add("threads", new String[]{comment2.getId(), comment3.getId()})
+                .add("unused", "unused");
         return parameters;
     }
     
     @Test
     public void testExtract() {
-        Map<String, String[]> parameters = createData();
+        Parameters parameters = createData();
         Comment entity = (Comment) dao.extract(parameters);
         AssertJUnit.assertNotNull(entity);
         AssertJUnit.assertNotNull(entity.getParent());
@@ -110,7 +111,7 @@ public class GenericDAOTest {
 
     @Test
     public void testCreate() {
-        Map<String, String[]> parameters = createData();
+        Parameters parameters = createData();
         IdentifiableEntity entity = dao.create(parameters);
         AssertJUnit.assertNotNull(entity);
     }
@@ -146,8 +147,8 @@ public class GenericDAOTest {
     public void testUpdate() {
         String id = comment1.getId();
         
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put("username", new String[]{"test"});
+        Parameters parameters = Parameters.create()
+                .add("username", "test");
         dao.update(id, parameters);
         
         Comment entity = manager.find(Comment.class, id);
@@ -156,8 +157,8 @@ public class GenericDAOTest {
     
     @Test
     public void testInvalidUpdate() {
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put("username", new String[]{"test"});
+        Parameters parameters = Parameters.create()
+                .add("username", "test");
         dao.update("invalid", parameters);
         
         Comment entity = manager.find(Comment.class, "invalid");
@@ -166,23 +167,25 @@ public class GenericDAOTest {
     
     @Test
     public void testBasicQuery() {
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
+        Parameters parameters = Parameters.create();
         List result = dao.query("findAll", parameters);
         AssertJUnit.assertEquals(3, result.size());
     }
     
     @Test
     public void testParameterQuery() {
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put("username", new String[]{"john"});
+        Parameters parameters = Parameters.create()
+                .add("username", "john");
         List result = dao.query("findByUsername", parameters);
         AssertJUnit.assertEquals(2, result.size());
     }
     
     @Test
     public void testParametersQuery() {
-        Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put("usernames", new String[]{"john", "jack", "tutu"});
+        Parameters parameters = Parameters.create()
+                .add("usernames", "john")
+                .add("usernames", "jack")
+                .add("usernames", "tutu");
         List result = dao.query("findByUsernames", parameters);
         AssertJUnit.assertEquals(3, result.size());
     }

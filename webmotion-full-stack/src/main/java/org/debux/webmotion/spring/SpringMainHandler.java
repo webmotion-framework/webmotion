@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add SpringInstanceCreatorHandler with use bean in Spring
+ * Add configuration to use Spring.
  * 
  * @author julien
  */
