@@ -318,7 +318,8 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 contextable.remove();
                 
                 Throwable cause = ex.getCause();
-                if (cause instanceof WebMotionException) {
+                if (cause instanceof WebMotionException 
+                        && ((WebMotionException) cause).getRule() != null) {
                     throw (WebMotionException) cause;
                     
                 } else {
