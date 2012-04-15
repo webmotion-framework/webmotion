@@ -154,63 +154,93 @@ public class WebMotionMainHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         Executor current = call.getCurrent();
         if (current != null) {
-            chainHandlers(executorHandlers, mapping, call);
+            // An executor is running
+            onExecutorInvoker(mapping, call);
             
         } else {
-            
             long start = System.currentTimeMillis();
-            HttpContext context = call.getContext();
-
-            // Determine the extension is used
-            String url = context.getUrl();
-            log.info("url = " + url);
-
-            List<Mapping> extensionsRules = mapping.getExtensionsRules();
-            for (Mapping extensionMapping : extensionsRules) {
-
-                String path = extensionMapping.getExtensionPath();
-                log.info("path = " + path);
-                if ("/".equals(path) 
-                        || WebMotionUtils.find("^" + path + "(/|$)", url)) {
-
-                    context.addExtensionPath(path);
-
-                    Config newConfig = extensionMapping.getConfig();
-                    String className = newConfig.getMainHandler();
-
-                    WebMotionHandler mainHandler = factory.getInstance(className);
-                    mainHandler.handle(extensionMapping, call);
-
-                    context.removeExtensionPath(path);
-
-                    // Stop if the first handler process the request
-                    Rule rule = call.getRule();
-                    if (rule != null) {
-                        break;
-                    }
-                }
-            }
-
-            // Search in mapping
+            onExtensionRuleFinder(mapping, call);
+            
             Rule rule = call.getRule();
             if (rule == null) {
+                // Not process in extension
                 call.setMainHandler(this);
-
-                // Determine if the request contains an errors
-                if (context.isError()) {
-                    ErrorData errorData = context.getErrorData();
-                    log.error("Error " + errorData.getStatusCode() + " : " + errorData.getMessage() 
-                            + " on " + errorData.getRequestUri(), errorData.getException());
-                    chainHandlers(errorHandlers, mapping, call);
-                } else {
-                    chainHandlers(actionHandlers, mapping, call);
-                }
+                onRuleFinder(mapping, call);
             }
-
+            
             handlerStats.registerHandlerTime(this.getClass().getName(), start);
         }
     }
 
+    /**
+     * Begin by search in extension if a rule is available.
+     * 
+     * @param mapping
+     * @param call 
+     */
+    protected void onExtensionRuleFinder(Mapping mapping, Call call) {
+        HttpContext context = call.getContext();
+
+        // Determine the extension is used
+        String url = context.getUrl();
+        log.info("url = " + url);
+
+        List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensionsRules) {
+
+            String path = extensionMapping.getExtensionPath();
+            log.info("path = " + path);
+            if ("/".equals(path) 
+                    || WebMotionUtils.find("^" + path + "(/|$)", url)) {
+
+                context.addExtensionPath(path);
+
+                Config newConfig = extensionMapping.getConfig();
+                String className = newConfig.getMainHandler();
+
+                WebMotionHandler mainHandler = factory.getInstance(className);
+                mainHandler.handle(extensionMapping, call);
+
+                context.removeExtensionPath(path);
+
+                // Stop if the first handler process the request
+                Rule rule = call.getRule();
+                if (rule != null) {
+                    break;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Next find a rule in current mapping.
+     * 
+     * @param mapping
+     * @param call 
+     */
+    protected void onRuleFinder(Mapping mapping, Call call) {
+        // Determine if the request contains an errors
+        HttpContext context = call.getContext();
+        if (context.isError()) {
+            ErrorData errorData = context.getErrorData();
+            log.error("Error " + errorData.getStatusCode() + " : " + errorData.getMessage() 
+                    + " on " + errorData.getRequestUri(), errorData.getException());
+            chainHandlers(errorHandlers, mapping, call);
+        } else {
+            chainHandlers(actionHandlers, mapping, call);
+        }
+    }
+    
+    /**
+     * Each executor invoked call this handlers chain.
+     * 
+     * @param mapping
+     * @param call 
+     */
+    protected void onExecutorInvoker(Mapping mapping, Call call) {
+        chainHandlers(executorHandlers, mapping, call);
+    }
+    
     /**
      * Chain handlers
      */
