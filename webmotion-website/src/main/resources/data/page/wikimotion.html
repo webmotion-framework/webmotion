@@ -1,0 +1,134 @@
+<div id="article">
+
+<h1>Wikimotion</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="presentation">Présentation</h2>
+</div>
+<p>
+    WikiMotion est un moteur de wiki, qui peut à la fois être utilisé en standalone 
+    ou comme extension. Par exemple, le site web <a href="/">WebMotion</a> utilise le wiki en tant qu'extension. 
+</p>
+
+<p>
+    Il propose comme fonctionnalités :
+</p>
+<ul>
+    <li>Sauvegarde de fichiers plats (pas besoin de base de données)</li>
+    <li>Syntaxe des pages en HTML, RST ou LaTeX</li>
+    <li>Support de l'authentification HTTP basic</li>
+    <li>Upload de fichier</li>
+    <li>Site map</li>
+    <li>Media map</li>
+</ul>
+
+<p>
+    Le style du wiki repose sur le boostrap de Twiter. Vous pouvez tout de même 
+    réaliser votre propre layout en redéfinissant le fichier <code>layout.jsp</code>.
+</p>
+
+<p style="text-align: right"><a class="btn" href="http://svn.debux.org/webmotion/trunk/webmotion-wiki/">Sources &raquo;</a> <a class="btn btn-primary" href="download">Télécharger &raquo;</a></p>
+
+<div class="page-header">
+    <h2 id="installation">Installation</h2>
+</div>
+
+<p>
+    Tout d'abord veuillez récupérer la dernière version de WikiMotion disponible 
+    dans la section <a href="download">Téléchargement</a> du site. Puis déployer 
+    le war téléchargé dans un serveur d'application comme Tomcat, Jetty ou encore GlassFish.
+</p>
+
+<p>
+    Une fois le wiki déployer, vous pouvez modifier le fichier de configuration 
+    <code>wikimotion-config.properties</code> fourni par défaut, afin de 
+    configurer et personnaliser votre wiki.
+</p>
+
+<p>
+    Si vous souhaitez le support du Latex dans le wiki, il vous faudra installer 
+    <code>latex</code> ainsi que <code>tth</code>.
+</p>
+<pre>
+$ apt-get install latex tth
+</pre>
+
+<p>
+    Si vous souhaitez le support du RST dans le wiki, il vous faudra installer 
+    <code>docutils</code> ainsi que le script <code>rst2html-pygments</code>.
+</p>
+<pre>
+$ apt-get install python-docutils python-pygments
+
+$ wget http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/rst2html-pygments
+$ cp rst2html-pygments /usr/bin/rst2html-pygments
+$ chmod 755 /usr/bin/rst2html-pygments
+</pre>
+
+<p>
+    Les utilisateurs sont configurés dans le fichier <code>wikimotion-users.json</code>, 
+    il exsite un utilisateur <code>admin</code> avec comme mot de passe <code>admin</code> par défaut. 
+    Les mots de passe doivent être encodés en sha1.
+</p>
+<div class="page-header">
+    <h2 id="extension">Extension</h2>
+</div>
+
+<p>
+    Pour pouvoir utiliser le WikiMotion en extension, il faut rajouter dans vos dépendances 
+    de votre projet le wiki.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;wikimotion&lt;/artifactId&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+    &lt;type&gt;war&lt;/type&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ensuite vous pouvez directement l'utiliser dans votre mapping en tant qu'extension.
+</p>
+<pre>
+[extensions]
+/wiki                                             wikimotion.wm
+</pre>
+
+<div class="page-header">
+    <h2 id="screens">Captures d'écran</h2>
+</div>
+<ul class="thumbnails">
+    <li class="span6">
+        <a href="media/wikimotion?name=index.png" class="thumbnail">
+            <img src="media/wikimotion?name=index.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=connection.png" class="thumbnail">
+            <img src="media/wikimotion?name=connection.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=edition.png" class="thumbnail">
+            <img src="media/wikimotion?name=edition.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=sitemap.png" class="thumbnail">
+            <img src="media/wikimotion?name=sitemap.png" alt="">
+        </a>
+    </li>
+</ul>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn primary large" style="float:right;" href="advanced">Avancé »</a>
+</div>
+
+</div>
