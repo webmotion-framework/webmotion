@@ -50,7 +50,7 @@
         <menu name="Project">
             <item name="Parent" href="../project-summary.html" />
             <item name="Server" href="../webmotion/project-summary.html" />
-            <item name="Full stack" href="../webmotion-full-stack/project-summary.html" />
+            <item name="Extras" href="../webmotion-extras/project-summary.html" />
             <item name="Test" href="../webmotion-test/project-summary.html" />
             <item name="Archetype" href="../webmotion-archetype/project-summary.html" />
             <item name="WikiMotion" href="../wikimotion/project-summary.html" />
