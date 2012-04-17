@@ -52,7 +52,7 @@
 
     <modules>
         <module>webmotion-server</module>
-        <module>webmotion-full-stack</module>
+        <module>webmotion-extras</module>
         <module>webmotion-wiki</module>
         <module>webmotion-test</module>
         <module>webmotion-website</module>
