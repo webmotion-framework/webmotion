@@ -1,0 +1,444 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Extras</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<div class="page-header">
+    <h2 id="controller">Extras</h2>
+</div>
+<p>
+    Les extras de WebMotion est un ensemble de fonctionnalités supplémentaires pour 
+    réaliser le développement d'application web. Il regroupe :
+</p>
+<ul>
+    <li>un moteur d'IOC avec Spring</li>
+    <li>un système de layoutage avec SiteMesh</li>
+    <li>un helper pour la gestion d'une base de données avec Hibernate</li>
+</ul>
+<p>
+    Pour utiliser les extras, il est nécessaire de rajouter une dépendance ainsi sous maven :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extras&lt;/artifactId&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Pour utiliser l'ensemble des extras, il vous suffit de définir comme handler principal 
+    <code>WebMotionExtrasMainHandler</code> ainsi :
+</p>
+<pre>
+[config]
+server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
+</pre>
+
+<div class="page-header">
+    <h2 id="spring">Spring</h2>
+</div>
+
+<p>
+    WebMotion propose l'injection de dépendances basée sur Spring. Elle vous 
+    permet de gérer les contrôleurs (WebMotionController dans Spring. Ainsi vous 
+    disposer l'ensemble des fonctionnalités de Spring comme les scopes 
+    (request/session/singleton/prototype) pour vos objets ou la gestion des transaction.
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement Spring dans votre projet vous pouvez modifier la section <code>[config]</code> 
+    de votre fichier de mapping ainsi :
+</p>
+<pre>[config]
+server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
+</pre>
+
+<p>
+    L'extras vous propose un configuration de Spring par défaut,  les fichiers 
+    de configuration <code>xml</code> sont automatiquement chargés depuis le répertoire 
+    <code>WEB-INF</code> et le nom doit commencer par <code>applicationContext</code>.
+</p>
+
+<p>
+    Exemple de fichier <code>applicationContext.xml</code> :
+</p>
+<pre class="prettyprint">
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			   http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd"&gt;
+
+    &lt;context:annotation-config/&gt;
+
+    &lt;bean id="myBean" class="org.debux.webmotion.test.Bean"/&gt;
+    
+    &lt;bean ... /&gt;
+
+&lt;/beans&gt;
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    Vous devez utiliser de l'injection de dépendance pour récupérer votre bean :
+</p>
+<pre class="prettyprint">
+public class Spring extends WebMotionController {
+
+    @Inject
+    protected Bean myBean;
+
+    public Render run() {
+        ...
+    }
+
+}
+</pre>
+
+<p>
+    Vous pouvez même récupérer les contrôlleur par injection au lieu d'utiliser le RenderAction :
+</p>
+<pre class="prettyprint">
+public class Spring extends WebMotionController {
+
+    @Inject
+    protected Action action;
+
+    public Render run() {
+        return action.exec();
+    }
+
+}
+</pre>
+
+<div class="page-header">
+    <h2 id="sitemesh">SiteMesh</h2>
+</div>
+
+<p>
+    La partie SiteMesh vous permet de décorrer vos pages avec un layout. Une intégration 
+    de SiteMesh a été réaliser pour pouvoir l'utiliser directement dans votre mapping sans 
+    les fichiers de configuration de SiteMesh. À noter qu'il est toujours possible 
+    de l'utiliser selon la documentation de SiteMesh.
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement SiteMesh dans votre projet vous pouvez modifier la section <code>[config]</code> 
+    de votre fichier de mapping ainsi :
+</p>
+<pre>[config]
+server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    Un filtre globale <code>SiteMesh</code> permet de décorer une page selon un 
+    path donné. Il vous est possible de préciser un décorateur pour la partie 
+    admin différent du site principal par exemple :
+</p>
+
+<pre>
+[filters]
+*           /*                                 SiteMesh.decorate       layout=decorator.html
+*           /admin/*                           SiteMesh.decorate       layout=decorator_admin.html
+
+[actions]
+*           /content                           view:content.html
+*           /admin/content                     view:content_admin.html
+</pre>
+
+<p>
+    Avec comme exemple de page de layout :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;SiteMesh example: &lt;sitemesh:write property='title'/&gt;&lt;/title&gt;
+        &lt;style type='text/css'&gt;
+            /* Some CSS */
+        &lt;/style&gt;
+        &lt;sitemesh:write property='head'/&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div class='header'&gt;My header&lt;/div&gt;
+        
+        &lt;h1 class='title'&gt;&lt;sitemesh:write property='title'/&gt;&lt;/h1&gt;
+
+        &lt;div class='mainBody'&gt;
+            &lt;sitemesh:write property='body'/&gt;
+        &lt;/div&gt;
+
+        &lt;div class='footer'&gt;My footer&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<div class="page-header">
+    <h2 id="hibernate">Hibernate</h2>
+</div>
+
+<p>
+    L'intégration vous donne un accès sur des actions pour réaliser un CRUD sur 
+    vos entités et permet la gestion de la transaction. Il repose sur JPA. 
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement JPA dans votre projet vous pouvez modifier la section <code>[config]</code> 
+    de votre fichier de mapping ainsi :
+</p>
+<pre>[config]
+server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
+</pre>
+
+<h3>Pre-requis</h3>
+<p>
+    Pour pouvoir utiliser correctement la partie JPA, il existe deux pre-requis :
+</p>
+<ul>
+    <li>
+        Il faut définir la configuration de la base de données dans le fichier <code>persitence.xml</code>
+    </li>
+    <li>
+        L'ensemble des entités doivent hériter de la classe <code>IdentifiableEntity</code> 
+        ce qui permet d'avoir un identifiant unique.
+    </li>
+</ul>
+
+<p>
+    Exemple basique d'une entité :
+</p>
+<pre class="prettyprint">
+@Entity
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    @ElementCollection
+    protected List&lt;String&gt; tags;
+
+    ... setters/getters
+}
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    L'utilisation ce fait par le biais d'un filtre pour la gestion de la transaction 
+    et par le biais d'un contrôlleur pour gérer les entités. Plusieurs paramètres 
+    de configuration peuvent être positionner au niveau du filtre, au niveau du 
+    controlleur ou au niveau de l'url :
+</p>
+<ul>
+    <li>
+        <strong>persistenceUnitName :</strong> permet de définir le nom du 
+        <code>persitence-unit</code> dans le fichier <code>persistence.xml</code>. 
+        Par défaut la valeur est positionnée à <code>webmotion</code>.
+    </li>
+    <li>
+        <strong>entityName :</strong> permet de connaître le nom de l'entité sur 
+        laquelle le CRUD est effectué. Il doit contenir le nom du paquetage si 
+        le paramètre <code>packageEntityName</code> n'est pas précisé.
+    </li>
+    <li>
+        <strong>packageEntityName :</strong> permet de préciser le nom de paquetage 
+        où sont disponible les entités.
+    </li>
+</ul>
+<p>
+    Seul le paramètre d'entityName est obligatoire pour faire fonctionner le 
+    contrôlleur pour la gestion du CRUD.
+</p>
+
+<h4>Filtre</h4>
+<p>
+    Le filtre s'occupe de la gestion de la transaction pour fournir les éléments 
+    nécessaires au contrôlleur. Les exemples ci-dessous peuvent être combiné.
+</p>
+<p>
+     Permet de créer un transaction par défaut.
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx
+</pre>
+
+<p>
+     Permet de changer le persistence unit :
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx                  persistenceUnitName=webmotion
+</pre>
+
+<p>
+    Permet de préciser sur quelle entité le CRUD est effectué :
+</p>
+<pre>
+[filters]
+*         /book/*                     Jpa.tx                  entityName=org.debux.webmotion.entity.Book
+</pre>
+
+<p>
+    Permet de préciser sur quelle paquetage ce trouve les entités : 
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx                  packageEntityName=org.debux.webmotion.entity
+</pre>
+
+<h4>Contrôlleur</h4>
+<p>
+    Le contrôlleur s'occupe de la gestion des entités. Il existe plusieurs actions 
+    disponibles :
+</p>
+<ul>
+    <li>
+        <strong>create :</strong> pour la creation d'une entité. L'action prend 
+        en paramètre les attributs en nom/valeur
+    </li>
+    <li>
+        <strong>find :</strong> pour la récupération d'une entité sur son identifiant. 
+        L'action prends en paramètre l'identifiant de l'entité (id).
+    </li>
+    <li>
+        <strong>query :</strong> pour l'exécution d'une requête. L'action prend en 
+        paramètre le nom de la requête (name) et les paramètres de la requête.
+    </li>
+    <li>
+        <strong>update :</strong> pour la modification partiel d'une entité.
+        L'action prend en paramètre l'identifiant (id) de l'entité et les attributs 
+        en nom/valeur.
+    </li>
+    <li>
+        <strong>delete :</strong> pour la suppression d'une entité. L'action 
+        prend en paramètre l'identifant de l'entité (id).
+    </li>
+    <li>
+        <strong>all :</strong> permet de faire l'ensemble des actions en la 
+        précisant en paramètre. L'action prend les paramètres en fonction de 
+        l'action apellée.
+    </li>
+</ul>
+
+<p>
+    À savoir pour les actions <code>create</code> et <code>update</code>, il est possible 
+    de passer en paramètre des associations vers des entités en passant l'identifiant.
+</p>
+
+<p>
+    Exemple de l'utilisation de l'action <code>query</code> :
+</p>
+<pre class="prettyprint">
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "findByTitle",
+        query = "SELECT b FROM Book b WHERE b.title=:title"
+})
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    ... setters/getters
+}
+</pre>
+
+<p>
+    Avec comme mapping pour l'utiliser sous la forme <code>/book?title=value</code> :
+</p>
+<pre>
+[actions]
+GET            /book             Jpa.query    entityName=org.debux.webmotion.entity.Book,name=findByTitle
+</pre>
+
+<p>
+    Vous pouvez créer des règles de mapping génériques :
+</p>
+<pre>
+[actions]
+GET         /{entityName}?action={}        Jpa.all
+</pre>
+
+<p>
+    Sinon par type de méthode HTTP :
+</p>
+<pre>
+[actions]
+PUT         /{entityName}                  Jpa.create
+GET         /{entityName}?query={name}     Jpa.query
+GET         /{entityName}/{id}             Jpa.find
+POST        /{entityName}/{id}             Jpa.update
+DELETE      /{entityName}/{id}             Jpa.delete
+</pre>
+
+<h4>Avancé</h4>
+
+<p>
+    L'ensemble des actions retourne un render de type JSON, il vous est possible 
+    de préciser une url de forward en paramètre. Ce qui permet d'exécuter une 
+    action après une action de CRUD. Dans ce cas là le résultat est récupérable comme 
+    attribut de la request (un objet <code>entity</code> pour le create, 
+    l'update et le find, un objet <code>queryResult</code> pour la query et un 
+    objet <code>deleted</code> pour la suppression).
+</p>
+<p>
+    Par exemple avec l'affichage du find dans la page <code>book.jsp</code>:
+</p>
+<pre>
+[actions]
+GET            /book             Jpa.find    forward=/book/view
+GET            /book/view        view:book.jsp
+</pre>
+
+<p>
+    Il est possible d'utiliser indépendament la gestion de transaction sans 
+    la partie CRUD. Vous pouvez aussi créer vos propre action en vous reposant 
+    sur le DAO générique.
+</p>
+<pre class="prettyprint">
+public Render findAll(GenericDAO dao, String title) {
+    Parameters parameters = Parameters.create()
+            .add("title", title);
+    List result = dao.query("findByTitle", title);
+    return renderJSON(result);
+}
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn primary large" style="float:right;" href="wikimotion">WikiMotion »</a>
+</div>
+
+</div>
