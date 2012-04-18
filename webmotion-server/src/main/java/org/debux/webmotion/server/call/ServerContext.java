@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.Converter;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -217,6 +218,10 @@ public class ServerContext {
 
     public void setConverter(ConvertUtilsBean converter) {
         this.converter = converter;
+    }
+
+    public void addConverter(Converter converter, Class clazz) {
+        this.converter.register(converter, clazz);
     }
 
     public ServerContextManager getServerManager() {
