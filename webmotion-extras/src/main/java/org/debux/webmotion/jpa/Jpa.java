@@ -42,64 +42,64 @@ public class Jpa extends Transactional {
     private static final Logger log = LoggerFactory.getLogger(Jpa.class);
 
     public Render all(GenericDAO dao, HttpServletRequest request, String action,
-            String id, String name, String forward) {
+            String id, String name, String callback) {
         
         if ("create".equals(action)) {
-            return create(dao, request, forward);
+            return create(dao, request, callback);
             
         } else if ("find".equals(action)) {
-            return find(dao, request, forward, id);
+            return find(dao, request, callback, id);
             
         } else if ("query".equals(action)) {
-            return query(dao, request, forward, name);
+            return query(dao, request, callback, name);
             
         } else if ("update".equals(action)) {
-            return update(dao, request, forward, id);
+            return update(dao, request, callback, id);
             
         } else if ("delete".equals(action)) {
-            return delete(dao, request, forward, id);
+            return delete(dao, request, callback, id);
         }
         
         return null;
     }
     
-    public Render create(GenericDAO dao, HttpServletRequest request, String forward) {
+    public Render create(GenericDAO dao, HttpServletRequest request, String callback) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         Parameters parameters = Parameters.create(parameterMap);
         
         IdentifiableEntity entity = dao.create(parameters);
-        return render(forward, "entity", entity);
+        return render(callback, "entity", entity);
     }
 
-    public Render find(GenericDAO dao, HttpServletRequest request, String forward, String id) {
+    public Render find(GenericDAO dao, HttpServletRequest request, String callback, String id) {
         IdentifiableEntity entity = dao.find(id);
-        return render(forward, "entity", entity);
+        return render(callback, "entity", entity);
     }
     
-    public Render query(GenericDAO dao, HttpServletRequest request, String forward, String name) {
+    public Render query(GenericDAO dao, HttpServletRequest request, String callback, String name) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         Parameters parameters = Parameters.create(parameterMap);
 
         List query = dao.query(name, parameters);
-        return render(forward, "queryResult", query);
+        return render(callback, "queryResult", query);
     }
     
-    public Render update(GenericDAO dao, HttpServletRequest request, String forward, String id) {
+    public Render update(GenericDAO dao, HttpServletRequest request, String callback, String id) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         Parameters parameters = Parameters.create(parameterMap);
         
         IdentifiableEntity entity = dao.update(id, parameters);
-        return render(forward, "entity", entity);
+        return render(callback, "entity", entity);
     }
     
-    public Render delete(GenericDAO dao, HttpServletRequest request, String forward, String id) {
+    public Render delete(GenericDAO dao, HttpServletRequest request, String callback, String id) {
         boolean deleted = dao.delete(id);
-        return render(forward, "deleted", deleted);
+        return render(callback, "deleted", deleted);
     }
 
-    protected Render render(String forward, String resultName, Object resultValue) {
-        if (forward != null && !forward.isEmpty()) {
-            return renderActionURL(forward, null, new Object[]{resultName, resultValue});
+    protected Render render(String callback, String resultName, Object resultValue) {
+        if (callback != null && !callback.isEmpty()) {
+            return renderActionURL(callback, null, new Object[]{resultName, resultValue});
         } else {
             return renderJSON(resultValue);
         }
