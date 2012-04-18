@@ -220,13 +220,20 @@
                                         <li><a id="cookie_object" href="./cookie_object">Cookie manager<br/>(object)</a> <span class="label label-info">New</span></li>
                                         <li><a id="shop" href="./shop">Validation</a></li>
                                         <li><a id="async" href="./async">Async</a></li>
-                                        <li><a id="listener" href="./listener">Server listener</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>File</strong>
                                     <ul>
                                         <li><a id="file" href="./file">File</a></li>
                                         <li><a id="upload" href="./upload">File with progress</a></li>
+                                    </ul>
+                                </li>
+                                <li><strong>Server</strong>
+                                    <ul>
+                                        <li><a id="listener" href="./listener">Server listener</a></li>
+                                        <li><a id="converter" href="./converter">Converter</a> <span class="label label-info">New</span></li>
+                                        <li><a id="injector" href="./injector">Injector</a> <span class="label label-info">New</span></li>
+                                        <li><a id="global" href="./global">Global controller</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>

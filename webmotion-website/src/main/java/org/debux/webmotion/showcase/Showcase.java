@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 public class Showcase extends WebMotionController {
 
     protected static final int INDEX_EXTENSIONS = 6;
-    protected static final int INDEX_FILTERS = 12;
-    protected static final int INDEX_ERRORS = 18;
-    protected static final int INDEX_ACTIONS = 26;
+    protected static final int INDEX_FILTERS = 15;
+    protected static final int INDEX_ERRORS = 21;
+    protected static final int INDEX_ACTIONS = 29;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
@@ -940,6 +940,48 @@ public class Showcase extends WebMotionController {
                     new FileContent("/src/main/resources/sitemesh.wm", getFile("sitemesh.wm")),
                     getPageContent("content.html"),
                     getPageContent("decorator.html")
+                )
+        );
+    }
+
+    public Render global() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/global"
+                ),
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", getFile("/global.wm")),
+                    getJavaContent("GlobalListener.java"),
+                    getJavaContent("HelloParameters.java"),
+                    getPageContent("helloParameters.jsp")
+                )
+        );
+    }
+        
+    public Render injector() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/config"
+                ),
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", getFile("/injector.wm")),
+                    getJavaContent("ConverterListener.java"),
+                    getJavaContent("Config.java"),
+                    getJavaContent("ConfigAction.java")
+                )
+        );
+    }
+
+        
+    public Render converter() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/jsonelement?element=%7Btest=%22value%22%7D"
+                ),
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", getFile("/converter.wm")),
+                    getJavaContent("ConverterListener.java"),
+                    getJavaContent("JsonElementAction.java")
                 )
         );
     }

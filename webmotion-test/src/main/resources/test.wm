@@ -32,6 +32,9 @@ server.listener.class=org.debux.webmotion.test.Listener
 /spring                                                 spring.wm
 /sitemesh                                               sitemesh.wm
 /                                                       META-INF/.*\.wm
+/                                                       global.wm
+/                                                       injector.wm
+/                                                       converter.wm
 
 [filters]
 *           /path/*                                     Filter.pass

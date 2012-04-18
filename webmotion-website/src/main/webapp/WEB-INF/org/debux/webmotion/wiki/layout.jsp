@@ -63,6 +63,8 @@
                           || layout_url == '/action'
                           || layout_url == '/extensions'
                           || layout_url == '/advanced'
+                          || layout_url == '/extras'
+                          || layout_url == '/wikimotion'
                           || layout_url == '/changelog'}" >
                 <c:set var="documentation_active" value="active"/>
             </c:if>

@@ -294,13 +294,4 @@ public class ActionMiscIT extends AbstractIT {
         AssertJUnit.assertTrue(result.contains("Hello world !"));
     }
     
-    @Test
-    public void serverListenner() throws IOException {
-        String url = getAbsoluteUrl("context");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("key = value"));
-    }
-    
 }

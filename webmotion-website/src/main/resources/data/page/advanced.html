@@ -181,8 +181,7 @@ public class Listener implements WebMotionServerListener {
 
     @Override
     public void onStart(ServerContext context) {
-        ConvertUtilsBean converter = context.getConverter()
-        converter.register(new Converter() {
+        context.addConverter(new Converter() {
             @Override
             public Object convert(Class type, Object value) {
                 ...
