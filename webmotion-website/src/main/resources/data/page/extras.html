@@ -61,6 +61,12 @@
 server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
 </pre>
 
+<p>
+    Comme pour WebMotion, la partie extras repose sur un fragment web, qui inclu 
+    l'ensemble des éléments web pour le bon fonctionnement de Spring, de SiteMesh 
+    et d'Hibernate.
+</p>
+
 <div class="page-header">
     <h2 id="spring">Spring</h2>
 </div>
@@ -85,6 +91,17 @@ server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
     de configuration <code>xml</code> sont automatiquement chargés depuis le répertoire 
     <code>WEB-INF</code> et le nom doit commencer par <code>applicationContext</code>.
 </p>
+
+<p>
+    Vous pouvez tout de même préciser vous propre fichier en indiquant dans votre 
+    fichier <code>web.xml</code>, la configuration suivante :
+</p>
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt;/WEB-INF/applicationContext*.xml,/WEB-INF/spring.xml&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
 
 <p>
     Exemple de fichier <code>applicationContext.xml</code> :
@@ -283,7 +300,8 @@ public class Book extends IdentifiableEntity {
 <h4>Filtre</h4>
 <p>
     Le filtre s'occupe de la gestion de la transaction pour fournir les éléments 
-    nécessaires au contrôlleur. Les exemples ci-dessous peuvent être combiné.
+    nécessaires au contrôlleur. Si une exception est levée durant l'exécution du 
+    contrôlleur, la transaction est rollbacker sinon elle sera comitter.
 </p>
 <p>
      Permet de créer un transaction par défaut.
@@ -316,6 +334,9 @@ public class Book extends IdentifiableEntity {
 [filters]
 *         /*                          Jpa.tx                  packageEntityName=org.debux.webmotion.entity
 </pre>
+<p>
+    Les exemples ci-dessus peuvent être combiné.
+</p>
 
 <h4>Contrôlleur</h4>
 <p>
@@ -347,7 +368,7 @@ public class Book extends IdentifiableEntity {
     <li>
         <strong>all :</strong> permet de faire l'ensemble des actions en la 
         précisant en paramètre. L'action prend les paramètres en fonction de 
-        l'action apellée.
+        l'action (action) apellée.
     </li>
 </ul>
 
@@ -406,7 +427,7 @@ DELETE      /{entityName}/{id}             Jpa.delete
 
 <p>
     L'ensemble des actions retourne un render de type JSON, il vous est possible 
-    de préciser une url de forward en paramètre. Ce qui permet d'exécuter une 
+    de préciser une url de callback en paramètre. Ce qui permet d'exécuter une 
     action après une action de CRUD. Dans ce cas là le résultat est récupérable comme 
     attribut de la request (un objet <code>entity</code> pour le create, 
     l'update et le find, un objet <code>queryResult</code> pour la query et un 
@@ -417,14 +438,15 @@ DELETE      /{entityName}/{id}             Jpa.delete
 </p>
 <pre>
 [actions]
-GET            /book             Jpa.find    forward=/book/view
+GET            /book             Jpa.find    callback=/book/view
 GET            /book/view        view:book.jsp
 </pre>
 
 <p>
     Il est possible d'utiliser indépendament la gestion de transaction sans 
     la partie CRUD. Vous pouvez aussi créer vos propre action en vous reposant 
-    sur le DAO générique.
+    sur le DAO générique. Il est automatiquement injecté si une classe d'entité 
+    est précisé.
 </p>
 <pre class="prettyprint">
 public Render findAll(GenericDAO dao, String title) {
@@ -434,6 +456,16 @@ public Render findAll(GenericDAO dao, String title) {
     return renderJSON(result);
 }
 </pre>
+
+<p>
+    Comme pour le DAO générique, vous pouvez récupérer la transaction et l'entity manager :
+</p>
+<pre class="prettyprint">
+public Render action(EntityTransaction transaction, EntityManager manager) {
+    ...
+}
+</pre>
+
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
