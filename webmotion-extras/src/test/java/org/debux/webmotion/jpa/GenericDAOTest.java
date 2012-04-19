@@ -149,9 +149,8 @@ public class GenericDAOTest {
         
         Parameters parameters = Parameters.create()
                 .add("username", "test");
-        dao.update(id, parameters);
+        Comment entity = (Comment) dao.update(id, parameters);
         
-        Comment entity = manager.find(Comment.class, id);
         AssertJUnit.assertEquals("test", entity.getUsername());
     }
     
@@ -159,9 +158,8 @@ public class GenericDAOTest {
     public void testInvalidUpdate() {
         Parameters parameters = Parameters.create()
                 .add("username", "test");
-        dao.update("invalid", parameters);
+        Comment entity = (Comment) dao.update("invalid", parameters);
         
-        Comment entity = manager.find(Comment.class, "invalid");
         AssertJUnit.assertNull(entity);
     }
     

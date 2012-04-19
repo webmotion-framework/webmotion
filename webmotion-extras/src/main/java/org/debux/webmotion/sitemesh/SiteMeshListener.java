@@ -47,12 +47,13 @@ import org.sitemesh.webapp.WebAppContext;
  */
 public class SiteMeshListener implements ServletContextListener {
 
+    /** Current SiteMesh filter */
     protected ConfigurableSiteMeshFilter filter;
     
     @Override
     public void contextInitialized(ServletContextEvent event) {
         if (filter == null) {
-            
+            // Create the filter
             filter = new ConfigurableSiteMeshFilter() {
                         @Override
                         protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
@@ -60,13 +61,13 @@ public class SiteMeshListener implements ServletContextListener {
 
                                 @Override
                                 public String[] selectDecoratorPaths(Content content, WebAppContext siteMeshContext) throws IOException {
+                                    // Search the filter into the attibutes of the request
                                     HttpServletRequest request = siteMeshContext.getRequest();
                                     String[] layouts = (String[]) request.getAttribute(SiteMesh.LAYOUTS);
                                     if (layouts != null) {
                                         return layouts;
-
                                     } else {
-
+                                        // Else use SiteMesh in classic mode 
                                         String[] selectDecoratorPaths = super.selectDecoratorPaths(content, siteMeshContext);
                                         return selectDecoratorPaths;
                                     }
@@ -75,6 +76,7 @@ public class SiteMeshListener implements ServletContextListener {
                         }
                     };
             
+            // Add filter into webapp
             ServletContext servletContext = event.getServletContext();
             FilterRegistration registration = servletContext.addFilter("sitemesh", filter);
             registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE), true, "/*");
@@ -83,6 +85,7 @@ public class SiteMeshListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
+        // Do nothing
     }
     
 }

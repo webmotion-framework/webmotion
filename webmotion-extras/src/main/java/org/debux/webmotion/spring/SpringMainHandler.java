@@ -35,7 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add configuration to use Spring.
+ * Add configuration to use Spring. It changes the ExecutorInstanceCreatorHandler 
+ * by SpringInstanceCreatorHandler.
  * 
  * @author julien
  */

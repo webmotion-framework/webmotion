@@ -33,24 +33,35 @@ import javax.persistence.InheritanceType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * All entities must extend this class, to be managed by the @see GenericDAO. 
+ * The class adds only an uuid identifier.
+ * 
  * @author julien
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class IdentifiableEntity implements Serializable {
     
+    /** Identifier attribute name */
     public static String ATTRIBUTE_NAME_ID = "id";
     
+    /** Identifier */
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name ="system-uuid", strategy = "uuid")
     protected String id;
 
+    /**
+     * @return the identifier
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Set identifier.
+     * @param id identifier
+     */
     public void setId(String id) {
         this.id = id;
     }

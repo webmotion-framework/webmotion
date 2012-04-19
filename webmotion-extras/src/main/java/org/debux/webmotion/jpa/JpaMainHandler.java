@@ -38,7 +38,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add configuration to use Jpa.
+ * Add configuration to use Jpa :
+ * <ul>
+ * <li>Add Jpa as global controller</li>
+ * <li>Add GenericDaoInjector as injector to get the DAO in Jpa controller</li>
+ * <li>Add EntityManagerInjector as injector to get EntityManager</li>
+ * <li>Add EntityTransactionManager as injector to get EntityTransaction</li>
+ * </ul>
  * 
  * @author julien
  */
@@ -57,6 +63,9 @@ public class JpaMainHandler extends WebMotionMainHandler {
         context.addInjector(new EntityTransactionManager());
     }
 
+    /**
+     * Inject EntityTransaction
+     */
     public static class EntityTransactionManager implements Injector {
         @Override
         public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -69,6 +78,9 @@ public class JpaMainHandler extends WebMotionMainHandler {
         }
     }
 
+    /**
+     * Inject EntityManager
+     */
     public static class EntityManagerInjector implements Injector {
         @Override
         public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -81,6 +93,9 @@ public class JpaMainHandler extends WebMotionMainHandler {
         }
     }
 
+    /**
+     * Inject GenericDAO
+     */
     public static class GenericDaoInjector implements Injector {
         @Override
         public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {

@@ -48,19 +48,35 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.debux.webmotion.server.WebMotionException;
 
 /**
- *
+ * The class is a generic DAO. It is used to CRUD operations on specific class.
+ * The DAO use JPA specification. In oder to create a generic DAO on entity, you
+ * must extends @see IdentifiableEntity.
+ * 
  * @author julien
  */
 public class GenericDAO {
     
+    /** Utility on bean */
     protected BeanUtilsBean beanUtil;
+    
+    /** Utility to convert value */
     protected ConvertUtilsBean convertUtils;
+    
+    /** Utility on property */
     protected PropertyUtilsBean propertyUtils;
 
+    /** Current entity manager */
     protected EntityManager manager;
-    protected String entityName;
+
+    /** Current entity class do crud */
     protected Class<? extends IdentifiableEntity> entityClass;
     
+    /**
+     * Constructor with direct entity class.
+     * 
+     * @param manager entity manager
+     * @param entityClass entity class
+     */
     public GenericDAO(EntityManager manager, Class<? extends IdentifiableEntity> entityClass) {
         this.manager = manager;
         this.entityClass = entityClass;
@@ -70,6 +86,12 @@ public class GenericDAO {
         this.propertyUtils = beanUtil.getPropertyUtils();
     }
     
+    /**
+     * Constructor with entity class as string.
+     * 
+     * @param manager entity manager
+     * @param entityName entity class as string
+     */
     public GenericDAO(EntityManager manager, String entityName) {
         this.manager = manager;
         try {
@@ -84,39 +106,80 @@ public class GenericDAO {
     }
     
     /**
-     * Helper to create dynamic parameter for the GenericDAO.
+     * Helper to create dynamic parameter for the GenericDAO. Thus you can pass 
+     * parameters easily from the http request or from code.<br/>
+     * 
+     * By default the parameters come from the http request, which are 
+     * represent with a Map. The key represents the name of parameter and the 
+     * object array represent the values.
      */
     public static class Parameters {
+        
+        /** All values */
         protected Map<String, Object[]> parameters;
 
+        /**
+         * Constructor by default
+         */
         public Parameters() {
             this(new HashMap<String, Object[]>());
         }
 
+        /**
+         * Constructor with the parameters.
+         * 
+         * @param parameters parameters
+         */
         public Parameters(Map<String, Object[]> parameters) {
             this.parameters = parameters;
         }
         
+        /**
+         * @return empty Parameters object
+         */
         public static Parameters create() {
             return new Parameters();
         }
         
-        protected static Parameters create(Map parameters) {
-            return new Parameters(parameters);
+        /**
+         * @return Parameters object the parameters
+         */
+        public static Parameters create(Map values) {
+            return new Parameters(values);
         }
         
-        public Parameters addAll(Map<String, Object[]> parameters) {
+        /**
+         * Add all parameters.
+         * 
+         * @param parameters parameters to add
+         * @return Parameters object
+         */
+        public Parameters addAll(Map parameters) {
             this.parameters.putAll(parameters);
             return this;
         }
         
+        /**
+         * Add one parameter with all values.
+         * 
+         * @param name parameter name
+         * @param values parameter values
+         * @return Parameters object
+         */
         public Parameters add(String name, Object[] values) {
-            parameters.put(name, values);
+            this.parameters.put(name, values);
             return this;
         }
         
+        /**
+         * Add one parameter to complete with a value.
+         * 
+         * @param name parameter name
+         * @param value parameter value
+         * @return Parameters object
+         */
         public Parameters add(String name, Object value) {
-            Object[] values = parameters.get(name);
+            Object[] values = this.parameters.get(name);
             if (values == null) {
                 values = new Object[]{value};
                 
@@ -126,34 +189,62 @@ public class GenericDAO {
                 values[length] = value;
             }
             
-            parameters.put(name, values);
+            this.parameters.put(name, values);
             return this;
         }
 
+        /**
+         * @return all parameters
+         */
         public Map<String, Object[]> getParameters() {
             return parameters;
         }
         
+        /**
+         * @param name parameter name
+         * @return parameter values
+         */
         public Object[] get(String name) {
             return parameters.get(name);
         }
     }
     
+    /**
+     * Create an entity with parameters.
+     * 
+     * @param parameters parameters
+     * @return entity created.
+     */
     public IdentifiableEntity create(Parameters parameters) {
         IdentifiableEntity entity = extract(parameters);
         manager.persist(entity);
+        manager.detach(entity);
         return entity;
     }
             
+    /**
+     * Update an entity with parameters, that is identified by this id.
+     * 
+     * @param id identifier
+     * @param parameters parameters
+     * @return entity updated
+     */
     public IdentifiableEntity update(String id, Parameters parameters) {
         IdentifiableEntity entity = manager.find(entityClass, id);
         if (entity != null) {
             entity = extract(entity, parameters);
-            manager.merge(entity);
+            entity = manager.merge(entity);
+            manager.detach(entity);
         }
         return entity;
     }
     
+    /**
+     * Delete an entity, that is identified by this id.
+     * 
+     * @param id identifier
+     * @return true if is deleted else false if the entity was not found.
+     */
     public boolean delete(String id) {
         IdentifiableEntity entity = manager.find(entityClass, id);
         if (entity != null) {
@@ -163,12 +254,25 @@ public class GenericDAO {
         return false;
     }
     
+    /**
+     * Find entity by the id.
+     * 
+     * @param id identifier
+     * @return 
+     */
     public IdentifiableEntity find(String id) {
         IdentifiableEntity entity = manager.find(entityClass, id);
         manager.detach(entity);
         return entity;
     }
     
+    /**
+     * Execute a query named in entity.
+     * 
+     * @param name query name
+     * @param parameters parameters
+     * @return outturn
+     */
     public List query(String name, Parameters parameters) {
         Query query = manager.createNamedQuery(name);
         
@@ -184,6 +288,12 @@ public class GenericDAO {
         return query.getResultList();
     }
     
+    /**
+     * Create a new entity with parameters.
+     * 
+     * @param parameters parameters
+     * @return entity with parameters
+     */
     protected IdentifiableEntity extract(Parameters parameters) {
         try {
             IdentifiableEntity entity = entityClass.newInstance();
@@ -196,6 +306,14 @@ public class GenericDAO {
         }
     }
     
+    /**
+     * Complete entity with parameters. Try to convert parameter, if the type not 
+     * match. To create an association on entity, you must pass only identifier.
+     * 
+     * @param entity entity
+     * @param parameters parameters
+     * @return entity completed
+     */
     protected IdentifiableEntity extract(IdentifiableEntity entity, Parameters parameters) {
         try {
             Field[] fields = entityClass.getDeclaredFields();
@@ -205,16 +323,21 @@ public class GenericDAO {
                 Class<?> type = field.getType();
                 Object[] values = parameters.get(name);
 
+                // The identifier can't be set
                 if (!IdentifiableEntity.ATTRIBUTE_NAME_ID.equals(name)) {
                     
                     if (values == null) {
+                        // Null value
                         beanUtil.setProperty(entity, name, null);
 
                     } else if (type.isAnnotationPresent(javax.persistence.Entity.class)) {
+                        // Association
                         List<Object> references = new ArrayList<Object>(values.length);
                         for (Object value : values) {
                             Object reference = manager.find(type, value);
-                            references.add(reference);
+                            if (reference != null) {
+                                references.add(reference);
+                            }
                         }
 
                         Object converted = null;
@@ -254,11 +377,11 @@ public class GenericDAO {
                         beanUtil.setProperty(entity, name, converted);
 
                     } else {
-
+                        // Basic object
                         if (Collection.class.isAssignableFrom(type)) {
                             Class convertType = String.class;
                             Type genericType = field.getGenericType();
-                            if(genericType != null && genericType instanceof ParameterizedType) {
+                            if (genericType != null && genericType instanceof ParameterizedType) {
                                 ParameterizedType parameterizedType = (ParameterizedType) genericType;
                                 convertType = (Class) parameterizedType.getActualTypeArguments()[0];
                             }

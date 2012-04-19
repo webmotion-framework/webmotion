@@ -36,8 +36,15 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public class SiteMesh extends WebMotionFilter {
     
+    /** Attribute name to store the layout to decorate the page */
     public static final String LAYOUTS = "sitemesh_layouts";
     
+    /**
+     * Set the layout into the request. Pass on the filter or the action.
+     * 
+     * @param request set layout into the request
+     * @param layout the layout to apply on the view
+     */
     public void decorate(HttpServletRequest request, String layout) {
         Mapping mapping = contextable.getMapping();
         Config config = mapping.getConfig();

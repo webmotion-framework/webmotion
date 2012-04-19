@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add configuration to use SiteMesh.
+ * Add configuration to use SiteMesh, just add SiteMesh add global filter.
  * 
  * @author julien
  */

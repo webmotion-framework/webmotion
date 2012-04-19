@@ -44,35 +44,58 @@ public abstract class Transactional extends WebMotionFilter {
 
     private static final Logger log = LoggerFactory.getLogger(Transactional.class);
 
+    /** Default persistence unit name  */
+    public static String DEFAULT_PERSISTENCE_UNIT_NAME = "webmotion";
+    
+    /** Attribute name stores the EntityManager  */
     public static String CURRENT_ENTITY_MANAGER = "wm_current_entity_manager";
+    
+    /** Attribute name stores the EntityTransaction  */
     public static String CURRENT_ENTITY_TRANSACTION = "wm_current_entity_transaction";
+    
+    /** Attribute name stores the GenericDAO  */
     public static String CURRENT_GENERIC_DAO = "wm_current_generic_dao";
     
+    /** Cache all EntityManagerFactory */
     protected Map<String, EntityManagerFactory> factories;
 
+    /** Default constructor */
     public Transactional() {
         factories = new HashMap<String, EntityManagerFactory>();
     }
-    
+
     /**
-     * Create the transaction.
+     * Create the transaction and the GenericDAO if the entity name is not 
+     * empty or null.
      * 
-     * @param request
-     * @param persistenceUnitName 
+     * @param request set EntityManager, EntityTransaction and GenericDAO into the request
+     * @param persistenceUnitName precise the persistence unit
+     * @param packageEntityName precise the package of entity
+     * @param entityName precise the class name of the entity
+     * 
+     * @throws Exception catch execption to rollback the transaction
      */
     public void tx(HttpServletRequest request, String persistenceUnitName,
             String packageEntityName, String entityName) throws Exception {
         
+        // Create factory
+        if (persistenceUnitName == null || persistenceUnitName.isEmpty()) {
+            persistenceUnitName = DEFAULT_PERSISTENCE_UNIT_NAME;
+        }
         EntityManagerFactory factory = factories.get(persistenceUnitName);
         if (factory == null) {
             factory = Persistence.createEntityManagerFactory(persistenceUnitName);
         }
+        
+        // Create manager
         EntityManager manager = factory.createEntityManager();
         request.setAttribute(CURRENT_ENTITY_MANAGER, manager);
         
+        // Create transaction
         EntityTransaction transaction = manager.getTransaction();
         request.setAttribute(CURRENT_ENTITY_TRANSACTION, transaction);
         
+        // Create generic DAO
         if (entityName != null) {
             String fullEntityName = null;
             if (packageEntityName != null) {
