@@ -965,7 +965,7 @@ public class Showcase extends WebMotionController {
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("/injector.wm")),
-                    getJavaContent("ConverterListener.java"),
+                    getJavaContent("InjectorListener.java"),
                     getJavaContent("Config.java"),
                     getJavaContent("ConfigAction.java")
                 )
