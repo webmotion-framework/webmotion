@@ -28,6 +28,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
@@ -44,6 +45,7 @@ public class GenericDAOTest {
     
     protected EntityManagerFactory factory;
     protected EntityManager manager;
+    protected EntityTransaction transaction;
     protected GenericDAO dao;
     
     protected Comment comment1;
@@ -54,9 +56,11 @@ public class GenericDAOTest {
     public void setUp() {
         factory = Persistence.createEntityManagerFactory("webmotion");
         manager = factory.createEntityManager();
+        manager.setFlushMode(FlushModeType.COMMIT);
+        
         dao = new GenericDAO(manager, Comment.class);
         
-        EntityTransaction transaction = manager.getTransaction();
+        transaction = manager.getTransaction();
         transaction.begin();
         
         comment1 = new Comment();
@@ -78,10 +82,12 @@ public class GenericDAOTest {
         manager.persist(comment3);
         
         transaction.commit();
+        transaction.begin();
     }
     
     @AfterMethod
     public void tearDown() {
+        transaction.commit();
         manager.close();
         factory.close();
     }
@@ -114,6 +120,9 @@ public class GenericDAOTest {
         Parameters parameters = createData();
         IdentifiableEntity entity = dao.create(parameters);
         AssertJUnit.assertNotNull(entity);
+        
+        entity = (Comment) dao.find(entity.getId());
+        AssertJUnit.assertNotNull(entity);
     }
     
     @Test
@@ -131,14 +140,19 @@ public class GenericDAOTest {
     @Test
     public void testDelete() {
         String id = comment1.getId();
-        dao.delete(id);
+        
+        boolean deleted = dao.delete(id);
+        AssertJUnit.assertTrue(deleted);
+        
         Comment entity = manager.find(Comment.class, id);
         AssertJUnit.assertNull(entity);
     }
     
     @Test
     public void testInvalidDelete() {
-        dao.delete("invalid");
+        boolean deleted = dao.delete("invalid");
+        AssertJUnit.assertFalse(deleted);
+        
         Comment entity = manager.find(Comment.class, "invalid");
         AssertJUnit.assertNull(entity);
     }
@@ -149,8 +163,11 @@ public class GenericDAOTest {
         
         Parameters parameters = Parameters.create()
                 .add("username", "test");
-        Comment entity = (Comment) dao.update(id, parameters);
         
+        Comment entity = (Comment) dao.update(id, parameters);
+        AssertJUnit.assertEquals("test", entity.getUsername());
+        
+        entity = (Comment) dao.find(id);
         AssertJUnit.assertEquals("test", entity.getUsername());
     }
     

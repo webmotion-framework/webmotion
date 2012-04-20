@@ -172,6 +172,17 @@ public class GenericDAO {
         }
         
         /**
+         * Add one parameter with null value.
+         * 
+         * @param name parameter name
+         * @return Parameters object
+         */
+        public Parameters add(String name) {
+            this.parameters.put(name, new Object[]{});
+            return this;
+        }
+        
+        /**
          * Add one parameter to complete with a value.
          * 
          * @param name parameter name
@@ -218,7 +229,6 @@ public class GenericDAO {
     public IdentifiableEntity create(Parameters parameters) {
         IdentifiableEntity entity = extract(parameters);
         manager.persist(entity);
-        manager.detach(entity);
         return entity;
     }
             
@@ -233,8 +243,6 @@ public class GenericDAO {
         IdentifiableEntity entity = manager.find(entityClass, id);
         if (entity != null) {
             entity = extract(entity, parameters);
-            entity = manager.merge(entity);
-            manager.detach(entity);
         }
         return entity;
     }
@@ -262,7 +270,6 @@ public class GenericDAO {
      */
     public IdentifiableEntity find(String id) {
         IdentifiableEntity entity = manager.find(entityClass, id);
-        manager.detach(entity);
         return entity;
     }
     
@@ -324,9 +331,9 @@ public class GenericDAO {
                 Object[] values = parameters.get(name);
 
                 // The identifier can't be set
-                if (!IdentifiableEntity.ATTRIBUTE_NAME_ID.equals(name)) {
+                if (!IdentifiableEntity.ATTRIBUTE_NAME_ID.equals(name) && values != null) {
                     
-                    if (values == null) {
+                    if (values.length == 0) {
                         // Null value
                         beanUtil.setProperty(entity, name, null);
 
