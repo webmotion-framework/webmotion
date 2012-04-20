@@ -93,10 +93,6 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
     <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
     <li><strong>FilterMethodFinderHandler</strong>, finds the methods to execute for filters.</li>
     <li><strong>ActionMethodFinderHandler</strong>, finds the method to execute for the action.</li>
-    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the filters and the action if necessary.</li>
-    <li><strong>ExecutorParametersConvertorHandler</strong>, converts the parameters according to the type of the method to call.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
-    <li><strong>ExecutorParametersValidatorHandler</strong>, validates the parameters.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
 </ul>
 
@@ -107,10 +103,18 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
     <li><strong>ParametersMultipartHandler</strong>, enables the file management in multi-part.</li>
     <li><strong>ErrorFinderHandler</strong>, finds the action to apply for an error.</li>
     <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
-    <li><strong>ErrorMethodFinderHandler</strong>, finds the method to execute for the action.</li>
-    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the action if necessary.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
+</ul>
+
+<p>
+    During the <code>ExecutorMethodInvokerHandler</code> handler, this 
+    supplementary handlers are run for each action and filter :
+</p>
+<ul>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the filter or the action if necessary.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, converts the parameters according to the type of the method to call.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
+    <li><strong>ExecutorParametersValidatorHandler</strong>, validates the parameters.</li>
 </ul>
 
 <p>

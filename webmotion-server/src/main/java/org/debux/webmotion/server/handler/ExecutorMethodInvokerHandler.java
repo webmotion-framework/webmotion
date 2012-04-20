@@ -178,7 +178,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         
         /** Current filters executed. */
         protected Iterator<Executor> filtersIterator;
-        protected int filtersIndex;
 
         /** Mark if the render is executed */
         protected boolean executed;
@@ -188,7 +187,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             this.call = call;
             
             this.filtersIterator = call.getFilters().iterator();
-            this.filtersIndex = 0;
             this.executed = false;
         }
         
@@ -253,19 +251,21 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 throw new WebMotionException("Error during invoke method for action " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
-                        ex, call.getRule());
+                        ex, executor.getRule());
+                
             } catch (IllegalArgumentException ex) {
                 contextable.remove();
                 throw new WebMotionException("Error during invoke method for action " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
-                        ex, call.getRule());
+                        ex, executor.getRule());
+                
             } catch (InvocationTargetException ex) {
                 contextable.remove();
                 throw new WebMotionException("Error during invoke method for action " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
-                        ex, call.getRule());
+                        ex, executor.getRule());
             }
         }
 
@@ -296,24 +296,22 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     processRender(mapping, call);
                 }
                 
-                filtersIndex ++;
-                
             } catch (IllegalAccessException ex) {
                 contextable.remove();
                 
-                FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                 throw new WebMotionException("Error during invoke method for filter " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
-                        ex, filterRule);
+                        ex, executor.getRule());
+                
             } catch (IllegalArgumentException ex) {
                 contextable.remove();
                 
-                FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                 throw new WebMotionException("Error during invoke method for filter " 
                         + executor.getClazz().getName() 
                         + " on method " + executor.getMethod().getName(),
-                        ex, filterRule);
+                        ex, executor.getRule());
+                
             } catch (InvocationTargetException ex) {
                 contextable.remove();
                 
@@ -323,11 +321,10 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     throw (WebMotionException) cause;
                     
                 } else {
-                    FilterRule filterRule = call.getFilterRules().get(filtersIndex);
                     throw new WebMotionException("Error during invoke method for filter " 
                             + executor.getClazz().getName() 
                             + " on method " + executor.getMethod().getName(),
-                            ex, filterRule);
+                            ex, executor.getRule());
                 }
             }
         }
@@ -357,13 +354,11 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
     
-        /**
-         * TODO: 20121504 Improve: maybe create an specific interface and remove
-         * current executor in Call.
-         */
         public void processHandlers(Mapping mapping, Call call) {
-            WebMotionHandler mainHandler = call.getMainHandler();
-            mainHandler.handle(mapping, call);
+            List<WebMotionHandler> executorHandlers = call.getExecutorHandlers();
+            for (WebMotionHandler handler : executorHandlers) {
+                handler.handle(mapping, call);
+            }
         }
     }
 }

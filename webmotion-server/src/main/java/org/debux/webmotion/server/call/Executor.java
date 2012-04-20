@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.mapping.Rule;
 
 /**
  * Information used to execute the user request on reflection java. The executor 
@@ -43,6 +44,8 @@ public class Executor {
     protected WebMotionController instance;
 
     protected Map<String, Object> parameters;
+    
+    protected Rule rule;
 
     public Executor() {
         parameters = new LinkedHashMap<String, Object>();
@@ -78,6 +81,14 @@ public class Executor {
 
     public void setClazz(Class<? extends WebMotionController> clazz) {
         this.clazz = clazz;
+    }
+
+    public Rule getRule() {
+        return rule;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
     }
 
 }

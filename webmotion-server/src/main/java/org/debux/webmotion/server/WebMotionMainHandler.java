@@ -152,24 +152,16 @@ public class WebMotionMainHandler implements WebMotionHandler {
     
     @Override
     public void handle(Mapping mapping, Call call) {
-        Executor current = call.getCurrent();
-        if (current != null) {
-            // An executor is running
-            onExecutorInvoker(mapping, call);
-            
-        } else {
-            long start = System.currentTimeMillis();
-            onExtensionRuleFinder(mapping, call);
-            
-            Rule rule = call.getRule();
-            if (rule == null) {
-                // Not process in extension
-                call.setMainHandler(this);
-                onRuleFinder(mapping, call);
-            }
-            
-            handlerStats.registerHandlerTime(this.getClass().getName(), start);
+        long start = System.currentTimeMillis();
+        handleExtension(mapping, call);
+
+        Rule rule = call.getRule();
+        if (rule == null) {
+            // Not process in extension
+            handleExecutors(mapping, call);
         }
+
+        handlerStats.registerHandlerTime(this.getClass().getName(), start);
     }
 
     /**
@@ -178,7 +170,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
      * @param mapping
      * @param call 
      */
-    protected void onExtensionRuleFinder(Mapping mapping, Call call) {
+    protected void handleExtension(Mapping mapping, Call call) {
         HttpContext context = call.getContext();
 
         // Determine the extension is used
@@ -218,7 +210,10 @@ public class WebMotionMainHandler implements WebMotionHandler {
      * @param mapping
      * @param call 
      */
-    protected void onRuleFinder(Mapping mapping, Call call) {
+    protected void handleExecutors(Mapping mapping, Call call) {
+        // Add handlers used during executor invoker
+        call.setExecutorHandlers(executorHandlers);
+
         // Determine if the request contains an errors
         HttpContext context = call.getContext();
         if (context.isError()) {
@@ -229,16 +224,6 @@ public class WebMotionMainHandler implements WebMotionHandler {
         } else {
             chainHandlers(actionHandlers, mapping, call);
         }
-    }
-    
-    /**
-     * Each executor invoked call this handlers chain.
-     * 
-     * @param mapping
-     * @param call 
-     */
-    protected void onExecutorInvoker(Mapping mapping, Call call) {
-        chainHandlers(executorHandlers, mapping, call);
     }
     
     /**

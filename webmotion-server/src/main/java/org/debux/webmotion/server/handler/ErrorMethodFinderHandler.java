@@ -90,6 +90,7 @@ public class ErrorMethodFinderHandler implements WebMotionHandler {
                 Executor executor = new Executor();
                 executor.setClazz(clazz);
                 executor.setMethod(method);
+                executor.setRule(rule);
                 call.setExecutor(executor);
 
             } catch (ClassNotFoundException clnfe) {

@@ -107,6 +107,7 @@ public class FilterMethodFinderHandler implements WebMotionHandler {
             Executor executor = new Executor();
             executor.setClazz(clazz);
             executor.setMethod(method);
+            executor.setRule(filterRule);
             
             List<Executor> filters = call.getFilters();
             filters.add(executor);

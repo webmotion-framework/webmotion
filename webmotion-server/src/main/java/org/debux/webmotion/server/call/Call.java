@@ -71,8 +71,8 @@ public class Call {
     /** Current executor is processed */
     protected Executor current;
     
-    /** The main handler handle */
-    protected WebMotionHandler mainHandler;
+    /** Add handlers used during executor invoker */
+    protected List<WebMotionHandler> executorHandlers;
     
     /** The final render for user. */
     protected Render render;
@@ -199,12 +199,12 @@ public class Call {
         this.current = current;
     }
 
-    public WebMotionHandler getMainHandler() {
-        return mainHandler;
+    public List<WebMotionHandler> getExecutorHandlers() {
+        return executorHandlers;
     }
 
-    public void setMainHandler(WebMotionHandler mainHandler) {
-        this.mainHandler = mainHandler;
+    public void setExecutorHandlers(List<WebMotionHandler> executorHandlers) {
+        this.executorHandlers = executorHandlers;
     }
     
 }

@@ -113,10 +113,6 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
     <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
     <li><strong>FilterMethodFinderHandler</strong>, récupère les méthodes à exécuter pour des filtres.</li>
     <li><strong>ActionMethodFinderHandler</strong>, récupère la méthode à exécuter pour l'action.</li>
-    <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie les filters et l'action si nécessaire.</li>
-    <li><strong>ExecutorParametersConvertorHandler</strong>, convertit les paramètres selon le type de méthode à invoquer.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
-    <li><strong>ExecutorParametersValidatorHandler</strong>, valide les paramètres.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action et retourne le rendu.</li>
 </ul>
 
@@ -128,10 +124,18 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
     <li><strong>ErrorFinderHandler</strong>, recherche l'action pour une erreur à appliquer.</li>
     <li><strong>ActionExecuteRenderHandler</strong>, crée le rendu si l'action est directement une vue ou une url.</li>
     <li><strong>ErrorMethodFinderHandler</strong>, récupère la méthode à éxecuter pour l'action.</li>
-    <li><strong>ExecutorParametersConvertorHandler</strong>, convertit les paramètres selon le type de méthode à invoquer.</li>
-    <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie l'action si nécessaire.</li>
-    <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
     <li><strong>ExecutorMethodInvokerHandler</strong>, invoque les méthodes pour les filtres et l'action et retourne le rendu.</li>
+</ul>
+
+<p>
+    Pendant l'handler <code>ExecutorMethodInvokerHandler</code>, des handlers 
+    supplémentaire sont invoqués pour chaque action et filtre :
+</p>
+<ul>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instancie le filtre ou l'action si nécessaire.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, convertit les paramètres selon le type de méthode à invoquer.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injecte des paramètres supplémentaires en fonction du type.</li>
+    <li><strong>ExecutorParametersValidatorHandler</strong>, valide les paramètres.</li>
 </ul>
 
 <p>
