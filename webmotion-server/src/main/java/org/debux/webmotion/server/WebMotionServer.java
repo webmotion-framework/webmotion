@@ -42,7 +42,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.call.Call;

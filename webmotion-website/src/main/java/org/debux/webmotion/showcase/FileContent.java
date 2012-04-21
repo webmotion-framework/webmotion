@@ -24,8 +24,8 @@
  */
 package org.debux.webmotion.showcase;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Present content of a file like java, jsp, ...
@@ -43,7 +43,7 @@ public class FileContent {
     }
     
     public String getContent() {
-        return StringEscapeUtils.escapeHtml(content);
+        return StringEscapeUtils.escapeHtml4(content);
     }
 
     public void setContent(String content) {

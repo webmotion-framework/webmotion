@@ -45,6 +45,7 @@ import javax.persistence.Query;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.lang3.ArrayUtils;
 import org.debux.webmotion.server.WebMotionException;
 
 /**
@@ -195,9 +196,7 @@ public class GenericDAO {
                 values = new Object[]{value};
                 
             } else {
-                int length = values.length;
-                values = Arrays.copyOf(values, length + 1);
-                values[length] = value;
+                values = ArrayUtils.add(values, value);
             }
             
             this.parameters.put(name, values);

@@ -24,7 +24,7 @@
  */
 package org.debux.webmotion.server.mapping;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents the action to execute when the url matches.
