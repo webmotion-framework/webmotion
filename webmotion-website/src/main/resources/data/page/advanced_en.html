@@ -29,9 +29,7 @@
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<div class="page-header">
-    <h2 id="servlet">Servlet architecture</h2>
-</div>
+<h2 class="page-header" id="servlet">Servlet architecture</h2>
 <p>
     The framework is managed by a filter. The filter analyzes all the incoming requests
     and redirects them to a static resource (html, jsp, css, ...)
@@ -58,9 +56,7 @@
 *           /readme                                     url:/static/README
 </pre>
 
-<div class="page-header">
-    <h2 id="handler">How does WebMotion work?</h2>
-</div>
+<h2 class="page-header" id="handler">How does WebMotion work?</h2>
 <p>
     The treatment of the request goes through different handlers to achieve the request of the web client.
     The <code>MainHandler</code>, which is the main handler, is the scheduler of the other handlers.
@@ -137,9 +133,7 @@ public class MyHandler implements WebMotionHandler {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="paranamer">Paranamer</h2>
-</div>
+<h2 class="page-header" id="paranamer">Paranamer</h2>
 <p>
     WebMotion is based on a library to find the paramater names of the method.
     This library is <a href="http://paranamer.codehaus.org/">Paranamer</a>.
@@ -180,9 +174,7 @@ javac.debug=false
 &lt;/plugin&gt;
 </pre>
 
-<div class="page-header">
-    <h2 id="jmx">JMX</h2>
-</div>
+<h2 class="page-header" id="jmx">JMX</h2>
 <p>
     Using JMX enables to get information about the execution of WebMotion, namely:
 </p>

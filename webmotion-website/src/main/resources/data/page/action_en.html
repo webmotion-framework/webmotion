@@ -29,9 +29,7 @@
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<div class="page-header">
-    <h2 id="controller">WebMotionController</h2>
-</div>
+<h2 class="page-header" id="controller">WebMotionController</h2>
 <p>
     In WebMotion, if you decide that the treatment to perform for a given URL
     is to execute Java code, then the called method must be a method of a class
@@ -62,9 +60,7 @@ public class User extends WebMotionController {
     unless you are really sure of what you are doing!
 </p>
 
-<div class="page-header">
-    <h2 id="render">Different kinds of rendering</h2>
-</div>
+<h2 class="page-header" id="render">Different kinds of rendering</h2>
 <p>
     A rendering is the response returned to the client which made a request to the server.
     The renderings can be returned whether in a filter or in a controller.
@@ -489,9 +485,7 @@ public class RenderAccept extends Render {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="context">Web context</h2>
-</div>
+<h2 class="page-header" id="context">Web context</h2>
 <p>
     All the controllers of the application can access the web context of the application,
     whether by calling the <code>getContext</code> method or directly in the method parameters.
@@ -572,9 +566,7 @@ public class Error extends WebMotionController {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="flashmessage">Flash messages</h2>
-</div>
+<h2 class="page-header" id="flashmessage">Flash messages</h2>
 <p>
     One of the difficulties of a HTTP redirection is to complete the response to inform the user
     about some temporary information. This is the goal of the flash messages,
@@ -654,9 +646,7 @@ ${flashMessages.miscs.my_message}
 ${flashMessages.messages}
 </pre>
 
-<div class="page-header">
-    <h2 id="validation">Validation of the parameters of the controllers</h2>
-</div>
+<h2 class="page-header" id="validation">Validation of the parameters of the controllers</h2>
 <p>
     WebMotion offers a validation of the parameters of the Java actions, according to the 303 JSR.
     For more information about this JSR, please refer to the <a href="http://jcp.org/">jcp</a> website.
@@ -708,9 +698,7 @@ public Render comment(@ValidGroup(MyGroup.class) Book book) {
         <span class="label label-warning">Warning</span>&nbsp; GlassFish supports the validation of the methods only since the 3.1.2 version.
 </div>
 
-<div class="page-header">
-    <h2 id="file">File loading</h2>
-</div>
+<h2 class="page-header" id="file">File loading</h2>
 <p>
     The files are managed like simple parameters. WebMotion takes care of the treatment
     for the mutli-part retrieving with <a href="http://commons.apache.org/fileupload/">FileUpload</a>.

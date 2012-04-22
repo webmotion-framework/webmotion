@@ -29,9 +29,7 @@
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<div class="page-header">
-    <h2 id="servlet">Architecture des servlets</h2>
-</div>
+<h2 class="page-header" id="servlet">Architecture des servlets</h2>
 <p>
     Le framework est géré par un filtre. Le filtre analyse 
     l'intégralité des requêtes entrantes et les aiguille vers une ressource statique (html, jsp, css, ...) 
@@ -78,9 +76,7 @@
     applications.
 </p>
 
-<div class="page-header">
-    <h2 id="handler">Comprendre le fonctionnement de WebMotion</h2>
-</div>
+<h2 class="page-header" id="handler">Comprendre le fonctionnement de WebMotion</h2>
 <p>
     Le traitement de la requête passe par différents handlers pour réaliser 
     la demande du client web. Il y a un handler particulier qui est l'hander principal <code>MainHandler</code> qui est
@@ -158,10 +154,7 @@ public class MyHandler implements WebMotionHandler {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="config">Configuration</h2>
-</div>
-
+<h2 class="page-header" id="config">Configuration</h2>
 <p>
     Certains handlers sont configurables par le biais de méthode dans le ServerContext. 
     Dans les cas suivant il n'est pas nécessaire d'écrire de nouveau handler :
@@ -276,9 +269,7 @@ package.base=org.debux.app
 *        /*           Transaction.begin
 </pre>
 
-<div class="page-header">
-    <h2 id="paranamer">Paranamer</h2>
-</div>
+<h2 class="page-header" id="paranamer">Paranamer</h2>
 <p>
     WebMotion repose sur une bibliothèque pour retrouver les noms des paramètres d'une méthode.
     Cette bibliothèque s'appelle <a href="http://paranamer.codehaus.org/">Paranamer</a>.
@@ -320,9 +311,7 @@ javac.debug=false
 &lt;/plugin&gt;
 </pre>
 
-<div class="page-header">
-    <h2 id="jmx">JMX</h2>
-</div>
+<h2 class="page-header" id="jmx">JMX</h2>
 <p>
     Utiliser JMX permet d'avoir des informations sur l'exécution de WebMotion, à savoir :
 </p>

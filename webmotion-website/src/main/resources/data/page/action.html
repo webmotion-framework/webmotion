@@ -29,9 +29,7 @@
 <script type="text/javascript" src="js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<div class="page-header">
-    <h2 id="controller">WebMotionController</h2>
-</div>
+<h2 class="page-header" id="controller">WebMotionController</h2>
 <p>
     Dans WebMotion, il l'on décide que le traitement à exécuter pour une URL donnée
     est l'exécution de code Java, la méthode appelée doit être une méthode d'une 
@@ -63,9 +61,7 @@ public class User extends WebMotionController {
     de créer des variables d'instance dans les contrôleurs, à moins que vous soyez sûr de ce que vous faites !
 </p>
 
-<div class="page-header">
-    <h2 id="render">Les différents types de rendus</h2>
-</div>
+<h2 class="page-header" id="render">Les différents types de rendus</h2>
 <p>
     Un rendu est la réponse retournée au client qui a fait une requête au serveur.
     Les rendus peuvent retourné soit dans un filtre, soit dans un contrôleur.
@@ -493,9 +489,7 @@ public class RenderAccept extends Render {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="context">Contexte web</h2>
-</div>
+<h2 class="page-header" id="context">Contexte web</h2>
 <p>
     Tous les contrôleurs de l'application ont accès au contexte web de l'application,
     soit par le biais de la méthode <code>getContext</code> soit directement en paramètre de la méthode.
@@ -576,9 +570,7 @@ public class Error extends WebMotionController {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="flashmessage">Messages flash</h2>
-</div>
+<h2 class="page-header" id="flashmessage">Messages flash</h2>
 <p>
     L'une des difficultés lors d'une redirection HTTP est de compléter la réponse pour informer l'utilisateur d'une information temporaire. 
     Les messages flash ont ce but, et sont disponibles dans le contexte HTTP. Les messages flash peuvent être de différents types : info, error, warning et misc.
@@ -657,9 +649,7 @@ ${flashMessages.miscs.my_message}
 ${flashMessages.messages}
 </pre>
 
-<div class="page-header">
-    <h2 id="validation">Validation des paramètres des contrôleurs</h2>
-</div>
+<h2 class="page-header" id="validation">Validation des paramètres des contrôleurs</h2>
 <p>
     WebMotion propose une validation des paramètres des actions Java, sur la JSR 303.
     Pour plus de renseignement sur la JSR, vous pouvez consulter le site <a href="http://jcp.org/">jcp</a>.
@@ -711,9 +701,7 @@ public Render comment(@ValidGroup(MyGroup.class) Book book) {
         <span class="label label-warning">Attention</span>&nbsp; GlassFish supporte la validation sur les méthodes qu'à partir de la version 3.1.2.
 </div>
 
-<div class="page-header">
-    <h2 id="file">Chargement de fichiers</h2>
-</div>
+<h2 class="page-header" id="file">Chargement de fichiers</h2>
 <p>
     Les fichiers sont gérés comme des paramètres simples. WebMotion s'occupe avec l'aide
     de <a href="http://commons.apache.org/fileupload/">FileUpload</a> de faire le traitement 
@@ -755,10 +743,7 @@ public Render progress(FileProgressListener listener) {
 }
 </pre>
 
-<div class="page-header">
-    <h2 id="cookie">Gestion des cookies</h2>
-</div>
-
+<h2 class="page-header" id="cookie">Gestion des cookies</h2>
 <p>
     Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
     en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
