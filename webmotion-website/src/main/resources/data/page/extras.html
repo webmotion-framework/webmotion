@@ -282,7 +282,7 @@ public class Book extends IdentifiableEntity {
     </li>
 </ul>
 <p>
-    Seul le paramètre d'entityName est obligatoire pour faire fonctionner le 
+    Seul le paramètre <code>entityName</code> est obligatoire pour faire fonctionner le 
     contrôlleur pour la gestion du CRUD.
 </p>
 
@@ -366,8 +366,54 @@ public class Book extends IdentifiableEntity {
     de passer en paramètre des associations vers des entités en passant l'identifiant.
 </p>
 
+<strong>Action create</strong>
 <p>
-    Exemple de l'utilisation de l'action <code>query</code> :
+    Exemple d'utilisation de l'action <code>create</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/create     Jpa.create
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>create</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/create?title=WebMotion</code>.
+</p>
+
+<strong>Action find</strong>
+<p>
+    Exemple d'utilisation de l'action <code>find</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/{id}       Jpa.find
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>find</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/110E8400-E29B-11D4-A716-446655440000</code>.
+</p>
+
+<strong>Action query</strong>
+<p>
+    Exemple d'utilisation de l'action <code>query</code> :
+</p>
+<p>
+    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
 </p>
 <pre class="prettyprint">
 @Entity
@@ -385,23 +431,87 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-    Avec comme mapping pour l'utiliser sous la forme <code>/book?title=value</code> :
+    Contenu du mapping :
 </p>
 <pre>
+[filters]
+*                /book/*          Jpa.tx                     persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
 [actions]
-GET            /book             Jpa.query    entityName=org.debux.webmotion.entity.Book,name=findByTitle
+GET              /book/title/{name}             Jpa.query    name=findByTitle
 </pre>
 
 <p>
-    Vous pouvez créer des règles de mapping génériques :
+    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/title/WebMotion</code>.
+</p>
+
+<strong>Action update</strong>
+<p>
+    Exemple d'utilisation de l'action <code>update</code> :
+</p>
+
+<p>
+    Contenu du mapping :
 </p>
 <pre>
+[filters]
+*                /book/*                Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
 [actions]
-GET         /{entityName}?action={}        Jpa.all
+GET              /book/update?id={}     Jpa.update
 </pre>
 
 <p>
-    Sinon par type de méthode HTTP :
+    Ainsi vous pouvez utiliser l'action <code>update</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/update?id=110E8400-E29B-11D4-A716-446655440000&amp;title=WebMotion%20book</code>.
+</p>
+
+<strong>Action delete</strong>
+<p>
+    Exemple d'utilisation de l'action <code>delete</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*                Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/delete?id={}     Jpa.delete
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>delete</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/delete?id=110E8400-E29B-11D4-A716-446655440000</code>.
+</p>
+
+<strong>Action all</strong>
+<p>
+    Exemple d'utilisation de l'action <code>all</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /*                             Jpa.tx        persistenceUnitName=books,packageEntityName=org.debux.webmotion.entity
+
+[actions]
+GET              /{entityName}?action={}        Jpa.all
+</pre>
+
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>all</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/Book/action=delete&amp;id=110E8400-E29B-11D4-A716-446655440000</code>.
+</p>
+
+<p>
+    Une autre façon de faire des régles de mapping générique, est de définir pour chaque méthode HTTP une action :
 </p>
 <pre>
 [actions]
@@ -414,13 +524,15 @@ DELETE      /{entityName}/{id}             Jpa.delete
 
 <h4>Avancé</h4>
 
+<strong>Callback</strong>
 <p>
     L'ensemble des actions retourne un render de type JSON, il vous est possible 
     de préciser une url de callback en paramètre. Ce qui permet d'exécuter une 
-    action après une action de CRUD. Dans ce cas là le résultat est récupérable comme 
-    attribut de la request (un objet <code>entity</code> pour le create, 
-    l'update et le find, un objet <code>queryResult</code> pour la query et un 
-    objet <code>deleted</code> pour la suppression).
+    régle du fichier de mapping après une action du CRUD. Si vous précisez un 
+    callback, le résultat est récupérable comme  attribut de la request 
+    (un objet <code>entity</code> pour le create, l'update et le find, un 
+    objet <code>queryResult</code> pour la query et un  objet <code>deleted</code>
+    pour la suppression).
 </p>
 <p>
     Par exemple avec l'affichage du find dans la page <code>book.jsp</code>:
@@ -431,6 +543,14 @@ GET            /book             Jpa.find    callback=/book/view
 GET            /book/view        view:book.jsp
 </pre>
 
+<p>
+    Avec comme page <code>book.jsp</code> :
+</p>
+<pre class="prettyprint">
+Title : ${entity.title}
+</pre>
+
+<strong>Injection</strong>
 <p>
     Il est possible d'utiliser indépendament la gestion de transaction sans 
     la partie CRUD. Vous pouvez aussi créer vos propre action en vous reposant 
@@ -454,7 +574,6 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
     ...
 }
 </pre>
-
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
