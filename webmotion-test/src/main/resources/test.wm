@@ -35,6 +35,7 @@ server.listener.class=org.debux.webmotion.test.Listener
 /                                                       global.wm
 /                                                       injector.wm
 /                                                       converter.wm
+/                                                       note.wm
 
 [filters]
 *           /path/*                                     Filter.pass

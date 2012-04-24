@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 public class Showcase extends WebMotionController {
 
     protected static final int INDEX_EXTENSIONS = 6;
-    protected static final int INDEX_FILTERS = 15;
-    protected static final int INDEX_ERRORS = 21;
-    protected static final int INDEX_ACTIONS = 29;
+    protected static final int INDEX_FILTERS = 16;
+    protected static final int INDEX_ERRORS = 22;
+    protected static final int INDEX_ACTIONS = 30;
     
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
