@@ -66,6 +66,9 @@ public class Jpa extends Transactional {
         } else if ("query".equals(action)) {
             return query(dao, request, callback, name);
             
+        } else if ("exec".equals(action)) {
+            return exec(dao, request, callback, name);
+            
         } else if ("update".equals(action)) {
             return update(dao, request, callback, id);
             
@@ -107,8 +110,8 @@ public class Jpa extends Transactional {
     }
     
     /**
-     * Execute the query with as parameter the request parameter and identify by 
-     * a name.
+     * Execute the query as read with as parameter the request parameter and 
+     * identify by a name.
      * 
      * @param dao generic dao injected
      * @param request http request injected
@@ -121,6 +124,24 @@ public class Jpa extends Transactional {
         Parameters parameters = Parameters.create(parameterMap);
 
         List query = dao.query(name, parameters);
+        return render(callback, "queryResult", query);
+    }
+    
+    /**
+     * Execute the query as write with as parameter the request parameter and 
+     * identify by  a name.
+     * 
+     * @param dao generic dao injected
+     * @param request http request injected
+     * @param callback callback
+     * @param name query name
+     * @return callback with attribute queryResult or JSON
+     */
+    public Render exec(GenericDAO dao, HttpServletRequest request, String callback, String name) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Parameters parameters = Parameters.create(parameterMap);
+
+        int query = dao.exec(name, parameters);
         return render(callback, "queryResult", query);
     }
     

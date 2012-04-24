@@ -342,10 +342,6 @@ public class Book extends IdentifiableEntity {
         L'action prends en paramètre l'identifiant de l'entité (id).
     </li>
     <li>
-        <strong>query :</strong> pour l'exécution d'une requête. L'action prend en 
-        paramètre le nom de la requête (name) et les paramètres de la requête.
-    </li>
-    <li>
         <strong>update :</strong> pour la modification partiel d'une entité.
         L'action prend en paramètre l'identifiant (id) de l'entité et les attributs 
         en nom/valeur.
@@ -353,6 +349,14 @@ public class Book extends IdentifiableEntity {
     <li>
         <strong>delete :</strong> pour la suppression d'une entité. L'action 
         prend en paramètre l'identifant de l'entité (id).
+    </li>
+    <li>
+        <strong>query :</strong> pour l'exécution d'une requête en lecture. L'action prend en 
+        paramètre le nom de la requête (name) et les paramètres de la requête.
+    </li>
+    <li>
+        <strong>exec :</strong> pour l'exécution d'une requête en écriture (delete ou update).
+        L'action prend en paramètre le nom de la requête (name) et les paramètres de la requête.
     </li>
     <li>
         <strong>all :</strong> permet de faire l'ensemble des actions en la 
@@ -408,44 +412,6 @@ GET              /book/{id}       Jpa.find
     <code>http://serverName:port/contextPath/book/110E8400-E29B-11D4-A716-446655440000</code>.
 </p>
 
-<strong>Action query</strong>
-<p>
-    Exemple d'utilisation de l'action <code>query</code> :
-</p>
-<p>
-    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
-</p>
-<pre class="prettyprint">
-@Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "findByTitle",
-        query = "SELECT b FROM Book b WHERE b.title=:title"
-})
-public class Book extends IdentifiableEntity {
-    @Basic
-    protected String title;
-
-    ... setters/getters
-}
-</pre>
-
-<p>
-    Contenu du mapping :
-</p>
-<pre>
-[filters]
-*                /book/*          Jpa.tx                     persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
-
-[actions]
-GET              /book/title/{name}             Jpa.query    name=findByTitle
-</pre>
-
-<p>
-    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'url suivant 
-    <code>http://serverName:port/contextPath/book/title/WebMotion</code>.
-</p>
-
 <strong>Action update</strong>
 <p>
     Exemple d'utilisation de l'action <code>update</code> :
@@ -488,6 +454,85 @@ GET              /book/delete?id={}     Jpa.delete
     <code>http://serverName:port/contextPath/book/delete?id=110E8400-E29B-11D4-A716-446655440000</code>.
 </p>
 
+<strong>Action query</strong>
+<p>
+    Exemple d'utilisation de l'action <code>query</code> :
+</p>
+<p>
+    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+</p>
+<pre class="prettyprint">
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "findByTitle",
+        query = "SELECT b FROM Book b WHERE b.title=:title"
+})
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    ... setters/getters
+}
+</pre>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx                     persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/title/{title}             Jpa.query    name=findByTitle
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/title/WebMotion</code>.
+</p>
+
+<strong>Action exec</strong>
+<p>
+    Exemple d'utilisation de l'action <code>exec</code> :
+</p>
+<p>
+    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+</p>
+<pre class="prettyprint">
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "updateNote",
+        query = "UPDATE Book b SET note = :note WHERE b.id=:id"
+})
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    @Basic
+    protected int note;
+
+    ... setters/getters
+}
+</pre>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*                        Jpa.tx      persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/{id}?note={}             Jpa.exec    name=updateNote
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'url suivant 
+    <code>http://serverName:port/contextPath/book/110E8400-E29B-11D4-A716-446655440000?note=17</code>.
+</p>
+
 <strong>Action all</strong>
 <p>
     Exemple d'utilisation de l'action <code>all</code> :
@@ -517,6 +562,7 @@ GET              /{entityName}?action={}        Jpa.all
 [actions]
 PUT         /{entityName}                  Jpa.create
 GET         /{entityName}?query={name}     Jpa.query
+GET         /{entityName}?exec={name}      Jpa.exec
 GET         /{entityName}/{id}             Jpa.find
 POST        /{entityName}/{id}             Jpa.update
 DELETE      /{entityName}/{id}             Jpa.delete
@@ -529,11 +575,14 @@ DELETE      /{entityName}/{id}             Jpa.delete
     L'ensemble des actions retourne un render de type JSON, il vous est possible 
     de préciser une url de callback en paramètre. Ce qui permet d'exécuter une 
     régle du fichier de mapping après une action du CRUD. Si vous précisez un 
-    callback, le résultat est récupérable comme  attribut de la request 
-    (un objet <code>entity</code> pour le create, l'update et le find, un 
-    objet <code>queryResult</code> pour la query et un  objet <code>deleted</code>
-    pour la suppression).
+    callback, le résultat est récupérable comme  attribut de la request :
 </p>
+<ul>
+    <li>pour l'action create, update et find un object <code>entity</code> avec comme valeur l'entité</li>
+    <li>pour l'action deleted un objet <code>deleted</code> précisant si la suppression a bien été effectué ou non</li>
+    <li>pour l'action query un objet <code>queryResult</code> avec le résultat de la requête</li>
+    <li>pour l'action exec un objet <code>queryResult</code> avec le nombre d'entités impactés</li>
+</ul>
 <p>
     Par exemple avec l'affichage du find dans la page <code>book.jsp</code>:
 </p>

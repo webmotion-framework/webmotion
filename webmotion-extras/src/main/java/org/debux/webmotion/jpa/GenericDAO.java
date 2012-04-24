@@ -273,7 +273,7 @@ public class GenericDAO {
     }
     
     /**
-     * Execute a query named in entity.
+     * Execute a query named as read in entity.
      * 
      * @param name query name
      * @param parameters parameters
@@ -281,7 +281,32 @@ public class GenericDAO {
      */
     public List query(String name, Parameters parameters) {
         Query query = manager.createNamedQuery(name);
-        
+        extract(query, parameters);
+        List list = query.getResultList();
+        return list;
+    }
+
+    /**
+     * Execute a query named as write in entity.
+     * 
+     * @param name query name
+     * @param parameters parameters
+     * @return the number of entities updated or deleted 
+     */
+    public int exec(String name, Parameters parameters) {
+        Query query = manager.createNamedQuery(name);
+        extract(query, parameters);
+        int executeUpdate = query.executeUpdate();
+        return executeUpdate;
+    }
+    
+    /**
+     * Set parameter in the query.
+     * 
+     * @param query query
+     * @param parameters parameters
+     */
+    protected void extract(Query query, Parameters parameters) {
         Set<Parameter<?>> queryParameters = query.getParameters();
         for (Parameter<?> parameter : queryParameters) {
             String parameterName = parameter.getName();
@@ -290,8 +315,6 @@ public class GenericDAO {
             List<Object> converted = Arrays.asList(values);
             query.setParameter(parameterName, converted);
         }
-        
-        return query.getResultList();
     }
     
     /**

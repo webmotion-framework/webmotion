@@ -51,6 +51,10 @@ import javax.persistence.Transient;
     @NamedQuery(
         name = "findByUsernames",
         query = "SELECT c FROM Comment c where c.username IN (:usernames)"
+    ),
+    @NamedQuery(
+        name = "updateNote",
+        query = "UPDATE Comment c SET c.note = :note"
     )
 })
 public class Comment extends IdentifiableEntity {

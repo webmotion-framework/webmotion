@@ -48,9 +48,9 @@ public class GenericDAOTest {
     protected EntityTransaction transaction;
     protected GenericDAO dao;
     
-    protected Comment comment1;
-    protected Comment comment2;
-    protected Comment comment3;
+    protected String comment1Id;
+    protected String comment2Id;
+    protected String comment3Id;
     
     @BeforeMethod
     public void setUp() {
@@ -63,25 +63,31 @@ public class GenericDAOTest {
         transaction = manager.getTransaction();
         transaction.begin();
         
-        comment1 = new Comment();
+        Comment comment1 = new Comment();
         comment1.setUsername("john");
         comment1.setComment("bla bla");
         comment1.setNote(19);
         manager.persist(comment1);
+        comment1Id = comment1.getId();
         
-        comment2 = new Comment();
+        Comment comment2 = new Comment();
         comment2.setUsername("john");
         comment2.setComment("bla bla");
         comment2.setNote(13);
         manager.persist(comment2);
+        comment2Id = comment2.getId();
         
-        comment3 = new Comment();
+        Comment comment3 = new Comment();
         comment3.setUsername("jack");
         comment3.setComment("bla bla");
         comment3.setNote(20);
         manager.persist(comment3);
+        comment3Id = comment3.getId();
         
         transaction.commit();
+        
+        manager.clear();
+        
         transaction.begin();
     }
     
@@ -100,8 +106,8 @@ public class GenericDAOTest {
                 .add("tags", "java")
                 .add("tags", "jee")
                 .add("tags", "wm")
-                .add("parent", comment1.getId())
-                .add("threads", new String[]{comment2.getId(), comment3.getId()})
+                .add("parent", comment1Id)
+                .add("threads", new String[]{comment2Id, comment3Id})
                 .add("unused", "unused");
         return parameters;
     }
@@ -127,7 +133,7 @@ public class GenericDAOTest {
     
     @Test
     public void testFind() {
-        IdentifiableEntity entity = dao.find(comment1.getId());
+        IdentifiableEntity entity = dao.find(comment1Id);
         AssertJUnit.assertNotNull(entity);
     }
     
@@ -139,12 +145,10 @@ public class GenericDAOTest {
     
     @Test
     public void testDelete() {
-        String id = comment1.getId();
-        
-        boolean deleted = dao.delete(id);
+        boolean deleted = dao.delete(comment1Id);
         AssertJUnit.assertTrue(deleted);
         
-        Comment entity = manager.find(Comment.class, id);
+        Comment entity = (Comment) dao.find(comment1Id);
         AssertJUnit.assertNull(entity);
     }
     
@@ -159,15 +163,13 @@ public class GenericDAOTest {
     
     @Test
     public void testUpdate() {
-        String id = comment1.getId();
-        
         Parameters parameters = Parameters.create()
                 .add("username", "test");
         
-        Comment entity = (Comment) dao.update(id, parameters);
+        Comment entity = (Comment) dao.update(comment1Id, parameters);
         AssertJUnit.assertEquals("test", entity.getUsername());
         
-        entity = (Comment) dao.find(id);
+        entity = (Comment) dao.find(comment1Id);
         AssertJUnit.assertEquals("test", entity.getUsername());
     }
     
@@ -203,6 +205,17 @@ public class GenericDAOTest {
                 .add("usernames", "tutu");
         List result = dao.query("findByUsernames", parameters);
         AssertJUnit.assertEquals(3, result.size());
+    }
+    
+    @Test
+    public void testParametersExec() {
+        Parameters parameters = Parameters.create()
+                .add("note", 12);
+        int result = dao.exec("updateNote", parameters);
+        AssertJUnit.assertEquals(3, result);
+        
+        Comment entity = (Comment) dao.find(comment1Id);
+        AssertJUnit.assertEquals(12, entity.getNote());
     }
     
 }
