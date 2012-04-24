@@ -34,6 +34,7 @@ GET         /{entityName}?action={}        Jpa.all
 
 PUT         /{entityName}                  Jpa.create
 GET         /{entityName}?query={name}     Jpa.query
+GET         /{entityName}?exec={name}      Jpa.exec
 GET         /{entityName}/{id}             Jpa.find
 POST        /{entityName}/{id}             Jpa.update
 DELETE      /{entityName}/{id}             Jpa.delete
