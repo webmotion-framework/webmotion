@@ -573,9 +573,10 @@ DELETE      /{entityName}/{id}             Jpa.delete
 <strong>Callback</strong>
 <p>
     L'ensemble des actions retourne un render de type JSON, il vous est possible 
-    de préciser une url de callback en paramètre. Ce qui permet d'exécuter une 
-    régle du fichier de mapping après une action du CRUD. Si vous précisez un 
-    callback, le résultat est récupérable comme  attribut de la request :
+    de préciser une url de callback en paramètre (de l'action ou du filtre). 
+    Ce qui permet d'exécuter une régle du fichier de mapping après une action 
+    du CRUD. Si vous précisez un callback, le résultat est récupérable comme 
+    attribut de la requête :
 </p>
 <ul>
     <li>pour l'action create, update et find un object <code>entity</code> avec comme valeur l'entité</li>
