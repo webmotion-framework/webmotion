@@ -88,14 +88,13 @@ public abstract class Transactional extends WebMotionFilter {
         }
         
         // Create manager
-        EntityManager manager = factory.createEntityManager();
-        request.setAttribute(CURRENT_ENTITY_MANAGER, manager);
+        EntityManager manager = (EntityManager) request.getAttribute(CURRENT_ENTITY_MANAGER);
+        if (manager == null) {
+            manager = factory.createEntityManager();
+            request.setAttribute(CURRENT_ENTITY_MANAGER, manager);
+        }
         
-        // Create transaction
-        EntityTransaction transaction = manager.getTransaction();
-        request.setAttribute(CURRENT_ENTITY_TRANSACTION, transaction);
-        
-        // Create generic DAO
+        // Create generic DAO each time if callback an action on an other entity
         if (entityName != null) {
             String fullEntityName = null;
             if (packageEntityName != null) {
@@ -106,22 +105,35 @@ public abstract class Transactional extends WebMotionFilter {
             
             GenericDAO genericDAO = new GenericDAO(manager, fullEntityName);
             request.setAttribute(CURRENT_GENERIC_DAO, genericDAO);
+            
+        } else {
+            request.setAttribute(CURRENT_GENERIC_DAO, null);
         }
         
-        transaction.begin();
+        // Create transaction
+        EntityTransaction transaction = (EntityTransaction) request.getAttribute(CURRENT_ENTITY_TRANSACTION);
+        if (transaction == null) {
+            transaction = manager.getTransaction();
+            request.setAttribute(CURRENT_ENTITY_TRANSACTION, transaction);
+        
+            transaction.begin();
 
-        try {
-            doProcess();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
+            try {
+                doProcess();
+            } catch (Exception e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
             }
-            throw e;
-        }
 
-        if (transaction.isActive()) {
-            transaction.commit();
+            if (transaction.isActive()) {
+                transaction.commit();
+            }
+            manager.close();
+            
+        } else {
+            doProcess();
         }
-        manager.close();
     }
 }
