@@ -36,12 +36,17 @@
                 <tr>
                     <td>Comment</td>
                     <td>Likes</td>
+                    <td>Actions</td>
                 </tr>
             </thead>
             <c:forEach items="${queryResult}" var="comment">
             <tr>
-                <td>${comment.content}</td>
+                <td><pre>${comment.content}</pre></td>
                 <td>${comment.likes}</td>
+                <td>
+                    <a href="<c:url value="./incLike?id=${comment.id}"/>">Like</a> 
+                    <a href="<c:url value="./delete?id=${comment.id}"/>">Delete</a>
+                </td>
             </tr>
             </c:forEach>
         </table>

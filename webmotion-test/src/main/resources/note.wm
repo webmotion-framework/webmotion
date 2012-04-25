@@ -27,9 +27,10 @@ package.views=WEB-INF/org.debux.webmotion.test
 server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
 
 [filters]
-*           /note/*                            Jpa.tx          persistenceUnitName=notes,entityName=org.debux.webmotion.test.Note,callback=/note/list
+*           /note/*                            Jpa.tx          persistenceUnitName=notes,entityName=org.debux.webmotion.test.Note,callback=/note
 
 [actions]
+GET        /note                               url:/note/list
 GET        /note/list                          Jpa.query       name=findAll,callback=/note/view
 GET        /note/view                          view:note.jsp
 GET        /note/create                        Jpa.create
