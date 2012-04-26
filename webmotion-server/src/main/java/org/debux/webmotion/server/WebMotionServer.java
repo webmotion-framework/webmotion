@@ -65,7 +65,7 @@ public class WebMotionServer implements Filter {
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
             
     /** Test if the path contains a extension */
-    protected static Pattern patternFile = Pattern.compile("\\..{2,4}$");
+    protected static Pattern patternFile = Pattern.compile("\\.\\w{2,4}$");
 
     /** Current application context */
     protected ServerContext serverContext;
@@ -141,6 +141,9 @@ public class WebMotionServer implements Filter {
         String contextPath = httpServletRequest.getContextPath();
         String url = StringUtils.substringAfter(uri, contextPath);
         
+        Mapping mapping = serverContext.getMapping();
+        Config config = mapping.getConfig();
+        
         log.info("Pass in filter = " + url);
         
         if (url.startsWith("/deploy")) {
@@ -151,7 +154,7 @@ public class WebMotionServer implements Filter {
             log.info("Is static");
             doResource(httpServletRequest, httpServletResponse);
             
-        } else if (patternFile.matcher(url).find()) {
+        } else if (config.isStaticAutodetect() && patternFile.matcher(url).find()) {
             // css js html png jpg jpeg xml jsp jspx ...
             log.info("Is file");
             chain.doFilter(request, response);

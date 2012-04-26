@@ -37,6 +37,7 @@ CONFIG_SERVER_CONTROLLER_SCOPE:'server.controller.scope';
 CONFIG_SERVER_LISTENER_CLASS:'server.listener.class';
 CONFIG_SERVER_MAIN_HANDLER_CLASS:'server.main.handler.class';
 CONFIG_SERVER_SECRET:'server.secret';
+CONFIG_STATIC_AUTODETECT:'server.static.autodetect';
 
 ACTION:'action:';
 ACTION_ASYNC:'async:';

@@ -175,6 +175,10 @@ public class BasicMappingParser extends MappingParser {
                 } else if (section == 4 && rule.startsWith(Config.SERVER_SECRET)) {
                     String value = extractConfig(Config.SERVER_SECRET, rule);
                     config.setSecret(value);
+                    
+                } else if (section == 4 && rule.startsWith(Config.SERVER_STATIC_AUTODETECT)) {
+                    String value = extractConfig(Config.SERVER_STATIC_AUTODETECT, rule);
+                    config.setJavacDebug(Boolean.valueOf(value));
                 }
                 
                 line ++;
