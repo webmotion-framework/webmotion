@@ -176,8 +176,6 @@
                                     <ul>
                                         <li><a id="blog" href="./blog">Action</a></li>
                                         <li><a id="stats" href="./stats">Pattern</a></li>
-                                        <li><a id="spring" href="./spring">Spring</a></li>
-                                        <li><a id="sitemesh" href="./sitemesh">SiteMesh</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -220,10 +218,6 @@
                                         <li><a id="cookie_object" href="./cookie_object">Cookie manager<br/>(object)</a> <span class="label label-info">New</span></li>
                                         <li><a id="shop" href="./shop">Validation</a></li>
                                         <li><a id="async" href="./async">Async</a></li>
-                                    </ul>
-                                </li>
-                                <li><strong>File</strong>
-                                    <ul>
                                         <li><a id="file" href="./file">File</a></li>
                                         <li><a id="upload" href="./upload">File with progress</a></li>
                                     </ul>
@@ -234,6 +228,13 @@
                                         <li><a id="converter" href="./converter">Converter</a> <span class="label label-info">New</span></li>
                                         <li><a id="injector" href="./injector">Injector</a> <span class="label label-info">New</span></li>
                                         <li><a id="global" href="./global">Global controller</a> <span class="label label-info">New</span></li>
+                                    </ul>
+                                </li>
+                                <li><strong>Extras</strong>
+                                    <ul>
+                                        <li><a id="spring" href="./spring">Spring</a></li>
+                                        <li><a id="sitemesh" href="./sitemesh">SiteMesh</a> <span class="label label-info">New</span></li>
+                                        <li><a id="jpa" href="./jpa">Hibernate/JPA</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>

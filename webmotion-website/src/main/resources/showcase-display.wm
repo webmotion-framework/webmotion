@@ -83,3 +83,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /global                                     Showcase.global
 *           /injector                                   Showcase.injector
 *           /converter                                  Showcase.converter
+*           /jpa                                        Showcase.jpa

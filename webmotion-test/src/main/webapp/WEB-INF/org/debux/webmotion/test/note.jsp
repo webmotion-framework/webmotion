@@ -31,6 +31,11 @@
 
     <body>
         <h1>Notes</h1>
+        <form method="GET" action="<c:url value="./create"/>">
+            <textarea name="content" required="true"></textarea>
+            <input type="submit" value="Create"/>
+        </form>
+            
         <table>
             <thead>
                 <tr>
@@ -50,10 +55,5 @@
             </tr>
             </c:forEach>
         </table>
-        
-        <form method="GET" action="<c:url value="./create"/>">
-            <textarea name="content" required="true"></textarea>
-            <input type="submit" value="Create"/>
-        </form>
     </body>
 </html>

@@ -74,6 +74,9 @@ public class Showcase extends WebMotionController {
         if(content.contains("# #L%\n###\n")) {
             content = StringUtils.substringAfter(content, "# #L%\n###\n");
         }
+        if(content.contains("<%--\n  #%L")) {
+            content = StringUtils.substringAfter(content, "  #L%\n  --%>\n");
+        }
         return content;
     }
     
@@ -971,7 +974,6 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
-
         
     public Render converter() throws IOException {
         return renderView("showcase.jsp",  
@@ -982,6 +984,22 @@ public class Showcase extends WebMotionController {
                     new FileContent("/src/main/resources/mapping", getFile("/converter.wm")),
                     getJavaContent("ConverterListener.java"),
                     getJavaContent("JsonElementAction.java")
+                )
+        );
+    }
+
+    public Render jpa() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/note"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, false, false, false)
+                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 7, 1)),
+                    new FileContent("/src/main/resources/note.wm", getFile("note.wm")),
+                    getJavaContent("Note.java"),
+                    getPageContent("note.jsp")
                 )
         );
     }
