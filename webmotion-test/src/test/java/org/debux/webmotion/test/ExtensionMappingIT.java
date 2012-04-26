@@ -25,6 +25,7 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,4 +77,26 @@ public class ExtensionMappingIT extends AbstractIT {
         AssertJUnit.assertTrue(result.contains("SiteMesh example site"));
     }
     
+    @Test
+    public void noteCreate() throws IOException {
+        String url = getAbsoluteUrl("note/create?content=test");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("test"));
+        
+        String id = StringUtils.substringBetween(result, "?id=", "\"");
+        url = getAbsoluteUrl("note/incLike?id=" + id);
+        request = new HttpGet(url);
+     
+        result = execute(request);
+        AssertJUnit.assertTrue(result.contains("<td>1</td>"));
+        
+        url = getAbsoluteUrl("note/delete?id=" + id);
+        request = new HttpGet(url);
+     
+        result = execute(request);
+        AssertJUnit.assertFalse(result.contains(id));
+    }
+
 }
