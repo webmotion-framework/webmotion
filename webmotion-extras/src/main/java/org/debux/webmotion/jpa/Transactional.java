@@ -85,6 +85,7 @@ public abstract class Transactional extends WebMotionFilter {
         EntityManagerFactory factory = factories.get(persistenceUnitName);
         if (factory == null) {
             factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+            factories.put(persistenceUnitName, factory);
         }
         
         // Create manager
