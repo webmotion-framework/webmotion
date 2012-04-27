@@ -38,14 +38,16 @@
 
 <p>
     The filter redirects the requests as follows: if the path of the URL does not contain an extension
-    (ie if the URL does not ends with <code>.*</code>)
+    (ie if the URL does not ends with <code>.\w{2,4}$</code>)
     then it redirects to an action which has been defined in the mapping file.
     Otherwise it redirects to a static resource.
 </p>
 
 <p>
     Static data access requests may be redirected wrongly to the action servlet.
-    To avoid this case, you just need to call explicitly the desired servlet.
+    To avoid this case, you just need to call explicitly the desired servlet or 
+    deactivate the auto detection. For more information, please refer to 
+    the <a href="mapping#config">Mapping - Config</a> section.
 </p>
 
 <p>

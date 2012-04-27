@@ -38,14 +38,15 @@
 
 <p>
     Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL ne 
-    contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.*</code>
+    contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.\w{2,4}$</code>
     alors il redirige vers une action definie dans le mapping sinon il redirige 
     vers une ressource statique.
 </p>
 
 <p>
     Il est possible que des requêtes d'accès à des données statiques passent à tort dans la servlet d'actions.
-    Pour éviter ce cas, il suffit d'appeller explicitement la servlet souhaitée
+    Pour éviter ce cas, il suffit d'appeller explicitement la servlet souhaitée ou désactiver la détection. 
+    Pour plus de renseignements, veuillez vous reporter à la section <a href="mapping#config">Mapping - Config</a>.
 </p>
 
 <p>

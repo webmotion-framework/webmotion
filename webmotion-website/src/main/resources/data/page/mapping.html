@@ -100,6 +100,7 @@
     <li>server.controller.scope</li>
     <li>server.listener.class</li>
     <li>server.main.handler.class</li>
+    <li>server.static.autodetect</li>
 </ul>
 
 <h3>package.views</h3>
@@ -328,6 +329,18 @@ public class Listener implements WebMotionServerListener {
     <span class="label label-info">Exemple</span> Définition d'une clé :
 </p>
 <pre>server.secret=012345678901234567890123456789_</pre>
+
+<h3>server.static.autodetect</h3>
+<p>
+    La propriété <strong>server.static.autodetect</strong> permet de définir si WebMotion se charge de la 
+    détection des ressources static de l'application. Si l'option est désactivée,
+    vous devez préciser <code>/static</code> dans vos urls pour accéder aux fichiers
+    de votre <code>webapps</code> . Les valeurs possible sont <code>true</code> ou <code>false</code>.
+    Pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#servlet">Avancé - Architecture des servlets</a>.
+</p>
+<p>
+    <span class="label">Default</span> Par défaut, la valeur server.static.autodetect est <code>true</code>.
+</p>
 
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
 <p>
