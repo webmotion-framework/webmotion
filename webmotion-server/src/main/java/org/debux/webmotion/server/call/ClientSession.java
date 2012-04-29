@@ -29,7 +29,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -39,6 +38,7 @@ import javax.persistence.Transient;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.debux.webmotion.server.call.CookieManger.CookieEntity;
 
 /**
@@ -46,12 +46,13 @@ import org.debux.webmotion.server.call.CookieManger.CookieEntity;
  */
 public class ClientSession implements HttpSession {
 
+    public static final int DEFAULT_TIMEOUT = 2 * 60 * 60; // 2h
+    
     public static final String SESSION_CONTEXT_COOKIE_NAME = "wm_session_context";
     public static final String ATTRIBUTES_COOKIE_NAME = "wm_attributes";
     
     protected JsonParser parser = new JsonParser();
     protected Gson gson = new Gson();
-    protected CookieManger manger;
         
     protected HttpContext context;
     protected ClientSessionContext sessionContext;
@@ -68,8 +69,10 @@ public class ClientSession implements HttpSession {
         protected boolean newly;
 
         public ClientSessionContext() {
+            id = RandomStringUtils.random(32, true, true);
             newly = true;
             creationTime = System.currentTimeMillis();
+            maxInactiveInterval = DEFAULT_TIMEOUT;
         }
 
         public long getCreationTime() {
@@ -113,23 +116,65 @@ public class ClientSession implements HttpSession {
         }
     }
 
-    public ClientSession(HttpContext context, String id) {
+    public ClientSession(HttpContext context) {
         this.context = context;
-        this.manger = new CookieManger(context, id, true, true);
         
-        CookieEntity sessionContextCookie = this.manger.get(SESSION_CONTEXT_COOKIE_NAME);
-        this.sessionContext = sessionContextCookie.getValue(ClientSessionContext.class);
-        if (this.sessionContext == null) {
-            this.sessionContext = new ClientSessionContext();
-        }
+        int maxInactiveInterval = sessionContext.getMaxInactiveInterval() * 1000;
+        long lastAccessedTime = sessionContext.getLastAccessedTime();
+        long currentAccessedTime = System.currentTimeMillis();
         
-        CookieEntity attributesCookie = this.manger.get(ATTRIBUTES_COOKIE_NAME);
-        String value = attributesCookie.getValue();
-        if (value == null) {
-            this.attributes = new JsonObject();
+        if (maxInactiveInterval <= 0 || 
+                maxInactiveInterval + lastAccessedTime < currentAccessedTime) {
+            sessionContext.setLastAccessedTime(currentAccessedTime);
+            attributes = readAttributes(sessionContext);
         } else {
-            this.attributes = this.parser.parse(value).getAsJsonObject();
+            invalidate();
         }
+    }
+    
+    protected ClientSessionContext readSessionContext() {
+        CookieManger manger = context.getCookieManger();
+        CookieEntity cookie = manger.get(SESSION_CONTEXT_COOKIE_NAME);
+        
+        ClientSessionContext result = null;
+        if (cookie != null) {
+            result = cookie.getValue(ClientSessionContext.class);
+        } else {
+            result = new ClientSessionContext();
+        }
+        return result;
+    }
+    
+    protected void writeSessionContext(ClientSessionContext sessionContext) {
+        CookieManger manger = context.getCookieManger();
+        CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
+        cookie.setPath("/");
+        cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
+        manger.add(cookie);
+    }
+    
+    protected JsonObject readAttributes(ClientSessionContext sessionContext) {
+        String id = sessionContext.getId();
+        CookieManger manger = context.getCookieManger(id, true, true);
+        CookieEntity cookie = manger.get(ATTRIBUTES_COOKIE_NAME);
+        
+        JsonObject result = null;
+        if (cookie != null) {
+            String value = cookie.getValue();
+            result = parser.parse(value).getAsJsonObject();
+        } else {
+            result = new JsonObject();
+        }
+        return result;
+    }
+    
+    protected void writeAttributes(ClientSessionContext sessionContext, JsonObject attributes) {
+        String id = sessionContext.getId();
+        CookieManger manger = context.getCookieManger(id, true, true);
+        CookieEntity cookie = manger.create(ATTRIBUTES_COOKIE_NAME, attributes);
+        cookie.setPath("/");
+        cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
+        manger.add(cookie);
     }
     
     @Override
