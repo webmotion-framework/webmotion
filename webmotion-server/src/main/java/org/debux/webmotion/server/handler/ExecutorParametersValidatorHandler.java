@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion in action
+ * Webmotion server
  * *
  * $Id$
  * $HeadURL$
