@@ -99,6 +99,9 @@ public class HttpContext {
     /** Helper to manage cookies */
     protected CookieManger cookieManger;
     
+    /** Helper to manage session on the client*/
+    protected ClientSession clientSession;
+    
     /** Information on error contained in request */
     protected ErrorData errorData;
     
@@ -299,6 +302,7 @@ public class HttpContext {
         this.response = response;
         
         this.cookieManger = new CookieManger(this);
+        this.clientSession = null;
         this.errorData = new ErrorData();
         this.flashMessages = new FlashMessages();
         this.extensionPath = "";
@@ -341,12 +345,23 @@ public class HttpContext {
     public CookieManger getCookieManger() {
         return cookieManger;
     }
-    
+
     /**
      * @return helper to manage secure cookie
      */
     public CookieManger getCookieManger(String username, boolean encrypt, boolean ssl) {
         return new CookieManger(this, username, encrypt, ssl);
+    }
+    
+    /**
+     * @return helper to manage session on client
+     */
+    public ClientSession getClientSession() {
+        if (clientSession == null) {
+            // Lazy instanciation to not create cookie if not uses the session
+            clientSession = new ClientSession(this);
+        }
+        return clientSession;
     }
     
     /**

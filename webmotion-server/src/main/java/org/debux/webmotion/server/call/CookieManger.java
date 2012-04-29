@@ -409,7 +409,10 @@ public class CookieManger {
         public <T> Collection<T> getValues(Class<T> clazz) {
             Class arrayClass = Array.newInstance(clazz, 0).getClass();
             T[] fromJson = (T[]) gson.fromJson(this.value, arrayClass);
-            return Arrays.asList(fromJson);
+            if (fromJson != null) {
+                return Arrays.asList(fromJson);
+            }
+            return null;
         }
     }
     

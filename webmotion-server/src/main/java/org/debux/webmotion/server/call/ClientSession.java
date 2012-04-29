@@ -28,7 +28,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -42,6 +45,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.debux.webmotion.server.call.CookieManger.CookieEntity;
 
 /**
+ * Manage a client session with the cookies. You can easily scale your server.
+ * 
  * @author jruchaud
  */
 public class ClientSession implements HttpSession {
@@ -72,6 +77,7 @@ public class ClientSession implements HttpSession {
             id = RandomStringUtils.random(32, true, true);
             newly = true;
             creationTime = System.currentTimeMillis();
+            lastAccessedTime = creationTime;
             maxInactiveInterval = DEFAULT_TIMEOUT;
         }
 
@@ -116,20 +122,38 @@ public class ClientSession implements HttpSession {
         }
     }
 
+    /**
+     * Constructor use for the tests.
+     */
+    protected ClientSession() {
+        sessionContext = new ClientSessionContext();
+        attributes = new JsonObject();
+    }
+    
+    /**
+     * Attach the client session on the context.
+     * @param context 
+     */
     public ClientSession(HttpContext context) {
         this.context = context;
         
-        int maxInactiveInterval = sessionContext.getMaxInactiveInterval() * 1000;
-        long lastAccessedTime = sessionContext.getLastAccessedTime();
-        long currentAccessedTime = System.currentTimeMillis();
+        sessionContext = readSessionContext();
         
-        if (maxInactiveInterval <= 0 || 
-                maxInactiveInterval + lastAccessedTime < currentAccessedTime) {
+        long currentAccessedTime = System.currentTimeMillis();
+        if (isExpired(currentAccessedTime)) {
+            invalidate();
+        } else {
             sessionContext.setLastAccessedTime(currentAccessedTime);
             attributes = readAttributes(sessionContext);
-        } else {
-            invalidate();
         }
+    }
+    
+    protected boolean isExpired(long currentAccessedTime) {
+        int maxInactiveInterval = sessionContext.getMaxInactiveInterval() * 1000;
+        long lastAccessedTime = sessionContext.getLastAccessedTime();
+        
+        return maxInactiveInterval > 0 && 
+                maxInactiveInterval + lastAccessedTime < currentAccessedTime;
     }
     
     protected ClientSessionContext readSessionContext() {
@@ -145,33 +169,33 @@ public class ClientSession implements HttpSession {
         return result;
     }
     
-    protected void writeSessionContext(ClientSessionContext sessionContext) {
-        CookieManger manger = context.getCookieManger();
-        CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
-        cookie.setPath("/");
-        cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
-        manger.add(cookie);
-    }
-    
     protected JsonObject readAttributes(ClientSessionContext sessionContext) {
         String id = sessionContext.getId();
         CookieManger manger = context.getCookieManger(id, true, true);
         CookieEntity cookie = manger.get(ATTRIBUTES_COOKIE_NAME);
         
-        JsonObject result = null;
+        JsonObject result = new JsonObject();
         if (cookie != null) {
             String value = cookie.getValue();
-            result = parser.parse(value).getAsJsonObject();
-        } else {
-            result = new JsonObject();
+            if (value != null) {
+                result = parser.parse(value).getAsJsonObject();
+            }
         }
         return result;
     }
     
-    protected void writeAttributes(ClientSessionContext sessionContext, JsonObject attributes) {
+    public void write() {
+        CookieManger manger = context.getCookieManger();
+        CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
+        cookie.setPath("/");
+        cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
+        manger.add(cookie);
+        
         String id = sessionContext.getId();
-        CookieManger manger = context.getCookieManger(id, true, true);
-        CookieEntity cookie = manger.create(ATTRIBUTES_COOKIE_NAME, attributes);
+        manger = context.getCookieManger(id, true, true);
+        
+        String toJson = gson.toJson(attributes);
+        cookie = manger.create(ATTRIBUTES_COOKIE_NAME, toJson);
         cookie.setPath("/");
         cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
         manger.add(cookie);
@@ -207,12 +231,56 @@ public class ClientSession implements HttpSession {
         return sessionContext.getMaxInactiveInterval();
     }
 
+    /**
+     * Return only JsonElement use getAttribute and getAttributes with class as 
+     * parameter to get a value.
+     */
     @Override
     public Object getAttribute(String name) {
-        // Return only JsonElement
-        return attributes.get(name);
+        JsonElement value = attributes.get(name);
+        if (value == null) {
+            return value;
+            
+        } else if (value.isJsonPrimitive()) {
+            JsonPrimitive primitive = value.getAsJsonPrimitive();
+            if (primitive.isString()) {
+                return primitive.getAsString();
+                
+            } else if (primitive.isBoolean()) {
+                return primitive.getAsBoolean();
+                
+            } else if (primitive.isNumber()) {
+                return primitive.getAsDouble();
+            }
+            
+        } else if (value.isJsonArray()) {
+            return value.getAsJsonArray();
+            
+        } else if (value.isJsonObject()) {
+            return value.getAsJsonObject();
+            
+        } else if (value.isJsonNull()) {
+            return value.getAsJsonNull();
+        } 
+        return value;
     }
 
+    public <T> T getAttribute(String name, Class<T> clazz) {
+        JsonElement value = attributes.get(name);
+        T fromJson = gson.fromJson(value, clazz);
+        return fromJson;
+    }
+    
+    public <T> Collection<T> getAttributes(String name, Class<T> clazz) {
+        JsonElement value = attributes.get(name);
+        Class arrayClass = Array.newInstance(clazz, 0).getClass();
+        T[] fromJson = (T[]) gson.fromJson(value, arrayClass);
+        if (fromJson != null) {
+            return Arrays.asList(fromJson);
+        }
+        return null;
+    }
+    
     @Override
     public Object getValue(String name) {
         return getAttribute(name);

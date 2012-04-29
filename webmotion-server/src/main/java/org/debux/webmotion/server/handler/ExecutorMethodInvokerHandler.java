@@ -52,6 +52,7 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.call.ClientSession;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
@@ -329,6 +330,14 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         }
         
         public void processRender(Mapping mapping, Call call) {
+            // Store the session
+            // TODO: jru 20122904 Move store session
+            HttpContext context = call.getContext();
+            ClientSession clientSession = context.getClientSession();
+            if (clientSession != null) { // true if the session uses
+                clientSession.write();
+            }
+        
             try {
                 Render render = call.getRender();
                 log.info("Render = " + render);
@@ -345,7 +354,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
 
             if (call.isFileUploadRequest()) {
-                HttpContext context = call.getContext();
                 HttpSession session = context.getSession();
                 if (session != null) {
                     session.removeAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);

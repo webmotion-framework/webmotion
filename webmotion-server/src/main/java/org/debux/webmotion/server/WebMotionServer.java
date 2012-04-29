@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.call.ClientSession;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

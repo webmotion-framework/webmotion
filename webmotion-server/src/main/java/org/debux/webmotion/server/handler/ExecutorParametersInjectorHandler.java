@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.ClientSession;
 import org.debux.webmotion.server.call.CookieManger;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
@@ -62,6 +63,7 @@ import org.slf4j.LoggerFactory;
  * <li>Exception</li>
  * <li>FileProgressListener</li>
  * <li>CookieManager</li>
+ * <li>ClientSession</li>
  * </ul>
  * 
  * You can add injector in server context.
@@ -176,6 +178,15 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
                     if (HttpSession.class.isAssignableFrom(type)) {
                         return call.getContext().getSession();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (ClientSession.class.isAssignableFrom(type)) {
+                        return call.getContext().getClientSession();
                     }
                     return null;
                 }
