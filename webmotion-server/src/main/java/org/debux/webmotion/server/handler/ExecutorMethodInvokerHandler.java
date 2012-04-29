@@ -35,7 +35,6 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
@@ -345,10 +344,10 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 throw new WebMotionException("Error on server when write the render in response", se, call.getRule());
             }
 
-            if(call.isFileUploadRequest()) {
+            if (call.isFileUploadRequest()) {
                 HttpContext context = call.getContext();
                 HttpSession session = context.getSession();
-                if(session != null) {
+                if (session != null) {
                     session.removeAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
                 }
             }
