@@ -213,6 +213,27 @@ server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
 &lt;/html&gt;
 </pre>
 
+<p>
+    Il est possible de préciser un layout vide, ce qui indique à SiteMesh de ne pas 
+    décorer la page :
+</p>
+<pre>
+[filters]
+*           /path/*                                 SiteMesh.decorate       layout=
+</pre>
+
+<p>
+    Le paramètre <code>layout</code> peut aussi être défini au niveau de l'action pour 
+    gérer une exception sur le filtre :
+</p>
+<pre>
+[filters]
+*           /*                                      SiteMesh.decorate       layout=decorator.html
+
+[actions]
+*           /content                                view:content.html       layout=decorator_content.html
+</pre>
+
 <h2 class="page-header" id="hibernate">Hibernate</h2>
 <p>
     L'intégration vous donne un accès sur des actions pour réaliser un CRUD sur 

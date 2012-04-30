@@ -40,22 +40,29 @@ public class SiteMesh extends WebMotionFilter {
     public static final String LAYOUTS = "sitemesh_layouts";
     
     /**
-     * Set the layout into the request. Pass on the filter or the action.
+     * Set the layout into the request. Pass on the filter or the action. If 
+     * the layout is null or empty not layout is passed to SiteMesh.
      * 
      * @param request set layout into the request
      * @param layout the layout to apply on the view
      */
     public void decorate(HttpServletRequest request, String layout) {
-        Mapping mapping = contextable.getMapping();
-        Config config = mapping.getConfig();
         
-        String path = "/" + layout;
-        String packageName = config.getPackageViews().replaceAll("\\.", "/");
-        if (packageName != null && !packageName.isEmpty()) {
-            path = "/" + packageName + path;
+        if (layout == null || layout.isEmpty()) {
+            request.setAttribute(LAYOUTS, null);
+            
+        } else {
+            Mapping mapping = contextable.getMapping();
+            Config config = mapping.getConfig();
+
+            String path = "/" + layout;
+            String packageName = config.getPackageViews().replaceAll("\\.", "/");
+            if (packageName != null && !packageName.isEmpty()) {
+                path = "/" + packageName + path;
+            }
+
+            request.setAttribute(LAYOUTS, new String[]{path});
         }
-        
-        request.setAttribute(LAYOUTS, new String[]{path});
         
         doProcess();
     }
