@@ -31,7 +31,7 @@
 
 <h2 class="page-header" id="presentation">Présentation</h2>
 <p>
-    WikiMotion est un moteur de wiki, qui peut à la fois être utilisé en standalone 
+    WikiMotion est un moteur de wiki, qui peut à la fois être utilisé en standalone (le fichier war est déployable sur n'importe quel serveur d'applications) 
     ou comme extension. Par exemple, le site web <a href="/">WebMotion</a> utilise le wiki en tant qu'extension. 
 </p>
 
@@ -40,7 +40,7 @@
 </p>
 <ul>
     <li>Sauvegarde de fichiers plats (pas besoin de base de données)</li>
-    <li>Syntaxe des pages en HTML, RST ou LaTeX</li>
+    <li>Syntaxe des pages en HTML, <a href="http://docutils.sourceforge.net/rst.html">RST</a> ou <a href="http://fr.wikipedia.org/wiki/LaTeX">LaTeX</a></li>
     <li>Support de l'authentification HTTP basic</li>
     <li>Upload de fichier</li>
     <li>Site map</li>
@@ -48,31 +48,31 @@
 </ul>
 
 <p>
-    Le style du wiki repose sur le boostrap de Twiter. Vous pouvez tout de même 
-    réaliser votre propre layout en redéfinissant le fichier <code>layout.jsp</code>.
+    Le style du wiki repose sur le <a href="http://twitter.github.com/bootstrap/">Boostrap Twiter</a>. Si vous souhaitez définir un design et un layout personnalisé, 
+    vous pouvez modifier (en cas d'utilisation standalone) et surcharger (cas d'utilisation en extension) le fichier <code>layout.jsp</code>.
 </p>
 
 <p style="text-align: right"><a class="btn" href="http://svn.debux.org/webmotion/trunk/webmotion-wiki/">Sources &raquo;</a> <a class="btn btn-primary" href="download">Télécharger &raquo;</a></p>
 
-<h2 class="page-header" id="installation">Installation</h2>
+<h2 class="page-header" id="installation">Installation de WikiMotion en mode standalone</h2>
 <p>
     Tout d'abord veuillez récupérer la dernière version de WikiMotion disponible 
     dans la section <a href="download">Téléchargement</a> du site. Puis déployer 
-    le war téléchargé dans un serveur d'application comme Tomcat, Jetty ou encore GlassFish.
+    le war téléchargé dans un serveur d'applications comme Tomcat, Jetty ou encore GlassFish.
 </p>
 
 <p>
-    Une fois le wiki déployer, vous pouvez modifier le fichier de configuration 
+    Une fois le wiki déployé, vous pouvez modifier le fichier de configuration 
     <code>wikimotion-config.properties</code> fourni par défaut, afin de 
     configurer et personnaliser votre wiki.
 </p>
 
 <p>
-    Si vous souhaitez le support du Latex dans le wiki, il vous faudra installer 
-    <code>latex</code> ainsi que <code>tth</code>.
+    Si vous souhaitez le support de la syntaxe LaTeX dans le wiki, il vous faudra installer les paquets
+    <code>latex</code> ainsi que <code>tth</code>. Sur une distribution linux telle que Ubuntu, lancez la commande suivante :
 </p>
 <pre>
-$ apt-get install latex tth
+$ sudo apt-get install latex tth
 </pre>
 
 <p>
@@ -80,28 +80,28 @@ $ apt-get install latex tth
     <code>docutils</code> ainsi que le script <code>rst2html-pygments</code>.
 </p>
 <pre>
-$ apt-get install python-docutils python-pygments
+$ sudo apt-get install python-docutils python-pygments
 
 $ wget http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/rst2html-pygments
-$ cp rst2html-pygments /usr/bin/rst2html-pygments
-$ chmod 755 /usr/bin/rst2html-pygments
+$ sudo cp rst2html-pygments /usr/bin/rst2html-pygments
+$ sudo chmod 755 /usr/bin/rst2html-pygments
 </pre>
 
 <p>
-    Les utilisateurs sont configurés dans le fichier <code>wikimotion-users.json</code>, 
-    il exsite un utilisateur <code>admin</code> avec comme mot de passe <code>admin</code> par défaut. 
-    Les mots de passe doivent être encodés en sha1.
+    Les utilisateurs sont configurés dans le fichier <code>wikimotion-users.json</code>.
+    Par défaut, il existe un utilisateur <code>admin</code> dont le mot de passe est <code>admin</code>
+    Les mots de passe présents dans ce fichier doivent être hashés via l'algorithme SHA-1.
 </p>
 
-<h2 class="page-header" id="extension">Extension</h2>
+<h2 class="page-header" id="extension">Utilisation de l'extension WikiMotion dans votre application</h2>
 <p>
-    Pour pouvoir utiliser le WikiMotion en extension, il faut rajouter dans vos dépendances 
+    Pour pouvoir utiliser le WikiMotion en extension, il faut rajouter dans les dépendances Maven
     de votre projet le wiki.
 </p>
 <pre class="prettyprint">
 &lt;dependency&gt;
     &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
-    &lt;artifactId&gt;wikimotion&lt;/artifactId&gt;
+    &lt;artifactId&gt;wikimotion&lt;/artifactId&gt; &lt;!-- Pensez à vérifier la dernière version disponible --&gt;
     &lt;version&gt;2.2&lt;/version&gt;
     &lt;type&gt;war&lt;/type&gt;
     &lt;scope&gt;runtime&lt;/scope&gt;
@@ -115,6 +115,11 @@ $ chmod 755 /usr/bin/rst2html-pygments
 [extensions]
 /wiki                                             wikimotion.wm
 </pre>
+
+<p>
+    <span class="label label-info">Note</span> Le fichier <code>wikimotion.wm</code> est le fichier de mapping de l'extension, 
+    embarqué directement par la dépendance pour être présent dans le classpath. Vous n'avez pas à vous en préoccuper.
+</p>
 
 <h2 class="page-header" id="screens">Captures d'écran</h2>
 <ul class="thumbnails">
