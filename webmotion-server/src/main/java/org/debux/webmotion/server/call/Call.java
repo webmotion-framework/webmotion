@@ -165,7 +165,7 @@ public class Call {
     public List<Executor> getExecutors() {
         List<Executor> result = new ArrayList<Executor>(filters.size() + 1);
         result.addAll(filters);
-        if(executor != null) {
+        if (executor != null) {
             result.add(executor);
         }
         return result;

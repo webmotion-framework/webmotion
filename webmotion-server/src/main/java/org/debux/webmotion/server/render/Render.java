@@ -49,11 +49,11 @@ public abstract class Render {
 
     private static final Logger log = LoggerFactory.getLogger(Render.class);
 
+    /** Default encoding uses to write the reponse */
     public static String DEFAULT_ENCODING = "UTF-8";
-    public static String DEFAULT_MODEL_NAME = "model";
     
-    public Render() {
-    }
+    /** Default model name uses when neither name is given */
+    public static String DEFAULT_MODEL_NAME = "model";
     
     /**
      * Execute the render and store a state as executed.

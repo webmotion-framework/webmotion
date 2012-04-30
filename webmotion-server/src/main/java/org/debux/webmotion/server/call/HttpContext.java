@@ -365,10 +365,12 @@ public class HttpContext {
     }
     
     /**
-     * @return true if the client session is used else false
+     * Save the session on client.
      */
-    public boolean hasClientSession() {
-        return clientSession != null;
+    public void saveClientSession() {
+        if (clientSession != null) { // true if the session uses
+            clientSession.write();
+        }
     }
     
     /**

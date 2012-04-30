@@ -63,7 +63,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Invokes methods of filters then action method. If a filter returns the 
- * render, the render action is avoided.
+ * render, the render action is avoided. Moreover the class manages async request, 
+ * you can configure the thread pool.
  * 
  * @author julien
  */
@@ -170,10 +171,16 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             threadPool.execute(runnableHandler);
         }
     }
-    
+
+    /**
+     * Runnable use direct execute or asyn execute the filters and the action.
+     */
     public class RunnableHandler implements Runnable, WebMotionHandler {
 
+        /** Current mapping */
         protected Mapping mapping;
+        
+        /** Current call */
         protected Call call;
         
         /** Current filters executed. */
@@ -220,6 +227,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
         
+        /**
+         * Process the action.
+         * 
+         * @param mapping
+         * @param call 
+         */
         public void processAction(Mapping mapping, Call call) {
             Executor executor = call.getExecutor();
             call.setCurrent(executor);
@@ -269,6 +282,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
 
+        /**
+         * Process one filter.
+         * 
+         * @param mapping
+         * @param call 
+         */
         public void processFilter(Mapping mapping, Call call) {
             Executor executor = filtersIterator.next();
             call.setCurrent(executor);
@@ -329,14 +348,16 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
         
+        /**
+         * Execute the render.
+         * 
+         * @param mapping
+         * @param call 
+         */
         public void processRender(Mapping mapping, Call call) {
-            // Store the session
-            // TODO: jru 20122904 Move store session
+            // Before render, store the client session
             HttpContext context = call.getContext();
-            if (context.hasClientSession()) { // true if the session uses
-                ClientSession clientSession = context.getClientSession();
-                clientSession.write();
-            }
+            context.saveClientSession();
         
             try {
                 Render render = call.getRender();
@@ -353,6 +374,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 throw new WebMotionException("Error on server when write the render in response", se, call.getRule());
             }
 
+            // After render, remove file progress from session
             if (call.isFileUploadRequest()) {
                 HttpSession session = context.getSession();
                 if (session != null) {
@@ -361,6 +383,12 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             }
         }
     
+        /**
+         * Execute the handler before each filters and action.
+         * 
+         * @param mapping
+         * @param call 
+         */
         public void processHandlers(Mapping mapping, Call call) {
             List<WebMotionHandler> executorHandlers = call.getExecutorHandlers();
             for (WebMotionHandler handler : executorHandlers) {
