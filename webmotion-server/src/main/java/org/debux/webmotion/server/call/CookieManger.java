@@ -488,7 +488,7 @@ public class CookieManger {
             
             long expire = -1;
             if (expiry != null && expiry > 0) {
-                expire = System.currentTimeMillis() + expiry;
+                expire = System.currentTimeMillis() + expiry * 1000;
             }
 
             String encryptValue;

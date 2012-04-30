@@ -365,6 +365,13 @@ public class HttpContext {
     }
     
     /**
+     * @return true if the client session is used else false
+     */
+    public boolean hasClientSession() {
+        return clientSession != null;
+    }
+    
+    /**
      * @return get real url corresponding in mapping
      */
     public String getUrl() {

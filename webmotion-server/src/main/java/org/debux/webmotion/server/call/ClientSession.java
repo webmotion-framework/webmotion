@@ -37,7 +37,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.persistence.Transient;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
@@ -70,8 +69,7 @@ public class ClientSession implements HttpSession {
         protected long lastAccessedTime;
         protected int maxInactiveInterval;
         
-        @Transient
-        protected boolean newly;
+        protected transient boolean newly;
 
         public ClientSessionContext() {
             id = RandomStringUtils.random(32, true, true);
@@ -187,7 +185,7 @@ public class ClientSession implements HttpSession {
     public void write() {
         CookieManger manger = context.getCookieManger();
         CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
-        cookie.setPath("/");
+        cookie.setAbsolutePath("/");
         cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
         manger.add(cookie);
         
@@ -196,7 +194,7 @@ public class ClientSession implements HttpSession {
         
         String toJson = gson.toJson(attributes);
         cookie = manger.create(ATTRIBUTES_COOKIE_NAME, toJson);
-        cookie.setPath("/");
+        cookie.setAbsolutePath("/");
         cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
         manger.add(cookie);
     }

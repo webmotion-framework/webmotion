@@ -333,8 +333,8 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             // Store the session
             // TODO: jru 20122904 Move store session
             HttpContext context = call.getContext();
-            ClientSession clientSession = context.getClientSession();
-            if (clientSession != null) { // true if the session uses
+            if (context.hasClientSession()) { // true if the session uses
+                ClientSession clientSession = context.getClientSession();
                 clientSession.write();
             }
         

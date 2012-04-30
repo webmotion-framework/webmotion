@@ -133,3 +133,5 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /cookie/object/read                         CookieObject.read
 *           /cookie/object/create                       CookieObject.create
 *           /cookie/object/remove                       CookieObject.remove
+*           /session/store                              Session.store
+*           /session/read                               Session.read

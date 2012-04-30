@@ -75,4 +75,13 @@ public class ServerMiscIT extends AbstractIT {
         String result = execute(request);
         AssertJUnit.assertTrue(result.contains("value"));
     }
+    
+    @Test
+    public void session() throws IOException {
+        String url = getAbsoluteUrl("session/store?value=test");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("test"));
+    }
 }
