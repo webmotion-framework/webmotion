@@ -44,39 +44,69 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.debux.webmotion.server.call.CookieManger.CookieEntity;
 
 /**
- * Manage a client session with the cookies. You can easily scale your server.
+ * Manages a client session with the cookies. Thus you can easily scale your server. 
+ * The class uses @see CookieManager to store secure data on client. The data is 
+ * serialized to json object, to get the value use getAttribute(s) method with 
+ * class as parameter. Currently the session is limited by cookie limitation, 
+ * the session can't exceeded 4ko.
  * 
  * @author jruchaud
  */
 public class ClientSession implements HttpSession {
 
+    /** Default timeout for the session, you can modify with setMaxInactiveInterval method */
     public static final int DEFAULT_TIMEOUT = 2 * 60 * 60; // 2h
     
+    /** Cookie name to store SessionContext */
     public static final String SESSION_CONTEXT_COOKIE_NAME = "wm_session_context";
+    
+    /* Cookie name to store attributes */
     public static final String ATTRIBUTES_COOKIE_NAME = "wm_attributes";
     
+    /** Parser json */
     protected JsonParser parser = new JsonParser();
+    
+    /** Parser json */
     protected Gson gson = new Gson();
         
+    /** Current http context */
     protected HttpContext context;
+    
+    /** Current session context */
     protected ClientSessionContext sessionContext;
+    
+    /** Current attributes in session */
     protected JsonObject attributes;
     
+    /**
+     * The class contains information on state of session.
+     */
     public static class ClientSessionContext {
 
+        /** Session id */
         protected String id;
+        
+        /** Creation date (millisecond) */
         protected long creationTime;
+        
+        /** Last access (millisecond) */
         protected long lastAccessedTime;
+        
+        /** Interval beetween access before to invalidate the session (second) */
         protected int maxInactiveInterval;
         
+        /** Indicate if the session just created */
         protected transient boolean newly;
 
+        /**
+         * Default constructor, generate the id and indicate the session is new.
+         */
         public ClientSessionContext() {
-            id = RandomStringUtils.random(32, true, true);
-            newly = true;
-            creationTime = System.currentTimeMillis();
-            lastAccessedTime = creationTime;
-            maxInactiveInterval = DEFAULT_TIMEOUT;
+            this.id = RandomStringUtils.random(32, true, true);
+            this.newly = true;
+            this.creationTime = System.currentTimeMillis();
+            this.lastAccessedTime = creationTime;
+            this.maxInactiveInterval = DEFAULT_TIMEOUT;
         }
 
         public long getCreationTime() {
@@ -129,8 +159,9 @@ public class ClientSession implements HttpSession {
     }
     
     /**
-     * Attach the client session on the context.
-     * @param context 
+     * Read the session in cookie and validate if the session is valid.
+     * 
+     * @param context http context
      */
     public ClientSession(HttpContext context) {
         this.context = context;
@@ -146,6 +177,13 @@ public class ClientSession implements HttpSession {
         }
     }
     
+    /**
+     * Check if the session is expired. The session is expired when the last 
+     * access is too late betwwen inactive interval.
+     * 
+     * @param currentAccessedTime reference last access, generally equals <code>System.currentTimeMillis()</code>
+     * @return true if the session is expired else false
+     */
     protected boolean isExpired(long currentAccessedTime) {
         int maxInactiveInterval = sessionContext.getMaxInactiveInterval() * 1000;
         long lastAccessedTime = sessionContext.getLastAccessedTime();
@@ -154,6 +192,11 @@ public class ClientSession implements HttpSession {
                 maxInactiveInterval + lastAccessedTime < currentAccessedTime;
     }
     
+    /**
+     * Read the session context in cookie.
+     * 
+     * @return session context
+     */
     protected ClientSessionContext readSessionContext() {
         CookieManger manger = context.getCookieManger();
         CookieEntity cookie = manger.get(SESSION_CONTEXT_COOKIE_NAME);
@@ -167,6 +210,12 @@ public class ClientSession implements HttpSession {
         return result;
     }
     
+    /**
+     * Read the attributes in cookie. Requires session id to decrypt the cookie.
+     * 
+     * @param sessionContext session context
+     * @return attributes
+     */
     protected JsonObject readAttributes(ClientSessionContext sessionContext) {
         String id = sessionContext.getId();
         CookieManger manger = context.getCookieManger(id, true, true);
@@ -182,6 +231,9 @@ public class ClientSession implements HttpSession {
         return result;
     }
     
+    /**
+     * Write the session context and attributes in cookie.
+     */
     public void write() {
         CookieManger manger = context.getCookieManger();
         CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
@@ -263,12 +315,29 @@ public class ClientSession implements HttpSession {
         return value;
     }
 
+    /**
+     * Get the attribute value as object representation. It is not possible to deserialize 
+     * collection with objects of arbitrary types, in this case getAttribute 
+     * as JsonElement.
+     * For example get int array, pass <code>int[].class</code> as class.
+     * @param name attribute name
+     * @param clazz class to value
+     * @return object
+     */
     public <T> T getAttribute(String name, Class<T> clazz) {
         JsonElement value = attributes.get(name);
         T fromJson = gson.fromJson(value, clazz);
         return fromJson;
     }
     
+    /**
+     * Get the attribute value as collection. It is not possible to deserialize 
+     * collection with objects of arbitrary types, in this case getAttribute 
+     * as JsonElement.
+     * @param name attribute name
+     * @param clazz object class in collection
+     * @return collection of values
+     */
     public <T> Collection<T> getAttributes(String name, Class<T> clazz) {
         JsonElement value = attributes.get(name);
         Class arrayClass = Array.newInstance(clazz, 0).getClass();
