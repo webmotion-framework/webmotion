@@ -42,6 +42,6 @@ public class Session extends WebMotionController {
     
     public Render read(ClientSession session) {
         String attribute = (String) session.getAttribute("name");
-        return renderContent(attribute, "text/html");
+        return renderContent("The value in the session is " + attribute, "text/html");
     }
 }

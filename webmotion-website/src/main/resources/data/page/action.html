@@ -542,6 +542,7 @@ public class Action extends WebMotionController {
     <li><strong>Config : </strong>la configuration du mapping applicatif</li>
     <li><strong>Call : </strong>le contexte d'appel des actions</li>
     <li><strong>CookieManager : </strong>le gestionnaire des cookies</li>
+    <li><strong>ClientSession : </strong>la session cliente</li>
 </ul>
 
 <p>
@@ -817,6 +818,35 @@ User user = cookie.getValue(User.class);
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager("username", true, true);
 </pre>
+
+<h2 class="page-header" id="session">Client session</h2>
+<p>
+    La session cliente est une session stocké sous forme de cookies sécurisés sur le navigateur 
+    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
+    s'utilise comme une session classique, et est disponible dans le context http ou par 
+    injection des paramètres dans l'action.
+</p>
+
+<pre class="prettyprint">
+public Render action(ClientSession session) {
+    ...
+}
+</pre>
+
+<p>
+    La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut ce 
+    fait selon un type de donnée, ce qui évite un cast.
+</p>
+
+<pre class="prettyprint">
+session.setAttribute("name", "value");
+String value = session.getAttribute("name", String.class);
+</pre>
+
+<p>
+    La session cliente comporte quelques limitations dù au système de stockage des cookies, 
+    comme la taille maximum de 4ko d'un cookie.
+</p>
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
