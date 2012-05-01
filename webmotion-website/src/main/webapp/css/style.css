@@ -29,6 +29,10 @@ body {
     text-align: justify;
 }
 
+.tooshort {
+    text-align: left;
+}
+
 @media (max-width: 980px) {
     body {
         padding-top: 0;
