@@ -492,7 +492,9 @@ public class RenderAccept extends Render {
 <h2 class="page-header" id="context">Contexte web</h2>
 <p>
     Tous les contrôleurs de l'application ont accès au contexte web de l'application,
-    soit par le biais de la méthode <code>getContext</code> soit directement en paramètre de la méthode.
+    soit par le biais de la méthode <code>getContext</code> soit directement en paramètre de la méthode. 
+    Le context web donne accès à l'ensemble des informations sur la requête et la réponse comme les 
+    messages flash, la gestion des cookies, la session cliente, ...
 </p>
 
 <p>
@@ -571,7 +573,7 @@ public class Error extends WebMotionController {
 }
 </pre>
 
-<h2 class="page-header" id="flashmessage">Messages flash</h2>
+<h3 id="flashmessage">Messages flash</h3>
 <p>
     L'une des difficultés lors d'une redirection HTTP est de compléter la réponse pour informer l'utilisateur d'une information temporaire. 
     Les messages flash ont ce but, et sont disponibles dans le contexte HTTP. Les messages flash peuvent être de différents types : info, error, warning et misc.
@@ -649,6 +651,110 @@ ${flashMessages.miscs.my_message}
 <pre class="prettyprint">
 ${flashMessages.messages}
 </pre>
+
+<h3 id="cookie">Gestion des cookies</h3>
+<p>
+    Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
+    en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
+    la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, ...
+    Il se situe dans le context http ou est récupérable dans les paramètres de la méthode.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Création d'un nouveau cookie :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.create("name", "value");
+cookie.setPath("/index.html");
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'une valeur :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.get("a_name");
+String value = cookie.getValue();
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Suppression d'un cookie :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+manager.remove("a_name");
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Enregistrement d'un objet comme valeur :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.create("a_name", new User("John"));
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'un objet comme valeur :
+</p>
+<pre class="prettyprint">
+CookieEntity cookie = manager.get("a_name");
+User user = cookie.getValue(User.class);
+</pre>
+
+<p>
+    Il est possible de gérer des cookies sécurisés, c'est à dire de les protèger sur :
+</p>
+<ul>
+    <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
+    <li>l'intégrité des données, en créant un hash des données</li>
+    <li>le replay attacks, en intégrant l'identifiant de session ssl</li>
+    <li>le volume attack, en intégrant le nom de l'utilisateur</li>
+</ul>
+<p>
+    Une clé secrète est utilisé pour garantir la sécurité des cookies. Elle est 
+    auto-générée si elle n'est pas défini dans le fichier de mapping. 
+    Pour plus de renseignements, veuillez vous reporter à la section 
+    <a href="mapping#config">Mapping - Config</a>.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération d'un gestionnaire de cookie complétement sécurisé :
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager("username", true, true);
+</pre>
+
+<h3 id="session">Session cliente</h3>
+<p>
+    La session cliente est une session stocké sous forme de cookies sécurisés sur le navigateur 
+    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
+    s'utilise comme une session classique, et est disponible dans le context http ou par 
+    injection des paramètres dans l'action.
+</p>
+
+<pre class="prettyprint">
+public Render action(ClientSession session) {
+    ...
+}
+</pre>
+
+<p>
+    La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut ce 
+    fait selon un type de donnée, ce qui évite un cast.
+</p>
+
+<pre class="prettyprint">
+session.setAttribute("name", "value");
+String value = session.getAttribute("name", String.class);
+</pre>
+
+<p>
+    La session cliente comporte quelques limitations dù au système de stockage des cookies, 
+    comme la taille maximum de 4ko d'un cookie.
+</p>
 
 <h2 class="page-header" id="validation">Validation des paramètres des contrôleurs</h2>
 <p>
@@ -743,110 +849,6 @@ public Render progress(FileProgressListener listener) {
     return renderJSON(listener);
 }
 </pre>
-
-<h2 class="page-header" id="cookie">Gestion des cookies</h2>
-<p>
-    Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
-    en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
-    la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, ...
-    Il se situe dans le context http ou est récupérable dans les paramètres de la méthode.
-</p>
-
-<p>
-    <span class="label label-info">Exemple</span> Création d'un nouveau cookie :
-</p>
-<pre class="prettyprint">
-CookieManager manager = context.getCookieManager();
-CookieEntity cookie = manager.create("name", "value");
-cookie.setPath("/index.html");
-manager.add(cookie);
-</pre>
-
-<p>
-    <span class="label label-info">Exemple</span> Récupération d'une valeur :
-</p>
-<pre class="prettyprint">
-CookieManager manager = context.getCookieManager();
-CookieEntity cookie = manager.get("a_name");
-String value = cookie.getValue();
-</pre>
-
-<p>
-    <span class="label label-info">Exemple</span> Suppression d'un cookie :
-</p>
-<pre class="prettyprint">
-CookieManager manager = context.getCookieManager();
-manager.remove("a_name");
-</pre>
-
-<p>
-    <span class="label label-info">Exemple</span> Enregistrement d'un objet comme valeur :
-</p>
-<pre class="prettyprint">
-CookieManager manager = context.getCookieManager();
-CookieEntity cookie = manager.create("a_name", new User("John"));
-manager.add(cookie);
-</pre>
-
-<p>
-    <span class="label label-info">Exemple</span> Récupération d'un objet comme valeur :
-</p>
-<pre class="prettyprint">
-CookieEntity cookie = manager.get("a_name");
-User user = cookie.getValue(User.class);
-</pre>
-
-<p>
-    Il est possible de gérer des cookies sécurisés, c'est à dire de les protèger sur :
-</p>
-<ul>
-    <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
-    <li>l'intégrité des données, en créant un hash des données</li>
-    <li>le replay attacks, en intégrant l'identifiant de session ssl</li>
-    <li>le volume attack, en intégrant le nom de l'utilisateur</li>
-</ul>
-<p>
-    Une clé secrète est utilisé pour garantir la sécurité des cookies. Elle est 
-    auto-générée si elle n'est pas défini dans le fichier de mapping. 
-    Pour plus de renseignements, veuillez vous reporter à la section 
-    <a href="mapping#config">Mapping - Config</a>.
-</p>
-
-<p>
-    <span class="label label-info">Exemple</span> Récupération d'un gestionnaire de cookie complétement sécurisé :
-</p>
-<pre class="prettyprint">
-CookieManager manager = context.getCookieManager("username", true, true);
-</pre>
-
-<h2 class="page-header" id="session">Client session</h2>
-<p>
-    La session cliente est une session stocké sous forme de cookies sécurisés sur le navigateur 
-    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
-    s'utilise comme une session classique, et est disponible dans le context http ou par 
-    injection des paramètres dans l'action.
-</p>
-
-<pre class="prettyprint">
-public Render action(ClientSession session) {
-    ...
-}
-</pre>
-
-<p>
-    La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut ce 
-    fait selon un type de donnée, ce qui évite un cast.
-</p>
-
-<pre class="prettyprint">
-session.setAttribute("name", "value");
-String value = session.getAttribute("name", String.class);
-</pre>
-
-<p>
-    La session cliente comporte quelques limitations dù au système de stockage des cookies, 
-    comme la taille maximum de 4ko d'un cookie.
-</p>
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
