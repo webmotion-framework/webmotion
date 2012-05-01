@@ -222,7 +222,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                     
                 } else {
                     // The call contains already the render
-                    processRender(mapping, call);
+                    processResponse(mapping, call);
                 }
             }
         }
@@ -257,7 +257,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
                 }
 
                 call.setRender(render);
-                processRender(mapping, call);
+                processResponse(mapping, call);
                 
             } catch (IllegalAccessException ex) {
                 contextable.remove();
@@ -312,7 +312,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
                 if (render != null) {
                     call.setRender(render);
-                    processRender(mapping, call);
+                    processResponse(mapping, call);
                 }
                 
             } catch (IllegalAccessException ex) {
@@ -349,12 +349,17 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         }
         
         /**
-         * Execute the render.
+         * Setting up the elements for the response :
+         * <ul>
+         * <li>save the client session</li>
+         * <li>execute the render</li>
+         * <li>remove attribute in session for file progress</li>
+         * </ul>
          * 
          * @param mapping
          * @param call 
          */
-        public void processRender(Mapping mapping, Call call) {
+        public void processResponse(Mapping mapping, Call call) {
             // Before render, store the client session
             HttpContext context = call.getContext();
             context.saveClientSession();
