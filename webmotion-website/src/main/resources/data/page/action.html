@@ -657,7 +657,6 @@ ${flashMessages.messages}
     Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
     en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
     la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, ...
-    Il se situe dans le context http ou est récupérable dans les paramètres de la méthode.
 </p>
 
 <p>
@@ -675,7 +674,7 @@ manager.add(cookie);
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-CookieEntity cookie = manager.get("a_name");
+CookieEntity cookie = manager.get("name");
 String value = cookie.getValue();
 </pre>
 
@@ -684,7 +683,7 @@ String value = cookie.getValue();
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-manager.remove("a_name");
+manager.remove("name");
 </pre>
 
 <p>
@@ -692,7 +691,7 @@ manager.remove("a_name");
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager();
-CookieEntity cookie = manager.create("a_name", new User("John"));
+CookieEntity cookie = manager.create("name", new User("John"));
 manager.add(cookie);
 </pre>
 
@@ -700,7 +699,7 @@ manager.add(cookie);
     <span class="label label-info">Exemple</span> Récupération d'un objet comme valeur :
 </p>
 <pre class="prettyprint">
-CookieEntity cookie = manager.get("a_name");
+CookieEntity cookie = manager.get("name");
 User user = cookie.getValue(User.class);
 </pre>
 
@@ -710,7 +709,7 @@ User user = cookie.getValue(User.class);
 <ul>
     <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
     <li>l'intégrité des données, en créant un hash des données</li>
-    <li>le replay attacks, en intégrant l'identifiant de session ssl</li>
+    <li>le replay attacks, en intégrant l'identifiant apache de session ssl</li>
     <li>le volume attack, en intégrant le nom de l'utilisateur</li>
 </ul>
 <p>
@@ -727,14 +726,23 @@ User user = cookie.getValue(User.class);
 CookieManager manager = context.getCookieManager("username", true, true);
 </pre>
 
-<h3 id="session">Session cliente</h3>
 <p>
-    La session cliente est une session stocké sous forme de cookies sécurisés sur le navigateur 
-    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
-    s'utilise comme une session classique, et est disponible dans le context http ou par 
-    injection des paramètres dans l'action.
+    Par la suite, le gestionnaire de cookie sécurisé s'utilise de façon transparente. 
+    Il n'est pas récupérable par l'injection au niveau des paramètres, car le gestionnaire 
+    propose plusieurs niveau de sécurisation (cryptographie et/ou ssl).
 </p>
 
+<h3 id="session">Session cliente</h3>
+<p>
+    La session cliente est une session stockée sous forme de cookies sécurisés sur le navigateur 
+    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
+    s'utilise comme une session classique. La session est créée et sauvegardée au 
+    moment de son utilisation.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Récupération de la session cliente :
+</p>
 <pre class="prettyprint">
 public Render action(ClientSession session) {
     ...
@@ -746,14 +754,29 @@ public Render action(ClientSession session) {
     fait selon un type de donnée, ce qui évite un cast.
 </p>
 
+<p>
+    <span class="label label-info">Exemple</span> Utilisation de la session cliente :
+</p>
 <pre class="prettyprint">
 session.setAttribute("name", "value");
 String value = session.getAttribute("name", String.class);
 </pre>
 
 <p>
+    Par défaut, la durée de validité de la session est fixé classsiquement à 2 heures. Vous pouvez 
+    changer la valeur par le biais de la méthode <code>setMaxInactiveInterval</code> :
+</p>
+
+<pre class="prettyprint">
+session.setMaxInactiveInterval(30 * 60); // 30 min
+</pre>
+
+<p>
     La session cliente comporte quelques limitations dù au système de stockage des cookies, 
-    comme la taille maximum de 4ko d'un cookie.
+    comme la taille maximum de 4ko d'un cookie. De plus, une clé secrète est utilisé pour 
+    garantir la sécurité de la session. Elle est auto-générée si elle n'est pas défini 
+    dans le fichier de mapping. Pour plus de renseignements, veuillez vous reporter 
+    à la section <a href="mapping#config">Mapping - Config</a>.
 </p>
 
 <h2 class="page-header" id="validation">Validation des paramètres des contrôleurs</h2>
