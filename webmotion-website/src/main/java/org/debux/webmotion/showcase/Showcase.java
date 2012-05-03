@@ -762,13 +762,11 @@ public class Showcase extends WebMotionController {
     public Render spring() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/spring/"
+                    "/spring"
                 ),
                 
                 "files", Arrays.asList(
-                    getConfig(false, false, false, false)
-                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 2, 1)),
-                    new FileContent("/src/main/resources/spring.wm", getFile("spring.wm")),
+                    new FileContent("/src/main/resources/mapping", getFile("spring.wm")),
                     getJavaContent("Spring.java"),
                     getJavaContent("Bean.java"),
                     getPageContent("spring.jsp")
@@ -938,9 +936,7 @@ public class Showcase extends WebMotionController {
                 ),
                 
                 "files", Arrays.asList(
-                    getConfig(false, false, false, false)
-                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 3, 1)),
-                    new FileContent("/src/main/resources/sitemesh.wm", getFile("sitemesh.wm")),
+                    new FileContent("/src/main/resources/mapping", getFile("sitemesh.wm")),
                     getPageContent("content.html"),
                     getPageContent("decorator.html")
                 )
@@ -995,9 +991,7 @@ public class Showcase extends WebMotionController {
                 ),
                 
                 "files", Arrays.asList(
-                    getConfig(false, false, false, false)
-                        .addContent(getMapping(SECTION_EXTENSIONS, INDEX_EXTENSIONS + 7, 1)),
-                    new FileContent("/src/main/resources/note.wm", getFile("note.wm")),
+                    new FileContent("/src/main/resources/mapping", getFile("note.wm")),
                     getJavaContent("Note.java"),
                     getPageContent("note.jsp")
                 )

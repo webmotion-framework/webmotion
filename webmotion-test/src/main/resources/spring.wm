@@ -28,4 +28,4 @@ package.views=WEB-INF/org.debux.webmotion.test
 server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
 
 [actions]
-*           /                                     Spring.sayHello
+*           /spring                                  Spring.sayHello

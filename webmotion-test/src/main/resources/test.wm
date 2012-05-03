@@ -29,8 +29,8 @@ server.listener.class=org.debux.webmotion.test.Listener
 
 [extensions]
 /blog                                                   blog.wm
-/spring                                                 spring.wm
-/sitemesh                                               sitemesh.wm
+/                                                       spring.wm
+/                                                       sitemesh.wm
 /                                                       META-INF/.*\.wm
 /                                                       global.wm
 /                                                       injector.wm
