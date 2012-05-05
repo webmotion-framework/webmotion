@@ -36,7 +36,7 @@ import org.debux.webmotion.server.render.Render;
 public class Error extends WebMotionController {
     
     public Render send() {
-        return renderError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+        return renderError(HttpServletResponse.SC_FORBIDDEN);
     }
     
 }

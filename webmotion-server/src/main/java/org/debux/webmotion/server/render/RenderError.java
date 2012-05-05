@@ -32,7 +32,7 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * Render use to return an error whith a message.
+ * Render use to return an error whith a message. The message can be null.
  * 
  * @author julien
  */

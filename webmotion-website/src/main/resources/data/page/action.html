@@ -73,7 +73,7 @@ public class User extends WebMotionController {
 
 <h3>Rendu de pages : renderView</h3>
 <p>
-    La méthode renderView(), appelée dans une méthode d'un WebMotionControlleur,
+    La méthode <code>renderView</code>, appelée dans une méthode d'un WebMotionControlleur,
     permet de retourner au client une ressource (typiquement, une page web, JSP, HTML, texte brut).
     Dans ce cas là, le modèle est passé en attribut de la requête (voir la méthode 
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#setAttribute(java.lang.String,%20java.lang.Object)">
@@ -222,7 +222,7 @@ return renderActionURL("/internal/action", new Object[]{"param", "internal"}, ne
 
 <h3>Rendu de contenu : renderContent</h3>
 <p>
-    La méthode <code>renderContent(String content, String mimeType)</code> permet de retourner 
+    La méthode <code>renderContent</code> permet de retourner 
     directement qui chaîne de caractères qui sera interprêtée par le client sous le type mime spécifié.
 </p>
 
@@ -244,7 +244,7 @@ return renderContent("&lt;h1&gt;exemple&lt;/h1&gt;", "text/plain");
 
 <h3>Rendu de flux : renderStream</h3>
 <p>
-    La méthode <code>renderContent(InputStream stream, String mimeType)</code>
+    La méthode <code>renderContent</code>
     permet de retourner directement un flux dans la réponse, qui sera interprêté 
     selon le type mime spécifié.
 </p>
@@ -269,7 +269,7 @@ return renderStream(stream, "image/png");
 
 <h3>Rendu pour le téléchargement : renderDownload</h3>
 <p>
-    La méthode <code>renderDownload(InputStream stream, String name, String mimeType)</code>
+    La méthode <code>renderDownload</code>
     permet de retourner le flux en attachement dans la réponse pour provoquer le téléchargement
     du fichier par le navigateur.
 </p>
@@ -294,7 +294,7 @@ return renderDownload(stream, "image.pdf", "image/png");
 
 <h3>Rechargement de page : renderLastPage</h3>
 <p>
-    La méthode <code>renderLastPage()</code> permet de rafraîchir la page courante, 
+    La méthode <code>renderLastPage</code> permet de rafraîchir la page courante, 
     elle utilise le referer dans le header HTTP de la requête.
 </p>
 
@@ -314,7 +314,7 @@ return renderLastPage("id", 122345);
 
 <h3>Retour de code HTTP : renderStatus</h3>
 <p>
-    La méthode <code>renderStatus(int status)</code> permet de retourner
+    La méthode <code>renderStatus</code> permet de retourner
     au client un code statut HTTP. Il est possible d'utiliser les constantes 
     présentes dans l'interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
@@ -331,7 +331,7 @@ return renderStatus(HttpServletResponse.SC_OK);
 
 <h3>Retour d'erreur : renderError</h3>
 <p>
-    La méthode <code>renderError(int status, String message)</code> permet de retourner
+    La méthode <code>renderError</code> permet de retourner
     au client un code d'erreur HTTP. Il est possible d'utiliser les constantes 
     présentes dans l'interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
@@ -343,7 +343,14 @@ return renderStatus(HttpServletResponse.SC_OK);
     <span class="label label-info">Exemple</span> Retourne une erreur 404 à l'utilisateur :
 </p>
 <pre class="prettyprint">
-return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+return renderError(HttpServletResponse.SC_NOT_FOUND);
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Retourne une erreur 404 à l'utilisateur avec un message :
+</p>
+<pre class="prettyprint">
+return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found because ...");
 </pre>
 
 <h3>Rendu de flux XML : renderXML</h3>

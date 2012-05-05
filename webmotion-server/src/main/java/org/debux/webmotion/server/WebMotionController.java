@@ -254,7 +254,7 @@ public class WebMotionController {
     }
     
     /**
-     * Send a error code to user (404, 500, ...) @HttpServletResponse.SC_* to 
+     * Send a error code to user (404, 500, ...) with a message. HttpServletResponse.SC_* to 
      * get all the code values.
      * 
      * @param code code http like 404 or 500
@@ -263,6 +263,17 @@ public class WebMotionController {
      */
     public Render renderError(int code, String message) {
         return new RenderError(code, message);
+    }
+    
+    /**
+     * Send a error code to user (404, 500, ...). HttpServletResponse.SC_* to 
+     * get all the code values.
+     * 
+     * @param code code http like 404 or 500
+     * @return render represents the next step for user
+     */
+    public Render renderError(int code) {
+        return new RenderError(code, null);
     }
     
     /**

@@ -72,7 +72,7 @@ public class User extends WebMotionController {
 
 <h3>Page rendering: renderView</h3>
 <p>
-    The renderView() method, called in a method of a WebMotionController,
+    The <code>renderView</code> method, called in a method of a WebMotionController,
     enables to return a resource (typically a web page, JSP, HTML, plain text) to the client.
     In this case, the model is passed as an attribute of the request (refer to the
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#setAttribute(java.lang.String,%20java.lang.Object)">
@@ -220,7 +220,7 @@ return renderActionURL("/internal/action", new Object[]{"param", "internal"}, ne
 
 <h3>Rendering of contents: renderContent</h3>
 <p>
-    The <code>renderContent(String content, String mimeType)</code> method enables to return
+    The <code>renderContent</code> method enables to return
     directly the string which will be interpreted by the client as the specified MIME type.
 </p>
 
@@ -242,7 +242,7 @@ return renderContent("&lt;h1&gt;example&lt;/h1&gt;", "text/plain");
 
 <h3>Stream redering: renderStream</h3>
 <p>
-    The <code>renderContent(InputStream stream, String mimeType)</code> method
+    The <code>renderContent</code> method
     enables to return directly a stream in the response, which will be interpreted
     as the specified MIME type.
 </p>
@@ -267,7 +267,7 @@ return renderStream(stream, "image/png");
 
 <h3>Rendering for download: renderDownload</h3>
 <p>
-    The <code>renderDownload(InputStream stream, String name, String mimeType)</code> method
+    The <code>renderDownload</code> method
     enables to return the stream as an attachment in the response to provoke the downloading
     of the file by the browser.
 </p>
@@ -292,7 +292,7 @@ return renderDownload(stream, "image.pdf", "image/png");
 
 <h3>Page reloading: renderLastPage</h3>
 <p>
-    The <code>renderLastPage()</code> method enables to refresh the current page.
+    The <code>renderLastPage</code> method enables to refresh the current page.
     It uses the referer in the HTTP request header.
 </p>
 
@@ -312,7 +312,7 @@ return renderLastPage("id", 122345);
 
 <h3>HTTP code return: renderStatus</h3>
 <p>
-    The <code>renderStatus(int status)</code> method enables to return a HTTP status code
+    The <code>renderStatus</code> method enables to return a HTTP status code
     to the client. You can use the constants in the interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
         HttpServletResponse
@@ -328,7 +328,7 @@ return renderStatus(HttpServletResponse.SC_OK);
 
 <h3>Error return: renderError</h3>
 <p>
-    The <code>renderError(int status, String message)</code> method enables to return
+    The <code>renderError</code> method enables to return
     a HTTP error code to the client. You can use the constants in the interface
     <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletResponse.html">
         HttpServletResponse
@@ -339,7 +339,14 @@ return renderStatus(HttpServletResponse.SC_OK);
     <span class="label label-info">Example</span> Returns a 404 error to the user:
 </p>
 <pre class="prettyprint">
-return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+return renderError(HttpServletResponse.SC_NOT_FOUND);
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Returns a 404 error to the user with a message:
+</p>
+<pre class="prettyprint">
+return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found because ...");
 </pre>
 
 <h3>XML stream rendering: renderXML</h3>
