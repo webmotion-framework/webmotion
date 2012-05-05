@@ -27,6 +27,7 @@ package org.debux.webmotion.server;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -333,6 +334,6 @@ public class WebMotionUtils {
         }
                 
         // By default
-        return userHome + "/.config";
+        return userHome + File.separator + ".config";
     }
 }
