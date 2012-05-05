@@ -283,4 +283,56 @@ public class WebMotionUtils {
         return RandomStringUtils.random(31, true, true);
     }
 
+    /**
+     * @return the system configuration path for os
+     */
+    public String getSystemConfigurationPath() {
+        String osName = System.getProperty("os.name");
+        
+        // For windows
+        String systemDirectory = System.getenv("SystemDirectory");
+        if (osName.toLowerCase().contains("windows") 
+                && systemDirectory != null && !systemDirectory.isEmpty()) {
+            
+            return systemDirectory;
+        }
+        
+        String systemRoot = System.getenv("SystemRoot");
+        if (osName.toLowerCase().contains("windows") 
+                && systemRoot != null && !systemRoot.isEmpty()) {
+            
+            return systemRoot + "\\System32";
+        }
+        
+        // By default
+        if (osName.toLowerCase().contains("windows")) {
+            return "C:\\Windows\\System32";
+            
+        } else { // For unix
+            return "/etc";
+        }
+    }
+    
+    /**
+     * @return the user configuration path for os
+     */
+    public String getUserConfigurationPath() {
+        String osName = System.getProperty("os.name");
+        String userHome = System.getProperty("user.home");
+        
+        // For windows
+        String appData = System.getenv("APPDATA");
+        if (osName.toLowerCase().contains("windows") 
+                && appData != null && !appData.isEmpty()) {
+            
+            return appData;
+        }
+        
+        if (osName.toLowerCase().contains("mac os x")) {
+            return userHome + "/Library/Application Support";
+        }
+                
+        // By default
+        return userHome + "/.config";
+    }
 }
