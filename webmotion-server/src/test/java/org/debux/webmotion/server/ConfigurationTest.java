@@ -50,6 +50,15 @@ public class ConfigurationTest {
     }
     
     @Test
+    public void testMap() throws ConfigurationException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("test", "10");
+        
+        MapConfiguration configuration = new MapConfiguration(map);
+        AssertJUnit.assertEquals(10, configuration.getInt("test"));
+    }
+    
+    @Test
     public void testComposite() throws ConfigurationException {
         PropertiesConfiguration first = new PropertiesConfiguration();
         first.load(new StringReader("name=value"));
@@ -74,11 +83,17 @@ public class ConfigurationTest {
     }
     
     @Test
-    public void testMap() throws ConfigurationException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("test", "10");
+    public void testLoad() throws ConfigurationException {
+        ClassLoader classLoader = ConfigurationTest.class.getClassLoader();
         
-        MapConfiguration configuration = new MapConfiguration(map);
-        AssertJUnit.assertEquals(10, configuration.getInt("test"));
+        PropertiesConfiguration configuration = new PropertiesConfiguration();
+        configuration.load(classLoader.getResource("properties/etc.properties"));
+        configuration.load(classLoader.getResource("properties/home.properties"));
+        configuration.load(classLoader.getResource("properties/local.properties"));
+        
+        AssertJUnit.assertEquals("etc", configuration.getString("key1"));
+        AssertJUnit.assertEquals("home", configuration.getString("key2"));
+        AssertJUnit.assertEquals("local", configuration.getString("key3"));
     }
+            
 }
