@@ -27,6 +27,7 @@ package org.debux.webmotion.server;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
@@ -254,6 +255,15 @@ public class WebMotionController {
     }
     
     /**
+     * Send a status 200 to user. It is the same call renderStatus(200).
+     * 
+     * @return render represents the next step for user
+     */
+    public Render renderSuccess() {
+        return new RenderStatus(HttpServletResponse.SC_OK);
+    }
+    
+    /**
      * Send a error code to user (404, 500, ...) with a message. HttpServletResponse.SC_* to 
      * get all the code values.
      * 
@@ -274,6 +284,15 @@ public class WebMotionController {
      */
     public Render renderError(int code) {
         return new RenderError(code, null);
+    }
+    
+    /**
+     * Send a error 500 to user. It is the same call renderError(500).
+     * 
+     * @return render represents the next step for user
+     */
+    public Render renderFailure() {
+        return new RenderError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, null);
     }
     
     /**

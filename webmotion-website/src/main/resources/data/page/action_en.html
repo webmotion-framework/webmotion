@@ -326,6 +326,13 @@ return renderLastPage("id", 122345);
 return renderStatus(HttpServletResponse.SC_OK);
 </pre>
 
+<p>
+    <span class="label label-info">Example</span> Shortcut to return a 200 error to the user :
+</p>
+<pre class="prettyprint">
+return renderSuccess();
+</pre>
+
 <h3>Error return: renderError</h3>
 <p>
     The <code>renderError</code> method enables to return
@@ -347,6 +354,13 @@ return renderError(HttpServletResponse.SC_NOT_FOUND);
 </p>
 <pre class="prettyprint">
 return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found because ...");
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Shortcut to return a 500 error to the user :
+</p>
+<pre class="prettyprint">
+return renderFailure();
 </pre>
 
 <h3>XML stream rendering: renderXML</h3>

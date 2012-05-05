@@ -329,6 +329,13 @@ return renderLastPage("id", 122345);
 return renderStatus(HttpServletResponse.SC_OK);
 </pre>
 
+<p>
+    <span class="label label-info">Exemple</span> Raccourci pour retourner une erreur 200 à l'utilisateur :
+</p>
+<pre class="prettyprint">
+return renderSuccess();
+</pre>
+
 <h3>Retour d'erreur : renderError</h3>
 <p>
     La méthode <code>renderError</code> permet de retourner
@@ -351,6 +358,13 @@ return renderError(HttpServletResponse.SC_NOT_FOUND);
 </p>
 <pre class="prettyprint">
 return renderError(HttpServletResponse.SC_NOT_FOUND, "Not found because ...");
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Raccourci pour retourner une erreur 500 à l'utilisateur :
+</p>
+<pre class="prettyprint">
+return renderFailure();
 </pre>
 
 <h3>Rendu de flux XML : renderXML</h3>
