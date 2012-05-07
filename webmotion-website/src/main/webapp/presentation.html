@@ -1,0 +1,343 @@
+<!--
+  #%L
+  WebMotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 - 2012 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex,nofollow,noarchive">
+
+        <title></title>
+
+        <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
+    </head>
+    <body style="display: none;">
+        <section class='slides layout-widescreen'>
+
+            <article>
+                <h1>WebMotion</h1>
+                <h2>Une plateforme web pour Java</h2>
+
+                <p>Julien Ruchaud - Code Lutin</p>
+                <p>RMLL 2012</p>
+            </article>
+
+            <article>
+                <h3>Qui suis-je ?</h3>
+                <ul>
+                    <li>Code Lutin</li>
+                    <li>Ingénieur</li>
+                    <li>Développeur Java & web</li>
+                    <li>Impliqué dans le libre</li>
+                </ul>
+                <p>Créateur du framework Java web WebMotion</p>
+            </article>
+
+            <article>
+                <h3>Plan</h3>
+                <h4>
+                    Présentation générale du projet
+                </h4>
+                <ul>
+                    <li>Ses origines</li>
+                    <li>Philosophie du projet</li>
+                </ul>
+                <h4>
+                    Présentation fonctionnelle et technique
+                </h4>
+                <ul>
+                    <li>Environnement technique</li>
+                    <li>À quels besoins ce projet répond t-il ?</li>
+                    <li>Comment ça marche ?</li>
+                </ul>
+            </article>
+            
+            <article>
+                <h1>Présentation générale</h1>
+                <h2>Origines</h2>
+            </article>
+
+            <article class='fill'>
+                <h3>
+                    Les frameworks Java web actuels ...
+                </h3>
+                <p>
+                    <img src='http://farm1.staticflickr.com/47/138067687_44999a5344_o.jpg'>
+                </p>
+                <div class='source white'>
+                    Auteur: kawanet
+                </div>
+            </article>
+            
+            <article>
+                <h3>Les origines de WebMotion</h3>
+                <h4>Les frameworks actuels</h4>
+                <!-- Mettre les logos au lieu des noms -->
+                <ul>
+                    <li>Grails</li>
+                    <li>Play!</li>
+                    <li>Struts</li>
+                    <li>Spring MVC</li>
+                    <li>GWT</li>
+                    <li>etc.</li>
+                </ul>
+            </article>
+            
+            <article>
+                <h3>Les origines de WebMotion</h3>
+                <h4>Les frameworks actuels, quelques mauvaises notes</h4>
+                <ul>
+                    <li>Des fichiers devenus trop verbeux</li>
+                    <li>Une architecture contraignante et fixée par le framework</li>
+                    <li>Des annotations qui polluent le code Java</li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>
+                    Comparaison entre un service Java et un service web avec JAX-RS
+                </h3>
+                <section>
+                    <pre>
+public class Album {
+    public Album get(String id) {/* */}
+    public List&lt;Photos&gt; getPhotos(String id, int limit) {/* */}
+}</pre>
+                </section>
+                <section>
+                    <pre>
+@Path("album")
+public class Album {
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Album get(@PathParam("id") String id) {/* */}
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/{id}/photos")
+    public List&lt;Photos&gt; getPhotos(@PathParam("id") String id, 
+        @QueryParam("limit") int limit) {/* */}
+}</pre>
+                </section>
+            </article>
+            
+            <article>
+                <h3>
+                    Standard API Servlet
+                </h3>
+                <p>16 lignes de code XML pour définir deux chemins dans l'applications ...</p>
+                <section>
+                    <pre>
+&lt;servlet&gt;
+    &lt;servlet-name&gt;AlbumsServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.debux.sample.AlbumsServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet&gt;
+    &lt;servlet-name&gt;PhotosServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.debux.sample.PhotosServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;AlbumsServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/album/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;PhotosServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/album/photos/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+                </section>
+            </article>
+
+            <article>
+                <h3>
+                    Les origines de WebMotion
+                </h3>
+                <h4>Des bonnes idées sont présentes</h4>
+                <ul>
+                    <li>Plugins (Struts)</li>
+                    <li>Présentation des chemins accessibles sur le site (Grails)</li>
+                    <li>Gestion de paramètres (Spring)</li>
+                </ul>
+                <h4>Conclusion : pas de pleine satisfaction !</h4>
+            </article>
+
+            <article>
+                <h1>Présentation générale</h1>
+                <h2>Philosophie du projet</h2>
+            </article>
+
+            <article class='fill'>
+                <h3>
+                    WebMotion - Un nouvel espoir ?
+                </h3>
+                <p>
+                    <img src="http://farm6.staticflickr.com/5109/5672243397_1aeea74a67_b.jpg" style="margin-top: -500px;">
+                </p>
+                <div class='source white'>
+                    Auteur: Bartosch Salmanski
+                </div>
+            </article>
+
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h4>Fondement sur les concepts de simplicité et de standard</h4>
+                <ul>
+                    <li>Repose sur l'API Servlet 3 (standard Java EE)</li>
+                    <li>Libre choix des outils pour les développeurs</li>
+                    <li>Rester simple (KISS)</li>
+                </ul>
+                
+                <h4>Assimilation des bonnes idées des frameworks existants</h4>
+                <ul>
+                    <li>Permettre une vision globale des chemins de votre application web</li>
+                    <li>Inciter à la réutilisation de morceaux fonctionnels</li>
+                    <li>Gestion des paramètres (conversion implicite en objets Java)</li>
+                </ul>
+                
+                <h4>Licence LGPL</h4>
+            </article>
+
+            <article>
+                <h1>Présentation fonctionnelle et technique</h1>
+                <h2>Environnement technique</h2>
+            </article>
+
+            <article class='fill'>
+                <h3>Le fichier de routes</h3>
+                <p>
+                    <img src="http://farm3.staticflickr.com/2327/2075310775_5eb35307dd_b.jpg"/>
+                </p>
+            </article>
+
+            <article>
+                <h3>Le fichier de routes</h3>
+                <h4>Généralités</h4>
+                <ul>
+                    <li>Point d'accès</li>
+                    <li>Syntaxe simple et lisible</li>
+                    <li>Nommé mapping</li>
+                    <li>Séparations en plusieurs sections</li>
+                </ul>
+                <h4>Rôles</h4>
+                <ul>
+                    <li>Gérer les urls</li>
+                    <li>Gérer les erreurs</li>
+                    <li>Gérer la configuration</li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>Les sections du fichier de routes</h3>
+                <ul>
+                    <li>section actions, <br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small></li>
+                    <li>section filtres, <br/><small>pour réaliser des actions en amont ou en aval d'urls</small></li>
+                    <li>section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une acttion</small></li>
+                    <li>section extensions, <br/><small>pour réutiliser des fichier de routes</small></li>
+                    <li>section config, <br/><small>pour la configuration de WebMotion</small></li>
+                    <li>section propriétés, <br/><small>pour la configuration de l'application</small></li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>Exemple complet pour débuter</h3>
+                <p>Fichier de routes</p>
+                <section>
+                    <pre>
+[actions]
+GET            /                      Album.index
+GET            /album/{id}            Album.get
+</pre>
+                </section>
+                <p>Actions java</p>
+                <section>
+                    <pre>
+public class Album extends WebMotionController {
+    public Render index() {
+        return renderView("index.jsp");
+    }
+    public Render get(String id) {
+        // recherche de l'album
+        return renderJSON(album);
+    }
+}
+</pre>
+                </section>
+            </article>
+
+            <article>
+                <h3>Fonctionnalités d'un contrôleur</h3>
+                <h4>Retour de différents rendus</h4>
+                <ul>
+                    <li>Visualisation</li>
+                    <li>Redirections</li>
+                    <li>Données</li>
+                </ul>
+                <h4>Gestion des paramètres</h4>
+                <ul>
+                    <li>Récupération</li>
+                    <li>Conversion</li>
+                    <li>Validation</li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>Fonctionnalités d'un contrôleur</h3>
+                <h4>Utilitaires</h4>
+                <ul>
+                    <li>Messages flash</li>
+                    <li>Gestionnaire de cookies</li>
+                    <li>Session cliente</li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>Extension</h3>
+                <h4>Avantages</h4>
+                <ul>
+                    <li>Structuration, comme des inclusions de fichiers</li>
+                    <li>Réutilisation, partage entre application</li>
+                    <li>Modularité, détection automatique des extensions</li>
+                </ul>
+                <h4>Exemple d'extensions</h4>
+                <ul>
+                    <li>Moteur de wiki</li>
+                    <li>Module d'audience</li>
+                </ul>
+            </article>
+            <article></article>
+            <article></article>
+            <article></article>
+
+            <article>
+
+            </article>
+
+            <article>
+                <h3>Contact</h3>
+                <img src="http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=http%3A//www.webmotion-framework.org&chld=H|0" />
+            </article>
+
+        </section>
+    </body>
+</html>
