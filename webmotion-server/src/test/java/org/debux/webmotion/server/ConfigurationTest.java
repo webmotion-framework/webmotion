@@ -53,9 +53,11 @@ public class ConfigurationTest {
     public void testMap() throws ConfigurationException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("test", "10");
+        map.put("var", "${test}");
         
         MapConfiguration configuration = new MapConfiguration(map);
         AssertJUnit.assertEquals(10, configuration.getInt("test"));
+        AssertJUnit.assertEquals(10, configuration.getInt("var"));
     }
     
     @Test
