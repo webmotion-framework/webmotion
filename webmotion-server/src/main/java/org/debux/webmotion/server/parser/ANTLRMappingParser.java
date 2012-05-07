@@ -562,7 +562,7 @@ public class ANTLRMappingParser extends MappingParser {
                 }
             });
 
-            rules.put("/ACTION/PARAMETERS/PARAMETER/VALUE/*", new Visit() {
+            rules.put("/ACTION/PARAMETERS/PARAMETER/VARIABLE/PATTERN/*", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -571,7 +571,7 @@ public class ANTLRMappingParser extends MappingParser {
                 }
             });
 
-            rules.put("/ACTION/PARAMETERS/PARAMETER/PATTERN/*", new Visit() {
+            rules.put("/ACTION/PARAMETERS/PARAMETER/VALUE/*", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();

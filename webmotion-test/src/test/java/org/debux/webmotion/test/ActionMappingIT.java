@@ -132,12 +132,21 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
-    public void patternNotOnlyA() throws IOException {
-        String url = getAbsoluteUrl("pattern/baaa?value=baaaa");
+    public void patternNotOnlyAPath() throws IOException {
+        String url = getAbsoluteUrl("pattern/baaa?value=aaaaa");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("The who baaa and value baaaa NOT contains only letter a"));
+        AssertJUnit.assertTrue(result.contains("The who baaa and value aaaaa NOT contains only letter a"));
+    }
+    
+    @Test
+    public void patternNotOnlyAParam() throws IOException {
+        String url = getAbsoluteUrl("pattern/aaaa?value=baaaa");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result.contains("The who aaaa and value baaaa NOT contains only letter a"));
     }
     
     @Test
