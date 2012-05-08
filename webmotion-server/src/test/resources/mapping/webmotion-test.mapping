@@ -52,7 +52,7 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /admin                                          view:sub/subaction/admin/index.jsp
 
 *           /static                                                 Test.hello          value=coco,number=9
-*           /test/hello?who={value:^aa.aa*\(.\)$}&number={number}   action:Test.hello
+*           /test/hello?who={value:^aa\{2,3\}.aa*\(.\)$}&number={number}   action:Test.hello
 *           /test/{value}/{number}                                  Test.hello
 
 *           /{sub}/{class}/{method}/{test}                  {sub}.{class}.{method}{test}

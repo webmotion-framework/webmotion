@@ -431,6 +431,8 @@ public class ANTLRMappingParser extends MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
+                    value = value.replaceAll("\\\\\\{", "{");
+                    value = value.replaceAll("\\\\\\}", "}");
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
                 }
@@ -566,6 +568,8 @@ public class ANTLRMappingParser extends MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
+                    value = value.replaceAll("\\\\\\{", "{");
+                    value = value.replaceAll("\\\\\\}", "}");
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
                 }

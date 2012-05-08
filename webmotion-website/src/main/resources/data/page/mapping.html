@@ -504,6 +504,10 @@ GET,POST    &lt;URL&gt;        &lt;action&gt;
 *           /user?action={value:a*}         &lt;action2&gt; // Ne sera jamais traitée, la ligne ci-avant est plus générique 
 </pre>
 
+<p>
+    Pour écrire des expressions régulières avec des accolades, par exemple <code>a{2,3}</code>, il vous faudra les dé-spécialiser ainsi <code>a\{2,3\}</code>.
+</p>
+
 <h4>Morceaux d'URL dynamiques</h4>
 <p>
     Vous disposer des mêmes fonctionnalités des paramètres mais directement dans le path de l'URL.

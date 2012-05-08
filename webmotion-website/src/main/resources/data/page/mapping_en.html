@@ -477,6 +477,10 @@ GET,POST    &lt;URL&gt;        &lt;action&gt;
 *           /user?action={value:a*}         &lt;action2&gt; // Will never be treated, the previous line is more generic
 </pre>
 
+<p>
+    To write regular expressions with brackets, for example <code>a{2,3}</code>, you will have to de-specialize thus <code>a\{2,3\}</code>.
+</p>
+
 <h4>Pieces of dynamic URLs</h4>
 <p>
     You have the same parameter functionalities but directly in the URL path,
