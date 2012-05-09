@@ -24,7 +24,38 @@ options {
 }
 
 mapping
-    : comment* section_config? (section_error | section_filter | section_action | section_extension)* EOF
+    : comment* (section_config | section_properties | section_error | section_filter | section_action | section_extension)* EOF
+    -> section_config? section_properties? section_error? section_filter? section_action? section_extension?
+    ;
+
+// Section properties
+
+section_properties
+    : LEFT_SQUARE_BRACKET section_properties_name SECTION_PROPERTIES RIGHT_SQUARE_BRACKET Newline ((section_properties_rule Newline) | comment)*
+    -> ^(DOLLAR["PROPERTIES"] ^(DOLLAR["NAME"] section_properties_name) section_properties_rule*)
+    ;
+
+section_properties_name
+    : (Letter | Digit | DOT | HYPHEN)+
+    -> DOT[$text]
+    ;
+
+section_properties_rule
+    :  section_properties_key Blank* EQUALS section_properties_value
+    -> ^(DOLLAR["PROPERTIE"] ^(DOLLAR["KEY"] section_properties_key) ^(DOLLAR["VALUE"] section_properties_value))
+    ;
+
+section_properties_key
+    : (Letter | Digit | DOT | HYPHEN | COMMA | DOLLAR | COLON)+
+    -> DOT[$text]
+    ;
+
+section_properties_value
+    : (EQUALS | Blank | Letter | Digit | DOT | HYPHEN | SLASH | BACKSLASH (Newline | BACKSLASH)
+    | PLUS | ASTERISK | COMMA | CIRCUMFLEX_ACCENT | DOLLAR | NUMBER_SIGN | LEFT_PARENTHESIS 
+    | RIGHT_PARENTHESIS | QUESTION_MARK | AMPERSAND | COLON | LEFT_CURLY_BRACE 
+    | RIGHT_CURLY_BRACE | LEFT_SQUARE_BRACKET | RIGHT_SQUARE_BRACKET | SECTION_PROPERTIES)*
+    -> DOT[$text]
     ;
 
 // Section config

@@ -10,6 +10,19 @@ server.controller.scope=request
 server.encoding=UTF-8
 server.async=true
 
+[conf.properties]
+site.name = test
+site.name = config.properties
+site.name=qsdfdsfqsdf/sdf/
+site_name=bla    vl a  \
+ dfsdf
+user.file = ${sys:user.home}/settings.xml
+action.key = ${const:java.awt.event.KeyEvent.VK_CANCEL}
+
+java.home = ${env:JAVA_HOME}
+
+
+
 [errors]
 java.lang.NullPointerException                              Error.npeError
 code:404                                                    Error.notFound

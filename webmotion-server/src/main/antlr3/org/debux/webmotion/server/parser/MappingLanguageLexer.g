@@ -23,6 +23,7 @@ SECTION_ERRORS:'[errors]';
 SECTION_FILTERS:'[filters]';
 SECTION_ACTIONS:'[actions]';
 SECTION_EXTENSIONS:'[extensions]';
+SECTION_PROPERTIES:'.properties';
 
 CONFIG_PACKAGE_VIEWS:'package.views';
 CONFIG_PACKAGE_BASE:'package.base';
@@ -74,10 +75,11 @@ COLON:':';
 AMPERSAND:'&';
 
 Letter
-    : '\u0024'
-    | '\u0025'
+    : '\u0024'            // $
+    | '\u0025'            // %
+    | '\u003b'            // ;
     | '\u0041'..'\u005a'
-    | '\u005f'
+    | '\u005f'            // _
     | '\u0061'..'\u007a'
     | '\u00c0'..'\u00d6'
     | '\u00d8'..'\u00f6'
@@ -95,11 +97,10 @@ Digit
     ;
 
 Newline
-    : ((' '|'\t')* '\r'? '\n')+
+    : ('\r'? '\n')+
     {skip();}
     ;
 
 Blank
     : (' '|'\t')+
-    {skip();}
     ;
