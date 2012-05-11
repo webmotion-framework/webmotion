@@ -33,7 +33,9 @@ import org.parboiled.annotations.SuppressNode;
 import org.parboiled.annotations.SuppressSubnodes;
 
 /**
- *
+ * Parboile parser for mapping file. The method to read the mapping is <code>mapping</code>.
+ * For more information on create mapping @see MappingParser.
+ * 
  * @author julien
  */
 @BuildParseTree
@@ -508,7 +510,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
 
     protected Rule LetterParameterValue() {
-        return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '$', '-', '%', '.');
+        return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '$', '-', '%', '.', "/");
     }
 
     protected Rule Letter() {
