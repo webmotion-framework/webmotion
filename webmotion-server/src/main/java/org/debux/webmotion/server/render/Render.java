@@ -29,7 +29,6 @@ import java.util.Map;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import org.debux.webmotion.server.WebMotionServer;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
@@ -146,16 +145,6 @@ public abstract class Render {
             }
         }
         return path;
-    }
-    
-    /**
-     * Mark next request force filter to do chain.
-     * @param call current call
-     */
-    protected static void markChainDoFilter(Call call) {
-        HttpContext context = call.getContext();
-        HttpServletRequest request = context.getRequest();
-        request.setAttribute(WebMotionServer.ATTRIBUTE_CHAIN_DO_FILTER, true);
     }
     
 }

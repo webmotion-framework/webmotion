@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import javax.servlet.AsyncContext;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -63,9 +64,6 @@ public class WebMotionServer implements Filter {
 
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
-            
-    /** Attribute name uses to chain the process */
-    public final static String ATTRIBUTE_CHAIN_DO_FILTER = "wm_chain.doFilter";
             
     /** Test if the path contains a extension */
     protected static Pattern patternFile = Pattern.compile("\\.\\w{2,4}$");
@@ -157,9 +155,8 @@ public class WebMotionServer implements Filter {
             log.info("Is static");
             doResource(httpServletRequest, httpServletResponse);
             
-        } else if (isChainDoFilter(httpServletRequest)) {
-            log.info("Is chain.doFilter");
-            request.setAttribute(ATTRIBUTE_CHAIN_DO_FILTER, false);
+        } else if (url.endsWith(".jsp") || url.endsWith(".jspx")) {
+            log.info("Is Jsp");
             chain.doFilter(request, response);
             
         } else if (config.isStaticAutodetect() && patternFile.matcher(url).find()) {
@@ -171,15 +168,6 @@ public class WebMotionServer implements Filter {
             log.info("Is default");
             doAction(httpServletRequest, httpServletResponse);
         }
-    }
-    
-    /**
-     * @param request current request
-     * @return true if force from render the chain.doFilter otherwise false
-     */
-    protected boolean isChainDoFilter(HttpServletRequest request) {
-        Boolean result = (Boolean) request.getAttribute(ATTRIBUTE_CHAIN_DO_FILTER);
-        return result != null && result;
     }
     
     /**

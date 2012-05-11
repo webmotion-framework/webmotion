@@ -63,8 +63,6 @@ public class RenderView extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        markChainDoFilter(call);
-        
         String path = getViewPath(mapping, view);
         addModel(call, model);
         
