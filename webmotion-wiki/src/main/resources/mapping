@@ -22,5 +22,8 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
+[config]
+server.static.autodetect=false
+
 [extensions]
 /                                       wikimotion.wm

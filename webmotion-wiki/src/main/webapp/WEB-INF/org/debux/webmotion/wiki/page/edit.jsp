@@ -26,18 +26,18 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <fmt:setBundle basename="bundle.wikimotion"/>
 
-<link rel="stylesheet" href="<c:url value="/js/codemirror-2.11/lib/codemirror.css"/>">
-<script src="<c:url value="/js/codemirror-2.11/lib/codemirror.js"/>"></script>
+<link rel="stylesheet" href="<c:url value="/static/js/codemirror-2.11/lib/codemirror.css"/>">
+<script src="<c:url value="/static/js/codemirror-2.11/lib/codemirror.js"/>"></script>
 
-<script src="<c:url value="/js/codemirror-2.11/mode/xml/xml.js"/>"></script>
-<script src="<c:url value="/js/codemirror-2.11/mode/javascript/javascript.js"/>"></script>
-<script src="<c:url value="/js/codemirror-2.11/mode/css/css.js"/>"></script>
-<script src="<c:url value="/js/codemirror-2.11/mode/htmlmixed/htmlmixed.js"/>"></script>
-<script src="<c:url value="/js/codemirror-2.11/mode/stex/stex.js"/>"></script>
-<script src="<c:url value="/js/codemirror-2.11/mode/rst/rst.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/xml/xml.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/javascript/javascript.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/css/css.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/htmlmixed/htmlmixed.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/stex/stex.js"/>"></script>
+<script src="<c:url value="/static/js/codemirror-2.11/mode/rst/rst.js"/>"></script>
 
-<link rel="stylesheet" href="<c:url value="/js/codemirror-2.11/mode/rst/rst.css"/>">
-<link rel="stylesheet" href="<c:url value="/js/codemirror-2.11/theme/default.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/js/codemirror-2.11/mode/rst/rst.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/js/codemirror-2.11/theme/default.css"/>">
 
 <div id="wiki">
     <form id="wiki_edit" action="<c:url value="${url}"/>" method="POST">

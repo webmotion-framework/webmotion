@@ -34,8 +34,8 @@
         <meta charset="utf-8">
         <title>${site_name}</title>
 
-        <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
-        <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
+        <link rel="icon" type="image/png" href="<c:url value="/static/img/favicon.png"/>">
+        <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/static/img/favicon.ico"/>">
         
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements --> 
         <!--[if lt IE 9]>
