@@ -46,14 +46,16 @@ import org.nuiton.util.Resource;
 import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.buffers.InputBuffer;
-import org.parboiled.parserunners.BasicParseRunner;
+import org.parboiled.errors.ErrorUtils;
+import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
+import org.parboiled.support.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ANTLR implementation of parser the file mapping.
+ * Parboile tree has been readed to generate the mapping object.
  * 
  * @author jruchaud
  */
@@ -68,6 +70,17 @@ public class MappingParser {
         
         /**
          * Accept visit before explore child, by default do nothing.
+         * @param inputBuffer current buffer
+         * @param node node of element
+         */
+        public void acceptBefore(Node node, InputBuffer inputBuffer) {
+            String value = org.parboiled.common.StringUtils.escape(ParseTreeUtils.getNodeText(node, inputBuffer));
+            log.info("with value = " + value);
+            acceptBefore(value);
+        }
+        
+        /**
+         * Accept visit before explore child, by default do nothing.
          * @param value value of element
          */
         public void acceptBefore(String value) {
@@ -75,9 +88,30 @@ public class MappingParser {
         
         /**
          * Accept visit after explore child, by default do nothing.
+         * @param inputBuffer current buffer
+         * @param node node of element
+         */
+        public void acceptAfter(Node node, InputBuffer inputBuffer) {
+            String value = org.parboiled.common.StringUtils.escape(ParseTreeUtils.getNodeText(node, inputBuffer));
+            acceptAfter(value);
+        }
+        
+        /**
+         * Accept visit after explore child, by default do nothing.
          * @param value value of element
          */
         public void acceptAfter(String value) {
+        }
+        
+        /**
+         * @param inputBuffer current buffer
+         * @param node node of element
+         * @return line number of node
+         */
+        public int getLine(Node node, InputBuffer inputBuffer) {
+            int index = node.getStartIndex();
+            Position position = inputBuffer.getPosition(index);
+            return position.line;
         }
     }
 
@@ -95,11 +129,19 @@ public class MappingParser {
         /** Stack during the parsing */
         protected Deque<Object> stack;
         
-        public TreeVisitor(Mapping m) {
-            this.mapping = m;
+        public TreeVisitor() {
+            this.mapping = new Mapping();
             this.stack = new LinkedList<Object>();
             this.rules = new HashMap<String, Visit>();
+            
+            createRules();
+        }
 
+        public Mapping getMapping() {
+            return mapping;
+        }
+        
+        protected void createRules() {
             rules.put("/configRule", new Visit() {
                 @Override
                 public void acceptAfter(String value) {
@@ -126,8 +168,10 @@ public class MappingParser {
 
             rules.put("/errorRule", new Visit() {
                 @Override
-                public void acceptBefore(String value) {
+                public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     ErrorRule errorRule = new ErrorRule();
+                    errorRule.setLine(getLine(node, inputBuffer));
+                    errorRule.setMapping(mapping);
                     stack.addLast(errorRule);
 
                     List<ErrorRule> errorRules = mapping.getErrorRules();
@@ -146,13 +190,6 @@ public class MappingParser {
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
                     errorRule.setError(value);
                 }
-
-                @Override
-                public void acceptAfter(String value) {
-                    ErrorRule errorRule = (ErrorRule) stack.peekLast();
-                    errorRule.setMapping(mapping);
-//                    errorRule.setLine(token.getLine());
-                }
             });
 
             rules.put("/errorRule/errorException", new Visit() {
@@ -166,7 +203,6 @@ public class MappingParser {
                 public void acceptAfter(String valuen) {
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
                     errorRule.setMapping(mapping);
-//                    errorRule.setLine(token.getLine());
                 }
             });
 
@@ -208,8 +244,10 @@ public class MappingParser {
 
             rules.put("/filterRule", new Visit() {
                 @Override
-                public void acceptBefore(String value) {
+                public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     FilterRule filterRule = new FilterRule();
+                    filterRule.setLine(getLine(node, inputBuffer));
+                    filterRule.setMapping(mapping);
                     stack.addLast(filterRule);
 
                     List<FilterRule> filterRules = mapping.getFilterRules();
@@ -228,13 +266,6 @@ public class MappingParser {
                     FilterRule filterRule = (FilterRule) stack.peekLast();
                     List<String> methods = filterRule.getMethods();
                     methods.add(value);
-                }
-
-                @Override
-                public void acceptAfter(String value) {
-                    FilterRule filterRule = (FilterRule) stack.peekLast();
-                    filterRule.setMapping(mapping);
-//                    filterRule.setLine(token.getLine());
                 }
             });
 
@@ -314,8 +345,10 @@ public class MappingParser {
 
             rules.put("/actionRule", new Visit() {
                 @Override
-                public void acceptBefore(String value) {
+                public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     ActionRule actionRule = new ActionRule();
+                    actionRule.setLine(getLine(node, inputBuffer));
+                    actionRule.setMapping(mapping);
                     stack.addLast(actionRule);
 
                     List<ActionRule> actionRules = mapping.getActionRules();
@@ -334,13 +367,6 @@ public class MappingParser {
                     ActionRule actionRule = (ActionRule) stack.peekLast();
                     List<String> methods = actionRule.getMethods();
                     methods.add(value);
-                }
-
-                @Override
-                public void acceptAfter(String value) {
-                    ActionRule actionRule = (ActionRule) stack.peekLast();
-                    actionRule.setMapping(mapping);
-//                    actionRule.setLine(token.getLine());
                 }
             });
 
@@ -586,8 +612,9 @@ public class MappingParser {
         public void visitTree(Node node, InputBuffer inputBuffer, String path) {
             String label = node.getLabel();
             boolean notSkip = !label.startsWith("'") &&
-                    !label.equals("mapping") &&
                     !label.startsWith("section") &&
+                    !label.equals("mapping") &&
+                    !label.equals("EOI") &&
                     !label.equals("Sequence") &&
                     !label.equals("Optional") &&
                     !label.equals("FirstOf") &&
@@ -595,13 +622,12 @@ public class MappingParser {
                     !label.equals("OneOrMore");
             
             if (notSkip) {
-                String text = org.parboiled.common.StringUtils.escape(ParseTreeUtils.getNodeText(node, inputBuffer));
                 path += "/" + label;
                 
-                log.info("Before " + path + " = " + text);
+                log.info("Before " + path);
                 Visit visit = rules.get(path);
-                if(visit != null) {
-                    visit.acceptBefore(text);
+                if (visit != null) {
+                    visit.acceptBefore(node, inputBuffer);
                 }
             }
             
@@ -610,12 +636,10 @@ public class MappingParser {
             }
             
             if (notSkip) {
-                String text = org.parboiled.common.StringUtils.escape(ParseTreeUtils.getNodeText(node, inputBuffer));
-                
-                log.info("After " + path + " = " + text);
+                log.info("After " + path);
                 Visit visit = rules.get(path);
-                if(visit != null) {
-                    visit.acceptAfter(text);
+                if (visit != null) {
+                    visit.acceptAfter(node, inputBuffer);
                 }
             }
         }
@@ -646,20 +670,30 @@ public class MappingParser {
      * @return the representation of the file
      */
     protected Mapping parse(URL url) {
-        Mapping mapping = new Mapping();
-        mapping.setName(url.toExternalForm());
-                
         try {
+            // Read the content in file
             InputStream stream = url.openStream();
             String content = IOUtils.toString(stream);
             
+            // Parse the content
             ParboiledMappingParser parser = Parboiled.createParser(ParboiledMappingParser.class);
-            BasicParseRunner runner = new BasicParseRunner(parser.mapping());
+            ReportingParseRunner runner = new ReportingParseRunner(parser.mapping());
             ParsingResult<?> result = runner.run(content);
             
+            // Detect if the parser has an errors
+            if (result.hasErrors()) {
+                log.error(ErrorUtils.printParseErrors(result));
+                throw new WebMotionException("Error to parse the mapping file");
+            }
+            
             // Visit tree
-            TreeVisitor tree = new TreeVisitor(mapping);
+            TreeVisitor tree = new TreeVisitor();
             tree.visitTree(result.parseTreeRoot, result.inputBuffer, "");
+            
+            // Get the mapping after the visit
+            Mapping mapping = tree.getMapping();
+            mapping.setName(url.toExternalForm());
+            
             return mapping;
 
         } catch (IOException ioe) {

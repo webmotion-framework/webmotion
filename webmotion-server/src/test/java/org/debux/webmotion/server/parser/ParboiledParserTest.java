@@ -31,11 +31,13 @@ import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.buffers.InputBuffer;
 import org.parboiled.common.StringUtils;
-import org.parboiled.parserunners.BasicParseRunner;
+import org.parboiled.errors.ErrorUtils;
+import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.AssertJUnit;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
@@ -55,6 +57,19 @@ public class ParboiledParserTest {
             new RunGrammar("mapping/debox-web.mapping")
         };
     }
+
+    @Test
+    public void testError() throws IOException {
+        String content = "[actions]\nGET test=value";
+
+        ParboiledMappingParser parser = Parboiled.createParser(ParboiledMappingParser.class);
+        ReportingParseRunner runner = new ReportingParseRunner(parser.mapping());
+        ParsingResult<?> result = runner.run(content);
+
+        log.info(ErrorUtils.printParseErrors(result));
+        log.info("error = " + result.hasErrors());
+        AssertJUnit.assertTrue(result.hasErrors());
+    }
     
     public class RunGrammar {
         
@@ -71,15 +86,16 @@ public class ParboiledParserTest {
             String content = IOUtils.toString(input);
             
             ParboiledMappingParser parser = Parboiled.createParser(ParboiledMappingParser.class);
-            BasicParseRunner runner = new BasicParseRunner(parser.mapping());
+            ReportingParseRunner runner = new ReportingParseRunner(parser.mapping());
             ParsingResult<?> result = runner.run(content);
             
             String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
-            System.out.println(parseTreePrintOut);
-            System.out.println("error = " + result.hasErrors());
+            log.info(parseTreePrintOut);
+            log.info("error = " + result.hasErrors());
+            AssertJUnit.assertFalse(result.hasErrors());
             
             StringBuilder sb = printTree(result.parseTreeRoot, result.inputBuffer, "", new StringBuilder());
-            System.out.println(sb.toString());
+            log.info(sb.toString());
         }
         
         private StringBuilder printTree(Node node, InputBuffer inputBuffer, String path, StringBuilder sb) {
@@ -87,6 +103,7 @@ public class ParboiledParserTest {
             if (!label.startsWith("'") &&
                     !label.equals("mapping") &&
                     !label.startsWith("section") &&
+                    !label.equals("EOI") &&
                     !label.equals("Sequence") &&
                     !label.equals("Optional") &&
                     !label.equals("FirstOf") &&

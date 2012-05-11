@@ -46,7 +46,7 @@ public class ParboiledMappingParser extends BaseParser {
     // First parse mapping
     public Rule mapping() {
         mapping = new Mapping();
-        return sections();
+        return Sequence(sections(), EOI);
     }
     
     public Rule sections() {
