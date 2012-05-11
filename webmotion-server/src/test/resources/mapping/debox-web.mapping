@@ -13,6 +13,7 @@ server.static.autodetect=false
 #java.lang.NullPointerException                              Error.npeError
 code:404                                                     view:error/404.jsp
 code:500                                                     view:error/500.jsp
+code:500                                                     url:/500
 
 [filters]
 GET         /*                                                Media.saveMediaType

@@ -26,7 +26,6 @@ package org.debux.webmotion.server.parser;
 
 import java.io.IOException;
 import java.net.URL;
-import org.antlr.runtime.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Factory;
@@ -37,9 +36,9 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class ANTLRParserTest {
+public class MappingParserTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ANTLRParserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(MappingParserTest.class);
 
     @Factory
     public Object[] testFactory() {
@@ -56,12 +55,12 @@ public class ANTLRParserTest {
 
         public RunGrammar(String fileName) {
             this.fileName = fileName;
-            this.parser = new ANTLRMappingParser();
+            this.parser = new MappingParser();
         }
         
         @Test
-        public void testParser() throws RecognitionException, IOException {
-            ClassLoader classLoader = ANTLRParserTest.class.getClassLoader();
+        public void testParser() throws IOException {
+            ClassLoader classLoader = MappingParserTest.class.getClassLoader();
             URL resource = classLoader.getResource(fileName);
             parser.parse(resource);
         }

@@ -24,14 +24,21 @@
  */
 package org.debux.webmotion.server.handler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.mapping.Action;
 import org.debux.webmotion.server.mapping.ActionRule;
+import org.debux.webmotion.server.mapping.FragmentUrl;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.parser.BasicMappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -47,6 +54,12 @@ public class ActionFinderHandlerTest {
 
     private static final Logger log = LoggerFactory.getLogger(ActionFinderHandlerTest.class);
 
+    /** Allowed characted are all alphanumeric characters, all punctuation characters exception following: <pre>!*'();:@&=+$,/?#[]</pre> */
+    protected static final String ALLOWED_CHARACTERS = "[\\p{Alnum}\\p{Punct}&&[^!\\*'\\(\\);:@&=+$,\\/\\?#\\[\\]]]";
+    protected static Pattern patternParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=\\{(" + ALLOWED_CHARACTERS + "*)(:)?(.*)?\\}$");
+    protected static Pattern patternStaticParam = Pattern.compile("^(" + ALLOWED_CHARACTERS + "*)=(" + ALLOWED_CHARACTERS + "*)$");
+    protected static Pattern patternPath = Pattern.compile("^\\{(\\p{Alnum}*)(:)?(.*)?\\}$");
+    
     @Factory
     public Object[] testFactory() {
         return new Object[]{
@@ -108,7 +121,6 @@ public class ActionFinderHandlerTest {
         protected String[] mappingContent;
         
         protected ActionFinderHandler handler;
-        protected BasicMappingParser parser;
 
         public RunHandler(String method, String url, String result, String... mappingContent) {
             this.method = method;
@@ -116,7 +128,6 @@ public class ActionFinderHandlerTest {
             this.result = result;
             this.mappingContent = mappingContent;
             this.handler = new ActionFinderHandler();
-            parser = new BasicMappingParser();
         }
         
         @Test
@@ -127,7 +138,7 @@ public class ActionFinderHandlerTest {
                 line = line.trim();
                 line = line.replaceAll(" +", " ");
                 
-                ActionRule actionRule = parser.extractSectionActions(line);
+                ActionRule actionRule = extractSectionActions(line);
                 actionRules.add(actionRule);
             }
             
@@ -136,6 +147,103 @@ public class ActionFinderHandlerTest {
             ActionRule actionRule = handler.getActionRule(mapping, call);
             AssertJUnit.assertNotNull(actionRule);
             AssertJUnit.assertEquals(result, actionRule.getAction().getFullName());
+        }
+        
+        public ActionRule extractSectionActions(String line) {
+            String[] splitRule = line.split(" ");
+            ActionRule actionRule = new ActionRule();
+
+            List<String> methods = Arrays.asList(splitRule[0]);
+            actionRule.setMethods(methods);
+
+            List<FragmentUrl> url = extractUrl(splitRule[1]);
+            actionRule.setRuleUrl(url);
+
+            List<FragmentUrl> parameters = extractParameters(splitRule[1]);
+            actionRule.setRuleParameters(parameters);
+
+            Action action = extractAction(splitRule[2]);
+            actionRule.setAction(action);
+
+            return actionRule;
+        }
+        
+        protected List<FragmentUrl> extractUrl(String fragment) {
+            log.info("fragment = " + fragment);
+            List<FragmentUrl> ruleUrl = new ArrayList<FragmentUrl>();
+            String baseUrl = StringUtils.substringBefore(fragment, "?");
+            if(!baseUrl.isEmpty()) {
+
+                List<String> splitBaseUrl = WebMotionUtils.splitPath(baseUrl);
+                log.info("splitBaseUrl = " + splitBaseUrl);
+
+                for(String item : splitBaseUrl) {
+                    FragmentUrl expression = extractExpression(item, false);
+                    ruleUrl.add(expression);
+                }
+            }
+            return ruleUrl;
+        }
+        
+        protected List<FragmentUrl> extractParameters(String fragment) {
+            List<FragmentUrl> ruleParameters = new ArrayList<FragmentUrl>();
+            String queryString = StringUtils.substringAfter(fragment, "?");
+            if (!queryString.isEmpty()) {
+
+                String[] splitQueryString = StringUtils.splitPreserveAllTokens(queryString, "&");
+                log.info("splitQueryString = " + Arrays.toString(splitQueryString));
+
+                for (String item : splitQueryString) {
+                    FragmentUrl expression = extractExpression(item, true);
+                    ruleParameters.add(expression);
+                }
+            }
+            return ruleParameters;
+        }
+
+        protected FragmentUrl extractExpression(String value, boolean isParam) {
+            FragmentUrl expression = new FragmentUrl();
+
+            Matcher matcherPath = patternPath.matcher(value);
+            Matcher matcherParam = patternParam.matcher(value);
+            Matcher matcherStaticParam = patternStaticParam.matcher(value);
+
+            String pattern = null;
+            if (matcherPath.find()) {
+                expression.setName(matcherPath.group(1));
+                pattern = matcherPath.group(3);
+
+            } else if (matcherParam.find()) {
+                expression.setParam(matcherParam.group(1));
+                expression.setName(matcherParam.group(2));
+                pattern = matcherParam.group(4);
+
+            } else if (matcherStaticParam.find()) {
+                expression.setParam(matcherStaticParam.group(1));
+                pattern = matcherStaticParam.group(2);
+
+            } else if (isParam) {
+                expression.setParam(value);
+
+            } else {
+                pattern = value;
+            }
+
+            if (pattern != null && !pattern.isEmpty()) {
+                expression.setPattern(Pattern.compile("^" + pattern + "$"));
+            }
+
+            return expression;
+        }
+        
+        protected Action extractAction(String ruleAction) {
+            Action action = new Action();
+
+            String[] split = ruleAction.split(":");
+            action.setFullName(split[0]);
+            action.setType(Action.Type.ACTION);
+
+            return action;
         }
     }
     

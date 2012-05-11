@@ -10,6 +10,9 @@ server.controller.scope=request
 server.encoding=UTF-8
 server.async=true
 
+[extensions]
+/                        mapping/debox-web.mapping
+
 [conf.properties]
 site.name = test
 site.name = config.properties
