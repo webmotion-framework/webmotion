@@ -69,7 +69,7 @@ public class ParametersMultipartHandler implements WebMotionHandler {
         Map<String, Object> extractParameters = call.getExtractParameters();
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        if(isMultipart) {
+        if (isMultipart) {
             FileItemFactory fileItemFactory = new DiskFileItemFactory();
             ServletFileUpload upload = new ServletFileUpload(fileItemFactory);
 
