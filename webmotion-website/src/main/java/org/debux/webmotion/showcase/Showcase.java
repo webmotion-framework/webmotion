@@ -946,7 +946,7 @@ public class Showcase extends WebMotionController {
     public Render global() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/global"
+                    "/global/hello"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("/global.wm")),

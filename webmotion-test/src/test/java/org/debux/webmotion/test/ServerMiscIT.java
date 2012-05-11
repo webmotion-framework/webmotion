@@ -51,7 +51,7 @@ public class ServerMiscIT extends AbstractIT {
     
     @Test
     public void globalListenner() throws IOException {
-        String url = getAbsoluteUrl("global");
+        String url = getAbsoluteUrl("global/hello");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);

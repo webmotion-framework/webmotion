@@ -28,7 +28,7 @@ package.base=org.debux.webmotion.test
 server.listener.class=org.debux.webmotion.test.GlobalListener
 
 [filters]
-*           /*                                     Logger.debug
+*           /global/*                                     Logger.debug
 
 [actions]
-*           /global                                view:helloParameters.jsp
+*           /global/hello                                 view:helloParameters.jsp

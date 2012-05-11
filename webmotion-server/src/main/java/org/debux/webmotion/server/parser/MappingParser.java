@@ -523,7 +523,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionValue/actionVariable/QualifiedIdentifier", new Visit() {
+            rules.put("/actionRule/actionParameters/actionParameter/actionVariable/QualifiedIdentifier", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -531,7 +531,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionValue/actionVariable/actionPattern", new Visit() {
+            rules.put("/actionRule/actionParameters/actionParameter/actionVariable/actionPatter", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
