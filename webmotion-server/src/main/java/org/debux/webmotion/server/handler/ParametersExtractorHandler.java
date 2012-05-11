@@ -93,7 +93,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         for (FragmentUrl expression : ruleUrl) {
             String name = expression.getName();
             
-            if(!StringUtils.isEmpty(name)) {
+            if (!StringUtils.isEmpty(name)) {
                 tmp.put(name, new String[]{path.get(position)});
             }
             position ++;
@@ -106,7 +106,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             
             if(!StringUtils.isEmpty(name)) {
                 Object values = extractParameters.get(param);
-                if(values != null) {
+                if (values != null) {
                     tmp.put(name, values);
                 }
             }
@@ -124,14 +124,14 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             
             for (position = 0; position < split.length; position++) {
 
-                if(position == split.length - 1) {
+                if (position == split.length - 1) {
                     map.put(split[position], value);
                     
                 } else {
                     String name = split[position];
 
                     Map<String, Object> next = (Map<String, Object>) map.get(name);
-                    if(next == null) {
+                    if (next == null) {
                         next = new LinkedHashMap<String, Object>();
                         map.put(name, next);
                     }
