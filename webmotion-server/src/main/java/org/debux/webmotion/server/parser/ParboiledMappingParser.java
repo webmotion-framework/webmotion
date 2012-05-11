@@ -331,15 +331,20 @@ public class ParboiledMappingParser extends BaseParser {
     public Rule actionPath() {
         return OneOrMore(
             FirstOf(
-                actionVariable(),
-                Sequence("/", actionPathStatic())
+                Sequence(actionPathSlash(), actionVariable()),
+                Sequence(actionPathSlash(), actionPathStatic()),
+                actionPathSlash()
             )
         );
     }
 
+    public Rule actionPathSlash() {
+        return fromStringLiteral("/");
+    }
+
     @SuppressSubnodes
     public Rule actionPathStatic() {
-        return ZeroOrMore(LetterPath());
+        return OneOrMore(LetterPath());
     }
     
     public Rule actionParameters() {

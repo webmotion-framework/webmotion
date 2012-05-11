@@ -344,6 +344,19 @@ public class MappingParser {
                 }
             });
 
+            rules.put("/actionRule/actionPath/actionPathSlash", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    FragmentUrl fragment = new FragmentUrl();
+                    Pattern pattern = Pattern.compile("^/$");
+                    fragment.setPattern(pattern);
+
+                    ActionRule actionRule = (ActionRule) stack.peekLast();
+                    List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
+                    ruleUrl.add(fragment);
+                }
+            });
+
             rules.put("/actionRule/actionPath/actionPathStatic", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
