@@ -150,6 +150,10 @@ public class WebMotionServer implements Filter {
             log.info("Is deploy");
             doAction(httpServletRequest, httpServletResponse);
             
+        } else if (url.endsWith(".jsp") || url.endsWith(".jspx")) {
+            log.info("Is Jsp");
+            chain.doFilter(request, response);
+            
         } else if (url.startsWith("/static")) {
             log.info("Is static");
             doResource(httpServletRequest, httpServletResponse);

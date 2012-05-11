@@ -87,7 +87,7 @@ public abstract class Render {
      * @param view
      * @return 
      */
-    protected String getActionPath(Mapping mapping, String view) {
+    protected static String getViewPath(Mapping mapping, String view) {
         String path = "/" + view;
         
         Config config = mapping.getConfig();
@@ -102,10 +102,10 @@ public abstract class Render {
 
     /**
      * Add model in attribute
-     * @param render
-     * @param request 
+     * @param call
+     * @param model
      */
-    protected void addModel(Call call, Map<String, Object> model) {
+    protected static void addModel(Call call, Map<String, Object> model) {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
         
@@ -121,9 +121,10 @@ public abstract class Render {
     /**
      * Add model in parameter
      * @param url
+     * @param model
      * @return 
      */
-    protected String addModel(String url, Map<String, Object> model) {
+    protected static String addModel(String url, Map<String, Object> model) {
         String path = url;
         if(model != null) {
 

@@ -72,7 +72,7 @@ public class RenderTemplate extends Render {
         
         ServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request);
         ResponseWrapper responseWrapper = new ResponseWrapper(response);
-        String path = getActionPath(mapping, view);
+        String path = getViewPath(mapping, view);
         request.getRequestDispatcher(path).include(requestWrapper, responseWrapper);
         
         String contentType = responseWrapper.getContentType();

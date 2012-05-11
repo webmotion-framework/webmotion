@@ -146,7 +146,7 @@ public class Config {
             }
             setSecret(value);
         } else if (SERVER_STATIC_AUTODETECT.equals(name)) {
-            setAsync(Boolean.valueOf(value));
+            setStaticAutodetect(Boolean.valueOf(value));
         }
     }
     

@@ -63,11 +63,10 @@ public class RenderView extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
+        String path = getViewPath(mapping, view);
         addModel(call, model);
-        
-        String path = getActionPath(mapping, view);
-        DispatcherType dispatcherType = request.getDispatcherType();
 
+        DispatcherType dispatcherType = request.getDispatcherType();
         if (request.isAsyncStarted()) {
             AsyncContext asyncContext = request.getAsyncContext();
             asyncContext.dispatch(path);
