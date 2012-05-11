@@ -68,7 +68,6 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
             <scope>test</scope>
         </dependency>
 
@@ -161,13 +160,11 @@
         <dependency>
             <groupId>org.parboiled</groupId>
             <artifactId>parboiled-core</artifactId>
-            <version>1.0.2</version>
         </dependency>
         
         <dependency>
             <groupId>org.parboiled</groupId>
             <artifactId>parboiled-java</artifactId>
-            <version>1.0.2</version>
         </dependency>
                     
     </dependencies>

@@ -529,7 +529,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/ACTION/PARAMETERS/PARAMETER/VALUE/*", new Visit() {
+            rules.put("/actionRule/actionParameters/actionParameter/actionValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();

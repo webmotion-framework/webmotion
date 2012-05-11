@@ -349,7 +349,7 @@ public class ParboiledMappingParser extends BaseParser {
     public Rule actionParameter() {
         return Sequence(
                 actionName(),
-                Optional("=", Optional(actionValue()))
+                Optional("=", Optional(FirstOf(actionVariable(), actionValue())))
             );
     }
     
@@ -358,13 +358,9 @@ public class ParboiledMappingParser extends BaseParser {
         return OneOrMore(LetterParameter());
     }
     
+    @SuppressSubnodes
     public Rule actionValue() {
-        return OneOrMore(
-            FirstOf(
-                actionVariable(),
-                LetterParameterValue()
-            )
-        );
+        return OneOrMore(LetterParameterValue());
     }
     
     @SuppressSubnodes
