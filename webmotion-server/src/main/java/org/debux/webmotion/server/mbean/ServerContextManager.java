@@ -61,7 +61,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
-            log.warn("Error during register the MBean", ex);
+            log.warn("Error during register the MBean");
         }    
     }
     
@@ -75,7 +75,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
-            log.warn("Error during unregister the MBean", ex);
+            log.warn("Error during unregister the MBean");
         }
     }
     

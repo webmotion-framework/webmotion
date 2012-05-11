@@ -69,7 +69,7 @@ public class ServerStats implements ServerStatsMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
-            log.warn("Error during register the MBean", ex);
+            log.warn("Error during register the MBean");
         }    
     }
     
@@ -83,7 +83,7 @@ public class ServerStats implements ServerStatsMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
-            log.warn("Error during unregister the MBean", ex);
+            log.warn("Error during unregister the MBean");
         }
     }
     
