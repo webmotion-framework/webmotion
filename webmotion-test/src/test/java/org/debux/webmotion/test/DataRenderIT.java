@@ -46,9 +46,9 @@ public class DataRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("John"));
-        AssertJUnit.assertTrue(result.contains("azerty"));
-        AssertJUnit.assertTrue(result.contains("77"));
+        AssertJUnit.assertTrue(result, result.contains("John"));
+        AssertJUnit.assertTrue(result, result.contains("azerty"));
+        AssertJUnit.assertTrue(result, result.contains("77"));
     }
     
     @Test
@@ -57,7 +57,7 @@ public class DataRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("{\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77}"));
+        AssertJUnit.assertTrue(result, result.contains("{\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77}"));
     }
     
     @Test
@@ -66,7 +66,7 @@ public class DataRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("test({\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77});"));
+        AssertJUnit.assertTrue(result, result.contains("test({\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77});"));
     }
     
     @Test
@@ -75,7 +75,7 @@ public class DataRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("bla bla bla ..."));
+        AssertJUnit.assertTrue(result, result.contains("bla bla bla ..."));
     }
     
 }

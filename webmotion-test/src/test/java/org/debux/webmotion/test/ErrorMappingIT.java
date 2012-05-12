@@ -46,7 +46,7 @@ public class ErrorMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Error server with code 500"));
+        AssertJUnit.assertTrue(result, result.contains("Error server with code 500"));
     }
     
     @Test
@@ -55,7 +55,7 @@ public class ErrorMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Error during the call"));
+        AssertJUnit.assertTrue(result, result.contains("Error during the call"));
     }
     
     @Test
@@ -64,7 +64,7 @@ public class ErrorMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Error server with code 404"));
+        AssertJUnit.assertTrue(result, result.contains("Error server with code 404"));
     }
     
     @Test
@@ -73,7 +73,7 @@ public class ErrorMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Error on the server"));
+        AssertJUnit.assertTrue(result, result.contains("Error on the server"));
     }
     
 }

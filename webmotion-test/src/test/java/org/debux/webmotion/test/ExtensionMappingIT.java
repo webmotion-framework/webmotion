@@ -47,7 +47,7 @@ public class ExtensionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("It is the blog in extension !"));
+        AssertJUnit.assertTrue(result, result.contains("It is the blog in extension !"));
     }
     
     @Test
@@ -56,7 +56,7 @@ public class ExtensionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello Spring !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello Spring !"));
     }
     
     @Test
@@ -65,7 +65,7 @@ public class ExtensionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("count = "));
+        AssertJUnit.assertTrue(result, result.contains("count = "));
     }
     
     @Test
@@ -74,7 +74,7 @@ public class ExtensionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("SiteMesh example site"));
+        AssertJUnit.assertTrue(result, result.contains("SiteMesh example site"));
     }
     
     @Test
@@ -83,20 +83,20 @@ public class ExtensionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("test"));
+        AssertJUnit.assertTrue(result, result.contains("test"));
         
         String id = StringUtils.substringBetween(result, "?id=", "\"");
         url = getAbsoluteUrl("note/incLike?id=" + id);
         request = new HttpGet(url);
      
         result = execute(request);
-        AssertJUnit.assertTrue(result.contains("<td>1</td>"));
+        AssertJUnit.assertTrue(result, result.contains("<td>1</td>"));
         
         url = getAbsoluteUrl("note/delete?id=" + id);
         request = new HttpGet(url);
      
         result = execute(request);
-        AssertJUnit.assertFalse(result.contains(id));
+        AssertJUnit.assertFalse(result, result.contains(id));
     }
 
 }

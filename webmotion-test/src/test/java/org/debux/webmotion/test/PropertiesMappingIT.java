@@ -46,7 +46,7 @@ public class PropertiesMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello World by properties !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello World by properties !"));
     }
     
 }

@@ -46,7 +46,7 @@ public class HelloWorldMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
 }

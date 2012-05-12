@@ -47,7 +47,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Execute action"));
+        AssertJUnit.assertTrue(result, result.contains("Execute action"));
     }
     
     @Test
@@ -56,7 +56,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
@@ -65,7 +65,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("WebMotion"));
+        AssertJUnit.assertTrue(result, result.contains("WebMotion"));
     }
     
     @Test
@@ -74,7 +74,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
@@ -83,7 +83,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
@@ -92,7 +92,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello you !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello you !"));
     }
     
     @Test
@@ -101,7 +101,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello me !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello me !"));
     }
     
     @Test
@@ -110,7 +110,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello default !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello default !"));
     }
     
     @Test
@@ -119,7 +119,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello other !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello other !"));
     }
     
     @Test
@@ -128,7 +128,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("The who aaaa and value aaaa contains only letter a"));
+        AssertJUnit.assertTrue(result, result.contains("The who aaaa and value aaaa contains only letter a"));
     }
     
     @Test
@@ -137,7 +137,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("The who baaa and value aaaaa NOT contains only letter a"));
+        AssertJUnit.assertTrue(result, result.contains("The who baaa and value aaaaa NOT contains only letter a"));
     }
     
     @Test
@@ -146,7 +146,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("The who aaaa and value baaaa NOT contains only letter a"));
+        AssertJUnit.assertTrue(result, result.contains("The who aaaa and value baaaa NOT contains only letter a"));
     }
     
     @Test
@@ -155,7 +155,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Login with user name : john and passwd azerty"));
+        AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
@@ -164,7 +164,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Login with user name : john and passwd azerty"));
+        AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
@@ -173,7 +173,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Select with parameter !"));
+        AssertJUnit.assertTrue(result, result.contains("Select with parameter !"));
     }
     
     @Test
@@ -182,7 +182,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Select without parameter !"));
+        AssertJUnit.assertTrue(result, result.contains("Select without parameter !"));
     }
     
     @Test
@@ -191,7 +191,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Execute get action"));
+        AssertJUnit.assertTrue(result, result.contains("Execute get action"));
     }
     
     @Test
@@ -200,7 +200,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Execute set action"));
+        AssertJUnit.assertTrue(result, result.contains("Execute set action"));
     }
     
     @Test
@@ -209,7 +209,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("It is the readme"));
+        AssertJUnit.assertTrue(result, result.contains("It is the readme"));
     }
     
     @Test
@@ -218,7 +218,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("It is the changelog"));
+        AssertJUnit.assertTrue(result, result.contains("It is the changelog"));
     }
     
     @Test
@@ -227,7 +227,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello John !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello John !"));
     }
     
     @Test
@@ -236,7 +236,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello Jack !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello Jack !"));
     }
     
     @Test
@@ -245,7 +245,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Tutu"));
+        AssertJUnit.assertTrue(result, result.contains("Tutu"));
     }
     
     @Test
@@ -254,7 +254,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Tata"));
+        AssertJUnit.assertTrue(result, result.contains("Tata"));
     }
     
     @Test
@@ -263,7 +263,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Return the person"));
+        AssertJUnit.assertTrue(result, result.contains("Return the person"));
     }
     
     @Test
@@ -272,7 +272,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpPost request = new HttpPost(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Save the person"));
+        AssertJUnit.assertTrue(result, result.contains("Save the person"));
     }
     
     @Test
@@ -281,7 +281,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Get the media"));
+        AssertJUnit.assertTrue(result, result.contains("Get the media"));
     }
     
     @Test
@@ -290,7 +290,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpPost request = new HttpPost(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Get the media"));
+        AssertJUnit.assertTrue(result, result.contains("Get the media"));
     }
     
     @Test
@@ -299,7 +299,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Dummy readme"));
+        AssertJUnit.assertTrue(result, result.contains("Dummy readme"));
     }
     
     @Test
@@ -308,7 +308,7 @@ public class ActionMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.isEmpty());
+        AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
 }

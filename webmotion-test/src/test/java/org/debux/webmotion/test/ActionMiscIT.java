@@ -56,9 +56,9 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Title lorem ipsum"));
-        AssertJUnit.assertTrue(result.contains("Author lorem ipsum"));
-        AssertJUnit.assertTrue(result.contains("Powered by WikiMotion and WebMotion"));
+        AssertJUnit.assertTrue(result, result.contains("Title lorem ipsum"));
+        AssertJUnit.assertTrue(result, result.contains("Author lorem ipsum"));
+        AssertJUnit.assertTrue(result, result.contains("Powered by WikiMotion and WebMotion"));
     }
     
     @Test
@@ -67,9 +67,9 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Title lorem ipsum"));
-        AssertJUnit.assertTrue(result.contains("Author lorem ipsum"));
-        AssertJUnit.assertTrue(result.contains("Powered by WikiMotion and WebMotion"));
+        AssertJUnit.assertTrue(result, result.contains("Title lorem ipsum"));
+        AssertJUnit.assertTrue(result, result.contains("Author lorem ipsum"));
+        AssertJUnit.assertTrue(result, result.contains("Powered by WikiMotion and WebMotion"));
     }
     
     @Test
@@ -104,7 +104,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpEntity entity = response.getEntity();
         InputStream content = entity.getContent();
         String result = IOUtils.toString(content);
-        AssertJUnit.assertTrue(result.contains("Value = a_value"));
+        AssertJUnit.assertTrue(result, result.contains("Value = a_value"));
         
         CookieStore cookieStore = client.getCookieStore();
         List<Cookie> cookies = cookieStore.getCookies();
@@ -139,7 +139,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpEntity entity = response.getEntity();
         InputStream content = entity.getContent();
         String result = IOUtils.toString(content);
-        AssertJUnit.assertTrue(result.contains("Value = test"));
+        AssertJUnit.assertTrue(result, result.contains("Value = test"));
     }
     
     @Test
@@ -210,7 +210,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpEntity entity = response.getEntity();
         InputStream content = entity.getContent();
         String result = IOUtils.toString(content);
-        AssertJUnit.assertTrue(result.contains("Current value = test"));
+        AssertJUnit.assertTrue(result, result.contains("Current value = test"));
     }
     
     @Test
@@ -219,7 +219,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Current value is empty"));
+        AssertJUnit.assertTrue(result, result.contains("Current value is empty"));
     }
         
     @Test
@@ -228,7 +228,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Book created"));
+        AssertJUnit.assertTrue(result, result.contains("Book created"));
     }
     
     @Test
@@ -237,7 +237,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Shop#create(arg0).title :"));
+        AssertJUnit.assertTrue(result, result.contains("Shop#create(arg0).title :"));
     }
     
     @Test
@@ -246,7 +246,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Comment saved"));
+        AssertJUnit.assertTrue(result, result.contains("Comment saved"));
     }
     
     @Test
@@ -255,7 +255,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Shop#comment(arg0).comment :"));
+        AssertJUnit.assertTrue(result, result.contains("Shop#comment(arg0).comment :"));
     }
     
     @Test
@@ -264,7 +264,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Not found"));
+        AssertJUnit.assertTrue(result, result.contains("Not found"));
     }
     
     @Test
@@ -273,7 +273,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Shop#search(arg0) :"));
+        AssertJUnit.assertTrue(result, result.contains("Shop#search(arg0) :"));
     }
     
     @Test
@@ -282,7 +282,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Not found"));
+        AssertJUnit.assertTrue(result, result.contains("Not found"));
     }
     
     @Test
@@ -291,7 +291,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello world !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
         
     @Test
@@ -300,7 +300,7 @@ public class ActionMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("test"));
+        AssertJUnit.assertTrue(result, result.contains("test"));
     }
     
 }

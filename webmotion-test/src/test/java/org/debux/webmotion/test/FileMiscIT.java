@@ -59,7 +59,7 @@ public class FileMiscIT extends AbstractIT {
         request.setEntity(entity);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("logback.xml is uploaded"));
+        AssertJUnit.assertTrue(result, result.contains("logback.xml is uploaded"));
     }
     
 }

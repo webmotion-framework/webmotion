@@ -46,7 +46,7 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("value = 42\nBefore filter\nAction log\nAction render\nAfter filter"));
+        AssertJUnit.assertTrue(result, result.contains("value = 42\nBefore filter\nAction log\nAction render\nAfter filter"));
     }
     
     @Test
@@ -55,7 +55,7 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("run : 0\nrun : 1\nrun : 2\nrun : 3\nrun : 4\nrun : 5"));
+        AssertJUnit.assertTrue(result, result.contains("run : 0\nrun : 1\nrun : 2\nrun : 3\nrun : 4\nrun : 5"));
     }
     
     @Test
@@ -64,7 +64,7 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Invalid number 3"));
+        AssertJUnit.assertTrue(result, result.contains("Invalid number 3"));
     }
     
     @Test
@@ -73,7 +73,7 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("With slot contact"));
+        AssertJUnit.assertTrue(result, result.contains("With slot contact"));
     }
     
     @Test
@@ -82,7 +82,7 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("With slot company"));
+        AssertJUnit.assertTrue(result, result.contains("With slot company"));
     }
     
 }

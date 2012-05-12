@@ -53,7 +53,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Lorem ipsum"));
+        AssertJUnit.assertTrue(result, result.contains("Lorem ipsum"));
     }
     
     @Test
@@ -62,7 +62,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello WebMotion !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello WebMotion !"));
     }
     
     @Test
@@ -89,8 +89,8 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Next action with value"));
-        AssertJUnit.assertTrue(result.contains("test"));
+        AssertJUnit.assertTrue(result, result.contains("Next action with value"));
+        AssertJUnit.assertTrue(result, result.contains("test"));
     }
     
     @Test
@@ -99,7 +99,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Execute internal"));
+        AssertJUnit.assertTrue(result, result.contains("Execute internal"));
     }
     
     @Test
@@ -108,7 +108,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello internal !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello internal !"));
     }
     
     @Test
@@ -117,7 +117,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Content"));
+        AssertJUnit.assertTrue(result, result.contains("Content"));
     }
     
     @Test
@@ -126,7 +126,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.isEmpty());
+        AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
     @Test
@@ -135,7 +135,7 @@ public class BasicRenderIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertFalse(result.isEmpty());
+        AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
     @Test
@@ -143,7 +143,7 @@ public class BasicRenderIT extends AbstractIT {
         String url = getAbsoluteUrl("reload");
         HttpGet request = new HttpGet(url);
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Error server with code 500"));
+        AssertJUnit.assertTrue(result, result.contains("Error server with code 500"));
     }
     
     @Test

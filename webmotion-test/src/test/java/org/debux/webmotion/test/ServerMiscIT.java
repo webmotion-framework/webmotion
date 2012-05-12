@@ -46,7 +46,7 @@ public class ServerMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("key = value"));
+        AssertJUnit.assertTrue(result, result.contains("key = value"));
     }
     
     @Test
@@ -55,7 +55,7 @@ public class ServerMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("Hello from logger !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello from logger !"));
     }
         
     @Test
@@ -64,7 +64,7 @@ public class ServerMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("A value from the config object"));
+        AssertJUnit.assertTrue(result, result.contains("A value from the config object"));
     }
         
     @Test
@@ -73,7 +73,7 @@ public class ServerMiscIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result.contains("value"));
+        AssertJUnit.assertTrue(result, result.contains("value"));
     }
 
 }
