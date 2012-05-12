@@ -62,15 +62,15 @@ public class ConfigurationTest {
     
     @Test
     public void testComposite() throws ConfigurationException {
-        PropertiesConfiguration first = new PropertiesConfiguration();
-        first.load(new StringReader("name=value"));
+        PropertiesConfiguration local = new PropertiesConfiguration();
+        local.load(new StringReader("name=value"));
         
-        PropertiesConfiguration second = new PropertiesConfiguration();
-        second.load(new StringReader("name=other"));
+        PropertiesConfiguration file = new PropertiesConfiguration();
+        file.load(new StringReader("name=other"));
         
         CompositeConfiguration composite = new CompositeConfiguration();
-        composite.addConfiguration(second);
-        composite.addConfiguration(first);
+        composite.addConfiguration(file);
+        composite.addConfiguration(local);
         
         AssertJUnit.assertEquals("other", composite.getString("name"));
     }

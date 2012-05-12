@@ -16,6 +16,7 @@ server.async=true
 [conf.properties]
 site.name = test
 site.name = config.properties
+site.name =
 site.name=qsdfdsfqsdf/sdf/
 site_name=bla    vl a  \
  dfsdf
@@ -24,7 +25,7 @@ action.key = ${const:java.awt.event.KeyEvent.VK_CANCEL}
 
 java.home = ${env:JAVA_HOME}
 
-
+include=properties/etc.properties
 
 [errors]
 java.lang.NullPointerException                              Error.npeError

@@ -287,7 +287,7 @@ public class WebMotionUtils {
     /**
      * @return the system configuration path for os
      */
-    public String getSystemConfigurationPath() {
+    public static String getSystemConfigurationPath() {
         String osName = System.getProperty("os.name");
         
         // For windows
@@ -317,7 +317,7 @@ public class WebMotionUtils {
     /**
      * @return the user configuration path for os
      */
-    public String getUserConfigurationPath() {
+    public static String getUserConfigurationPath() {
         String osName = System.getProperty("os.name");
         String userHome = System.getProperty("user.home");
         

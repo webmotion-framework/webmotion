@@ -102,7 +102,7 @@ public class ParboiledParserTest {
             String label = node.getLabel();
             if (!label.startsWith("'") &&
                     !label.equals("mapping") &&
-                    !label.startsWith("section") &&
+                    !label.equals("sections") &&
                     !label.equals("EOI") &&
                     !label.equals("Sequence") &&
                     !label.equals("Optional") &&

@@ -42,6 +42,8 @@ import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
+import org.debux.webmotion.server.mapping.Properties;
+import org.debux.webmotion.server.mapping.Properties.PropertiesItem;
 import org.nuiton.util.Resource;
 import org.parboiled.Node;
 import org.parboiled.Parboiled;
@@ -142,31 +144,67 @@ public class MappingParser {
         }
         
         protected void createRules() {
-            rules.put("/configRule", new Visit() {
+            rules.put("/sectionConfig/configRule", new Visit() {
                 @Override
                 public void acceptAfter(String value) {
                     stack.removeLast();
                 }
             });
-
-            rules.put("/configRule/configName", new Visit() {
+            
+            rules.put("/sectionConfig/configRule/configName", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
-                    stack.addLast(value);
+                    stack.addLast(value.trim());
                 }
             });
 
-            rules.put("/configRule/configValue", new Visit() {
+            rules.put("/sectionConfig/configRule/configValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Config config = mapping.getConfig();
 
                     String name = (String) stack.peekLast();
-                    config.set(name, value);
+                    config.set(name, value.trim());
                 }
             });
 
-            rules.put("/errorRule", new Visit() {
+            rules.put("/sectionProperties", new Visit() {
+                @Override
+                public void acceptAfter(String value) {
+                    stack.removeLast();
+                }
+            });
+            
+            rules.put("/sectionProperties/propertiesSection/Identifier", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    PropertiesItem item = new PropertiesItem(value);
+                    stack.addLast(item);
+                    
+                    Properties properties = mapping.getProperties();
+                    properties.addItem(item);
+                }
+            });
+
+            rules.put("/sectionProperties/propertiesRule/propertiesName", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    stack.addLast(value.trim());
+                }
+            });
+
+            rules.put("/sectionProperties/propertiesRule/propertiesValue", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    String key = (String) stack.removeLast();
+                    PropertiesItem item = (PropertiesItem) stack.peekLast();
+                            
+                    value = value.replaceAll("\\\\\\\\n\\p{Space}*", "");
+                    item.addProperty(key, value.trim());
+                }
+            });
+            
+            rules.put("/sectionErrors/errorRule", new Visit() {
                 @Override
                 public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     ErrorRule errorRule = new ErrorRule();
@@ -184,7 +222,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/errorRule/errorCode", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorCode", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -192,7 +230,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/errorRule/errorException", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorException", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -206,7 +244,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/errorRule/errorJava/errorJavaValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorJava/errorJavaValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -218,7 +256,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/errorRule/errorView/errorViewValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorView/errorViewValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -230,7 +268,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/errorRule/errorUrl/errorUrlValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorUrl/errorUrlValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -242,7 +280,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule", new Visit() {
+            rules.put("/sectionFilters/filterRule", new Visit() {
                 @Override
                 public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     FilterRule filterRule = new FilterRule();
@@ -260,7 +298,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/Method/MethodValue", new Visit() {
+            rules.put("/sectionFilters/filterRule/Method/MethodValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -269,7 +307,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterPath", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterPath", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     value = value.replaceAll("/\\*/", "/[^/]*/");
@@ -281,7 +319,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterJava/filterJavaValue", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterJava/filterJavaValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -293,7 +331,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterView", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterView", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -305,7 +343,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterUrl", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterUrl", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -317,14 +355,14 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterParameters/filterParameter", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterParameters/filterParameter", new Visit() {
                 @Override
                 public void acceptAfter(String value) {
                     stack.removeLast();
                 }
             });
 
-            rules.put("/filterRule/filterParameters/filterParameter/filterName", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterParameters/filterParameter/filterName", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -334,16 +372,17 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/filterRule/filterParameters/filterParameter/filterValue", new Visit() {
+            rules.put("/sectionFilters/filterRule/filterParameters/filterParameter/filterValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     String key = (String) stack.peekLast();
                     FilterRule actionRule = (FilterRule) stack.getFirst();
                     Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
-                    defaultParameters.put(key, new String[]{value});            }
+                    defaultParameters.put(key, new String[]{value});
+                }
             });
 
-            rules.put("/actionRule", new Visit() {
+            rules.put("/sectionActions/actionRule", new Visit() {
                 @Override
                 public void acceptBefore(Node node, InputBuffer inputBuffer) {
                     ActionRule actionRule = new ActionRule();
@@ -361,7 +400,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/Method/MethodValue", new Visit() {
+            rules.put("/sectionActions/actionRule/Method/MethodValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ActionRule actionRule = (ActionRule) stack.peekLast();
@@ -370,7 +409,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionPath/actionPathSlash", new Visit() {
+            rules.put("/sectionActions/actionRule/actionPath/actionPathSlash", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = new FragmentUrl();
@@ -383,7 +422,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionPath/actionPathStatic", new Visit() {
+            rules.put("/sectionActions/actionRule/actionPath/actionPathStatic", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = new FragmentUrl();
@@ -396,7 +435,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionPath/actionVariable", new Visit() {
+            rules.put("/sectionActions/actionRule/actionPath/actionVariable", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ActionRule actionRule = (ActionRule) stack.peekLast();
@@ -414,7 +453,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionPath/actionVariable/QualifiedIdentifier", new Visit() {
+            rules.put("/sectionActions/actionRule/actionPath/actionVariable/QualifiedIdentifier", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -422,7 +461,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionPath/actionVariable/actionPattern", new Visit() {
+            rules.put("/sectionActions/actionRule/actionPath/actionVariable/actionPattern", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -433,7 +472,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionJava", new Visit() {
+            rules.put("/sectionActions/actionRule/actionJava", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -451,7 +490,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionJava/actionJavaValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionJava/actionJavaValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = (Action) stack.peekLast();
@@ -459,7 +498,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionJava/actionJavaType", new Visit() {
+            rules.put("/sectionActions/actionRule/actionJava/actionJavaType", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = (Action) stack.peekLast();
@@ -473,7 +512,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionView/actionViewValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionView/actionViewValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -485,7 +524,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionUrl/actionUrlValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionUrl/actionUrlValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -497,14 +536,14 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionDefaultParameters/actionDefaultParameter", new Visit() {
+            rules.put("/sectionActions/actionRule/actionDefaultParameters/actionDefaultParameter", new Visit() {
                 @Override
                 public void acceptAfter(String value) {
                     stack.removeLast();
                 }
             });
 
-            rules.put("/actionRule/actionDefaultParameters/actionDefaultParameter/actionDefaultName", new Visit() {
+            rules.put("/sectionActions/actionRule/actionDefaultParameters/actionDefaultParameter/actionDefaultName", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ActionRule actionRule = (ActionRule) stack.peekLast();
@@ -514,7 +553,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionDefaultParameters/actionDefaultParameter/actionDefaultValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionDefaultParameters/actionDefaultParameter/actionDefaultValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     String key = (String) stack.peekLast();
@@ -524,7 +563,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter", new Visit() {
+            rules.put("/sectionActions/actionRule/actionParameters/actionParameter", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     ActionRule actionRule = (ActionRule) stack.peekLast();
@@ -541,7 +580,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionName", new Visit() {
+            rules.put("/sectionActions/actionRule/actionParameters/actionParameter/actionName", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -549,7 +588,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionVariable/QualifiedIdentifier", new Visit() {
+            rules.put("/sectionActions/actionRule/actionParameters/actionParameter/actionVariable/QualifiedIdentifier", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -557,7 +596,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionVariable/actionPattern", new Visit() {
+            rules.put("/sectionActions/actionRule/actionParameters/actionParameter/actionVariable/actionPattern", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -568,7 +607,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/actionRule/actionParameters/actionParameter/actionValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionParameters/actionParameter/actionValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
@@ -577,14 +616,14 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/extensionRule/extensionPath", new Visit() {
+            rules.put("/sectionExtensions/extensionRule/extensionPath", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     stack.addLast(value);
                 }
             });
 
-            rules.put("/extensionRule/extensionFile", new Visit() {
+            rules.put("/sectionExtensions/extensionRule/extensionFile", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     String path = (String) stack.removeLast();
@@ -612,8 +651,8 @@ public class MappingParser {
         public void visitTree(Node node, InputBuffer inputBuffer, String path) {
             String label = node.getLabel();
             boolean notSkip = !label.startsWith("'") &&
-                    !label.startsWith("section") &&
                     !label.equals("mapping") &&
+                    !label.equals("sections") &&
                     !label.equals("EOI") &&
                     !label.equals("Sequence") &&
                     !label.equals("Optional") &&

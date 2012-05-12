@@ -42,6 +42,9 @@ public class Mapping {
     /** Represents config section */
     protected Config config;
     
+    /** Represents properties section */
+    protected Properties properties;
+    
     /** Represents error section */
     protected List<ErrorRule> errorRules;
     
@@ -60,6 +63,7 @@ public class Mapping {
     /** Default contructor. */
     public Mapping() {
         this.config = new Config();
+        this.properties = new Properties();
         this.errorRules = new ArrayList<ErrorRule>();
         this.filterRules = new ArrayList<FilterRule>();
         this.actionRules = new ArrayList<ActionRule>();
@@ -72,6 +76,14 @@ public class Mapping {
 
     public void setConfig(Config config) {
         this.config = config;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
     
     public List<FilterRule> getFilterRules() {

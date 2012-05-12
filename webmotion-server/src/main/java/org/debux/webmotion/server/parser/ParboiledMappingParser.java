@@ -54,10 +54,10 @@ public class ParboiledMappingParser extends BaseParser {
                     FirstOf(
                         comment(),
                         sectionConfig(),
-                        sectionError(),
-                        sectionFilter(),
-                        sectionAction(),
-                        sectionExtension(),
+                        sectionErrors(),
+                        sectionFilters(),
+                        sectionActions(),
+                        sectionExtensions(),
                         sectionProperties()
                     )
                 );
@@ -151,7 +151,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     // Section error
-    public Rule sectionError() {
+    public Rule sectionErrors() {
         return Sequence(errorSection(), ZeroOrMore(FirstOf(comment(), errorRule())));
     }
     
@@ -207,7 +207,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     // Section filter
-    public Rule sectionFilter() {
+    public Rule sectionFilters() {
         return Sequence(filterSection(), ZeroOrMore(FirstOf(comment(), filterRule())));
     }
     
@@ -266,7 +266,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     // Section extension
-    public Rule sectionExtension() {
+    public Rule sectionExtensions() {
         return Sequence(extensionSection(), ZeroOrMore(FirstOf(comment(), extensionRule())));
     }
     
@@ -294,7 +294,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     // Section action
-    public Rule sectionAction() {
+    public Rule sectionActions() {
         return Sequence(actionSection(), ZeroOrMore(FirstOf(comment(), actionRule())));
     }
     
@@ -482,7 +482,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressNode
     public Rule WhiteSpace() {
-        return OneOrMore(AnyOf(" \t\r\n\f").label("Whitespace"));
+        return OneOrMore(AnyOf(" \t\r\n\f"));
     }
     
     @SuppressSubnodes
