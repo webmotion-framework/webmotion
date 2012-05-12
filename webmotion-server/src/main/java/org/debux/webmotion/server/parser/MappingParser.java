@@ -175,7 +175,7 @@ public class MappingParser {
                 }
             });
             
-            rules.put("/sectionProperties/propertiesSection/Identifier", new Visit() {
+            rules.put("/sectionProperties/propertiesSection/propertiesIdentifier", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     PropertiesItem item = new PropertiesItem(value);

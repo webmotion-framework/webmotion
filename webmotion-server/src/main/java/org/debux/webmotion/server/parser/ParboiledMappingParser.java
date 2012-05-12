@@ -74,7 +74,12 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     public Rule propertiesSection() {
-        return Sequence('[', Identifier(), ".properties]", NewLine());
+        return Sequence('[', propertiesIdentifier(), ".properties]", NewLine());
+    }
+    
+    @SuppressSubnodes
+    public Rule propertiesIdentifier() {
+        return OneOrMore(LetterProperties());
     }
     
     public Rule propertiesRule() {
@@ -507,6 +512,10 @@ public class ParboiledMappingParser extends BaseParser {
 
     protected Rule LetterParameter() {
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '$', '-', '.');
+    }
+
+    protected Rule LetterProperties() {
+        return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '$', '-');
     }
 
     protected Rule LetterParameterValue() {
