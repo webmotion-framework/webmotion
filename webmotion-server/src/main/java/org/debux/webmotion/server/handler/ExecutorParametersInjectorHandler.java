@@ -160,7 +160,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
                     if (Properties.class.isAssignableFrom(type)) {
-                        return mapping.getProperties();
+                        return call.getContext().getServerContext().getMapping().getProperties();
                     }
                     return null;
                 }

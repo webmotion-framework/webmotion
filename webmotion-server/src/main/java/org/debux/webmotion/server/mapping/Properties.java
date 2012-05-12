@@ -37,7 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Contains all user configuration. 
+ * Contains all user configuration. Manage key with value. You can get the value 
+ * directly in good type. The key "include" add a properties file, it is search 
+ * in classpath, user home and system configuration.
  * 
  * @author julien
  */
