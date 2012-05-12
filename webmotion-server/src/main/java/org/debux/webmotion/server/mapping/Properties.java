@@ -53,6 +53,10 @@ public class Properties extends DataConfiguration {
         ((CompositeConfiguration) configuration).addConfiguration(item);
     }
 
+    public void addProperties(Properties properties) {
+        ((CompositeConfiguration) configuration).addConfiguration(properties);
+    }
+
     public static class PropertiesItem extends CompositeConfiguration {
         protected String name;
 

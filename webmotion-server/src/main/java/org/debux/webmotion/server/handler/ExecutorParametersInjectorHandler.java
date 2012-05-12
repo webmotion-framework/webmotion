@@ -44,6 +44,7 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,6 +152,15 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
                     if (Config.class.isAssignableFrom(type)) {
                         return mapping.getConfig();
+                    }
+                    return null;
+                }
+            },
+            new  Injector() {
+                @Override
+                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                    if (Properties.class.isAssignableFrom(type)) {
+                        return mapping.getProperties();
                     }
                     return null;
                 }

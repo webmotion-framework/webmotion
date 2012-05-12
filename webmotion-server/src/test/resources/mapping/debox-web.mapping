@@ -9,6 +9,9 @@ server.static.autodetect=false
 #javac.debug=true
 #server.controller.scope=singleton
 
+[debox.properties]
+debox = good
+
 [errors]
 #java.lang.NullPointerException                              Error.npeError
 code:404                                                     view:error/404.jsp

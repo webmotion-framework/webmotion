@@ -639,6 +639,10 @@ public class MappingParser {
                             Mapping extensionMapping = parser.parse(resource);
                             extensionMapping.setExtensionPath(path);
                             extensionsRules.add(extensionMapping);
+                            
+                            Properties extensionProperties = extensionMapping.getProperties();
+                            Properties properties = mapping.getProperties();
+                            properties.addProperties(extensionProperties);
                         }
 
                     } catch (IOException ex) {
