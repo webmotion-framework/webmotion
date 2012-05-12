@@ -22,6 +22,16 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
+[webmotion-website.properties]
+site.name=WebMotion
+file.path=classpath:./data/page
+media.path=classpath:./data/media
+first.page=/main
+default.language=en
+supported.language=fr,en
+public.permissions=read
+users.path=classpath:wikimotion-users.json
+
 [extensions]
 /test                                                            test.wm
 /showcase                                                        showcase-display.wm

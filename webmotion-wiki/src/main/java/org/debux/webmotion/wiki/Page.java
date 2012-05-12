@@ -64,20 +64,20 @@ public class Page extends WebMotionController {
     }
     
     public Render firstPage() throws Exception {
-        String firstPage = WikiConfig.getFirstPage();
+        String firstPage = WikiConfig.instance.getFirstPage();
         return renderURL(firstPage);
     }
     
     public Render display(String nameSpace, String pageName) throws Exception {
         String url = null;
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             url = "/" + nameSpace + "/" + pageName;
         } else {
             url = "/" + pageName;
         }
                 
         File page = service.findPage(nameSpace, pageName, getLanguage());
-        if(page != null) {
+        if (page != null) {
             return renderView("page/display.jsp",
                     "nameSpace", nameSpace,
                     "pageName", pageName,
@@ -92,7 +92,7 @@ public class Page extends WebMotionController {
     
     public Render include(String nameSpace, String pageName) throws Exception {
         String content = service.evalContent(nameSpace, pageName, getLanguage());
-        if(content != null) {
+        if (content != null) {
             return renderContent(content, "text/html");
         }
         
@@ -101,7 +101,7 @@ public class Page extends WebMotionController {
 
     public Render edit(String nameSpace, String pageName) throws Exception {
         String url = null;
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             url = "/" + nameSpace + "/" + pageName;
         } else {
             url = "/" + pageName;
@@ -119,7 +119,7 @@ public class Page extends WebMotionController {
     public Render source(String nameSpace, String pageName) throws Exception {
         String content = service.getContent(nameSpace, pageName, getLanguage());
         
-        if(content != null) {
+        if (content != null) {
             return renderContent(content, "text/plain");
         } else {
             return renderContent("", "text/plain");
@@ -133,7 +133,7 @@ public class Page extends WebMotionController {
 
     public Render create(String nameSpace, String pageName, String type) throws Exception {
         service.createPage(nameSpace, pageName, getLanguage(), type);
-        if(nameSpace == null) {
+        if (nameSpace == null) {
             return renderURL("/" + pageName,
                     "action" , "edit");
         } else {
@@ -144,7 +144,7 @@ public class Page extends WebMotionController {
     
     public Render save(String nameSpace, String pageName, String content) throws Exception {
         service.save(nameSpace, pageName, getLanguage(), content);
-        if(nameSpace == null) {
+        if (nameSpace == null) {
             return renderURL("/" + pageName);
         } else {
             return renderURL("/" + nameSpace + "/" + pageName);
@@ -153,7 +153,7 @@ public class Page extends WebMotionController {
     
     public Render map(String nameSpace) throws Exception {
         String url = "";
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             url = "/" + nameSpace;
         }
         

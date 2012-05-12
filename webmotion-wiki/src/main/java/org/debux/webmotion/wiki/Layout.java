@@ -50,8 +50,8 @@ public class Layout extends WebMotionFilter {
         if(url == null && sub == null && name == null) {
             
             url = context.getUrl();
-            String siteName = WikiConfig.getSiteName();
-            List<String> languages = WikiConfig.getSupportedLanguage();
+            String siteName = WikiConfig.instance.getSiteName();
+            String[] languages = WikiConfig.instance.getSupportedLanguage();
             
             // Check current language
             String language = (String) Config.get(session, Config.FMT_LOCALE);
@@ -59,7 +59,7 @@ public class Layout extends WebMotionFilter {
                 Locale locale = request.getLocale();
                 String lang = locale.getLanguage();
                 
-                language = WikiConfig.getDefaultLanguage();
+                language = WikiConfig.instance.getDefaultLanguage();
                 Config.set(session, Config.FMT_LOCALE, language);
                 
                 for (String supported : languages) {

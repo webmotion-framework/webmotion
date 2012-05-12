@@ -27,6 +27,32 @@ package.filters=org.debux.webmotion.wiki
 package.actions=org.debux.webmotion.wiki
 package.errors=org.debux.webmotion.wiki
 package.views=WEB-INF/org.debux.webmotion.wiki
+server.listener.class=org.debux.webmotion.wiki.Listenner
+
+[wikimotion-config.properties]
+# Site name
+site.name=WikiMotion
+
+# File path to store the wiki pages
+file.path=classpath:./data/page
+
+# Media path to store the wiki pages
+media.path=classpath:./data/media
+
+# First page display
+first.page=/index
+
+# Default language
+default.language=fr
+
+# Supported language
+supported.language=fr,en
+
+# Public permissions [read,write]
+public.permissions=read
+
+# File path to get users
+users.path=classpath:wikimotion-users.json
 
 [filters]
 *             /*                                                 Security.check

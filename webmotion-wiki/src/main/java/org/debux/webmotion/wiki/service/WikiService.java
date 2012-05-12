@@ -37,7 +37,6 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.PrefixFileFilter;
-import org.nuiton.util.ArgumentsParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +80,7 @@ public class WikiService {
     
     public String evalContent(String nameSpace, String pageName, String lang) throws Exception {
         File file = findPage(nameSpace, pageName, lang);
-        if(file != null) {
+        if (file != null) {
             String content = generate(file);
             return content;
         }
@@ -107,7 +106,7 @@ public class WikiService {
     
     public String getContent(String nameSpace, String pageName, String lang) throws Exception {
         File file = findPage(nameSpace, pageName, lang);
-        if(file != null) {
+        if (file != null) {
             String content = IOUtils.toString(new FileInputStream(file));
             return content;
         }
@@ -117,14 +116,14 @@ public class WikiService {
     
     public void save(String nameSpace, String pageName, String lang, String content) throws Exception {
         File file = findPage(nameSpace, pageName, lang);
-        if(file != null) {
+        if (file != null) {
             IOUtils.write(content, new FileOutputStream(file));
         }
     }
     
     public File createPage(String nameSpace, String pageName, String lang, String type) throws Exception {
         File file = getPage(nameSpace, pageName, lang, type);
-        if(!file.exists()) {
+        if (!file.exists()) {
             file.getParentFile().mkdir();
             file.createNewFile();
         }
@@ -133,7 +132,7 @@ public class WikiService {
     
     public String getType(String nameSpace, String pageName, String lang) throws Exception {
         File file = findPage(nameSpace, pageName, lang);
-        if(file != null) {
+        if (file != null) {
             String fileName = file.getName();
             String type = FilenameUtils.getExtension(fileName);
             return type;
@@ -143,13 +142,13 @@ public class WikiService {
     
     protected File getPage(String nameSpace, String pageName, String lang, String type) throws Exception {
         String path = getPagePath();
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             path += File.separator + nameSpace;
         }
         
         String name = pageName;
-        List<String> language = WikiConfig.getSupportedLanguage();
-        if(language != null && !language.isEmpty() && lang != null) {
+        String[] language = WikiConfig.instance.getSupportedLanguage();
+        if (language != null && language.length != 0 && lang != null) {
             name += "_" + lang;
         }
 
@@ -161,13 +160,13 @@ public class WikiService {
     
     public File findPage(String nameSpace, String pageName, String lang) throws Exception {
         String path = getPagePath();
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             path += File.separator + nameSpace;
         }
         
         String prefix = pageName;
-        List<String> language = WikiConfig.getSupportedLanguage();
-        if(language != null && !language.isEmpty() && lang != null) {
+        String[] language = WikiConfig.instance.getSupportedLanguage();
+        if (language != null && language.length != 0 && lang != null) {
             prefix += "_" + lang;
         }
         
@@ -176,7 +175,7 @@ public class WikiService {
         File[] files = directory.listFiles((FilenameFilter) new PrefixFileFilter(prefix + "."));
         log.info("result search : " + Arrays.toString(files));
         
-        if(files != null && files.length >= 1) {
+        if (files != null && files.length >= 1) {
             File page = files[0];
             return page;
             
@@ -187,14 +186,14 @@ public class WikiService {
         return null;
     }
 
-    protected String getPagePath() throws ArgumentsParserException, URISyntaxException {
-        String filePath = WikiConfig.getFilePath();
+    protected String getPagePath() throws URISyntaxException {
+        String filePath = WikiConfig.instance.getFilePath();
         String path = filePath + File.separator;
         return path;
     }
 
-    protected String getMediaPath() throws ArgumentsParserException, URISyntaxException {
-        String filePath = WikiConfig.getMediaPath();
+    protected String getMediaPath() throws URISyntaxException {
+        String filePath = WikiConfig.instance.getMediaPath();
         String path = filePath + File.separator;
         return path;
     }
@@ -209,7 +208,7 @@ public class WikiService {
     
     public File getMedia(String nameSpace, String mediaName) throws Exception {
         String path = getMediaPath();
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             path += nameSpace + File.separator;
         }
         path += mediaName;
@@ -220,7 +219,7 @@ public class WikiService {
     
     public Map<String, List<String>> getSiteMap(String nameSpace) throws Exception {
         String pagePath = getPagePath();
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             pagePath += nameSpace;
         }
         return getMap(pagePath, true);
@@ -228,7 +227,7 @@ public class WikiService {
     
     public Map<String, List<String>> getMediaMap(String nameSpace) throws Exception {
         String mediaPath = getMediaPath();
-        if(nameSpace != null) {
+        if (nameSpace != null) {
             mediaPath += nameSpace;
         }
         return getMap(mediaPath, false);
@@ -244,8 +243,8 @@ public class WikiService {
         for (File file : files) {
             String fileName = file.getName();
             
-            if(file.isFile()) {
-                if(removeExtension) {
+            if (file.isFile()) {
+                if (removeExtension) {
                     fileName = removeExtension(fileName);
                 }
                 filesWithoutDirectory.add(fileName);
@@ -254,7 +253,7 @@ public class WikiService {
                 String[] list = file.list();
                 ArrayList<String> filesWithDirectory = new ArrayList<String>(list.length);
                 for (String pageName : list) {
-                    if(removeExtension) {
+                    if (removeExtension) {
                         pageName = removeExtension(pageName);
                     }
                     filesWithDirectory.add(pageName);
@@ -269,7 +268,7 @@ public class WikiService {
     protected String removeExtension(String name) {
         String value = name;
         int lastIndexOf = name.lastIndexOf('.');
-        if(lastIndexOf != -1) {
+        if (lastIndexOf != -1) {
             value = name.substring(0, lastIndexOf);
         }
         return value;

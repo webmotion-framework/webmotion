@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,6 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.wiki.service.WikiConfig;
-import org.nuiton.util.ArgumentsParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,8 +90,8 @@ public class Security extends WebMotionFilter {
         }
     }
     
-    public Security() throws IOException, ArgumentsParserException, URISyntaxException {
-        String usersPath = WikiConfig.getUsersPath();
+    public Security() throws IOException, URISyntaxException {
+        String usersPath = WikiConfig.instance.getUsersPath();
         InputStream stream = new FileInputStream(usersPath);
         String json = IOUtils.toString(stream);
 
@@ -127,11 +126,11 @@ public class Security extends WebMotionFilter {
         for (User user : users) {
             String name = user.getName();
             
-            if(name.equals(username)) {
+            if (name.equals(username)) {
                 
                 String encoded = DigestUtils.shaHex(password);
                 log.info("encoded = " + encoded);
-                if(encoded.equals(user.getPassword())) {
+                if (encoded.equals(user.getPassword())) {
                     
                     HttpContext context = getContext();
                     HttpSession session = context.getSession();
@@ -157,26 +156,26 @@ public class Security extends WebMotionFilter {
     }
     
     public Render check(String action, String sub) throws Exception {
-        List<String> publicPermissions = WikiConfig.getPublicPermissions();
-        List<String> currentPermissions = new ArrayList<String>(publicPermissions);
+        String[] publicPermissions = WikiConfig.instance.getPublicPermissions();
+        List<String> currentPermissions = Arrays.asList(publicPermissions);
         
         HttpContext context = getContext();
         HttpSession session = context.getSession();
         User user = (User) session.getAttribute(CURRENT_USER_ATTRIBUTE);
-        if(user != null) {
+        if (user != null) {
             List<String> roles = user.getRoles();
             currentPermissions.addAll(roles);
         }
         
         String required;
-        if(action != null) {
+        if (action != null) {
             required = permissions.get(action);
         } else {
             required = permissions.get(sub);
         }
 
         log.info("required = " + required + " in " + currentPermissions);
-        if(required != null && (required.equals(NO_SECURE)
+        if (required != null && (required.equals(NO_SECURE)
             || currentPermissions.contains(required))) {
             
             doProcess();
