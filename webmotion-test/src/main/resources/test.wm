@@ -27,6 +27,10 @@ package.views=WEB-INF/org.debux.webmotion.test
 package.base=org.debux.webmotion.test
 server.listener.class=org.debux.webmotion.test.Listener
 
+[conf.properties]
+text = Hello World by properties !
+number = 10
+
 [extensions]
 /blog                                                   blog.wm
 /                                                       spring.wm
@@ -135,3 +139,4 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /cookie/object/remove                       CookieObject.remove
 *           /session/store                              Session.store
 *           /session/read                               Session.read
+*           /echo                                       Echo.run
