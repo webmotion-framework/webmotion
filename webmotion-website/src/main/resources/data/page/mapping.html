@@ -103,6 +103,11 @@
     <li>server.static.autodetect</li>
 </ul>
 
+<p>
+    Les propriétés suivantes <code>server.encoding</code>, <code>server.error.page</code> et <code>server.static.autodetect</code> 
+    sont prises en compte seulement depuis le fichier de mapping principal.
+</p>
+
 <h3>package.views</h3>
 <p>
     La propriété <strong>package.views</strong> permet de définir le chemin de l'ensemble des pages JSP, HTML, etc.
@@ -340,6 +345,12 @@ public class Listener implements WebMotionServerListener {
 </p>
 <p>
     <span class="label">Default</span> Par défaut, la valeur server.static.autodetect est <code>true</code>.
+</p>
+
+<p>
+    <span class="label label-warning">Attention</span> 
+    La désativation de la détection des ressources peut provoquer une imcompabilité 
+    avec les extensions ne supportant pas la désactivation.
 </p>
 
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
