@@ -42,11 +42,13 @@ import org.slf4j.LoggerFactory;
  */
 public class Showcase extends WebMotionController {
 
-    protected static final int INDEX_EXTENSIONS = 6;
-    protected static final int INDEX_FILTERS = 16;
-    protected static final int INDEX_ERRORS = 22;
-    protected static final int INDEX_ACTIONS = 30;
+    protected static final int INDEX_PROPERTIES = 6;
+    protected static final int INDEX_EXTENSIONS = 10;
+    protected static final int INDEX_FILTERS = 20;
+    protected static final int INDEX_ERRORS = 26;
+    protected static final int INDEX_ACTIONS = 34;
     
+    protected static final String SECTION_PROPERTIES = "properties";
     protected static final String SECTION_ACTIONS = "actions";
     protected static final String SECTION_FILTERS = "filters";
     protected static final String SECTION_ERRORS = "errors";
@@ -1008,6 +1010,21 @@ public class Showcase extends WebMotionController {
                     getConfig(false, true, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 82, 2)),
                     getJavaContent("Session.java")
+                )
+        );
+    }
+
+    public Render properties() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/echo"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, true, false, false)
+                        .addContent(getMapping(SECTION_PROPERTIES, INDEX_PROPERTIES + 1, 2))
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 84, 1)),
+                    getJavaContent("Echo.java")
                 )
         );
     }

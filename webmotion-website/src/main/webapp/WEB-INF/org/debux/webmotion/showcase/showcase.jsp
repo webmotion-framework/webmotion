@@ -178,6 +178,11 @@
                                         <li><a id="stats" href="./stats">Pattern</a></li>
                                     </ul>
                                 </li>
+                                <li><strong>Properties</strong>
+                                    <ul>
+                                        <li><a id="properties" href="./properties">Basic</a> <span class="label label-info">New</span></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                         <div id="render" class="tab-pane fade in">
