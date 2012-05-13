@@ -50,7 +50,8 @@
     Comme nous l'avons évoqué <a href="begin#mapping">précédemment</a>, le fichier de mapping contient un certains nombres de sections :
 </p>
 <ul>
-    <li><code>[config]</code>&nbsp;<a href="#config">La configuration de l'application web</a></li>
+    <li><code>[config]</code>&nbsp;<a href="#config">La configuration de WebMotion</a></li>
+    <li><code>[properties]</code>&nbsp;<a href="#properties">La configuration de l'application</a></li>
     <li><code>[errors]</code>&nbsp;<a href="#errors">Les actions liées aux erreurs (techniques et / ou applicatives)</a></li>
     <li><code>[filters]</code>&nbsp;<a href="#filters">Les filtres de l'applications</a></li>
     <li><code>[actions]</code>&nbsp;<a href="#actions">Les actions liées aux URL de l'application</a></li>
@@ -69,7 +70,7 @@
 # End comment
 </pre>
 
-<h2 id="config" class="page-header">[config] Configuration de l'application web</h2>
+<h2 id="config" class="page-header">[config] Configuration de WebMotion</h2>
 <p>
     Cette section permet de définir quelques éléments de fonctionnement et de valeurs par défaut pour WebMotion.
     C'est ici que l'on précisera par exemple le répertoire contenant les pages de l'application 
@@ -352,6 +353,57 @@ public class Listener implements WebMotionServerListener {
     La désativation de la détection des ressources peut provoquer une imcompabilité 
     avec les extensions ne supportant pas la désactivation.
 </p>
+
+<h2 id="properties" class="page-header">[properties] Configuration de l'application</h2>
+<p>
+    Cette section permet de définir une configuration pour votre application en clé/valeur. La 
+    syntaxe est comparable à un fichier de propriétés. Pour plus de renseignements, 
+    veuillez vous reporter à la section <a href="action#context">Action - Contexte web</a>.
+</p>
+
+<h3>Syntaxe</h3>
+<p>
+    Les différentes propriétés sont listées après le mot-clé <code>[&lt;name&gt;.properties]</code>. 
+    Le nom de section est le nom du fichier qui permet de redéfinir les 
+    propriétés dans un fichier situé soit :
+</p>
+<ul>
+    <li>dans le path système (/etc, C:\Windows\System32\etc)</li>
+    <li>dans le path utilisateur ($(user.home)/.config, C:\Documents and Settings\USER\Application Data\, $(user.home)/Library/Application Support)</li>
+    <li>dans le classpath de l'application</li>
+</ul>
+
+<p>
+    <span class="label label-info">Exemple</span> Déclaration d'une section 
+    avec comme nom de fichier <code>config.properties</code> :
+</p>
+<pre>
+[config.properties]
+</pre>
+
+<p>
+    La définition d'une propriété se fait en clé/valeur : 
+</p>
+
+<pre>
+&lt;key&gt;=&lt;value&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Déclaration d'une propriété :
+</p>
+<pre class="prettyprint">
+site.name=WebMotion
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Inclusion d'un autre fichier 
+    de propriété, il sera recherché dans le path système, dans le path utilisateur 
+    puis dans le classpath de l'application :
+</p>
+<pre class="prettyprint">
+include=other-config.properties
+</pre>
 
 <h2 id="actions" class="page-header">[actions] Configuration des actions</h2>
 <p>

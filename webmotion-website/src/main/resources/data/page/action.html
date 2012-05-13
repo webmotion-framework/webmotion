@@ -562,7 +562,8 @@ public class Action extends WebMotionController {
     <li><strong>Exception : </strong>en cas d'erreur, l'exception responsable de l'erreur</li>
     <li><strong>FileProgressListener : </strong>permet de suivre la progression de chargement de fichier</li>
     <li><strong>Mapping : </strong>l'instance applicative du mapping</li>
-    <li><strong>Config : </strong>la configuration du mapping applicatif</li>
+    <li><strong>Config : </strong>la configuration de WebMotion</li>
+    <li><strong>Properties : </strong>la configuration de l'application</li>
     <li><strong>Call : </strong>le contexte d'appel des actions</li>
     <li><strong>CookieManager : </strong>le gestionnaire des cookies</li>
     <li><strong>ClientSession : </strong>la session cliente</li>
@@ -592,6 +593,74 @@ public class Error extends WebMotionController {
     }
     ...
 }
+</pre>
+
+<h3 id="properties">Configuration de l'application</h3>
+<p>
+    WebMotion permet de gérer simplement dans le fichier de mapping une configuration 
+    pour votre application. Pour plus de renseignements, veuillez vous reporter 
+    à la section <a href="mapping#properties">Mapping - Configuration de l'application</a>.
+    La configuration repose sur la librairie <a href="http://commons.apache.org/configuration">commons-configuration</a>.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Recupération de la configuration dans une action :
+</p>
+<pre class="prettyprint">
+public Render run(Properties configuration) {
+    ...
+}
+</pre>
+    
+<p>
+    <span class="label label-info">Exemple</span> Recupération de la configuration dans le listenner :
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        Mapping mapping = context.getMapping();
+        Properties configuration = mapping.getProperties();
+        ...
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        // Do nothing
+    }
+}
+</pre>
+    
+<p>
+    L'objet <code>Properties</code> permet de récupérer les valeurs selon différents types.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Recupération d'un String :
+</p>
+<pre class="prettyprint">
+String value = configuration.getString("key");
+</pre>
+<p>
+    Avec comme mapping :
+</p>
+<pre class="prettyprint">
+[config.properties]
+key=test
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Recupération d'un tableau de String :
+</p>
+<pre class="prettyprint">
+String[] values = configuration.getStringArray("key");
+</pre>
+<p>
+    Avec comme mapping :
+</p>
+<pre class="prettyprint">
+[config.properties]
+key=test1,test2,test3
 </pre>
 
 <h3 id="flashmessage">Messages flash</h3>

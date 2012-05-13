@@ -62,10 +62,39 @@
 </p>
 
 <p>
-    Une fois le wiki déployé, vous pouvez modifier le fichier de configuration 
-    <code>wikimotion-config.properties</code> fourni par défaut, afin de 
+    Une fois le wiki déployé, vous pouvez ajouter un fichier de configuration 
+    <code>wikimotion-config.properties</code> soit dans votre configuration système, 
+    soit dans votre configuration utilisateur ou soit dans le classpath, afin de 
     configurer et personnaliser votre wiki.
 </p>
+<p>
+    <span class="label label-info">Exemple</span> Exemple de fichier de configuration :
+</p>
+<pre class="prettyprint">
+# Site name
+site.name=WebMotion
+
+# File path to store the wiki pages
+file.path=classpath:./data/page
+
+# Media path to store the wiki pages
+media.path=classpath:./data/media
+
+# First page display
+first.page=/main
+
+# Default language
+default.language=en
+
+# Supported language
+supported.language=fr,en
+
+# Public permissions [read,write]
+public.permissions=read
+
+# File path to get users
+users.path=classpath:wikimotion-users.json
+</pre>
 
 <p>
     Si vous souhaitez le support de la syntaxe LaTeX dans le wiki, il vous faudra installer les paquets
@@ -120,6 +149,15 @@ $ sudo chmod 755 /usr/bin/rst2html-pygments
     <span class="label label-info">Note</span> Le fichier <code>wikimotion.wm</code> est le fichier de mapping de l'extension, 
     embarqué directement par la dépendance pour être présent dans le classpath. Vous n'avez pas à vous en préoccuper.
 </p>
+
+<p>
+    Pour configurer le WikiMotion vous pouvez rajouter dans votre fichier de 
+    mapping une section properties ainsi :
+</p>
+<pre class="prettyprint">
+[mon-site.properties]
+site.name=Mon site
+</pre>
 
 <h2 class="page-header" id="screens">Captures d'écran</h2>
 <ul class="thumbnails">
