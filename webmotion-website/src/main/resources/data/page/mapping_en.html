@@ -391,7 +391,8 @@ public class Listener implements WebMotionServerListener {
 </p>
 <p>
     Only the GET and POST methods are supported in the web form (<code>&lt;form&gt;</code> tag).
-    To be able to use the other methods, you will need to make AJAX requests.
+    To be able to use the other methods, you will need to make AJAX requests or use header 
+    X-HTTP-Method, X-HTTP-Method-Override or X-METHOD-OVERRIDE on a POST request.
 </p>
 <p>
     <span class="label label-info">Example</span> Definition of an action for d'une action for a single HTTP method:

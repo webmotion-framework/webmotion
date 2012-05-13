@@ -443,7 +443,24 @@ public class HttpContext {
      * @return get http method
      */
     public String getMethod() {
-        return request.getMethod();
+        String method = request.getMethod();
+        if (method.equalsIgnoreCase("POST")) {
+            
+            String header = request.getHeader("X-HTTP-Method");
+            if (header == null || header.isEmpty()) {
+                header = request.getHeader("X-HTTP-Method-Override");
+                if (header == null || header.isEmpty()) {
+                    header = request.getHeader("X-METHOD-OVERRIDE");
+                }
+            }
+            
+            if ("DELETE".equalsIgnoreCase(header) || "PUT".equalsIgnoreCase(header) 
+                    || "HEAD".equalsIgnoreCase(header)) {
+                method = header;
+            }
+        }
+        
+        return method.toUpperCase();
     }
     
     /**

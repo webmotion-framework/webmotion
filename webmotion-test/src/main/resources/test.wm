@@ -140,3 +140,4 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /session/store                              Session.store
 *           /session/read                               Session.read
 *           /echo                                       Echo.run
+DELETE      /simulate                                   action:Action.execute

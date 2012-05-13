@@ -51,6 +51,16 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
+    public void simulate() throws IOException {
+        String url = getAbsoluteUrl("simulate");
+        HttpPost request = new HttpPost(url);
+        request.setHeader("X-HTTP-Method-Override", "DELETE");
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains("Execute action"));
+    }
+    
+    @Test
     public void view() throws IOException {
         String url = getAbsoluteUrl("view");
         HttpGet request = new HttpGet(url);

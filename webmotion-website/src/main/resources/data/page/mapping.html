@@ -475,7 +475,8 @@ include=other-config.properties
 </p>
 <p>
     Seules les méthodes HTTP GET et POST sont supportées dans les formulaires web (balise <code>&lt;form&gt;</code>), pour pouvoir bénificier 
-    des autres méthodes il faudra utiliser des requêtes AJAX.
+    des autres méthodes il faudra utiliser des requêtes AJAX ou utiliser l'header 
+    X-HTTP-Method, X-HTTP-Method-Override ou X-METHOD-OVERRIDE sur une requête POST.
 </p>
 <p>
     <span class="label label-info">Exemple</span> Définition d'une action pour une seule méthode HTTP :
