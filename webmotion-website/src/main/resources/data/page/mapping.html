@@ -318,7 +318,7 @@ public class Listener implements WebMotionServerListener {
     La propriété <strong>server.main.handler.class</strong> permet de définir la 
     classe responsable du chaînage des actions en interne à WebMotion. 
     Cette propriété est utile uniquement dans le but d'étendre le framework. 
-    Pour plus de renseignement, veuillez vous reporter à partie <a href="advanced#handler">Avancé - Comprendre le fonctionnement de WebMotion</a>.
+    Pour plus de renseignements, veuillez vous reporter à la partie <a href="advanced#handler">Avancé - Comprendre le fonctionnement de WebMotion</a>.
 </p>
 <p>
     <span class="label">Default</span> Par défaut, la valeur server.main.handler.class est <code>org.debux.webmotion.server.WebMotionMainHandler</code>
@@ -326,10 +326,10 @@ public class Listener implements WebMotionServerListener {
 
 <h3>server.secret</h3>
 <p>
-    La propriété <strong>server.secret</strong> permet de définir la clé secret qui
+    La propriété <strong>server.secret</strong> permet de définir la clé secrète qui
     permet la sécurisation des données (les cookies, ...). Elle est à définir si vous
     utilisez WebMotion sur différents serveurs pour une même application. Elle doit contenir
-    au moins 31 charactères. Si la clé n'est pas défini une clé est automatiquement créée. 
+    au moins 31 charactères. Si aucune clé n'est définie dans le fichier de mapping, alors une clé sera automatiquement créée en mémoire. 
 </p>
 <p>
     <span class="label label-info">Exemple</span> Définition d'une clé :
@@ -338,15 +338,30 @@ public class Listener implements WebMotionServerListener {
 
 <h3>server.static.autodetect</h3>
 <p>
-    La propriété <strong>server.static.autodetect</strong> permet de définir si WebMotion se charge de la 
-    détection des ressources static de l'application. Si l'option est désactivée,
-    vous devez préciser <code>/static</code> dans vos urls pour accéder aux fichiers
-    de votre <code>webapps</code> . Les valeurs possible sont <code>true</code> ou <code>false</code>.
+    Dans son fonctionnement classique, WebMotion détecte automatiquement les ressources considérées comme statiques
+    (page html, images, scripts, feuilles de styles, soit toute ressource dont le nom contient une extension).
+    Si vous souhaitez que votre application gère le rendu de certains fichiers considérés comme statiques, vous devrez désactiver cette détection automatique.
+    Pour ce faire, la propriété <strong>server.static.autodetect</strong> peut prendre deux valeurs, <code>true</code> ou <code>false</code>. 
+    Si vous désactivez cette détection automatique, vous devrez adapter vos pages web : tout chemin vers une ressources réellement statique devra être préfixé par <code>/static</code>
+    (chemin relatif au contexte de l'application).
     Pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#servlet">Avancé - Architecture des servlets</a>.
 </p>
 <p>
     <span class="label">Default</span> Par défaut, la valeur server.static.autodetect est <code>true</code>.
 </p>
+<p>
+    <span class="label label-info">Exemple</span> Accès à une ressource statique non gérée par WebMotion dans un fichier HTML :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
 
 <p>
     <span class="label label-warning">Attention</span> 
