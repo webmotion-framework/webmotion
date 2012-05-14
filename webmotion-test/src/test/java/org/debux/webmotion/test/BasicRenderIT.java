@@ -94,7 +94,7 @@ public class BasicRenderIT extends AbstractIT {
     }
     
     @Test
-    public void actionUrl() throws IOException {
+    public void actionForward() throws IOException {
         String url = getAbsoluteUrl("internal");
         HttpGet request = new HttpGet(url);
         
@@ -103,7 +103,7 @@ public class BasicRenderIT extends AbstractIT {
     }
     
     @Test
-    public void absoluteActionUrl() throws IOException {
+    public void absoluteRedirect() throws IOException {
         String url = getAbsoluteUrl("redirect");
         HttpGet request = new HttpGet(url);
         
