@@ -268,11 +268,23 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/sectionErrors/errorRule/errorUrl/errorUrlValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorRedirect/errorRedirectValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
-                    action.setType(Action.Type.URL);
+                    action.setType(Action.Type.REDIRECT);
+                    action.setFullName(value);
+
+                    ErrorRule errorRule = (ErrorRule) stack.peekLast();
+                    errorRule.setAction(action);
+                }
+            });
+
+            rules.put("/sectionErrors/errorRule/errorForward/errorForwardValue", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    Action action = new Action();
+                    action.setType(Action.Type.FORWARD);
                     action.setFullName(value);
 
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
@@ -324,30 +336,6 @@ public class MappingParser {
                 public void acceptBefore(String value) {
                     Action action = new Action();
                     action.setType(Action.Type.ACTION);
-                    action.setFullName(value);
-
-                    FilterRule filterRule = (FilterRule) stack.peekLast();
-                    filterRule.setAction(action);
-                }
-            });
-
-            rules.put("/sectionFilters/filterRule/filterView", new Visit() {
-                @Override
-                public void acceptBefore(String value) {
-                    Action action = new Action();
-                    action.setType(Action.Type.VIEW);
-                    action.setFullName(value);
-
-                    FilterRule filterRule = (FilterRule) stack.peekLast();
-                    filterRule.setAction(action);
-                }
-            });
-
-            rules.put("/sectionFilters/filterRule/filterUrl", new Visit() {
-                @Override
-                public void acceptBefore(String value) {
-                    Action action = new Action();
-                    action.setType(Action.Type.URL);
                     action.setFullName(value);
 
                     FilterRule filterRule = (FilterRule) stack.peekLast();
@@ -524,11 +512,23 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/sectionActions/actionRule/actionUrl/actionUrlValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionRedirect/actionRedirectValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
-                    action.setType(Action.Type.URL);
+                    action.setType(Action.Type.REDIRECT);
+                    action.setFullName(value);
+
+                    ActionRule actionRule = (ActionRule) stack.peekLast();
+                    actionRule.setAction(action);
+                }
+            });
+
+            rules.put("/sectionActions/actionRule/actionActionUrl/actionForwardValue", new Visit() {
+                @Override
+                public void acceptBefore(String value) {
+                    Action action = new Action();
+                    action.setType(Action.Type.FORWARD);
                     action.setFullName(value);
 
                     ActionRule actionRule = (ActionRule) stack.peekLast();

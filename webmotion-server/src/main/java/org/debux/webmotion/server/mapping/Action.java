@@ -36,7 +36,8 @@ public class Action {
     public static enum Type {
         ACTION,
         VIEW,
-        URL
+        REDIRECT,
+        FORWARD
     }
     
     protected Type type;
@@ -78,7 +79,7 @@ public class Action {
     }
 
     /**
-     * @return true if the action is directly a action
+     * @return true if the action is directly an action
      */
     public boolean isAction() {
         return type == Type.ACTION;
@@ -92,10 +93,17 @@ public class Action {
     }
     
     /**
-     * @return true if the action is directly a url
+     * @return true if the action is directly a redirection
      */
-    public boolean isUrl() {
-        return type == Type.URL;
+    public boolean isRedirect() {
+        return type == Type.REDIRECT;
+    }
+    
+    /**
+     * @return true if the action is directly a forward
+     */
+    public boolean isForward() {
+        return type == Type.FORWARD;
     }
     
 }

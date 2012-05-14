@@ -113,7 +113,7 @@ return renderView("index.jsp", "name", "value");
 Value = ${name}
 </pre>
 
-<h3>Redirection HTTP : renderURL</h3>
+<h3>Redirection HTTP : renderURL or renderRedirect</h3>
 <p>
     Ce type de rendu permet de rediriger le client web vers une autre URL.
     Il peut s'agir aussi bien d'une URL absolue (domaine externe, par exemple)
@@ -187,7 +187,7 @@ public class Call extends WebMotionController {
 }
 </pre>
 
-<h3>Forward vers un autre contrôleur : renderActionUrl</h3>
+<h3>Forward vers un autre contrôleur : renderForward</h3>
 <p>
     
     Le forward vers un autre contrôleur permet d'enchaîner plusieurs actions et de retourner
@@ -201,7 +201,7 @@ public class Call extends WebMotionController {
     <span class="label label-info">Exemple</span> Appel d'une action interne par l'url :
 </p>
 <pre class="prettyprint">
-return renderActionURL("/internal/action", "param", "internal");
+return renderForward("/internal/action", "param", "internal");
 </pre>
 
 <p>
@@ -217,7 +217,7 @@ public Render action(String param) {
     <span class="label label-info">Exemple</span> Appel d'une action interne par l'url avec des attributs :
 </p>
 <pre class="prettyprint">
-return renderActionURL("/internal/action", new Object[]{"param", "internal"}, new Object[]{"att", "value"});
+return renderForward("/internal/action", new Object[]{"param", "internal"}, new Object[]{"att", "value"});
 </pre>
 
 <h3>Rendu de contenu : renderContent</h3>

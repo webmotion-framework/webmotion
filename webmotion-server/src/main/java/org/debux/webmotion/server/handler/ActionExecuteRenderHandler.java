@@ -34,7 +34,8 @@ import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Rule;
-import org.debux.webmotion.server.render.RenderUrl;
+import org.debux.webmotion.server.render.RenderForward;
+import org.debux.webmotion.server.render.RenderRedirect;
 import org.debux.webmotion.server.render.RenderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,11 +73,23 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
                 Render render = new RenderView(pageName, model);
                 call.setRender(render);
 
-            } else if (action.isUrl()) {
+            } else if (action.isRedirect()) {
                 String url = action.getFullName();
                 url = WebMotionUtils.replaceDynamicName(url, parameters);
 
-                Render render = new RenderUrl(url, null);
+                Render render = new RenderRedirect(url, null);
+                call.setRender(render);
+                
+            } else if (action.isForward()) {
+                String url = action.getFullName();
+                url = WebMotionUtils.replaceDynamicName(url, parameters);
+
+                Map<String, Object> model = null;
+                if(parameters != null) {
+                    model = convert(parameters);
+                }
+                        
+                Render render = new RenderForward(url, model, null);
                 call.setRender(render);
             }
         }

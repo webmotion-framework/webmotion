@@ -31,6 +31,8 @@ include=properties/etc.properties
 java.lang.NullPointerException                              Error.npeError
 code:404                                                    Error.notFound
 code:500                                                    Error.error
+code:500                                                    redirect:/test/tutu
+code:500                                                    forward:/test/tutu
 *                                                           view:error.jsp
 
 [filters]
@@ -40,11 +42,13 @@ code:500                                                    Error.error
 
 [actions]
 #<method>   <url>                                           <action>
-*           /                                               Test.index
+*           /                                               action:Test.index
 *           /index                                          view:test/index.html
 *           /google                                         url:http://www.google.fr
 *           /info/                                          url:/test/hello/3
 *           /info/{param}                                   url:/test/{param}
+*           /info/{param}                                   forward:/test/{param}
+*           /info/{param}                                   redirect:/test/{param}
 *           /info?value={}                                  view:{value}.jsp
 
 GET,POST    /user                                           User.get

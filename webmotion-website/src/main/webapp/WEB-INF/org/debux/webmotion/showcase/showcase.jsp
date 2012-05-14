@@ -191,9 +191,9 @@
                                     <ul>
                                         <li><a id="index" href="./index">View</a></li>
                                         <li><a id="helloModel" href="./helloModel">Model</a></li>
-                                        <li><a id="save" href="./save">Url</a></li>
+                                        <li><a id="save" href="./save">Url or redirect</a></li>
                                         <li><a id="first" href="./first">Action</a></li>
-                                        <li><a id="internal" href="./internal">Action url</a></li>
+                                        <li><a id="internal" href="./internal">Forward</a></li>
                                         <li><a id="content" href="./content">Content</a></li>
                                         <li><a id="stream" href="./stream">Stream</a></li>
                                         <li><a id="application" href="./application">Download</a></li>

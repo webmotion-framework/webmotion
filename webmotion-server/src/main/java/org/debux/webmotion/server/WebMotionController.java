@@ -32,7 +32,7 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.render.RenderAction;
-import org.debux.webmotion.server.render.RenderActionUrl;
+import org.debux.webmotion.server.render.RenderForward;
 import org.debux.webmotion.server.render.RenderContent;
 import org.debux.webmotion.server.render.RenderError;
 import org.debux.webmotion.server.render.RenderJson;
@@ -42,7 +42,7 @@ import org.debux.webmotion.server.render.RenderStatus;
 import org.debux.webmotion.server.render.RenderStream;
 import org.debux.webmotion.server.render.RenderStringTemplate;
 import org.debux.webmotion.server.render.RenderTemplate;
-import org.debux.webmotion.server.render.RenderUrl;
+import org.debux.webmotion.server.render.RenderRedirect;
 import org.debux.webmotion.server.render.RenderView;
 import org.debux.webmotion.server.render.RenderXml;
 
@@ -215,8 +215,8 @@ public class WebMotionController {
      * @param model data used, either just one object, either key/value pairs.
      * @return render represents the next step for user
      */
-    public Render renderActionURL(String url, Object ... model) {
-        return new RenderActionUrl(url, toMap(model), null);
+    public Render renderForward(String url, Object ... model) {
+        return new RenderForward(url, toMap(model), null);
     }
 
     /**
@@ -228,8 +228,8 @@ public class WebMotionController {
      * @param attributes data used as attribute in request, either just one object, either key/value pairs.
      * @return render represents the next step for user
      */
-    public Render renderActionURL(String url, Object[] parameters, Object[] attributes) {
-        return new RenderActionUrl(url, toMap(parameters), toMap(attributes));
+    public Render renderForward(String url, Object[] parameters, Object[] attributes) {
+        return new RenderForward(url, toMap(parameters), toMap(attributes));
     }
 
     /**
@@ -240,7 +240,18 @@ public class WebMotionController {
      * @return render represents the next step for user
      */
     public Render renderURL(String url, Object ... model) {
-        return new RenderUrl(url, toMap(model));
+        return new RenderRedirect(url, toMap(model));
+    }
+
+    /**
+     * Redirect the user to an URL. The model is put as parameters in url.
+     * 
+     * @param url the redirect URL.
+     * @param model data used, either just one object, either key/value pairs.
+     * @return render represents the next step for user
+     */
+    public Render renderRedirect(String url, Object ... model) {
+        return new RenderRedirect(url, toMap(model));
     }
 
     /**

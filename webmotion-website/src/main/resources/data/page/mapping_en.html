@@ -353,10 +353,16 @@ public class Listener implements WebMotionServerListener {
 &lt;http_method&gt;    &lt;url&gt;    <b>view:</b>&lt;page_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
 </pre>
 <p>
-    Here is the syntax to map a URL with another URL:
+    Here is the syntax to map a redirection on an URL:
 </p>
 <pre>
-&lt;http_method&gt;    &lt;url&gt;    <b>url:</b>&lt;path&gt;
+&lt;http_method&gt;    &lt;url&gt;    (<b>url:</b>|<b>redirect:</b>)&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map a forward on an URL:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>forward:</b>&lt;path&gt;
 </pre>
 <p>
     Here is the syntax to map a URL with a Java action (controller method):
@@ -546,7 +552,8 @@ GET         /doc/index                          <b>view:</b>doc/index.html
 <h3>HTTP redirections</h3>
 <p>
     You can define HTTP redirections to absolute URLs (generally to another domain) or relative to the application.
-    To define a redirection, you just need to prefix the treatment by <code>url:</code>.
+    To define a redirection, you just need to prefix the treatment by <code>url:</code> or <code>redirect:</code> 
+    and for a forward to prefix by <code>forward:</code>.
 </p>
 <p>
     <span class="label label-info">Example</span> Redirection to another website:
@@ -558,17 +565,17 @@ GET         /google                              <b>url:</b>http://www.google.co
     <span class="label label-info">Example</span> Redirection to a URL of the application:
 </p>
 <pre>
-GET         /foo                                 <b>url:</b>/do?param=3
+GET         /foo                                 <b>redirect:</b>/do?param=3
 </pre>
 
 <p>
     Once again, the treatment can be configurable according to the treated URL.
 </p>
 <p>
-    <span class="label label-info">Example</span> Wikipedia URL rewriting in our website:
+    <span class="label label-info">Example</span> Wikipedia URL forwarding in our website:
 </p>
 <pre>
-GET         /wikipedia/{page}                    <b>url:</b>http://www.wikipedia.org/wiki/{page}
+GET         /wikipedia/{page}                    <b>forward:</b>http://www.wikipedia.org/wiki/{page}
 </pre>
 
 <h3>Java treatment</h3>
@@ -936,7 +943,7 @@ public class Decorator extends WebMotionFilter {
     Here is the syntax to map an error on another URL:
 </p>
 <pre>
-&lt;error&gt;    url:&lt;path&gt;
+&lt;error&gt;    (url:|redirect:)&lt;path&gt;
 </pre>
 <p>
     Here is the syntax to map an error on a Java action:

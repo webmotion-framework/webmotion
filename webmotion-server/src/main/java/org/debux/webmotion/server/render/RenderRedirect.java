@@ -38,11 +38,11 @@ import org.debux.webmotion.server.mapping.Mapping;
  * 
  * @author julien
  */
-public class RenderUrl extends Render {
+public class RenderRedirect extends Render {
     protected String url;
     protected Map<String, Object> model;
 
-    public RenderUrl(String url, Map<String, Object> model) {
+    public RenderRedirect(String url, Map<String, Object> model) {
         this.url = url;
         this.model = model;
     }

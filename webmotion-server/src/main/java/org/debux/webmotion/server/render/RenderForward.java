@@ -41,12 +41,12 @@ import org.debux.webmotion.server.mapping.Mapping;
  * 
  * @author julien
  */
-public class RenderActionUrl extends Render {
+public class RenderForward extends Render {
     protected String url;
     protected Map<String, Object> parameters;
     protected Map<String, Object> attributes;
 
-    public RenderActionUrl(String url, Map<String, Object> parameters, Map<String, Object> attributes) {
+    public RenderForward(String url, Map<String, Object> parameters, Map<String, Object> attributes) {
         this.url = url;
         this.parameters = parameters;
         this.attributes = attributes;

@@ -170,7 +170,8 @@ public class ParboiledMappingParser extends BaseParser {
                     WhiteSpace(),
                     FirstOf(
                         errorView(),
-                        errorUrl(),
+                        errorRedirect(),
+                        errorActionUrl(),
                         errorJava()
                     ),
                     NewLine()
@@ -185,8 +186,12 @@ public class ParboiledMappingParser extends BaseParser {
         return End();
     }    
     
-    public Rule errorUrl() {
-        return Sequence("url:", errorUrlValue());
+    public Rule errorRedirect() {
+        return Sequence(FirstOf("url:", "redirect"), errorUrlValue());
+    }    
+    
+    public Rule errorActionUrl() {
+        return Sequence("forward:", errorUrlValue());
     }    
     
     public Rule errorUrlValue() {
@@ -314,7 +319,7 @@ public class ParboiledMappingParser extends BaseParser {
                     actionPath(),
                     Optional("?", actionParameters()),
                     WhiteSpace(),
-                    FirstOf(actionView(), actionUrl(), actionJava()),
+                    FirstOf(actionView(), actionRedirect(), actionForward(), actionJava()),
                     Optional(WhiteSpace(), actionDefaultParameters()),
                     NewLine()
             );
@@ -399,20 +404,35 @@ public class ParboiledMappingParser extends BaseParser {
             );
     }
     
-    public Rule actionUrl() {
+    public Rule actionRedirect() {
         return Sequence(
-                "url:", 
-                actionUrlValue()
+                FirstOf("url:", "redirect"),
+                actionRedirectValue()
             );
     }
     
     @SuppressSubnodes
-    public Rule actionUrlValue() {
+    public Rule actionRedirectValue() {
         return ZeroOrMore(
                 FirstOf(
                     actionSimpleVariable(),
-                    fromStringLiteral("\\{"),
-                    fromStringLiteral("\\}"),
+                    Sequence(TestNot(FirstOf("{", "}", NewLine())), ANY)
+                )
+        );
+    }
+    
+    public Rule actionForward() {
+        return Sequence(
+                "forward:", 
+                actionForwardValue()
+            );
+    }
+    
+    @SuppressSubnodes
+    public Rule actionForwardValue() {
+        return ZeroOrMore(
+                FirstOf(
+                    actionSimpleVariable(),
                     Sequence(TestNot(FirstOf("{", "}", NewLine())), ANY)
                 )
         );

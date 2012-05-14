@@ -184,7 +184,7 @@ public class Jpa extends Transactional {
      */
     protected Render render(String callback, String resultName, Object resultValue) {
         if (callback != null && !callback.isEmpty()) {
-            return renderActionURL(callback, null, new Object[]{resultName, resultValue});
+            return renderForward(callback, null, new Object[]{resultName, resultValue});
         } else {
             return renderJSON(resultValue);
         }
