@@ -519,7 +519,7 @@ public class RenderAccept extends Render {
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Recupération du context par paramètre :
+    <span class="label label-info">Exemple</span> Recupération du contexte par paramètre :
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -532,7 +532,7 @@ public class Action extends WebMotionController {
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Recupération du context par méthode :
+    <span class="label label-info">Exemple</span> Recupération du contexte par méthode :
 </p>
 <pre class="prettyprint">
 public class Action extends WebMotionController {
@@ -613,7 +613,7 @@ public Render run(Properties configuration) {
 </pre>
     
 <p>
-    <span class="label label-info">Exemple</span> Recupération de la configuration dans le listenner :
+    <span class="label label-info">Exemple</span> Recupération de la configuration dans le listener :
 </p>
 <pre class="prettyprint">
 public class Listener implements WebMotionServerListener {
@@ -736,7 +736,7 @@ ${flashMessages.miscs.my_message}
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Récupérations de l'ensemble des messages en jsp :
+    <span class="label label-info">Exemple</span> Récupération de l'ensemble des messages en JSP :
 </p>
 <pre class="prettyprint">
 ${flashMessages.messages}
@@ -744,9 +744,9 @@ ${flashMessages.messages}
 
 <h3 id="cookie">Gestion des cookies</h3>
 <p>
-    Le framework propose un gestionnaire de cookie pour simplifié l'utilisation des cookies,
+    Le framework propose un gestionnaire de cookie pour simplifier l'utilisation des cookies,
     en proposant des fonctionnalités comme la récupération d'un cookie par son nom,
-    la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, ...
+    la suppression d'un cookie, la sécurisation, la manipulation d'objet comme valeur de cookie, etc.
 </p>
 
 <p>
@@ -794,17 +794,17 @@ User user = cookie.getValue(User.class);
 </pre>
 
 <p>
-    Il est possible de gérer des cookies sécurisés, c'est à dire de les protèger sur :
+    Il est possible de gérer des cookies sécurisés, cette sécurité permet de garantir :
 </p>
 <ul>
     <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
     <li>l'intégrité des données, en créant un hash des données</li>
-    <li>le replay attacks, en intégrant l'identifiant apache de session ssl</li>
-    <li>le volume attack, en intégrant le nom de l'utilisateur</li>
+    <li>une protection contre les replay attacks, en intégrant l'identifiant apache de session ssl</li>
+    <li>une protection contre les volume attacks, en intégrant le nom de l'utilisateur</li>
 </ul>
 <p>
-    Une clé secrète est utilisé pour garantir la sécurité des cookies. Elle est 
-    auto-générée si elle n'est pas défini dans le fichier de mapping. 
+    Une clé secrète est utilisée pour garantir la sécurité des cookies. Elle est 
+    auto-générée si elle n'est pas définie dans le fichier de mapping. 
     Pour plus de renseignements, veuillez vous reporter à la section 
     <a href="mapping#config">Mapping - Config</a>.
 </p>
@@ -817,9 +817,9 @@ CookieManager manager = context.getCookieManager("username", true, true);
 </pre>
 
 <p>
-    Par la suite, le gestionnaire de cookie sécurisé s'utilise de façon transparente. 
+    Par la suite, le gestionnaire de cookies sécurisés s'utilise de façon transparente. 
     Il n'est pas récupérable par l'injection au niveau des paramètres, car le gestionnaire 
-    propose plusieurs niveau de sécurisation (cryptographie et/ou ssl).
+    propose plusieurs niveaux de sécurité (cryptographie et/ou ssl).
 </p>
 
 <h3 id="session">Session cliente</h3>
@@ -840,7 +840,7 @@ public Render action(ClientSession session) {
 </pre>
 
 <p>
-    La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut ce 
+    La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut se 
     fait selon un type de donnée, ce qui évite un cast.
 </p>
 
@@ -853,7 +853,7 @@ String value = session.getAttribute("name", String.class);
 </pre>
 
 <p>
-    Par défaut, la durée de validité de la session est fixé classsiquement à 2 heures. Vous pouvez 
+    Par défaut, la durée de validité de la session est fixée classsiquement à 2 heures. Vous pouvez 
     changer la valeur par le biais de la méthode <code>setMaxInactiveInterval</code> :
 </p>
 
@@ -863,8 +863,8 @@ session.setMaxInactiveInterval(30 * 60); // 30 min
 
 <p>
     La session cliente comporte quelques limitations dù au système de stockage des cookies, 
-    comme la taille maximum de 4ko d'un cookie. De plus, une clé secrète est utilisé pour 
-    garantir la sécurité de la session. Elle est auto-générée si elle n'est pas défini 
+    comme la taille maximum de 4ko d'un cookie. De plus, une clé secrète est utilisée pour 
+    garantir la sécurité de la session. Elle est auto-générée si elle n'est pas définie 
     dans le fichier de mapping. Pour plus de renseignements, veuillez vous reporter 
     à la section <a href="mapping#config">Mapping - Config</a>.
 </p>
@@ -872,7 +872,7 @@ session.setMaxInactiveInterval(30 * 60); // 30 min
 <h2 class="page-header" id="validation">Validation des paramètres des contrôleurs</h2>
 <p>
     WebMotion propose une validation des paramètres des actions Java, sur la JSR 303.
-    Pour plus de renseignement sur la JSR, vous pouvez consulter le site <a href="http://jcp.org/">jcp</a>.
+    Pour plus de renseignements sur la JSR, vous pouvez consulter le site <a href="http://jcp.org/">jcp</a>.
     Un bean ne sera validé uniquement si les annotations <code>@Valid</code> ou <code>@ValidGroup</code>
     apparaissent sur le paramètre correspondant dans la méthode appellée.
     Il faut noter que <code>@ValidGroup</code> est la seule annotation 
