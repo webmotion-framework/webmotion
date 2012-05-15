@@ -524,7 +524,7 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/sectionActions/actionRule/actionActionUrl/actionForwardValue", new Visit() {
+            rules.put("/sectionActions/actionRule/actionForward/actionForwardValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();

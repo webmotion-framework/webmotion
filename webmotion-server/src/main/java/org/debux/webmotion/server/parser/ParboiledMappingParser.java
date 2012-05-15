@@ -187,7 +187,7 @@ public class ParboiledMappingParser extends BaseParser {
     }    
     
     public Rule errorRedirect() {
-        return Sequence(FirstOf("url:", "redirect"), errorUrlValue());
+        return Sequence(FirstOf("url:", "redirect:"), errorUrlValue());
     }    
     
     public Rule errorActionUrl() {
@@ -406,7 +406,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     public Rule actionRedirect() {
         return Sequence(
-                FirstOf("url:", "redirect"),
+                FirstOf("url:", "redirect:"),
                 actionRedirectValue()
             );
     }
