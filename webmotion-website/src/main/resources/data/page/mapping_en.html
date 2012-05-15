@@ -940,10 +940,16 @@ public class Decorator extends WebMotionFilter {
 &lt;error&gt;    view:&lt;page_name&gt;
 </pre>
 <p>
-    Here is the syntax to map an error on another URL:
+    Here is the syntax to map an error on a redirection to an URL:
 </p>
 <pre>
 &lt;error&gt;    (url:|redirect:)&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map an error on a forward to an URL:
+</p>
+<pre>
+&lt;error&gt;    forward:&lt;path&gt;
 </pre>
 <p>
     Here is the syntax to map an error on a Java action:
