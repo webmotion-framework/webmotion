@@ -51,6 +51,12 @@
         <script type="text/javascript" src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
 
         <style type="text/css">
+            body {
+                text-align: left;
+            }
+            .space {
+                padding-bottom: 5px;
+            }
             .tab-pane {
                 clear: both;
                 padding-left: 5px;
@@ -143,17 +149,23 @@
                                         <li><a id="act" href="./act">Action</a></li>
                                         <li><a id="view" href="./view">View</a></li>
                                         <li><a id="url" href="./url">Url</a></li>
+                                        <li class="space"><a id="forward" href="./forward">Forward</a> <span class="label label-info">New</span></li>
+                                        
                                         <li><a id="helloParameters" href="./helloParameters">Parameters</a></li>
                                         <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                         <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
                                         <li><a id="login" href="./login">Renamed parameters</a></li>
-                                        <li><a id="select" href="./select">Parameters static</a></li>
+                                        <li class="space"><a id="select" href="./select">Parameters static</a></li>
+                                        
                                         <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
                                         <li><a id="text" href="./text">Dynamic view</a></li>
                                         <li><a id="helloView" href="./helloView">Dynamic jsp view</a></li>
-                                        <li><a id="wikipedia" href="./wikipedia">Dynamic url</a></li>
+                                        <li><a id="wikipedia" href="./wikipedia">Dynamic url or redirect</a></li>
+                                        <li class="space"><a id="dynamic_forward" href="./dynamic_forward">Dynamic forward</a> <span class="label label-info">New</span></li>
+                                        
                                         <li><a id="form" href="./form">Method</a></li>
-                                        <li><a id="media" href="./media">Multiple method</a></li>
+                                        <li class="space"><a id="media" href="./media">Multiple method</a></li>
+                                        
                                         <li><a id="static" href="./static">Static resources</a></li>
                                     </ul>
                                 </li>

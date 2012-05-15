@@ -86,3 +86,5 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /jpa                                        Showcase.jpa
 *           /client_session                             Showcase.clientSession
 *           /properties                                 Showcase.properties
+*           /forward                                    Showcase.forward
+*           /dynamic_forward                            Showcase.dynamicForward

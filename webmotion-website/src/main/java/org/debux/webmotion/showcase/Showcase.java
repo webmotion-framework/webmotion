@@ -1029,4 +1029,35 @@ public class Showcase extends WebMotionController {
         );
     }
     
+    public Render forward() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/forward"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false)
+                        .addContent(getFirstMapping(SECTION_ACTIONS, INDEX_ACTIONS + 86, 1))
+                        .addContent(getContentMapping(INDEX_ACTIONS + 1, 1)),
+                    getJavaContent("Hello.java"),
+                    getPageContent("hello.jsp")
+                )
+        );
+    }
+
+    public Render dynamicForward() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/forward/dynamic/get",
+                    "/forward/dynamic/set"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 88, 3)),
+                    getJavaContent("Dynamic.java")
+                )
+        );
+    }
+
 }
