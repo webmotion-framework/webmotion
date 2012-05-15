@@ -97,6 +97,33 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
+    public void forwardRelativeUrl() throws IOException {
+        String url = getAbsoluteUrl("forward");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
+    }
+    
+    @Test
+    public void forwardAbsoluteUrl() throws IOException {
+        String url = getAbsoluteUrl("forward/absolute");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains("Hello world !"));
+    }
+    
+    @Test
+    public void dynamicForward() throws IOException {
+        String url = getAbsoluteUrl("forward/dynamic/get");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains("Execute get action"));
+    }
+    
+    @Test
     public void helloParametersYou() throws IOException {
         String url = getAbsoluteUrl("helloParameters?who=you");
         HttpGet request = new HttpGet(url);

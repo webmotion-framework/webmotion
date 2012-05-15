@@ -87,7 +87,7 @@ code:500                                                ErrorCode.display
 *           /receive                                    view:receive.jsp
 GET         /calc                                       view:calc.jsp
 POST        /add                                        Calc.add
-*           /readme                                     url:/static/README
+*           /readme                                     redirect:/static/README
 *           /form                                       view:form.jsp
 GET         /person                                     Person.get
 POST        /person                                     Person.save
@@ -128,8 +128,8 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /include                                    async:Include.index
 *           /include/header                             async:Include.header
 *           /include/footer                             async:Include.footer
-*           /redirect/relative                          url:/hello
-*           /redirect/absolute                          url:/deploy/test/hello
+*           /redirect/relative                          redirect:/hello
+*           /redirect/absolute                          redirect:/deploy/test/hello
 *           /redirect                                   Dispatcher.redirect
 *           /cookie/create                              CookieService.create
 *           /cookie/read                                CookieService.read
@@ -141,3 +141,8 @@ GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
 *           /session/read                               Session.read
 *           /echo                                       Echo.run
 DELETE      /simulate                                   action:Action.execute
+*           /forward                                    forward:/hello
+*           /forward/absolute                           forward:/deploy/test/hello
+*           /forward/dynamic/{method}                   forward:/forward/{method}
+*           /forward/get                                Dynamic.get
+*           /forward/set                                Dynamic.set
