@@ -186,6 +186,23 @@ public class SpringController extends WebMotionController {
 server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
 </pre>
 
+<p>
+    Vous pouvez aussi ajouter la configuration en Java dans un listener ainsi :
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        context.addGlobalController(SiteMesh.class);
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+    }
+}
+</pre>
+
 <h3>Utilisation</h3>
 
 <p>
@@ -263,6 +280,27 @@ server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
+</pre>
+
+<p>
+    Vous pouvez aussi ajouter la configuration en Java dans un listener ainsi :
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        context.addGlobalController(Jpa.class);
+        
+        context.addInjector(new GenericDaoInjector());
+        context.addInjector(new EntityManagerInjector());
+        context.addInjector(new EntityTransactionManager());
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+    }
+}
 </pre>
 
 <h3>Pre-requis</h3>
