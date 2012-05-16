@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.spring;
 
-
 import javax.servlet.ServletContext;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
