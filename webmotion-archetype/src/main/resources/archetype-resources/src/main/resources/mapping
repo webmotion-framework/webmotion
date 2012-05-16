@@ -1,6 +1,9 @@
 [config]
 package.views=WEB-INF/${package}
 package.base=${package}
+#if ($usesExtras == 'y' || $usesExtras == 'Y')
+#server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
+#end
 
 [actions]
 *         /                           Base.index

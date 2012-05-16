@@ -62,12 +62,5 @@
             </includes>
         </fileSet>
     
-        <fileSet encoding="UTF-8">
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>**/*.</include>
-            </includes>
-        </fileSet>
-    
     </fileSets>
 </archetype-descriptor>
