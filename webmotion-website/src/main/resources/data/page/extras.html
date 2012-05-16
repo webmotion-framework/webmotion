@@ -65,6 +65,23 @@ server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
     et d'Hibernate.
 </p>
 
+<p>
+    Vous pouvez utiliser l'archetype maven pour créer votre projet avec les 
+    extras en précisant le paramètre <code>usesExtras</code> à <code>Y</code> :
+</p>
+<pre>
+$ mvn archetype:generate \
+    -DarchetypeRepository=http://debux.org/maven/repo \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.2 \
+    -DgroupId=org.example \
+    -DartifactId=myapp \
+    -Dpackage=org.example.myapp \
+    -Dversion=1.0-SNAPSHOT \
+    -DusesExtras=Y
+</pre>
+
 <h2 class="page-header" id="spring">Spring</h2>
 <p>
     WebMotion propose l'injection de dépendances basée sur Spring. Elle vous 
