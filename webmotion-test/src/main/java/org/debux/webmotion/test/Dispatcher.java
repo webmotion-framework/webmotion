@@ -35,7 +35,7 @@ import org.debux.webmotion.server.render.Render;
 public class Dispatcher extends WebMotionController {
     
     public Render redirect() {
-        return renderForward("/deploy/test/helloParameters", "who", "internal");
+        return renderRedirect("/deploy/test/helloParameters", "who", "internal");
     }
     
 }
