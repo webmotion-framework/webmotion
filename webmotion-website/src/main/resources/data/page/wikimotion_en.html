@@ -1,0 +1,190 @@
+<!--
+  #%L
+  WebMotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 - 2012 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Wikimotion</h1>
+
+<script type="text/javascript" src="js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="presentation">Presentation</h2>
+<p>
+    WikiMotion is a wiki engine, which can be used both standalone (the war file can be deployed on any application server) 
+    and as an extension. For example, the <a href="www.webmotion-framework.org">WebMotion</a> web site uses the wiki as en extension. 
+</p>
+
+<p>
+    It offers the following functionalities:
+</p>
+<ul>
+    <li>Flat files saving (no database needed)</li>
+    <li>HTML, <a href="http://docutils.sourceforge.net/rst.html">RST</a> or <a href="http://fr.wikipedia.org/wiki/LaTeX">LaTeX</a> page syntax</li>
+    <li>Support of the basic HTTP authentication</li>
+    <li>File upload</li>
+    <li>Site map</li>
+    <li>Media map</li>
+</ul>
+
+<p>
+    The style of the wiki relies on the <a href="http://twitter.github.com/bootstrap/">Boostrap, from Twitter</a>. If you wish to define a design and a custom layout,
+    you can modify (in case of a standalone use) or override (in case of the extension use) the <code>layout.jsp</code> file.
+</p>
+
+<p style="text-align: right"><a class="btn" href="http://svn.debux.org/webmotion/trunk/webmotion-wiki/">Sources &raquo;</a> <a class="btn btn-primary" href="download">Download &raquo;</a></p>
+
+<h2 class="page-header" id="installation">Installation of WikiMotion in the standalone mode</h2>
+<p>
+    First, get the last available version of WikiMotion in the <a href="download">Download</a> section of the site.
+    Then deploy the downloaded war file in an application server such as Tomcat, Jetty or GlassFish.
+</p>
+
+<p>
+    Once the wiki is deployed, you can add a <code>wikimotion-config.properties</code> configuration file,
+    either in your system configuration, in your user configuration or in the classpath, 
+    in order to configure and customize your wiki.
+</p>
+<p>
+    <span class="label label-info">Example</span> configuration file:
+</p>
+<pre class="prettyprint">
+# Site name
+site.name=WebMotion
+
+# File path to store the wiki pages
+file.path=classpath:./data/page
+
+# Media path to store the wiki pages
+media.path=classpath:./data/media
+
+# First page display
+first.page=/main
+
+# Default language
+default.language=en
+
+# Supported language
+supported.language=fr,en
+
+# Public permissions [read,write]
+public.permissions=read
+
+# File path to get users
+users.path=classpath:wikimotion-users.json
+</pre>
+
+<p>
+    If you wish to support the LaTeX syntax in the wiki, you will need to install the <code>latex</code> package
+    as well as the <code>tth</code> one. In a linux distribution like Ubuntu, launch the following command:
+</p>
+<pre>
+$ sudo apt-get install latex tth
+</pre>
+
+<p>
+    If you wish to support the RST syntax in the wiki, you will need to install <code>docutils</code> 
+    and the <code>rst2html-pygments</code> script.
+</p>
+<pre>
+$ sudo apt-get install python-docutils python-pygments
+
+$ wget http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/rst2html-pygments
+$ sudo cp rst2html-pygments /usr/bin/rst2html-pygments
+$ sudo chmod 755 /usr/bin/rst2html-pygments
+</pre>
+
+<p>
+    The users are configured in the <code>wikimotion-users.json</code> file.
+    By default, there is an <code>admin</code> whose password is <code>admin</code>.
+    The default user's name is <code>admin</code> and its password is <code>admin</code>.
+    The passwords in this file must be hashed with the SHA-1 algorithm.
+</p>
+
+<h2 class="page-header" id="extension">Use of the WikiMotion extension in your application</h2>
+<p>
+    To be able to use the WikiMotion extension, you need to add the wiki in the Maven dependencies of your project.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;wikimotion&lt;/artifactId&gt; &lt;!-- Check the last available version --&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+    &lt;type&gt;war&lt;/type&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Then, you can directly use it in your mapping file as an extension.
+</p>
+<pre>
+[extensions]
+/wiki                                             wikimotion.wm
+</pre>
+
+<p>
+    <span class="label label-info">Note</span> 
+    The <code>wikimotion.wm</code> is the mapping file of the extension, provided by the dependency to be in the classpath.
+    You have nothing to worry about.
+</p>
+
+<p>
+    To configure the WikiMotion, you can add a properties section in your mapping file:
+</p>
+<pre class="prettyprint">
+[my-site.properties]
+site.name=My site
+</pre>
+
+<h2 class="page-header" id="screens">Screenshots</h2>
+<ul class="thumbnails">
+    <li class="span6">
+        <a href="media/wikimotion?name=index.png" class="thumbnail">
+            <img src="media/wikimotion?name=index.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=connection.png" class="thumbnail">
+            <img src="media/wikimotion?name=connection.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=edition.png" class="thumbnail">
+            <img src="media/wikimotion?name=edition.png" alt="">
+        </a>
+    </li>
+    <li class="span6">
+        <a href="media/wikimotion?name=sitemap.png" class="thumbnail">
+            <img src="media/wikimotion?name=sitemap.png" alt="">
+        </a>
+    </li>
+</ul>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="advanced">Advanced »</a>
+</div>
+
+</div>
