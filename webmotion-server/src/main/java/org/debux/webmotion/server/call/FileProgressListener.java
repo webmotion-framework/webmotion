@@ -42,8 +42,13 @@ public class FileProgressListener implements ProgressListener {
     /** Attribute name where the listener is stored */
     public static String SESSION_ATTRIBUTE_NAME = "fileProgressListener";
     
+    /** Current bytes read in request */
     protected long bytesRead;
+    
+    /** Total file size */
     protected long contentLength;
+    
+    /** Number of item read */
     protected int items;
 
     @Override

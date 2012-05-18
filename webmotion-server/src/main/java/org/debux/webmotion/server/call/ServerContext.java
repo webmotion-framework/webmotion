@@ -43,7 +43,6 @@ import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.parser.MappingParser;
-import org.debux.webmotion.server.parser.MappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

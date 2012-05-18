@@ -39,12 +39,19 @@ import org.debux.webmotion.server.mapping.Rule;
  */
 public class Executor {
 
+    /** Class */
     protected Class<? extends  WebMotionController> clazz;
+    
+    /** Method */
     protected Method method;
+    
+    /** Instance */
     protected WebMotionController instance;
 
+    /** Parameters */
     protected Map<String, Object> parameters;
     
+    /** Rule uses to create the Executor */
     protected Rule rule;
 
     public Executor() {

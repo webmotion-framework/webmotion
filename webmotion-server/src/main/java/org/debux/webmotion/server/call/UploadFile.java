@@ -33,9 +33,17 @@ import java.io.File;
  * @author jruchaud
  */
 public class UploadFile {
+    
+    /** File content */
     protected File file;
+    
+    /** File name */
     protected String name;
+    
+    /** File size */
     protected long size;
+    
+    /** File centent type */
     protected String contentType;
 
     public UploadFile() {

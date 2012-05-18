@@ -661,6 +661,9 @@ public class CookieManger {
         }
     }
     
+    /**
+     * In this case the value is not secured.
+     */
     public static class DummySecureValue extends SecureValue {
 
         @Override
