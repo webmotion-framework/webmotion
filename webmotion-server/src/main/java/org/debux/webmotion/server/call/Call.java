@@ -199,6 +199,10 @@ public class Call {
         this.current = current;
     }
 
+    public Rule getCurrentRule() {
+        return current.getRule();
+    }
+    
     public List<WebMotionHandler> getExecutorHandlers() {
         return executorHandlers;
     }
