@@ -113,6 +113,7 @@
                                 <exclude>**/codemirror-2.11/**</exclude>
                                 <exclude>**/js/generated_toc.js</exclude>
                                 <exclude>**/css/pygments-default.css</exclude>
+                                <exclude>**/layout.jsp</exclude>
                             </excludes>
                         </configuration>
                     </execution>
