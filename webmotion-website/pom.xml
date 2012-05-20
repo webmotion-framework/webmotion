@@ -131,6 +131,8 @@
                             <excludes>
                                 <exclude>**/bootstrap/**</exclude>
                                 <exclude>**/prettify/**</exclude>
+                                <exclude>**/showcase.jsp</exclude>
+                                <exclude>**/layout.jsp</exclude>
                             </excludes>
                         </configuration>
                     </execution>
