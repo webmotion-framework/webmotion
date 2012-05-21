@@ -133,6 +133,7 @@
                                 <exclude>**/prettify/**</exclude>
                                 <exclude>**/showcase.jsp</exclude>
                                 <exclude>**/layout.jsp</exclude>
+                                <exclude>**/presentation.html</exclude>
                             </excludes>
                         </configuration>
                     </execution>
