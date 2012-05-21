@@ -31,6 +31,13 @@
 <html lang="${language}">
     <head>
         <meta charset="utf-8">
+        <c:if test="${language == 'fr'}">
+            <meta name="description" content="WebMotion est un framework web Java fondé sur le standard Java EE 6. La principal fonctionnalité est d’assurer la couche de présentation par le biais de pages ou de templates. Mais il propose également la création d’API REST pour les appels AJAX. Le framework est basé sur un fichier de mapping permettant de définir des actions suivant des événements, comme par exemple lancer une action Java selon une URL.">
+        </c:if>
+        <c:if test="${language != 'fr'}">
+            <meta name="description" content="WebMotion is a Java web framework based on the Java EE6 standard. The main functionality consists in assuring the presentation layer with pages or templates. But it also offers the creation of REST APIs for the AJAX calls. The framework is based on a mapping file which enables to define actions based on events, such as launching a Java action according to a URL.">
+        </c:if>
+            
         <title>${site_name}</title>
         
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">

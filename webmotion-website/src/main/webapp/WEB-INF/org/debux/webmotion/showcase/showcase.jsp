@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="language" value="${sessionScope['javax.servlet.jsp.jstl.fmt.locale.session']}"/>
  
 <!DOCTYPE html>
 <!--
@@ -28,11 +29,16 @@
   #L%
 -->
 
-<html>
+<html lang="${language}">
     <head>
+        <meta charset="utf-8">
+        <c:if test="${language == 'fr'}">
+            <meta name="description" content="WebMotion est un framework web Java fondé sur le standard Java EE 6. La principal fonctionnalité est d’assurer la couche de présentation par le biais de pages ou de templates. Mais il propose également la création d’API REST pour les appels AJAX. Le framework est basé sur un fichier de mapping permettant de définir des actions suivant des événements, comme par exemple lancer une action Java selon une URL.">
+        </c:if>
+        <c:if test="${language != 'fr'}">
+            <meta name="description" content="WebMotion is a Java web framework based on the Java EE6 standard. The main functionality consists in assuring the presentation layer with pages or templates. But it also offers the creation of REST APIs for the AJAX calls. The framework is based on a mapping file which enables to define actions based on events, such as launching a Java action according to a URL.">
+        </c:if>
         <title>WebMotion</title>
-        <meta name="description" content="">
-        <meta name="author" content="">
 
         <link rel="icon" type="image/png" href="<c:url value="/img/favicon.png"/>">
         <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon.ico"/>">
@@ -115,7 +121,7 @@
                         <jsp:include page="/deploy/menu?sub=include" />
                         <ul class="nav pull-right">
                             <li>
-                                <a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-lang="${sessionScope["javax.servlet.jsp.jstl.fmt.locale.session"]}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
+                                <a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-lang="${language}" data-url="http://www.webmotion-framework.org" data-size="large">Tweet</a>
                                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                             </li>
                             <li>
