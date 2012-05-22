@@ -803,7 +803,7 @@ User user = cookie.getValue(User.class);
 <ul>
     <li>la confidentialité des données, en utilisant l'algorithme symétrique de chiffrement Rijndael</li>
     <li>l'intégrité des données, en créant un hash des données</li>
-    <li>une protection contre les replay attacks, en intégrant l'identifiant apache de session ssl</li>
+    <li>une protection contre les replay attacks, en intégrant l'identifiant Apache de session SSL</li>
     <li>une protection contre les volume attacks, en intégrant le nom de l'utilisateur</li>
 </ul>
 <p>
@@ -814,7 +814,7 @@ User user = cookie.getValue(User.class);
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Récupération d'un gestionnaire de cookie complétement sécurisé :
+    <span class="label label-info">Exemple</span> Récupération d'un gestionnaire de cookie complètement sécurisé :
 </p>
 <pre class="prettyprint">
 CookieManager manager = context.getCookieManager("username", true, true);
@@ -823,13 +823,13 @@ CookieManager manager = context.getCookieManager("username", true, true);
 <p>
     Par la suite, le gestionnaire de cookies sécurisés s'utilise de façon transparente. 
     Il n'est pas récupérable par l'injection au niveau des paramètres, car le gestionnaire 
-    propose plusieurs niveaux de sécurité (cryptographie et/ou ssl).
+    propose plusieurs niveaux de sécurité (cryptographie et/ou SSL).
 </p>
 
 <h3 id="session">Session cliente</h3>
 <p>
     La session cliente est une session stockée sous forme de cookies sécurisés sur le navigateur 
-    du client. Ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle 
+    du client, ce qui permet une grande souplesse pour la scabilité de vos serveurs. Elle
     s'utilise comme une session classique. La session est créée et sauvegardée au 
     moment de son utilisation.
 </p>
@@ -845,7 +845,7 @@ public Render action(ClientSession session) {
 
 <p>
     La fonctionnalité supplémentaire porte sur la récupération des attributs qui peut se 
-    fait selon un type de donnée, ce qui évite un cast.
+    faire selon un type de donnée, ce qui évite un cast.
 </p>
 
 <p>
@@ -857,7 +857,7 @@ String value = session.getAttribute("name", String.class);
 </pre>
 
 <p>
-    Par défaut, la durée de validité de la session est fixée classsiquement à 2 heures. Vous pouvez 
+    Par défaut, la durée de validité de la session est fixée classiquement à 2 heures. Vous pouvez 
     changer la valeur par le biais de la méthode <code>setMaxInactiveInterval</code> :
 </p>
 

@@ -513,7 +513,9 @@ public class RenderAccept extends Render {
 <h2 class="page-header" id="context">Web context</h2>
 <p>
     All the controllers of the application can access the web context of the application,
-    whether by calling the <code>getContext</code> method or directly in the method parameters.
+    by calling the <code>getContext</code> method or directly in the method parameters.
+    The web context gives access to all the information about the request and the response
+    suche as the flash messages, the cookie management, the client session, ...
 </p>
 
 <p>
@@ -562,7 +564,10 @@ public class Action extends WebMotionController {
     <li><strong>FileProgressListener: </strong>enables to follow the loading progress of a file</li>
     <li><strong>Mapping: </strong>the applicative instance of the mapping</li>
     <li><strong>Config: </strong>the configuration of WebMotion</li>
+    <li><strong>Properties : </strong>the configuration of the application</li>
     <li><strong>Call: </strong>the call context of the actions</li>
+    <li><strong>CookieManager : </strong>the cookie manager</li>
+    <li><strong>ClientSession : </strong>the client session</li>
 </ul>
 
 <p>
@@ -589,6 +594,74 @@ public class Error extends WebMotionController {
     }
     ...
 }
+</pre>
+
+
+<h3 id="properties">Configuration of the application</h3>
+<p>
+    WebMotion enables to easily manage a configuration of your application in the mapping file.
+    For more details, please refer to the <a href="mapping#properties">Mapping - Configuration of the application</a>
+    section. The configuration relies on the <a href="http://commons.apache.org/configuration">Apache Commons Configuration</a> library.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of the configuration in an action:
+</p>
+<pre class="prettyprint">
+public Render run(Properties configuration) {
+    ...
+}
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of the configuration in the listener:
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        Mapping mapping = context.getMapping();
+        Properties configuration = mapping.getProperties();
+        ...
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        // Do nothing
+    }
+}
+</pre>
+
+<p>
+    The <code>Properties</code> object enables to retrieve the values according to different types.
+</p>
+<p>
+    <span class="label label-info">Example</span> Retrieving of a String:
+</p>
+<pre class="prettyprint">
+String value = configuration.getString("key");
+</pre>
+<p>
+    With the following mapping:
+</p>
+<pre class="prettyprint">
+[config.properties]
+key=test
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of an array of String:
+</p>
+<pre class="prettyprint">
+String[] values = configuration.getStringArray("key");
+</pre>
+<p>
+    With the following mapping:
+</p>
+<pre class="prettyprint">
+[config.properties]
+key=test1,test2,test3
 </pre>
 
 <h3 id="flashmessage">Flash messages</h3>
@@ -670,6 +743,131 @@ ${flashMessages.miscs.my_message}
 <pre class="prettyprint">
 ${flashMessages.messages}
 </pre>
+
+<h3 id="cookie">Cookie management</h3>
+<p>
+    The framework offers a cookie manager to simplify the use of the cookies,
+    by offering functionalities such as the retrieving of a cookie by its name,
+    the deletion of a cookie, the securisation, the handling of objects as value of a cookie, etc.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Creation of a new cookie:
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.create("name", "value");
+cookie.setPath("/index.html");
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of a value:
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.get("name");
+String value = cookie.getValue();
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Deletion of a cookie:
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+manager.remove("name");
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Recording of an object as value:
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.create("name", new User("John"));
+manager.add(cookie);
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of an object as value:
+</p>
+<pre class="prettyprint">
+CookieEntity cookie = manager.get("name");
+User user = cookie.getValue(User.class);
+</pre>
+
+<p>
+    It is possible to manage secure cookies. This security enables to guarantee:
+</p>
+<ul>
+    <li>the confidentiality of the data, by using the symmetric algorithm of encryption Rijndael</li>
+    <li>the integrity of the data, by creating a hash of the data</li>
+    <li>a protection against the replay attacks, by integrating the SSL session Apache id</li>
+    <li>a protection against the volume attacks, by integrating the name of the user</li>
+</ul>
+<p>
+    A secret key is used to guarantee the security of the cookies.
+    It is autogenerated if it is not defined in the mapping file.
+    For more details, please refer to the <a href="mapping#config">Mapping - Config</a> section.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of a completely secure cookie manager:
+</p>
+<pre class="prettyprint">
+CookieManager manager = context.getCookieManager("username", true, true);
+</pre>
+
+<p>
+    Afterward, the secure cookie manager is used transparently.
+    You cannot retrieve it by injecting at the level of the parameters, because
+    the manager offers several levels of security (cryptography and/or SSL).
+</p>
+
+<h3 id="session">Client session</h3>
+<p>
+    The client session is a session stored in the form of a secure cookie on the browser of client,
+    what offers a high flexibility for the scalability of your servers.
+    It is used like a classical session. The session is created and saved at the time of its use.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Retrieving of the client session:
+</p>
+<pre class="prettyprint">
+public Render action(ClientSession session) {
+    ...
+}
+</pre>
+
+<p>
+    An additional functionality is the retrieving of the attributes according to a type,
+    which avoid to cast the object.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Use of the client session:
+</p>
+<pre class="prettyprint">
+session.setAttribute("name", "value");
+String value = session.getAttribute("name", String.class);
+</pre>
+
+<p>
+    By default, the duration of the validity of the session is classically set to 2 hours.
+    You can change this value via the <code>setMaxInactiveInterval</code> method:
+</p>
+
+<pre class="prettyprint">
+session.setMaxInactiveInterval(30 * 60); // 30 min
+</pre>
+
+<p>
+    The client session contains a few limitations due to the storage of the cookies,
+    such as the maximum size of a cookie (4 ko). Moreover, a secret key is used
+    to guarantee the security of the session. It is autogenerated if it is not defined
+    in the mapping file. For more details, please refer to the
+    <a href="mapping#config">Mapping - Config</a> section.
+</p>
 
 <h2 class="page-header" id="validation">Validation of the parameters of the controllers</h2>
 <p>
