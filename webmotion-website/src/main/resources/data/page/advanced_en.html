@@ -135,6 +135,122 @@ public class MyHandler implements WebMotionHandler {
 }
 </pre>
 
+<h2 class="page-header" id="config">Converter, injector &amp; global controller</h2>
+<p>
+    Some handlers are configurable by means of methods in the ServerContext.
+    In the following cases, it is not necessary to write a new handler:
+</p>
+<ul>
+    <li>parameter converter</li>
+    <li>parmaeter injection according to a given type</li>
+    <li>definition of a controller in several mapping files.</li>
+</ul>
+
+<h3 id="converter">Converter</h3>
+<p>
+    The request parameters are converted by the <code>ExecutorParametersConvertorHandler</code> handler.
+    It relies on Apache's BeanUtils API, you can record your own converters via the <code>ServerContext</code>.
+    For more details, please refer to the <a href="http://commons.apache.org/beanutils/">Apache's API</a>.
+</p>
+
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        context.addConverter(new Converter() {
+            @Override
+            public Object convert(Class type, Object value) {
+                ...
+            }
+        }, AClass.class);
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+
+<h3 id="injector">Injector</h3>
+<p>
+    Some method parameters are directly injected according to their type,
+    the <code>ExecutorParametersInjectorHandler</code> handleris in charge of this task.
+    You can add your own parameter injection. To do so, you need to implement
+    the <code>ExecutorParametersInjectorHandler.Injector</code> interface.
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        context.addInjector(new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                if (AClass.class.isAssignableFrom(type)) {
+                    return new AClass();
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+<p>
+    You can directly retrieve the value in the method parameters:
+</p>
+<pre class="prettyprint">
+public class AController extends WebMotionController {
+
+    public Render action(AClass aClass) {
+        ...
+    }
+
+}
+</pre>
+
+<h3 id="gloabal">Global controller</h3>
+<p>
+    A global controller has the advantage of being accessible in all the mapping files
+    without taking the current package of the mapping file into account.
+    This functionality is available in the
+    <code>FilterMethodFinderHandler</code>, <code>ActionMethodFinderHandler</code>
+    and <code>ErrorMethodFinderHandler</code> handlers.
+    For example, you can implement a filter for the management of a transaction
+    and define it as global, what enables you to use it in all your mapping files.
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(ServerContext context) {
+        context.addGlobalController(org.debux.jpa.Transaction.class);
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+
+<p>
+    You can use it in a mapping file like this:
+</p>
+<pre>
+[config]
+package.base=org.debux.app
+
+[filter]
+*        /*           Transaction.begin
+</pre>
+
 <h2 class="page-header" id="paranamer">Paranamer</h2>
 <p>
     WebMotion is based on a library to find the paramater names of the method.
