@@ -123,9 +123,7 @@ public class ParboiledMappingParser extends BaseParser {
     public Rule configRule() {
         return Sequence(
                     configName(),
-                    Optional(WhiteSpace()),
                     "=",
-                    Optional(WhiteSpace()),
                     configValue(),
                     NewLine()
             );
@@ -171,7 +169,7 @@ public class ParboiledMappingParser extends BaseParser {
                     FirstOf(
                         errorView(),
                         errorRedirect(),
-                        errorActionUrl(),
+                        errorForward(),
                         errorJava()
                     ),
                     NewLine()
@@ -190,7 +188,7 @@ public class ParboiledMappingParser extends BaseParser {
         return Sequence(FirstOf("url:", "redirect:"), errorUrlValue());
     }    
     
-    public Rule errorActionUrl() {
+    public Rule errorForward() {
         return Sequence("forward:", errorUrlValue());
     }    
     
@@ -326,7 +324,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
         
     public Rule actionVariable() {
-        return Sequence("{", Optional(QualifiedIdentifier()), Optional(":", actionPattern()), "}");
+        return Sequence("{", Optional(Identifier()), Optional(":", actionPattern()), "}");
     }
     
     @SuppressSubnodes
@@ -382,7 +380,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressSubnodes
     public Rule actionSimpleVariable() {
-        return Sequence("{", QualifiedIdentifier(), "}");
+        return Sequence("{", Identifier(), "}");
     }
     
     public Rule actionView() {
@@ -511,13 +509,13 @@ public class ParboiledMappingParser extends BaseParser {
     }
     
     @SuppressSubnodes
-    protected Rule QualifiedIdentifier() {
-        return Sequence(Identifier(), ZeroOrMore(".", Identifier()));
+    public Rule End() {
+        return ZeroOrMore(Sequence(TestNot(NewLine()), ANY));
     }
     
     @SuppressSubnodes
-    public Rule End() {
-        return ZeroOrMore(Sequence(TestNot(NewLine()), ANY));
+    protected Rule QualifiedIdentifier() {
+        return Sequence(Identifier(), ZeroOrMore(".", Identifier()));
     }
     
     @SuppressSubnodes
