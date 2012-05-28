@@ -515,7 +515,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressSubnodes
     protected Rule QualifiedIdentifier() {
-        return Sequence(Identifier(), ZeroOrMore(".", Identifier()));
+        return Sequence(Identifier(), OneOrMore(".", Identifier()));
     }
     
     @SuppressSubnodes
