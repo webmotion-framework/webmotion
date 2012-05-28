@@ -324,7 +324,7 @@ public class ParboiledMappingParser extends BaseParser {
     }
         
     public Rule actionVariable() {
-        return Sequence("{", Optional(Identifier()), Optional(":", actionPattern()), "}");
+        return Sequence("{", Optional(QualifiedIdentifier()), Optional(":", actionPattern()), "}");
     }
     
     @SuppressSubnodes
@@ -380,7 +380,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressSubnodes
     public Rule actionSimpleVariable() {
-        return Sequence("{", Identifier(), "}");
+        return Sequence("{", QualifiedIdentifier(), "}");
     }
     
     public Rule actionView() {
@@ -515,7 +515,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressSubnodes
     protected Rule QualifiedIdentifier() {
-        return Sequence(Identifier(), OneOrMore(".", Identifier()));
+        return Sequence(Identifier(), ZeroOrMore(".", Identifier()));
     }
     
     @SuppressSubnodes

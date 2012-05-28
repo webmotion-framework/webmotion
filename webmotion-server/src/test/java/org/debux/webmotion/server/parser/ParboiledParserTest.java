@@ -92,6 +92,9 @@ public class ParboiledParserTest {
             String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
             log.info(parseTreePrintOut);
             log.info("error = " + result.hasErrors());
+            if (result.hasErrors()) {
+                log.error(ErrorUtils.printParseErrors(result));
+            }
             AssertJUnit.assertFalse(result.hasErrors());
             
             StringBuilder sb = printTree(result.parseTreeRoot, result.inputBuffer, "", new StringBuilder());
