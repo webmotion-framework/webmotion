@@ -47,13 +47,13 @@ body {
          text-align: right;
     }
 }
-
+    
 .pull-right li:last-child {
     text-align: left;
     display: inline-block;
 }
 
-.pull-right li:last-child a {
+.pull-right li a {
     display: inline-block;
 }
     
