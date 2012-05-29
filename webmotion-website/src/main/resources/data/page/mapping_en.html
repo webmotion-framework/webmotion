@@ -49,7 +49,6 @@
 <ul>
     <li><code>[config]</code>&nbsp;<a href="#config"></a>The WebMotion configuration</li>
     <li><code>[properties]</code>&nbsp;<a href="#properties">The web application configuration</a></li>
-    <li><code>[config]</code>&nbsp;<a href="#config">The web application configuration</a></li>
     <li><code>[errors]</code>&nbsp;<a href="#errors">The actions linked to the errors (technical and/or applicative)</a></li>
     <li><code>[filters]</code>&nbsp;<a href="#filters">The application filters</a></li>
     <li><code>[actions]</code>&nbsp;<a href="#actions">The actions linked to the application URLs</a></li>
@@ -323,6 +322,102 @@ public class Listener implements WebMotionServerListener {
 <p>
     <span class="label">Default</span> By default, the value of server.main.handler.class is <code>org.debux.webmotion.server.WebMotionMainHandler</code>
 </p>
+
+<h3>server.secret</h3>
+<p>
+    The <strong>server.secret</strong> enables you to define the secret key which
+    enables the securisation of the data (cookies, ...). It is to be defined if you use
+    WebMotion on different servers for a same application. It must contain at least 31 characters.
+    If no key is defined in the mapping file, then a key will be automatically created in memory.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Definition of a key:
+</p>
+<pre>server.secret=012345678901234567890123456789_</pre>
+
+<h3>server.static.autodetect</h3>
+<p>
+    In its classical functioning, WebMotion automatically detects the resources considered as static
+    (HTML pages, images, scripts, stylesheets, ie every resource whose name contains an extension).
+    If you wish that your application handles the rendering of some resources considered as static, you will need to deactivate this automatic detection.
+    To do so, the <strong>server.static.autodetect</strong> property can take two values: <code>true</code> or <code>false</code>.
+    If you deactivate this automatic detection, you will need to adapt your web pages: 
+    every path to a real static resource will need to be prefixed by <code>/static</code> (relative path to the application context).
+    For more details, please report to the <a href="advanced#servlet">Advanced - Servelt architecture</a> section.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of server.static.autodetect is <code>true</code>.
+</p>
+<p>
+    <span class="label label-info">Example</span> Access to a static resource not managed by WebMotion in a HTML file:
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+    <span class="label label-warning">Warning</span>
+    The deactivation of the resource detection can provoke an iIncompatibility
+    with th extensions which does not support the deactivation.
+</p>
+
+<h2 id="properties" class="page-header">[properties] Configuration of the application</h2>
+<p>
+    This section enables to define a configuration for your application from key/value pairs.
+    The syntax is comparable to a classic property file.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The different properties are listed after the <code>[&lt;name&gt;.properties]</code> keyword.
+    The name of the section is the name of the file which enables to redefine the properties
+    in a file in:
+</p>
+<ul>
+    <li>the system path (<code>/etc</code>, <code>C:\Windows\System32\etc</code>)</li>
+    <li>the user path (<code>$(user.home)/.config</code>, <code>C:\Documents and Settings\USER\Application Data\</code>, <code>$(user.home)/Library/Application Support</code>)</li>
+    <li>the classpath of the application</li>
+</ul>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of a section 
+    with the filename <code>config.properties</code>:
+</p>
+<pre>
+[config.properties]
+</pre>
+
+<p>
+    The definition of a property is a key/value definition: 
+</p>
+
+<pre>
+&lt;key&gt;=&lt;value&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of a property:
+</p>
+<pre class="prettyprint">
+site.name=WebMotion
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Inclusion of another property file,
+    it will be searched in the system path, in the user path then in the classpath
+    of the application:
+</p>
+<pre class="prettyprint">
+include=other-config.properties
+</pre>
 
 <h2 id="actions" class="page-header">[actions] Action configuration</h2>
 <p>
