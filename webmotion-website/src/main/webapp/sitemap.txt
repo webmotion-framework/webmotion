@@ -5,7 +5,9 @@ http://www.webmotion-framework.org/contacts
 http://www.webmotion-framework.org/begin
 http://www.webmotion-framework.org/mapping
 http://www.webmotion-framework.org/action
-http://www.webmotion-framework.org/extensions
+http://www.webmotion-framework.org/extras
+http://www.webmotion-framework.org/wikimotion
+http://www.webmotion-framework.org/changelog
 http://www.webmotion-framework.org/advanced
 http://www.webmotion-framework.org/main_en
 http://www.webmotion-framework.org/documentation_en
@@ -14,5 +16,7 @@ http://www.webmotion-framework.org/contacts_en
 http://www.webmotion-framework.org/begin_en
 http://www.webmotion-framework.org/mapping_en
 http://www.webmotion-framework.org/action_en
-http://www.webmotion-framework.org/extensions_en
+http://www.webmotion-framework.org/extras_en
+http://www.webmotion-framework.org/wikimotion_en
 http://www.webmotion-framework.org/advanced_en
+http://www.webmotion-framework.org/changelog_en
