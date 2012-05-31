@@ -91,8 +91,8 @@ $ mvn archetype:generate \
 </p>
 
 <p>
-    If you only wnat to use Spring in your project, you can modify the <code>[config]</code> section
-    in your mapping file and modify the applicative main handler like this:
+    If you only want to use Spring in your project, you can modify the <code>[config]</code> section
+    in your mapping file and the applicative main handler like this:
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
@@ -179,8 +179,8 @@ public class SpringController extends WebMotionController {
 </p>
 
 <p>
-    To be able to use only SiteMesh in your project, you can modify the <code>[config]</code>
-    section in your mapping file and modify the applicative main handler like this:
+    If you want to use only SiteMesh in your project, you can modify the <code>[config]</code>
+    section in your mapping file and the applicative main handler like this:
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
@@ -270,21 +270,23 @@ public class Listener implements WebMotionServerListener {
 
 <h2 class="page-header" id="hibernate">Hibernate</h2>
 <p>
-    L'intégration d'Hibernate vous donne un accès sur des actions pour réaliser un CRUD sur 
-    vos entités et permet la gestion de la transaction. Il repose sur JPA. 
+    The integration of Hibernate gives access to actions to realize a CRUD
+    on your entities and enables the management of the transactions. It relies on JPA.
 </p>
 
 <p>
-    Pour pouvoir utiliser seulement JPA dans votre projet vous pouvez modifier la section <code>[config]</code>  
-    de votre fichier de mapping, et modifier le principal handler applicatif, comme suit :
+    If you want to use only JPA in your project, you can modify the <code>[config]</code> section
+    of your mapping file and the applicative main hanlder like this:
 </p>
+
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
 </pre>
 
 <p>
-    Vous pouvez aussi ajouter la configuration en Java dans un listener ainsi :
+    You can also add the Java configuration in a listener like this:
 </p>
+
 <pre class="prettyprint">
 public class Listener implements WebMotionServerListener {
 
@@ -303,22 +305,23 @@ public class Listener implements WebMotionServerListener {
 }
 </pre>
 
-<h3>Pre-requis</h3>
+<h3>Prerequisites</h3>
 <p>
-    Pour pouvoir utiliser correctement la partie JPA, il existe deux pré-requis :
+    To use correctly the JPA part, there are two prerequisites:
 </p>
 <ul>
     <li>
-        Il faut définir la configuration de la base de données dans le fichier <code>persitence.xml</code>
+        You must define the configuration of the database in the <code>persistence.xml</code> file.
     </li>
     <li>
-        L'ensemble des entités doivent hériter de la classe <code>IdentifiableEntity</code> 
-        ce qui permet d'avoir un identifiant unique (basé sur une génération de <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>.
+        All the entities must inherit from the <code>IdentifiableEntity</code> class,
+        what enables to have unique ids (based on the generation of
+        <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>).
     </li>
 </ul>
 
 <p>
-    Exemple basique d'une entité :
+    Basci example of an entity:
 </p>
 <pre class="prettyprint">
 @Entity
@@ -333,44 +336,44 @@ public class Book extends IdentifiableEntity {
 }
 </pre>
 
-<h3>Utilisation</h3>
+<h3>Use</h3>
 
 <p>
-    L'utilisation ce fait par le biais d'un filtre pour la gestion de la transaction 
-    et par le biais d'un contrôleur pour gérer les entités. Plusieurs paramètres 
-    de configuration peuvent être positionnés au niveau du filtre, au niveau du 
-    contrôleur ou au niveau de l'URL :
+    The use is done by means of a filter for the management of the transaction
+    and by means of a controller to manage the entities.
+    Several configuration parameters can be positioned at the level of the filter,
+    of the controller or of the URL:
 </p>
 <ul>
     <li>
-        <strong>persistenceUnitName :</strong> permet de définir le nom du 
-        <code>persitence-unit</code> dans le fichier <code>persistence.xml</code>. 
-        Par défaut la valeur est positionnée à <code>webmotion</code>.
+        <strong>persistenceUnitName:</strong> enables to define the name of the
+        <code>persitence-unit</code> in the <code>persistence.xml</code> file.
+        By default, the value is <code>webmotion</code>.
     </li>
     <li>
-        <strong>entityName :</strong> permet de connaître le nom de l'entité sur 
-        laquelle le CRUD est effectué. Il doit contenir le nom du paquetage si 
-        le paramètre <code>packageEntityName</code> n'est pas précisé.
+        <strong>entityName:</strong> enables to know the name of the entity on which the CRUD is done.
+        It muste contain the name of the package of the <code>packageEntityName</code>
+        parameter is not specified.
     </li>
     <li>
-        <strong>packageEntityName :</strong> permet de préciser le nom de paquetage 
-        où sont disponible les entités.
+        <strong>packageEntityName:</strong> enables to specify the name of the package
+        where the entities are available.
     </li>
 </ul>
 <p>
-    Seul le paramètre <code>entityName</code> est obligatoire pour faire fonctionner le 
-    contrôleur pour la gestion du CRUD.
+    Only the <code>entityName</code> parameter is mandatory to make the controller
+    work for the CRUD management.
 </p>
 
-<h4>Filtre</h4>
+<h4>Filter</h4>
 <p>
-    Le filtre s'occupe de la gestion de la transaction pour fournir les éléments 
-    nécessaires au contrôleur. Si une exception est levée durant l'exécution du 
-    contrôleur, la transaction est annulée (rollback). Si le traitement du contrôleur 
-    s'effectue avec succès, alors la transaction sera validée (commit).
+    The filter takes care of the management of the transaction to provide the
+    necessary elements to the controller. If an exception is thrown,
+    the transaction is cancelled (rollback). If the treatment of the controller
+    succeeds, then the transaction will be validated (commit).
 </p>
 <p>
-     Permet de créer un transaction par défaut :
+    To create a default transaction:
 </p>
 <pre>
 [filters]
@@ -378,7 +381,7 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-     Permet de changer le persistence unit :
+     To change the persistence unit:
 </p>
 <pre>
 [filters]
@@ -386,7 +389,7 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-    Permet de préciser sur quelle entité le CRUD est effectué :
+    To specify on which entity the CRUD is done:
 </p>
 <pre>
 [filters]
@@ -394,66 +397,66 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-    Permet de préciser sur quel paquetage se trouvent les entités : 
+    To specify in which package are the entities:
 </p>
 <pre>
 [filters]
 *         /*                          Jpa.tx                  packageEntityName=org.debux.webmotion.entity
 </pre>
 <p>
-    Les exemples ci-dessus peuvent être combinés.
+    The example above can be combined.
 </p>
 
-<h4>Contrôleur</h4>
+<h4>Controller</h4>
 <p>
-    Le contrôleur s'occupe de la gestion des entités. Il existe plusieurs actions 
-    disponibles :
+    The controller takes care of the management of the entities.
+    There are several available actions:
 </p>
 <ul>
     <li>
-        <strong>create :</strong> pour la creation d'une entité. L'action prend 
-        en paramètre les attributs en nom/valeur
+        <strong>create:</strong> to create an entity.
+        The action takes in parameters the name/value of the attributes.
     </li>
     <li>
-        <strong>find :</strong> pour la récupération d'une entité sur son identifiant. 
-        L'action prend en paramètre l'identifiant de l'entité (id).
+        <strong>find:</strong> to retrieve an entity with its id.
+        The action takes in parameters the id of the entity.
     </li>
     <li>
-        <strong>update :</strong> pour la modification partiel d'une entité.
-        L'action prend en paramètre l'identifiant (id) de l'entité et les attributs 
-        en nom/valeur.
+        <strong>update:</strong> to modify partially an entity.
+        The action takes in parameters the id of the entity and the the name/value
+        of its attributes.
     </li>
     <li>
-        <strong>delete :</strong> pour la suppression d'une entité. L'action 
+        <strong>delete:</strong> to delete an entity.
+        The action takes in parameters the id of the entity.
         prend en paramètre l'identifant de l'entité (id).
     </li>
     <li>
-        <strong>query :</strong> pour l'exécution d'une requête en lecture. L'action prend en 
-        paramètre le nom de la requête (name) et les paramètres de la requête.
+        <strong>query:</strong> to execute a query in reading.
+        The action takes in parameters the name of the query and its parameters.
     </li>
     <li>
-        <strong>exec :</strong> pour l'exécution d'une requête en écriture (delete ou update).
-        L'action prend en paramètre le nom de la requête (name) et les paramètres de la requête.
+        <strong>exec:</strong> to execute a query in writing (delete or update).
+        The action takes in parameters the name of the query and its parameters.
     </li>
     <li>
-        <strong>all :</strong> permet de faire l'ensemble des actions en la 
-        précisant en paramètre. L'action prend les paramètres en fonction de 
-        l'action (action) apellée.
+        <strong>all:</strong> to do any action specified in parameter.
+        The parameters of the action are depending of the action called.
     </li>
 </ul>
 
 <p>
-    À savoir pour les actions <code>create</code> et <code>update</code>, il est possible 
-    de passer en paramètre des associations vers des entités en passant l'identifiant.
+    For the <code>create</code> and <code>update</code> actions, you can pass in parameters
+    associations to entities by passing the id.
 </p>
 
-<strong>Action create</strong>
+<strong>Create action</strong>
 <p>
-    Exemple d'utilisation de l'action <code>create</code> :
+    Example of use of the <code>create</code> action:
 </p>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -464,17 +467,17 @@ GET              /book/create     Jpa.create
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>create</code> sur l'URL suivante 
+    So you can use the <code>create</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/create?title=WebMotion</code>.
 </p>
 
-<strong>Action find</strong>
+<strong>Find action</strong>
 <p>
-    Exemple d'utilisation de l'action <code>find</code> :
+    Example of use of the <code>find</code> action:
 </p>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -485,17 +488,17 @@ GET              /book/{id}       Jpa.find
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>find</code> sur l'URL suivante 
+    So you can use the <code>find</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/ff8081813697774901369777ed3d0002</code>.
 </p>
 
 <strong>Action update</strong>
 <p>
-    Exemple d'utilisation de l'action <code>update</code> :
+    Example of use of the <code>update</code> action:
 </p>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -506,17 +509,17 @@ GET              /book/update?id={}     Jpa.update
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>update</code> sur l'URL suivante 
+    So you can use the <code>update</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/update?id=ff8081813697774901369777ed3d0002&amp;title=WebMotion%20book</code>.
 </p>
 
 <strong>Action delete</strong>
 <p>
-    Exemple d'utilisation de l'action <code>delete</code> :
+    Example of use of the <code>delete</code> action:
 </p>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -527,16 +530,16 @@ GET              /book/delete?id={}     Jpa.delete
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>delete</code> sur l'URL suivante 
+    So you can use the <code>delete</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/delete?id=ff8081813697774901369777ed3d0002</code>.
 </p>
 
 <strong>Action query</strong>
 <p>
-    Exemple d'utilisation de l'action <code>query</code> :
+    Example of use of the <code>query</code> action:
 </p>
 <p>
-    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+    To use this action, you need to define queries on your entity.
 </p>
 <pre class="prettyprint">
 @Entity
@@ -554,7 +557,7 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -565,16 +568,16 @@ GET              /book/title/{title}             Jpa.query    name=findByTitle
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'URL suivante 
+    So you can use the <code>query</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/title/WebMotion</code>.
 </p>
 
 <strong>Action exec</strong>
 <p>
-    Exemple d'utilisation de l'action <code>exec</code> :
+    Example of use of the <code>exec</code> action:
 </p>
 <p>
-    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+    To use this action, you need to define queries on your entity.
 </p>
 <pre class="prettyprint">
 @Entity
@@ -595,7 +598,7 @@ public class Book extends IdentifiableEntity {
 </pre>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -606,17 +609,17 @@ GET              /book/{id}?note={}             Jpa.exec    name=updateNote
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'URL suivante 
+    So you can use the <code>exec</code> action on the following URL:
     <code>http://serverName:port/contextPath/book/ff8081813697774901369777ed3d0002?note=17</code>.
 </p>
 
 <strong>Action all</strong>
 <p>
-    Exemple d'utilisation de l'action <code>all</code> :
+    Example of use of the <code>all</code> action:
 </p>
 
 <p>
-    Contenu du mapping :
+    Content of the mapping:
 </p>
 <pre>
 [filters]
@@ -626,14 +629,13 @@ GET              /book/{id}?note={}             Jpa.exec    name=updateNote
 GET              /{entityName}?action={}        Jpa.all
 </pre>
 
-
 <p>
-    Ainsi vous pouvez utiliser l'action <code>all</code> sur l'URL suivante 
+    So you can use the <code>all</code> action on the following URL:
     <code>http://serverName:port/contextPath/Book/action=delete&amp;id=ff8081813697774901369777ed3d0002</code>.
 </p>
 
 <p>
-    Une autre façon de faire des régles de mapping générique, est de définir pour chaque méthode HTTP une action :
+    Another way to do generic mapping rules is to define an action for each HTTP method:
 </p>
 <pre>
 [actions]
@@ -645,24 +647,23 @@ POST        /{entityName}/{id}             Jpa.update
 DELETE      /{entityName}/{id}             Jpa.delete
 </pre>
 
-<h4>Avancé</h4>
+<h4>Advanced</h4>
 
 <strong>Callback</strong>
 <p>
-    L'ensemble des actions retourne un render de type JSON, il vous est possible 
-    de préciser une url de callback en paramètre (de l'action ou du filtre). 
-    Ce qui permet d'exécuter une régle du fichier de mapping après une action 
-    du CRUD. Si vous précisez un callback, le résultat est récupérable comme 
-    attribut de la requête :
+    All the actions return a JSON type rendering. You can specify a callback url
+    in parameters (of the action or filter), what enables to execute a rule
+    of the mapping file after a CRUD action.
+    If you specify a callback, you can access the result in the attributes of the request:
 </p>
 <ul>
-    <li>pour l'action create, update et find un object <code>entity</code> avec comme valeur l'entité</li>
-    <li>pour l'action deleted un objet <code>deleted</code> précisant si la suppression a bien été effectué ou non</li>
-    <li>pour l'action query un objet <code>queryResult</code> avec le résultat de la requête</li>
-    <li>pour l'action exec un objet <code>queryResult</code> avec le nombre d'entités impactés.</li>
+    <li>for the create, update and find action, an <code>entity</code> object whose value is the entity</li>
+    <li>for the delete action, a <code>deleted</code> object specifying if the deletion succeeded or failed</li>
+    <li>for the query action, a <code>queryResult</code> object with the result of the request</li>
+    <li>for the exec action, a <code>queryResult</code> object with the number of impacted entities.</li>
 </ul>
 <p>
-    Par exemple avec l'affichage du find dans la page <code>book.jsp</code>:
+    For example, the display of the find in the <code>book.jsp</code> page:
 </p>
 <pre>
 [actions]
@@ -671,7 +672,7 @@ GET            /book/view        view:book.jsp
 </pre>
 
 <p>
-    Avec comme page <code>book.jsp</code> :
+    With the <code>book.jsp</code> page:
 </p>
 <pre class="prettyprint">
 Title : ${entity.title}
@@ -679,10 +680,9 @@ Title : ${entity.title}
 
 <strong>Injection</strong>
 <p>
-    Il est possible d'utiliser indépendament la gestion de transaction sans 
-    la partie CRUD. Vous pouvez aussi créer vos propres actions en vous reposant 
-    sur le DAO générique. Il est automatiquement injecté si une classe d'entité 
-    est précisée.
+    It is possible to use independently the management of the transaction without
+    the CRUD part. You can create your own actions too by relying on the generic DAO.
+    It is automatically injected if an entity class is specified.
 </p>
 <pre class="prettyprint">
 public Render findAll(GenericDAO dao, String title) {
@@ -694,7 +694,7 @@ public Render findAll(GenericDAO dao, String title) {
 </pre>
 
 <p>
-    Comme pour le DAO générique, vous pouvez récupérer la transaction et l'entity manager :
+    Like for the generic DAO, you can retrieve the transaction and the entity manager:
 </p>
 <pre class="prettyprint">
 public Render action(EntityTransaction transaction, EntityManager manager) {
@@ -704,7 +704,7 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
-    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
     <a class="btn primary large" style="float:right;" href="wikimotion">WikiMotion »</a>
 </div>
 

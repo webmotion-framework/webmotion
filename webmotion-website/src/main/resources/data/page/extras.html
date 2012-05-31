@@ -31,8 +31,8 @@
 
 <h2 class="page-header" id="controller">Extras</h2>
 <p>
-    Les extras de WebMotion est un ensemble de fonctionnalités supplémentaires pour 
-    aider à la réalisation d'application web. Il regroupe :
+    Les extras de WebMotion sont un ensemble de fonctionnalités supplémentaires pour
+    aider à la réalisation d'application web. Ils regroupent :
 </p>
 <ul>
     <li>un moteur d'IOC avec Spring</li>
@@ -92,14 +92,14 @@ $ mvn archetype:generate \
 
 <p>
     Si vous souhaitez uniquement utiliser Spring dans votre projet, vous pouvez modifier la section <code>[config]</code> 
-    de votre fichier de mapping, et modifier le principal handler applicatif, comme suit :
+    de votre fichier de mapping et le principal handler applicatif, comme suit :
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
 </pre>
 
 <p>
-    L'extras vous propose un configuration de Spring par défaut, les fichiers 
+    L'extras vous propose une configuration de Spring par défaut, les fichiers
     de configuration <code>xml</code> sont automatiquement chargés depuis le répertoire 
     <code>WEB-INF</code> et leur nom doit commencer par <code>applicationContext</code>.
 </p>
@@ -139,7 +139,7 @@ server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
 <h3>Utilisation</h3>
 
 <p>
-    Vous devez utiliser de l'injection de dépendance pour récupérer votre bean :
+    Vous devez utiliser l'injection de dépendance pour récupérer votre bean :
 </p>
 <pre class="prettyprint">
 public class SpringController extends WebMotionController {
@@ -180,7 +180,7 @@ public class SpringController extends WebMotionController {
 
 <p>
     Pour pouvoir utiliser seulement SiteMesh dans votre projet vous pouvez modifier la section <code>[config]</code>  
-    de votre fichier de mapping, et modifier le principal handler applicatif, comme suit :
+    de votre fichier de mapping et le principal handler applicatif, comme suit :
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
@@ -207,8 +207,8 @@ public class Listener implements WebMotionServerListener {
 
 <p>
     Un filtre global <code>SiteMesh</code> permet de décorer une page selon un 
-    path donné. Il vous est possible de préciser un décorateur pour la partie 
-    admin différent du site principal par exemple :
+    chemin donné. Il vous est par exemple possible de préciser un décorateur pour la partie
+    admin différent du site principal :
 </p>
 
 <pre>
@@ -270,13 +270,13 @@ public class Listener implements WebMotionServerListener {
 
 <h2 class="page-header" id="hibernate">Hibernate</h2>
 <p>
-    L'intégration d'Hibernate vous donne un accès sur des actions pour réaliser un CRUD sur 
+    L'intégration d'Hibernate vous donne accès à des actions pour réaliser un CRUD sur
     vos entités et permet la gestion de la transaction. Il repose sur JPA. 
 </p>
 
 <p>
     Pour pouvoir utiliser seulement JPA dans votre projet vous pouvez modifier la section <code>[config]</code>  
-    de votre fichier de mapping, et modifier le principal handler applicatif, comme suit :
+    de votre fichier de mapping et le principal handler applicatif, comme suit :
 </p>
 <pre>[config]
 server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
@@ -305,14 +305,14 @@ public class Listener implements WebMotionServerListener {
 
 <h3>Pre-requis</h3>
 <p>
-    Pour pouvoir utiliser correctement la partie JPA, il existe deux pré-requis :
+    Pour pouvoir utiliser correctement la partie JPA, il existe deux prérequis :
 </p>
 <ul>
     <li>
-        Il faut définir la configuration de la base de données dans le fichier <code>persitence.xml</code>
+        Il faut définir la configuration de la base de données dans le fichier <code>persitence.xml</code>.
     </li>
     <li>
-        L'ensemble des entités doivent hériter de la classe <code>IdentifiableEntity</code> 
+        L'ensemble des entités doit hériter de la classe <code>IdentifiableEntity</code> 
         ce qui permet d'avoir un identifiant unique (basé sur une génération de <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>.
     </li>
 </ul>
@@ -336,7 +336,7 @@ public class Book extends IdentifiableEntity {
 <h3>Utilisation</h3>
 
 <p>
-    L'utilisation ce fait par le biais d'un filtre pour la gestion de la transaction 
+    L'utilisation se fait par le biais d'un filtre pour la gestion de la transaction
     et par le biais d'un contrôleur pour gérer les entités. Plusieurs paramètres 
     de configuration peuvent être positionnés au niveau du filtre, au niveau du 
     contrôleur ou au niveau de l'URL :
@@ -606,7 +606,7 @@ GET              /book/{id}?note={}             Jpa.exec    name=updateNote
 </pre>
 
 <p>
-    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'URL suivante 
+    Ainsi vous pouvez utiliser l'action <code>exec</code> sur l'URL suivante
     <code>http://serverName:port/contextPath/book/ff8081813697774901369777ed3d0002?note=17</code>.
 </p>
 
@@ -633,7 +633,7 @@ GET              /{entityName}?action={}        Jpa.all
 </p>
 
 <p>
-    Une autre façon de faire des régles de mapping générique, est de définir pour chaque méthode HTTP une action :
+    Une autre façon de faire des régles de mapping génériques, est de définir pour chaque méthode HTTP une action :
 </p>
 <pre>
 [actions]
@@ -649,20 +649,20 @@ DELETE      /{entityName}/{id}             Jpa.delete
 
 <strong>Callback</strong>
 <p>
-    L'ensemble des actions retourne un render de type JSON, il vous est possible 
-    de préciser une url de callback en paramètre (de l'action ou du filtre). 
-    Ce qui permet d'exécuter une régle du fichier de mapping après une action 
+    L'ensemble des actions retourne un render de type JSON. Il vous est possible
+    de préciser une url de callback en paramètre (de l'action ou du filtre),
+    ce qui permet d'exécuter une régle du fichier de mapping après une action
     du CRUD. Si vous précisez un callback, le résultat est récupérable comme 
     attribut de la requête :
 </p>
 <ul>
-    <li>pour l'action create, update et find un object <code>entity</code> avec comme valeur l'entité</li>
-    <li>pour l'action deleted un objet <code>deleted</code> précisant si la suppression a bien été effectué ou non</li>
-    <li>pour l'action query un objet <code>queryResult</code> avec le résultat de la requête</li>
-    <li>pour l'action exec un objet <code>queryResult</code> avec le nombre d'entités impactés.</li>
+    <li>pour l'action create, update et find, un objet <code>entity</code> avec comme valeur l'entité</li>
+    <li>pour l'action delete, un objet <code>deleted</code> précisant si la suppression a bien été effectué ou non</li>
+    <li>pour l'action query, un objet <code>queryResult</code> avec le résultat de la requête</li>
+    <li>pour l'action exec, un objet <code>queryResult</code> avec le nombre d'entités impactés.</li>
 </ul>
 <p>
-    Par exemple avec l'affichage du find dans la page <code>book.jsp</code>:
+    Par exemple, l'affichage du find dans la page <code>book.jsp</code>:
 </p>
 <pre>
 [actions]
