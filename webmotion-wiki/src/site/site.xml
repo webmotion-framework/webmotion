@@ -43,7 +43,7 @@
             <item name="Webmotion" href="http://www.webmotion-framework.org"/>
         </links>
 
-        <menu name="Project">
+        <menu name="Projects">
             <item name="Parent" href="../project-summary.html" />
             <item name="Server" href="../webmotion/project-summary.html" />
             <item name="Extras" href="../webmotion-extras/project-summary.html" />

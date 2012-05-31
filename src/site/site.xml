@@ -43,24 +43,14 @@
             <item name="Webmotion" href="http://www.webmotion-framework.org"/>
         </links>
 
-        <menu name="Project">
-            <item name="Project" href="/project-summary.html" />
-            <item name="Repository" href="http://debux.org/maven/" />
-            <item name="Redmine" href="http://projects.debux.org/projects/webmotion" />
-            <item name="Site" href="http://www.webmotion-framework.org" />
-        </menu>
-        
-        <menu name="Modules">
-            <item name="Server" href="/webmotion/project-summary.html" />
-            <item name="Archetype" href="/webmotion-archetype/project-summary.html" />
-            <item name="Test" href="/webmotion-test/project-summary.html" />
-            <item name="Website" href="/webmotion-website/project-summary.html" />
-        </menu>
-
-        <menu name="Extensions">
-            <item name="WikiMotion" href="/wikimotion/project-summary.html" />
-            <item name="Spring" href="/webmotion-spring/project-summary.html" />
-<!--      <item name="JPA" href="/webmotion-jpa/project-summary.html" />-->
+        <menu name="Projects">
+            <item name="Parent" href="../project-summary.html" />
+            <item name="Server" href="../webmotion/project-summary.html" />
+            <item name="Extras" href="../webmotion-extras/project-summary.html" />
+            <item name="Test" href="../webmotion-test/project-summary.html" />
+            <item name="Archetype" href="../webmotion-archetype/project-summary.html" />
+            <item name="WikiMotion" href="../wikimotion/project-summary.html" />
+            <item name="Website" href="../webmotion-website/project-summary.html" />
         </menu>
 
         <menu ref="reports"/>
