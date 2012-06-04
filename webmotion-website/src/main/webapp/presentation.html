@@ -117,6 +117,7 @@
                 <ul>
                     <li>Des fichiers devenus trop verbeux</li>
                     <li>Une architecture contraignante et fixée par le framework</li>
+                    <li>Une forte dépendance</li>
                     <li>Des annotations qui polluent le code Java</li>
                 </ul>
             </article>
@@ -222,9 +223,19 @@ public class Album {
                     <li>Gestion des paramètres (conversion implicite en objets Java)</li>
                 </ul>
                 
-                <h4>Licence LGPL</h4>
             </article>
 
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h4>Compatible sur différents serveurs d'application</h4>
+                <ul>
+                    <li>Tomcat</li>
+                    <li>Jetty</li>
+                    <li>Glassfish</li>
+                </ul>
+                <h4>Licence libre (LGPL)</h4>
+            </article>
+            
             <article>
                 <h1>Présentation fonctionnelle et technique</h1>
                 <h2>À quels besoins ce projet répond t-il ?</h2>
@@ -232,7 +243,7 @@ public class Album {
             
             <article class='fill'>
                 <h3>
-                    Rester simple !
+                    Quelles sont les fonctionnalités ?
                 </h3>
                 <p>
                     <img src="http://farm4.staticflickr.com/3396/3494000327_55f658c921_b.jpg">
@@ -247,8 +258,10 @@ public class Album {
                 <h4>Manipulation de la requête et de la réponse, c'est tout !</h4>
                 <ul>
                     <li>Présentation des pages</li>
-                    <li>Création d'API REST (AJAX)</li>
-                    <li>Aproche composant</li>
+                    <li>Création d'API REST</li>
+                    <li>AJAX</li>
+                    <li>Composant graphique</li>
+                    <li>Upload de fichier</li>
                 </ul>
             </article>
             
@@ -283,9 +296,9 @@ public class Album {
                 <h3>Le fichier de routes</h3>
                 <h4>Généralités</h4>
                 <ul>
+                    <li>Nommé mapping</li>
                     <li>Point d'accès</li>
                     <li>Syntaxe simple et lisible</li>
-                    <li>Nommé mapping</li>
                     <li>Séparations en plusieurs sections</li>
                 </ul>
                 <h4>Rôles</h4>
@@ -355,7 +368,7 @@ public class Album extends WebMotionController {
                 <h3>Fonctionnalités d'un contrôleur</h3>
                 <h4>Utilitaires</h4>
                 <ul>
-                    <li>Messages flash</li>
+                    <li>Messages utilisateur</li>
                     <li>Gestionnaire de cookies</li>
                     <li>Session cliente</li>
                 </ul>
