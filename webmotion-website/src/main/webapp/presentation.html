@@ -102,10 +102,10 @@
                 <h4>Les frameworks actuels</h4>
                 <!-- Mettre les logos au lieu des noms -->
                 <ul>
-                    <li>Grails</li>
-                    <li>Play!</li>
                     <li>Struts</li>
                     <li>Spring MVC</li>
+                    <li>Grails</li>
+                    <li>Play!</li>
                     <li>GWT</li>
                     <li>etc.</li>
                 </ul>
@@ -118,7 +118,7 @@
                     <li>Des fichiers devenus trop verbeux</li>
                     <li>Une architecture contraignante et fixée par le framework</li>
                     <li>Une forte dépendance</li>
-                    <li>Des annotations qui polluent le code Java</li>
+                    <li>Des excès d'annotations qui polluent le code Java</li>
                 </ul>
             </article>
 
@@ -155,9 +155,9 @@ public class Album {
                 <h3>
                     Standard API Servlet
                 </h3>
-                <h4>Les mêmes points négatifs</h4>
+                <h4>Les mêmes points négatifs et ...</h4>
                 <ul>
-                    <li>Limitation du web.xml</li>
+                    <li>Limitation de la configuration (web.xml)</li>
                     <li>Difficulté pour manipuler les paramètres</li>
                     <li>API basique</li>
                 </ul>
@@ -167,7 +167,7 @@ public class Album {
                 <h3>
                     Standard API Servlet
                 </h3>
-                <p>16 lignes de code XML pour définir deux chemins dans l'applications ...</p>
+                <p>16 lignes de code XML pour définir deux chemins dans l'application ...</p>
                 <section>
                     <pre>
 &lt;servlet&gt;
@@ -280,7 +280,7 @@ public class Album {
             
             <article>
                 <h3>Les extras</h3>
-                <p>Ajouts à WebMotion, ne font pas partie du serveur de base</p>
+                <p>Ajouts à WebMotion, ne font pas partie de la version de base</p>
                 <h4>Développez rapidement :</h4>
                 <ul>
                     <li>Décoration de page (SiteMesh)</li>
@@ -300,25 +300,23 @@ public class Album {
                 <p>
                     <img src="http://farm3.staticflickr.com/2327/2075310775_5eb35307dd_b.jpg"/>
                 </p>
-                <div class='source white'>
+                <div class='source black'>
                     Auteur: Nicolas Prevost
                 </div>
             </article>
 
             <article>
                 <h3>Le fichier de routes</h3>
-                <h4>Généralités</h4>
-                <ul>
-                    <li>Nommé mapping</li>
-                    <li>Point d'accès</li>
-                    <li>Syntaxe simple et lisible</li>
-                    <li>Séparations en plusieurs sections</li>
-                </ul>
                 <h4>Rôles</h4>
                 <ul>
                     <li>Gérer les urls</li>
                     <li>Gérer les erreurs</li>
                     <li>Gérer la configuration</li>
+                </ul>
+                <h4>Avantages</h4>
+                <ul>
+                    <li>Point d'accès</li>
+                    <li>Syntaxe simple et lisible</li>
                 </ul>
             </article>
 
@@ -327,8 +325,8 @@ public class Album {
                 <ul>
                     <li>section actions, <br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small></li>
                     <li>section filtres, <br/><small>pour réaliser des actions en amont ou en aval d'urls</small></li>
-                    <li>section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une acttion</small></li>
-                    <li>section extensions, <br/><small>pour réutiliser des fichier de routes</small></li>
+                    <li>section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small></li>
+                    <li>section extensions, <br/><small>pour réutiliser des fichiers de routes</small></li>
                     <li>section config, <br/><small>pour la configuration de WebMotion</small></li>
                     <li>section propriétés, <br/><small>pour la configuration de l'application</small></li>
                 </ul>
@@ -399,8 +397,8 @@ public class Album extends WebMotionController {
                 </ul>
                 <h4>Exemple d'extensions</h4>
                 <ul>
-                    <li>Moteur de wiki (WikiMotion)</li>
-                    <li>Module d'audience</li>
+                    <li>WikiMotion</li>
+                    <li>Forum, blog, ...</li>
                 </ul>
             </article>
             <article>
@@ -422,7 +420,7 @@ public class Album extends WebMotionController {
 
             <article>
                 <h3>L'avenir</h3>
-                <h4>Coté fonctionnalités</h4>
+                <h4>Ajouter des nouvelles fonctionnalités</h4>
                 <ul>
                     <li>Intégration IDE</li>
                     <li>Sécurité</li>
@@ -430,36 +428,36 @@ public class Album extends WebMotionController {
                     <li>Application de référence</li>
                     <li>Serveur haute performance</li>
                 </ul>
-                <h4>Coté références</h4>
+                <h4>Être mieux référencé</h4>
                 <ul>
-                    <li>Projet libre</li>
-                    <li>Projet pro</li>
+                    <li>Projets libres</li>
+                    <li>Projets pro</li>
                 </ul>
             </article>
 
             <article class='fill'>
-                <h3>À vous de construire ! Rejoigniez nous !</h3>
+                <h3>À vous de construire l'avenir de WebMotion !</h3>
                 <p>
                     <img src="http://farm3.staticflickr.com/2161/2486479402_a6390ea1e0_b.jpg"/>
                 </p>
-                <div class='source white'>
+                <div class='source black'>
                     Auteur: Davide Del Monte
                 </div>
             </article>
 
             <article>
-                <h3>À vous de construire ! Rejoigniez nous !</h3>
-                <h4>Au niveau du code</h4>
+                <h3>Rejoigniez nous !</h3>
+                <h4>Environnement</h4>
                 <ul>
                     <li>SVN pour le gestion des sources (GIT en réflexion)</li>
                     <li>Redmine pour la forge</li>
                     <li>Maillists pour le suivi</li>
                 </ul>
-                <h4>Au niveau des technologies</h4>
+                <h4>Technologies</h4>
                 <ul>
                     <li>Java/JEE</li>
                     <li>Maven</li>
-                    <li>etc</li>
+                    <li>etc.</li>
                 </ul>
             </article>
             
@@ -478,9 +476,12 @@ public class Album extends WebMotionController {
                 <p>
                     <img src="http://farm8.staticflickr.com/7063/6877620005_9b3bd49590_b.jpg"/>
                 </p>
-                <div class='source white'>
+                <div class='source black'>
                     Auteur: [F]oxymoron
                 </div>
+<!--                <div class='source black' style="padding-left: 175px; right: 60px;">
+                    julien.ruchaud@webmotion-framework.org
+                </div>-->
             </article>
 
         </section>
