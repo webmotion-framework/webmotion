@@ -30,6 +30,23 @@
         <meta name="robots" content="noindex,nofollow,noarchive">
 
         <title>WebMotion presentation</title>
+        <style>
+            .footer {
+                color: black;
+                width: 100%;
+                text-align: center;
+                font-size: 15px;
+                left: 0px;
+                letter-spacing: 0px;
+                line-height: 18px;
+                position: absolute;
+                top: 644px;
+            }
+            pre.code {
+                margin-bottom: 0px;
+                margin-top: 20px;
+            }
+        </style>
         <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
     </head>
     
@@ -41,7 +58,7 @@
                 <h2>Une plateforme web pour Java</h2>
 
                 <p>Julien Ruchaud - Code Lutin</p>
-                <p>RMLL 2012</p>
+                <p><a href="http://2012.rmll.info/">RMLL 2012</a> - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a></p>
             </article>
 
             <article>
@@ -59,6 +76,9 @@
                 <p style="text-align: center;">
                     <a href="http://www.codelutin.com">http://www.codelutin.com</a>
                 </p>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -78,11 +98,17 @@
                     <li>Environnement technique</li>
                     <li>Avenir</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
                 <h1>Présentation générale</h1>
                 <h2>Origines</h2>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article class='fill'>
@@ -109,6 +135,9 @@
                     <li>GWT</li>
                     <li>etc.</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
@@ -120,6 +149,9 @@
                     <li>Une forte dépendance</li>
                     <li>Des excès d'annotations qui polluent le code Java</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -127,14 +159,14 @@
                     Comparaison entre un service Java et un service web avec JAX-RS
                 </h3>
                 <section>
-                    <pre>
+                    <pre class="code">
 public class Album {
     public Album get(String id) {/* */}
     public List&lt;Photos&gt; getPhotos(String id, int limit) {/* */}
 }</pre>
                 </section>
                 <section>
-                    <pre>
+                    <pre class="code">
 @Path("album")
 public class Album {
     @GET
@@ -149,6 +181,9 @@ public class Album {
         @QueryParam("limit") int limit) {/* */}
 }</pre>
                 </section>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
@@ -161,6 +196,9 @@ public class Album {
                     <li>Difficulté pour manipuler les paramètres</li>
                     <li>API basique</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
@@ -169,7 +207,7 @@ public class Album {
                 </h3>
                 <p>16 lignes de code XML pour définir deux chemins dans l'application ...</p>
                 <section>
-                    <pre>
+                    <pre class="code">
 &lt;servlet&gt;
     &lt;servlet-name&gt;AlbumsServlet&lt;/servlet-name&gt;
     &lt;servlet-class&gt;org.debux.sample.AlbumsServlet&lt;/servlet-class&gt;
@@ -187,6 +225,9 @@ public class Album {
     &lt;url-pattern&gt;/album/photos/*&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;</pre>
                 </section>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -200,11 +241,17 @@ public class Album {
                     <li>Gestion de paramètres (Spring)</li>
                 </ul>
                 <h4>Conclusion : pas de pleine satisfaction !</h4>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
                 <h1>Présentation générale</h1>
                 <h2>Philosophie du projet</h2>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article class='fill'>
@@ -234,7 +281,9 @@ public class Album {
                     <li>Inciter à la réutilisation de morceaux fonctionnels</li>
                     <li>Gestion des paramètres (conversion implicite en objets Java)</li>
                 </ul>
-                
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -246,11 +295,17 @@ public class Album {
                     <li>Glassfish</li>
                 </ul>
                 <h4>Licence libre (LGPL)</h4>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
                 <h1>Présentation fonctionnelle et technique</h1>
                 <h2>À quels besoins ce projet répond t-il ?</h2>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article class='fill'>
@@ -276,6 +331,9 @@ public class Album {
                     <li>Composant graphique</li>
                     <li>Upload de fichier</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
@@ -288,11 +346,17 @@ public class Album {
                     <li>Injection dépendance (Spring)</li>
                     <li>Sécurité (Shiro prochainement)</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
                 <h1>Présentation fonctionnelle et technique</h1>
                 <h2>Environnement technique</h2>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article class='fill'>
@@ -318,6 +382,9 @@ public class Album {
                     <li>Point d'accès</li>
                     <li>Syntaxe simple et lisible</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -330,13 +397,16 @@ public class Album {
                     <li>section config, <br/><small>pour la configuration de WebMotion</small></li>
                     <li>section propriétés, <br/><small>pour la configuration de l'application</small></li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
                 <h3>Exemple complet pour débuter</h3>
                 <p>Fichier de routes</p>
                 <section>
-                    <pre>
+                    <pre class="code">
 [actions]
 GET            /                      Album.index
 GET            /album/{id}            Album.get
@@ -344,7 +414,7 @@ GET            /album/{id}            Album.get
                 </section>
                 <p>Actions java</p>
                 <section>
-                    <pre>
+                    <pre class="code">
 public class Album extends WebMotionController {
     public Render index() {
         return renderView("index.jsp");
@@ -356,6 +426,9 @@ public class Album extends WebMotionController {
 }
 </pre>
                 </section>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -373,6 +446,9 @@ public class Album extends WebMotionController {
                     <li>Validation</li>
                     <li>Injection</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -384,6 +460,9 @@ public class Album extends WebMotionController {
                     <li>Session cliente</li>
                     <li>Récupération de la configuration</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article>
@@ -400,10 +479,17 @@ public class Album extends WebMotionController {
                     <li>WikiMotion</li>
                     <li>Forum, blog, ...</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
+            
             <article>
                 <h1>Présentation fonctionnelle et technique</h1>
                 <h2>Avenir</h2>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article class='fill'>
@@ -433,6 +519,9 @@ public class Album extends WebMotionController {
                     <li>Projets libres</li>
                     <li>Projets pro</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article class='fill'>
@@ -459,6 +548,9 @@ public class Album extends WebMotionController {
                     <li>Maven</li>
                     <li>etc.</li>
                 </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
             
             <article>
@@ -469,6 +561,9 @@ public class Album extends WebMotionController {
                 <p style="text-align: center;">
                     <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
                 </p>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
             </article>
 
             <article class="fill">
@@ -479,9 +574,6 @@ public class Album extends WebMotionController {
                 <div class='source black'>
                     Auteur: [F]oxymoron
                 </div>
-<!--                <div class='source black' style="padding-left: 175px; right: 60px;">
-                    julien.ruchaud@webmotion-framework.org
-                </div>-->
             </article>
 
         </section>
