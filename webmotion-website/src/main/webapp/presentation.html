@@ -51,7 +51,7 @@
         <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
     </head>
     
-    <body style="display: none;">
+    <body style="display: none;" onload="document.getElementById('filter').childNodes[7].style.display='none'">
         <section class='slides layout-widescreen'>
 
             <article>
@@ -391,12 +391,56 @@ public class Album {
             <article>
                 <h3>Les sections du fichier de routes</h3>
                 <ul>
-                    <li>section actions, <br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small></li>
-                    <li>section filtres, <br/><small>pour réaliser des actions en amont ou en aval d'urls</small></li>
-                    <li>section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small></li>
-                    <li>section extensions, <br/><small>pour réutiliser des fichiers de routes</small></li>
-                    <li>section config, <br/><small>pour la configuration de WebMotion</small></li>
-                    <li>section propriétés, <br/><small>pour la configuration de l'application</small></li>
+                    <li>
+                        section actions, <br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small>
+                        <pre class="code">
+[actions]
+GET            /path                      Class.method
+</pre>
+                    </li>
+                    <li>
+                        section filtres, <br/><small>pour réaliser des actions en amont ou en aval d'urls</small>
+                        <pre id="filter" class="code">
+[filters]
+GET            /path/_*                    Class.method
+</pre>
+                    </li>
+                    <li>
+                        section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small>
+                       <pre class="code">
+[errors]
+code:500                                  Class.method
+</pre>
+                    </li>
+                </ul>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            <article>
+                <h3>Les sections du fichier de routes</h3>
+                <ul>
+                    <li>
+                        section extensions, <br/><small>pour réutiliser des fichiers de routes</small>
+                       <pre class="code">
+[extensions]
+/path                                     FileName
+</pre>
+                    </li>
+                    <li>
+                        section propriétés, <br/><small>pour la configuration de l'application</small>
+                       <pre class="code">
+[properties]
+key=value
+</pre>
+                    </li>
+                    <li>
+                        section config, <br/><small>pour la configuration de WebMotion</small>
+                       <pre class="code">
+[config]
+package.base=org.webmotion
+</pre>
+                    </li>
                 </ul>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -434,12 +478,6 @@ public class Album extends WebMotionController {
 
             <article>
                 <h3>Fonctionnalités d'un contrôleur</h3>
-                <h4>Retour de différents rendus</h4>
-                <ul>
-                    <li>Visualisation (html, jsp, stringtemplate, ...)</li>
-                    <li>Redirections</li>
-                    <li>Données (xml, json, ...)</li>
-                </ul>
                 <h4>Gestion des paramètres</h4>
                 <ul>
                     <li>Récupération</li>
@@ -447,6 +485,31 @@ public class Album extends WebMotionController {
                     <li>Validation</li>
                     <li>Injection</li>
                 </ul>
+                <h4>Exemple :</h4>
+                <pre class="code">
+public Render action(User user) {
+// ...
+}
+</pre>
+                <div class="footer">
+                    Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Fonctionnalités d'un contrôleur</h3>
+                <h4>Retour de différents rendus</h4>
+                <ul>
+                    <li>Visualisation (html, jsp, stringtemplate, ...)</li>
+                    <li>Redirections</li>
+                    <li>Données (xml, json, ...)</li>
+                </ul>
+                <h4>Exemple :</h4>
+                <pre class="code">
+renderView("page.html");
+renderUrl("www.webmotion-framework.org");
+renderXml(user);
+</pre>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
@@ -461,6 +524,12 @@ public class Album extends WebMotionController {
                     <li>Session cliente</li>
                     <li>Récupération de la configuration</li>
                 </ul>
+                <h4>Exemple :</h4>
+                <pre class="code">
+CookieManager manager = context.getCookieManager();
+CookieEntity cookie = manager.get("name");
+String value = cookie.getValue();
+</pre>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
@@ -469,17 +538,17 @@ public class Album extends WebMotionController {
             <article>
                 <h3>Extension</h3>
                 <p>C'est un point de montage applicatif</p>
+                <pre class="code">
+[extensions]
+/wiki                          wikimotion.wm
+</pre>
                 <h4>Avantages</h4>
                 <ul>
                     <li>Structuration, comme des inclusions de fichiers</li>
                     <li>Réutilisation, partage entre application</li>
                     <li>Modularité, détection automatique des extensions</li>
                 </ul>
-                <h4>Exemple d'extensions</h4>
-                <ul>
-                    <li>WikiMotion</li>
-                    <li>Forum, blog, ...</li>
-                </ul>
+                <h4>Exemple d'extensions (Wiki, Forum, Blog, ...)</h4>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
