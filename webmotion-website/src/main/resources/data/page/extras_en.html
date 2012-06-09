@@ -688,7 +688,7 @@ Title : ${entity.title}
 public Render findAll(GenericDAO dao, String title) {
     Parameters parameters = Parameters.create()
             .add("title", title);
-    List result = dao.query("findByTitle", title);
+    List result = dao.query("findByTitle", parameters);
     return renderJSON(result);
 }
 </pre>
