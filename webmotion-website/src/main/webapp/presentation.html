@@ -47,12 +47,15 @@
                 margin-top: 20px;
                 border-radius: 3px;
             }
+            * {
+                overflow: hidden; /* Usefull for better render in fullscreen browser + zoom in. Vertical scrollbar is not displayed. */ 
+            }
         </style>
         <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
     </head>
     
     <body style="display: none;" onload="document.getElementById('filter').childNodes[7].style.display='none'">
-        <section class='slides layout-widescreen'>
+        <section class="slides layout-widescreen">
 
             <article>
                 <h1>WebMotion</h1>
@@ -206,7 +209,7 @@ public class Album {
                 <h3>
                     Standard API Servlet
                 </h3>
-                <p>16 lignes de code XML pour définir deux chemins dans l'application ...</p>
+                <p>16 lignes de code XML pour définir deux chemins dans l'application&hellip;</p>
                 <section>
                     <pre class="code">
 &lt;servlet&gt;
@@ -345,7 +348,7 @@ public class Album {
                     <li>Décoration de page (SiteMesh)</li>
                     <li>Accès à la base de données (Hibernate)</li>
                     <li>Injection dépendance (Spring)</li>
-                    <li>Sécurité (Shiro prochainement)</li>
+                    <li>Sécurité (prochainement avec Shiro)</li>
                 </ul>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -374,7 +377,7 @@ public class Album {
                 <h3>Le fichier de routes</h3>
                 <h4>Rôles</h4>
                 <ul>
-                    <li>Gérer les urls</li>
+                    <li>Gérer les URLs</li>
                     <li>Gérer les erreurs</li>
                     <li>Gérer la configuration</li>
                 </ul>
@@ -392,21 +395,21 @@ public class Album {
                 <h3>Les sections du fichier de routes</h3>
                 <ul>
                     <li>
-                        section actions, <br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small>
+                        section actions<br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small>
                         <pre class="code">
 [actions]
 GET            /path                      Class.method
 </pre>
                     </li>
                     <li>
-                        section filtres, <br/><small>pour réaliser des actions en amont ou en aval d'urls</small>
+                        section filtres<br/><small>pour réaliser des actions en amont ou en aval d'urls</small>
                         <pre id="filter" class="code">
 [filters]
 GET            /path/_*                    Class.method
 </pre>
                     </li>
                     <li>
-                        section erreurs, <br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small>
+                        section erreurs<br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small>
                        <pre class="code">
 [errors]
 code:500                                  Class.method
@@ -421,21 +424,21 @@ code:500                                  Class.method
                 <h3>Les sections du fichier de routes</h3>
                 <ul>
                     <li>
-                        section extensions, <br/><small>pour réutiliser des fichiers de routes</small>
+                        section extensions<br/><small>pour réutiliser des fichiers de routes</small>
                        <pre class="code">
 [extensions]
 /path                                     FileName
 </pre>
                     </li>
                     <li>
-                        section propriétés, <br/><small>pour la configuration de l'application</small>
+                        section propriétés<br/><small>pour la configuration de l'application</small>
                        <pre class="code">
 [properties]
 key=value
 </pre>
                     </li>
                     <li>
-                        section config, <br/><small>pour la configuration de WebMotion</small>
+                        section config<br/><small>pour la configuration de WebMotion</small>
                        <pre class="code">
 [config]
 package.base=org.webmotion
@@ -465,7 +468,7 @@ public class Album extends WebMotionController {
         return renderView("index.jsp");
     }
     public Render get(String id) {
-        // recherche de l'album
+        Album album = ...; // recherche de l'album
         return renderJSON(album);
     }
 }
@@ -500,14 +503,14 @@ public Render action(User user) {
                 <h3>Fonctionnalités d'un contrôleur</h3>
                 <h4>Retour de différents rendus</h4>
                 <ul>
-                    <li>Visualisation (html, jsp, stringtemplate, ...)</li>
-                    <li>Redirections</li>
-                    <li>Données (xml, json, ...)</li>
+                    <li>Visualisation (HTML, JSP, StringTemplate, ...)</li>
+                    <li>Redirections HTTP</li>
+                    <li>Données (XML, JSON, ...)</li>
                 </ul>
                 <h4>Exemple :</h4>
                 <pre class="code">
 renderView("page.html");
-renderUrl("www.webmotion-framework.org");
+renderUrl("http://www.webmotion-framework.org");
 renderXml(user);
 </pre>
                 <div class="footer">
@@ -578,16 +581,16 @@ String value = cookie.getValue();
                 <h3>L'avenir</h3>
                 <h4>Ajouter des nouvelles fonctionnalités</h4>
                 <ul>
-                    <li>Intégration IDE</li>
+                    <li>Intégration IDE (à ce jour, un plugin Netbeans existe)</li>
                     <li>Sécurité</li>
                     <li>WebSocket</li>
                     <li>Application de référence</li>
-                    <li>Serveur haute performance</li>
+                    <li>Serveur haute performance (ex : Netty, Apache Mina, etc.)</li>
                 </ul>
                 <h4>Être mieux référencé</h4>
                 <ul>
                     <li>Projets libres</li>
-                    <li>Projets pro</li>
+                    <li>Projets professionnels</li>
                 </ul>
                 <div class="footer">
                     Julien Ruchaud - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -605,7 +608,7 @@ String value = cookie.getValue();
             </article>
 
             <article>
-                <h3>Rejoigniez nous !</h3>
+                <h3>Rejoignez-nous !</h3>
                 <h4>Environnement</h4>
                 <ul>
                     <li><a href="http://svn.debux.org">SVN</a> pour le gestion des sources (GIT en réflexion)</li>
