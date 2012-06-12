@@ -994,6 +994,7 @@ public class Showcase extends WebMotionController {
                 
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("note.wm")),
+                    new FileContent("/META-INF/persistence.xml", getFile("showcase-persistence.xml")),
                     getJavaContent("Note.java"),
                     getPageContent("note.jsp")
                 )
