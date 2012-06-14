@@ -31,7 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.*;
-import org.debux.webmotion.server.call.CookieManger.CookieEntity;
+import org.debux.webmotion.server.call.CookieManager.CookieEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -47,8 +47,8 @@ public class CookieManagerTest {
    
     private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
 
-    protected CookieManger manger;
-    protected CookieManger securedManger;
+    protected CookieManager manager;
+    protected CookieManager securedManager;
     
     public static class MyObject {
         protected String name;
@@ -64,7 +64,7 @@ public class CookieManagerTest {
     
     @BeforeMethod
     public void setUp() {
-        manger = new CookieManger(new HttpContext() {
+        manager = new CookieManager(new HttpContext() {
             @Override
             public HttpServletRequest getRequest() {
                 return new HttpServletRequestDummy() {
@@ -88,7 +88,7 @@ public class CookieManagerTest {
             }
         });
         
-        securedManger = new CookieManger(new HttpContext() {
+        securedManager = new CookieManager(new HttpContext() {
             @Override
             public HttpServletRequest getRequest() {
                 return new HttpServletRequestDummy() {
@@ -125,41 +125,41 @@ public class CookieManagerTest {
     
     @Test
     public void testGet() {
-        CookieEntity cookie = manger.get("name");
+        CookieEntity cookie = manager.get("name");
         String value = cookie.getValue();
         AssertJUnit.assertEquals("value", value);
     }
     
     @Test
     public void testRemove() {
-        manger.remove("name");
-        CookieEntity cookie = manger.get("name");
+        manager.remove("name");
+        CookieEntity cookie = manager.get("name");
         AssertJUnit.assertNull(cookie);
     }
     
     @Test
     public void testAdd() {
-        CookieEntity cookie = manger.create("other", "other value");
-        manger.add(cookie);
+        CookieEntity cookie = manager.create("other", "other value");
+        manager.add(cookie);
         
-        cookie = manger.get("other");
+        cookie = manager.get("other");
         String value = cookie.getValue();
         AssertJUnit.assertEquals("other value", value);
     }
     
     @Test
     public void testSecure() {
-        CookieEntity cookie = securedManger.create("other", "other value");
-        securedManger.add(cookie);
+        CookieEntity cookie = securedManager.create("other", "other value");
+        securedManager.add(cookie);
         
-        cookie = securedManger.get("other");
+        cookie = securedManager.get("other");
         String value = cookie.getValue();
         AssertJUnit.assertEquals("other value", value);
     }
     
     @Test
     public void testObject() {
-        CookieEntity cookie = manger.create("my_object", new MyObject("test"));
+        CookieEntity cookie = manager.create("my_object", new MyObject("test"));
         String json = cookie.getValue();
         AssertJUnit.assertEquals("{\"name\":\"test\"}", json);
         
@@ -175,7 +175,7 @@ public class CookieManagerTest {
                                         new MyObject("test3")
                                     );
                 
-        CookieEntity cookie = manger.create("my_object", objects);
+        CookieEntity cookie = manager.create("my_object", objects);
         String json = cookie.getValue();
         AssertJUnit.assertEquals("[{\"name\":\"test1\"},{\"name\":\"test2\"},{\"name\":\"test3\"}]", json);
         

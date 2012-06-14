@@ -37,7 +37,7 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.ClientSession;
-import org.debux.webmotion.server.call.CookieManger;
+import org.debux.webmotion.server.call.CookieManager;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
 import org.debux.webmotion.server.call.HttpContext;
@@ -271,8 +271,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
-                    if (CookieManger.class.isAssignableFrom(type)) {
-                        return call.getContext().getCookieManger();
+                    if (CookieManager.class.isAssignableFrom(type)) {
+                        return call.getContext().getCookieManager();
                     }
                     return null;
                 }

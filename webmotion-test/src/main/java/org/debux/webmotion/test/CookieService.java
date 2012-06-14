@@ -25,8 +25,8 @@
 package org.debux.webmotion.test;
 
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.call.CookieManger;
-import org.debux.webmotion.server.call.CookieManger.CookieEntity;
+import org.debux.webmotion.server.call.CookieManager;
+import org.debux.webmotion.server.call.CookieManager.CookieEntity;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 
@@ -40,10 +40,10 @@ public class CookieService extends WebMotionController {
     public Render create(HttpContext context, boolean secured) {
         String name = secured ? "secured_name" : "name";
         
-        CookieManger manger = getCookieManger(context, secured);
-        CookieEntity cookie = manger.create(name, "a_value");
+        CookieManager manager = getCookieManager(context, secured);
+        CookieEntity cookie = manager.create(name, "a_value");
         cookie.setPath("/cookie");
-        manger.add(cookie);
+        manager.add(cookie);
         
         return renderURL("/cookie/read", "secured", secured);
     }
@@ -51,18 +51,18 @@ public class CookieService extends WebMotionController {
     public Render read(HttpContext context, boolean secured) {
         String name = secured ? "secured_name" : "name";
         
-        CookieManger manger = getCookieManger(context, secured);
-        CookieEntity cookie = manger.get(name);
+        CookieManager manager = getCookieManager(context, secured);
+        CookieEntity cookie = manager.get(name);
         String value = cookie.getValue();
         
         return renderContent("<div>Value = " + value + "</div>", "text/html");
     }
     
-    protected CookieManger getCookieManger(HttpContext context, boolean secured) {
+    protected CookieManager getCookieManager(HttpContext context, boolean secured) {
         if (secured) {
-            return context.getCookieManger("me", true, true);
+            return context.getCookieManager("me", true, true);
         } else {
-            return context.getCookieManger();
+            return context.getCookieManager();
         }
     }
 }

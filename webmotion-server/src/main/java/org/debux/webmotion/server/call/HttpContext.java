@@ -35,7 +35,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.debux.webmotion.server.call.CookieManger.CookieEntity;
+import org.debux.webmotion.server.call.CookieManager.CookieEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +97,7 @@ public class HttpContext {
     protected ServerContext serverContext;
             
     /** Helper to manage cookies */
-    protected CookieManger cookieManger;
+    protected CookieManager cookieManager;
     
     /** Helper to manage session on the client*/
     protected ClientSession clientSession;
@@ -180,7 +180,7 @@ public class HttpContext {
             warnings = new HashMap<String, String>();
             miscs = new HashMap<String, String>();
             
-            Collection<String> names = cookieManger.getNames();
+            Collection<String> names = cookieManager.getNames();
             for (String name : names) {
                 String prefix = null;
                 Map<String, String> messages = null;
@@ -203,7 +203,7 @@ public class HttpContext {
                 }
 
                 if(prefix != null) {
-                    CookieEntity cookie = cookieManger.get(name);
+                    CookieEntity cookie = cookieManager.get(name);
                     String value = cookie.getValue();
                     
                     name = name.replaceFirst(prefix, "");
@@ -230,10 +230,10 @@ public class HttpContext {
         
         public void add(Map<String, String> map, String prefix, String key, String value) {
             // Store value if do redirect the request
-            CookieEntity cookie = cookieManger.create(prefix + key, value);
+            CookieEntity cookie = cookieManager.create(prefix + key, value);
             cookie.setMaxAge(10); // 10s
             cookie.setPath("/");
-            cookieManger.add(cookie);
+            cookieManager.add(cookie);
             
             // Store value if do forward the request
             map.put(key, value);
@@ -301,7 +301,7 @@ public class HttpContext {
         this.request = request;
         this.response = response;
         
-        this.cookieManger = new CookieManger(this);
+        this.cookieManager = new CookieManager(this);
         this.clientSession = null;
         this.errorData = new ErrorData();
         this.flashMessages = new FlashMessages();
@@ -342,15 +342,15 @@ public class HttpContext {
     /**
      * @return helper to manage cookie
      */
-    public CookieManger getCookieManger() {
-        return cookieManger;
+    public CookieManager getCookieManager() {
+        return cookieManager;
     }
 
     /**
      * @return helper to manage secure cookie
      */
-    public CookieManger getCookieManger(String username, boolean encrypt, boolean ssl) {
-        return new CookieManger(this, username, encrypt, ssl);
+    public CookieManager getCookieManager(String username, boolean encrypt, boolean ssl) {
+        return new CookieManager(this, username, encrypt, ssl);
     }
     
     /**

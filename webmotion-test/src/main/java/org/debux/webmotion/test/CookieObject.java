@@ -25,8 +25,8 @@
 package org.debux.webmotion.test;
 
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.call.CookieManger;
-import org.debux.webmotion.server.call.CookieManger.CookieEntity;
+import org.debux.webmotion.server.call.CookieManager;
+import org.debux.webmotion.server.call.CookieManager.CookieEntity;
 import org.debux.webmotion.server.render.Render;
 
 /**
@@ -36,8 +36,8 @@ import org.debux.webmotion.server.render.Render;
  */
 public class CookieObject extends WebMotionController {
     
-    public Render read(CookieManger manger) {
-        CookieEntity cookie = manger.get("user_cookie");
+    public Render read(CookieManager manager) {
+        CookieEntity cookie = manager.get("user_cookie");
         if (cookie != null) {
             UserCookie userCookie = cookie.getValue(UserCookie.class);
             String value = userCookie.getValue();
@@ -47,16 +47,16 @@ public class CookieObject extends WebMotionController {
         }
     }
     
-    public Render create(CookieManger manger, String value) {
-        CookieEntity cookie = manger.create("user_cookie", new UserCookie(value));
+    public Render create(CookieManager manager, String value) {
+        CookieEntity cookie = manager.create("user_cookie", new UserCookie(value));
         cookie.setPath("/cookie/object");
-        manger.add(cookie);
+        manager.add(cookie);
         
         return renderURL("/cookie/object/read");
     }
     
-    public Render remove(CookieManger manger) {
-        manger.remove("user_cookie");
+    public Render remove(CookieManager manager) {
+        manager.remove("user_cookie");
         
         return renderURL("/cookie/object/read");
     }

@@ -26,7 +26,7 @@ package org.debux.webmotion.server.call;
 
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.*;
-import org.debux.webmotion.server.call.CookieManger.SecureValue;
+import org.debux.webmotion.server.call.CookieManager.SecureValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;

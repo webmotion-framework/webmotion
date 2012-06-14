@@ -41,7 +41,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.debux.webmotion.server.call.CookieManger.CookieEntity;
+import org.debux.webmotion.server.call.CookieManager.CookieEntity;
 
 /**
  * Manages a client session with the cookies. Thus you can easily scale your server. 
@@ -198,8 +198,8 @@ public class ClientSession implements HttpSession {
      * @return session context
      */
     protected ClientSessionContext readSessionContext() {
-        CookieManger manger = context.getCookieManger();
-        CookieEntity cookie = manger.get(SESSION_CONTEXT_COOKIE_NAME);
+        CookieManager manager = context.getCookieManager();
+        CookieEntity cookie = manager.get(SESSION_CONTEXT_COOKIE_NAME);
         
         ClientSessionContext result = null;
         if (cookie != null) {
@@ -218,8 +218,8 @@ public class ClientSession implements HttpSession {
      */
     protected JsonObject readAttributes(ClientSessionContext sessionContext) {
         String id = sessionContext.getId();
-        CookieManger manger = context.getCookieManger(id, true, true);
-        CookieEntity cookie = manger.get(ATTRIBUTES_COOKIE_NAME);
+        CookieManager manager = context.getCookieManager(id, true, true);
+        CookieEntity cookie = manager.get(ATTRIBUTES_COOKIE_NAME);
         
         JsonObject result = new JsonObject();
         if (cookie != null) {
@@ -235,20 +235,20 @@ public class ClientSession implements HttpSession {
      * Write the session context and attributes in cookie.
      */
     public void write() {
-        CookieManger manger = context.getCookieManger();
-        CookieEntity cookie = manger.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
+        CookieManager manager = context.getCookieManager();
+        CookieEntity cookie = manager.create(SESSION_CONTEXT_COOKIE_NAME, sessionContext);
         cookie.setAbsolutePath("/");
         cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
-        manger.add(cookie);
+        manager.add(cookie);
         
         String id = sessionContext.getId();
-        manger = context.getCookieManger(id, true, true);
+        manager = context.getCookieManager(id, true, true);
         
         String toJson = gson.toJson(attributes);
-        cookie = manger.create(ATTRIBUTES_COOKIE_NAME, toJson);
+        cookie = manager.create(ATTRIBUTES_COOKIE_NAME, toJson);
         cookie.setAbsolutePath("/");
         cookie.setMaxAge(sessionContext.getMaxInactiveInterval());
-        manger.add(cookie);
+        manager.add(cookie);
     }
     
     @Override

@@ -60,7 +60,7 @@ import org.debux.webmotion.server.WebMotionException;
  * 
  * @author jruchaud
  */
-public class CookieManger {
+public class CookieManager {
 
     /** Enabled secure cookie value */
     protected SecureValue secured;
@@ -78,7 +78,7 @@ public class CookieManger {
      * Create basic cookie manager not secured.
      * @param context http context
      */
-    public CookieManger(HttpContext context) {
+    public CookieManager(HttpContext context) {
         this.context = context;
         HttpServletRequest request = context.getRequest();
         
@@ -104,7 +104,7 @@ public class CookieManger {
      * @param encrypt if value is encrypt
      * @param ssl if ssl session id is used in verified key
      */
-    public CookieManger(HttpContext context, String username, boolean encrypt, boolean ssl) {
+    public CookieManager(HttpContext context, String username, boolean encrypt, boolean ssl) {
         this(context);
         
         ServerContext serverContext = context.getServerContext();
