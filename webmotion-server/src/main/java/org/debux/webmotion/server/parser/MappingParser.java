@@ -233,6 +233,10 @@ public class MappingParser {
             rules.put("/sectionErrors/errorRule/errorException", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
+                    if(!MappingChecker.checkClassName(value)) {
+                        log.warn("Invalid exception " + value);
+                    }
+                    
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
                     errorRule.setError(value);
                 }
@@ -633,6 +637,10 @@ public class MappingParser {
                     try {
                         ClassLoader classLoader = getClass().getClassLoader();
                         List<URL> resources = Resource.getResources(value, classLoader);
+                        if (resources.isEmpty()) {
+                            log.warn("Extension not found for " + value);
+                        }
+                        
                         for (URL resource : resources) {
                             MappingParser parser = new MappingParser();
 
@@ -714,6 +722,9 @@ public class MappingParser {
      */
     protected Mapping parse(URL url) {
         try {
+            String name = url.toExternalForm();
+            log.info("Mapping " + name + " load");
+            
             // Read the content in file
             InputStream stream = url.openStream();
             String content = IOUtils.toString(stream);
@@ -735,7 +746,6 @@ public class MappingParser {
             
             // Get the mapping after the visit
             Mapping mapping = tree.getMapping();
-            String name = url.toExternalForm();
             mapping.setName(name);
             
             log.info("Mapping " + name + " is loaded");
