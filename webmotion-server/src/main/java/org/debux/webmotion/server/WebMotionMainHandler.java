@@ -174,13 +174,13 @@ public class WebMotionMainHandler implements WebMotionHandler {
 
         // Determine the extension is used
         String url = context.getUrl();
-        log.info("url = " + url);
+        log.debug("url = " + url);
 
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensionsRules) {
 
             String path = extensionMapping.getExtensionPath();
-            log.info("path = " + path);
+            log.debug("path = " + path);
             if ("/".equals(path) 
                     || WebMotionUtils.find("^" + path + "(/|$)", url)) {
 

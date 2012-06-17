@@ -120,7 +120,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         RunnableHandler runnableHandler = new RunnableHandler(mapping, call);
         
         // Execute the request
-        log.info("is Async " + !isSyncRequest + " for url " + context.getUrl());
+        log.debug("is Async " + !isSyncRequest + " for url " + context.getUrl());
         if (isSyncRequest) {
             runnableHandler.handle(mapping, call);
             
@@ -147,7 +147,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
             asyncContext.addListener(new AsyncListener() {
                 @Override
                 public void onComplete(AsyncEvent event) throws IOException {
-                    log.info("onComplete " + event);
+                    log.debug("onComplete " + event);
                 }
 
                 @Override
@@ -162,7 +162,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
 
                 @Override
                 public void onStartAsync(AsyncEvent event) throws IOException {
-                    log.info("onStartAsync");
+                    log.debug("onStartAsync");
                 }
                 
             });
@@ -365,7 +365,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         
             try {
                 Render render = call.getRender();
-                log.info("Render = " + render);
+                log.debug("Render = " + render);
                 if (render != null) {
                     render.exec(mapping, call);
                 }

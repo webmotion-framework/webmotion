@@ -96,7 +96,7 @@ public abstract class Render {
             path = "/" + packageName + path;
         }
         
-        log.info("path = " + path);
+        log.debug("path = " + path);
         return path;
     }
 

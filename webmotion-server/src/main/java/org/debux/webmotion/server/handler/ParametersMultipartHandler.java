@@ -75,7 +75,7 @@ public class ParametersMultipartHandler implements WebMotionHandler {
 
             HttpSession session = request.getSession();
             if(session != null) {
-                log.info("Set file upload listener");
+                log.debug("Set file upload listener");
                 FileProgressListener listener = new FileProgressListener();
                 upload.setProgressListener(listener);
                 session.setAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME, listener);

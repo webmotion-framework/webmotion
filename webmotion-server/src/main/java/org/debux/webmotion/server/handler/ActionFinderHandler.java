@@ -77,9 +77,9 @@ public class ActionFinderHandler implements WebMotionHandler {
         String url = context.getUrl();
         if (url != null) {
             
-            log.info("url = " + url);
+            log.debug("url = " + url);
             List<String> path = WebMotionUtils.splitPath(url);
-            log.info("path = " + path);
+            log.debug("path = " + path);
             Map<String, Object> parameters = call.getExtractParameters();
             String method = context.getMethod();
 
@@ -93,7 +93,7 @@ public class ActionFinderHandler implements WebMotionHandler {
             }
         }
         
-        log.error("Unable to get action rule for url: " + url);
+        log.debug("Unable to get action rule for url: " + url);
         return null;
     }
     
@@ -128,7 +128,7 @@ public class ActionFinderHandler implements WebMotionHandler {
                 
             String[] values = new String[]{value};
             boolean matchValues = matchValues(expression, values);
-            log.info("Path " + Arrays.toString(values) + " for pattern " + pattern + " match ? " + matchValues);
+            log.debug("Path " + Arrays.toString(values) + " for pattern " + pattern + " match ? " + matchValues);
             if(!matchValues) {
                 return false;
             }
@@ -141,7 +141,7 @@ public class ActionFinderHandler implements WebMotionHandler {
         for (position = 0; position < expressions.length; position ++) {
             FragmentUrl expression = expressions[position];
 
-            log.info("param " + expression.getParam());
+            log.debug("param " + expression.getParam());
             String param = expression.getParam();
             String[] values = null;
             Object parameterValue = parameters.get(param);
@@ -150,7 +150,7 @@ public class ActionFinderHandler implements WebMotionHandler {
             }
             
             boolean matchValues = matchValues(expression, values);
-            log.info("Param " + param + " for value " + Arrays.toString(values) + " match ? " + matchValues);
+            log.debug("Param " + param + " for value " + Arrays.toString(values) + " match ? " + matchValues);
             if(!matchValues) {
                 return false;
             }

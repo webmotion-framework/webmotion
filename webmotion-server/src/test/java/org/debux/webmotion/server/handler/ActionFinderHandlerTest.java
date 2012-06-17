@@ -169,13 +169,13 @@ public class ActionFinderHandlerTest {
         }
         
         protected List<FragmentUrl> extractUrl(String fragment) {
-            log.info("fragment = " + fragment);
+            log.debug("fragment = " + fragment);
             List<FragmentUrl> ruleUrl = new ArrayList<FragmentUrl>();
             String baseUrl = StringUtils.substringBefore(fragment, "?");
             if(!baseUrl.isEmpty()) {
 
                 List<String> splitBaseUrl = WebMotionUtils.splitPath(baseUrl);
-                log.info("splitBaseUrl = " + splitBaseUrl);
+                log.debug("splitBaseUrl = " + splitBaseUrl);
 
                 for(String item : splitBaseUrl) {
                     FragmentUrl expression = extractExpression(item, false);
@@ -191,7 +191,7 @@ public class ActionFinderHandlerTest {
             if (!queryString.isEmpty()) {
 
                 String[] splitQueryString = StringUtils.splitPreserveAllTokens(queryString, "&");
-                log.info("splitQueryString = " + Arrays.toString(splitQueryString));
+                log.debug("splitQueryString = " + Arrays.toString(splitQueryString));
 
                 for (String item : splitQueryString) {
                     FragmentUrl expression = extractExpression(item, true);

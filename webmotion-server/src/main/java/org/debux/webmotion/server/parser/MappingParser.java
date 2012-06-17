@@ -77,7 +77,7 @@ public class MappingParser {
          */
         public void acceptBefore(Node node, InputBuffer inputBuffer) {
             String value = org.parboiled.common.StringUtils.escape(ParseTreeUtils.getNodeText(node, inputBuffer));
-            log.info("with value = " + value);
+            log.debug("with value = " + value);
             acceptBefore(value);
         }
         
@@ -667,7 +667,7 @@ public class MappingParser {
             if (notSkip) {
                 path += "/" + label;
                 
-                log.info("Before " + path);
+                log.debug("Before " + path);
                 Visit visit = rules.get(path);
                 if (visit != null) {
                     visit.acceptBefore(node, inputBuffer);
@@ -679,7 +679,7 @@ public class MappingParser {
             }
             
             if (notSkip) {
-                log.info("After " + path);
+                log.debug("After " + path);
                 Visit visit = rules.get(path);
                 if (visit != null) {
                     visit.acceptAfter(node, inputBuffer);
@@ -735,8 +735,10 @@ public class MappingParser {
             
             // Get the mapping after the visit
             Mapping mapping = tree.getMapping();
-            mapping.setName(url.toExternalForm());
+            String name = url.toExternalForm();
+            mapping.setName(name);
             
+            log.info("Mapping " + name + " is loaded");
             return mapping;
 
         } catch (IOException ioe) {

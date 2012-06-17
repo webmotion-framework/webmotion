@@ -144,27 +144,27 @@ public class WebMotionServer implements Filter {
         Mapping mapping = serverContext.getMapping();
         Config config = mapping.getConfig();
         
-        log.info("Pass in filter = " + url);
+        log.debug("Pass in filter = " + url);
         
         if (url.startsWith("/deploy")) {
-            log.info("Is deploy");
+            log.debug("Is deploy");
             doAction(httpServletRequest, httpServletResponse);
             
         } else if (url.startsWith("/static")) {
-            log.info("Is static");
+            log.debug("Is static");
             doResource(httpServletRequest, httpServletResponse);
             
         } else if (url.endsWith(".jsp") || url.endsWith(".jspx")) {
-            log.info("Is Jsp");
+            log.debug("Is Jsp");
             chain.doFilter(request, response);
             
         } else if (config.isStaticAutodetect() && patternFile.matcher(url).find()) {
             // css js html png jpg jpeg xml ...
-            log.info("Is file");
+            log.debug("Is file");
             chain.doFilter(request, response);
             
         } else {
-            log.info("Is default");
+            log.debug("Is default");
             doAction(httpServletRequest, httpServletResponse);
         }
     }

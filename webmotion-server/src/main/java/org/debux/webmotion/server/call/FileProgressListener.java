@@ -57,7 +57,7 @@ public class FileProgressListener implements ProgressListener {
         this.contentLength = contentLength;
         this.items = items;
         
-        log.info("FileProgressListener : " 
+        log.debug("FileProgressListener : " 
                 + bytesRead + " bytesRead, " 
                 + contentLength + " contentLength, " 
                 + items + " items");

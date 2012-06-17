@@ -171,9 +171,9 @@ public class WikiService {
         }
         
         File directory = new File(path);
-        log.info("file search : " + directory.getAbsolutePath() + File.separator + prefix);
+        log.debug("file search : " + directory.getAbsolutePath() + File.separator + prefix);
         File[] files = directory.listFiles((FilenameFilter) new PrefixFileFilter(prefix + "."));
-        log.info("result search : " + Arrays.toString(files));
+        log.debug("result search : " + Arrays.toString(files));
         
         if (files != null && files.length >= 1) {
             File page = files[0];

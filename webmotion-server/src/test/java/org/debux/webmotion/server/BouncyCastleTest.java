@@ -70,7 +70,7 @@ public class BouncyCastleTest {
         cipher.doFinal(cipherText, cipherLength);
         
         String result = new String(Base64.encode(cipherText));
-        log.info("result : " + result);
+        log.debug("result : " + result);
         AssertJUnit.assertNotNull(result);
     }
     
@@ -100,7 +100,7 @@ public class BouncyCastleTest {
         }
         
         String result = new String(resultBytes);
-        log.info("result : " + result);
+        log.debug("result : " + result);
         AssertJUnit.assertEquals("value", result);
     }
         
@@ -120,7 +120,7 @@ public class BouncyCastleTest {
         byte[] out = mac.doFinal();
         
         String result = new String(Base64.encode(out));
-        log.info("result : " + result);
+        log.debug("result : " + result);
         AssertJUnit.assertNotNull(result);
     }
 }

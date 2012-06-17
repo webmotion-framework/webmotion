@@ -81,7 +81,7 @@ public class FilterFinderHandler implements WebMotionHandler {
         Pattern pattern = filterRule.getPattern();
         Matcher matcher = pattern.matcher(url);
         boolean found = matcher.find();
-        log.info("Filter pattern : " + pattern.pattern() + " = " + found);
+        log.debug("Filter pattern : " + pattern.pattern() + " = " + found);
         return found;
     }
 

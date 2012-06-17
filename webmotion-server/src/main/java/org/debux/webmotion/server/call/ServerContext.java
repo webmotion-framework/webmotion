@@ -129,6 +129,8 @@ public class ServerContext {
         
         // Read the mapping
         this.loadMapping();
+        
+        log.info("WebMotion is started");
     }
 
     /**

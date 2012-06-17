@@ -47,7 +47,7 @@ public class SecureValueTest {
     public void testHashSha1() {
         SecureValue secured = new SecureValue(secret, "username", true, true);
         String result = secured.hashSha1("test", "test");
-        log.info("result : " + result);
+        log.debug("result : " + result);
         AssertJUnit.assertNotNull(result);
     }
     
@@ -58,11 +58,11 @@ public class SecureValueTest {
         SecureValue secured = new SecureValue(secret, "username", true, true);
         
         String encryptValue = secured.encryptRijndael("test", key);
-        log.info("encryptValue : " + encryptValue);
+        log.debug("encryptValue : " + encryptValue);
         AssertJUnit.assertNotNull(encryptValue);
         
         String decryptValue = secured.decryptRijndael(encryptValue, key);
-        log.info("decryptValue : " + decryptValue);
+        log.debug("decryptValue : " + decryptValue);
         AssertJUnit.assertEquals(value, decryptValue);
     }
     
@@ -72,11 +72,11 @@ public class SecureValueTest {
         SecureValue secured = new SecureValue(secret, "username", false, true);
         
         String secureValue = secured.getSecureValue(value, -1);
-        log.info("secureValue : " + secureValue);
+        log.debug("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
         String unsecureValue = secured.getUnsecureValue(secureValue);
-        log.info("unsecureValue : " + unsecureValue);
+        log.debug("unsecureValue : " + unsecureValue);
         AssertJUnit.assertEquals(value, unsecureValue);
     }
     
@@ -86,11 +86,11 @@ public class SecureValueTest {
         SecureValue secured = new SecureValue(secret, "username", true, true);
         
         String secureValue = secured.getSecureValue(value, -1);
-        log.info("secureValue : " + secureValue);
+        log.debug("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
         String unsecureValue = secured.getUnsecureValue(secureValue);
-        log.info("unsecureValue : " + unsecureValue);
+        log.debug("unsecureValue : " + unsecureValue);
         AssertJUnit.assertEquals(value, unsecureValue);
     }
     
@@ -100,7 +100,7 @@ public class SecureValueTest {
         SecureValue secured = new SecureValue(secret, "username", true, true);
         
         String secureValue = secured.getSecureValue(value, -1);
-        log.info("secureValue : " + secureValue);
+        log.debug("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
         // Invalid key
@@ -109,7 +109,7 @@ public class SecureValueTest {
         secureValue = StringUtils.join(split, "|");
         
         String unsecureValue = secured.getUnsecureValue(secureValue);
-        log.info("unsecureValue : " + unsecureValue);
+        log.debug("unsecureValue : " + unsecureValue);
         AssertJUnit.assertNull(unsecureValue);
     }
 
@@ -119,7 +119,7 @@ public class SecureValueTest {
         SecureValue secured = new SecureValue(secret, "username", true, true);
         
         String secureValue = secured.getSecureValue(value, -1);
-        log.info("secureValue : " + secureValue);
+        log.debug("secureValue : " + secureValue);
         AssertJUnit.assertNotNull(secureValue);
         
         // Invalid value
@@ -128,7 +128,7 @@ public class SecureValueTest {
         secureValue = StringUtils.join(split, "|");
         
         String unsecureValue = secured.getUnsecureValue(secureValue);
-        log.info("unsecureValue : " + unsecureValue);
+        log.debug("unsecureValue : " + unsecureValue);
         AssertJUnit.assertNull(unsecureValue);
     }
 

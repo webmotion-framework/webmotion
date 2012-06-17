@@ -67,7 +67,7 @@ public class GsonTest {
         map.put("keys", new String[]{"abc", "def", "ghi"});
         
         String json = gson.toJson(map);
-        log.info("json = " + json);
+        log.debug("json = " + json);
         
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse(json).getAsJsonObject();

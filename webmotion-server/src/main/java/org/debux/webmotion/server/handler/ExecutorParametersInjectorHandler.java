@@ -106,7 +106,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     Object inject = injector.getValue(mapping, call, type, generic);
 
                     if (inject != null) {
-                        log.info("Inject " + name + " for type " + type + " the value " + inject);
+                        log.debug("Inject " + name + " for type " + type + " the value " + inject);
                         parameters.put(name, inject);
                     }
                 }

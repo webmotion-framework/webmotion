@@ -98,8 +98,7 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
                 .unwrap(MethodValidator.class);
             
         } catch (ValidationException ve) {
-            // Glassfish not supports MethodValidator, I don't known why.
-            log.info("MethodValidator not supported", ve);
+            log.warn("MethodValidator not supported", ve);
             return;
         }
     }

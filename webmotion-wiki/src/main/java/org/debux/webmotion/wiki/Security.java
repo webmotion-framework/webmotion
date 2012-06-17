@@ -129,7 +129,7 @@ public class Security extends WebMotionFilter {
             if (name.equals(username)) {
                 
                 String encoded = DigestUtils.shaHex(password);
-                log.info("encoded = " + encoded);
+                log.debug("encoded = " + encoded);
                 if (encoded.equals(user.getPassword())) {
                     
                     HttpContext context = getContext();
@@ -174,7 +174,7 @@ public class Security extends WebMotionFilter {
             required = permissions.get(sub);
         }
 
-        log.info("required = " + required + " in " + currentPermissions);
+        log.debug("required = " + required + " in " + currentPermissions);
         if (required != null && (required.equals(NO_SECURE)
             || currentPermissions.contains(required))) {
             
