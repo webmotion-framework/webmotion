@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import java.io.File;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -73,8 +74,13 @@ public class WebMotionServer implements Filter {
     /** Listeners on server */
     protected List<WebMotionServerListener> listeners;
     
+    /** Absolute path on webapp */
+    protected String path;
+    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // Remove path/. to path/
+        path = filterConfig.getServletContext().getRealPath("/");
         serverContext = initServerContext(filterConfig);
         
         // Extract listeners
@@ -140,13 +146,9 @@ public class WebMotionServer implements Filter {
         
         String contextPath = httpServletRequest.getContextPath();
         String url = StringUtils.substringAfter(uri, contextPath);
-        
-        Mapping mapping = serverContext.getMapping();
-        Config config = mapping.getConfig();
-        
         log.debug("Pass in filter = " + url);
         
-        if (url.startsWith("/deploy")) {
+        if (url.startsWith("/deploy") || url.equals("/")) {
             log.debug("Is deploy");
             doAction(httpServletRequest, httpServletResponse);
             
@@ -154,18 +156,16 @@ public class WebMotionServer implements Filter {
             log.debug("Is static");
             doResource(httpServletRequest, httpServletResponse);
             
-        } else if (url.endsWith(".jsp") || url.endsWith(".jspx")) {
-            log.debug("Is Jsp");
-            chain.doFilter(request, response);
-            
-        } else if (config.isStaticAutodetect() && patternFile.matcher(url).find()) {
-            // css js html png jpg jpeg xml ...
-            log.debug("Is file");
-            chain.doFilter(request, response);
-            
         } else {
-            log.debug("Is default");
-            doAction(httpServletRequest, httpServletResponse);
+            File file = new File(path, url);
+            if (file.exists()) {
+                // css js html png jpg jpeg xml ...
+                log.debug("Is file");
+                chain.doFilter(request, response);
+            } else {
+                log.debug("Is default");
+                doAction(httpServletRequest, httpServletResponse);
+            }
         }
     }
     

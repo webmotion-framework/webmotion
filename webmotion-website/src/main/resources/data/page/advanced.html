@@ -37,16 +37,14 @@
 </p>
 
 <p>
-    Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL ne 
-    contient pas d'extension, c'est à dire si l'URL ne se termine pas par <code>.\w{2,4}$</code>
-    alors il redirige vers une action definie dans le mapping sinon il redirige 
-    vers une ressource statique.
+    Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL correspond 
+    à un fichier dans le répertoire de l'application web, alors l'url est considérée comme une
+    ressource static sinon l'url est considérée comme une action.
 </p>
 
 <p>
-    Il est possible que des requêtes d'accès à des données statiques passent à tort dans la servlet d'actions.
-    Pour éviter ce cas, il suffit d'appeller explicitement la servlet souhaitée ou désactiver la détection. 
-    Pour plus de renseignements, veuillez vous reporter à la section <a href="mapping#config">Mapping - Config</a>.
+    Il est possible de préciser explicitement si l'url est une ressource static ou une action,
+    il vous suffit d'appeller explicitement dans l'url le path <code>/static</code> ou <code>/deploy</code>.
 </p>
 
 <p>
@@ -55,6 +53,20 @@
 <pre>
 [actions]
 *           /readme                                     url:/static/README
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Accès à une ressource statique explicitement :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
 </pre>
 
 <p>

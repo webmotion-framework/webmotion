@@ -102,11 +102,10 @@
     <li>server.listener.class</li>
     <li>server.main.handler.class</li>
     <li>server.secret</li>
-    <li>server.static.autodetect</li>
 </ul>
 
 <p>
-    Les propriétés suivantes <code>server.encoding</code>, <code>server.error.page</code> et <code>server.static.autodetect</code> 
+    Les propriétés suivantes <code>server.encoding</code> et <code>server.error.page</code>
     sont prises en compte seulement depuis le fichier de mapping principal.
 </p>
 
@@ -336,39 +335,6 @@ public class Listener implements WebMotionServerListener {
     <span class="label label-info">Exemple</span> Définition d'une clé :
 </p>
 <pre>server.secret=012345678901234567890123456789_</pre>
-
-<h3>server.static.autodetect</h3>
-<p>
-    Dans son fonctionnement classique, WebMotion détecte automatiquement les ressources considérées comme statiques
-    (page html, images, scripts, feuilles de styles, soit toute ressource dont le nom contient une extension).
-    Si vous souhaitez que votre application gère le rendu de certains fichiers considérés comme statiques, vous devrez désactiver cette détection automatique.
-    Pour ce faire, la propriété <strong>server.static.autodetect</strong> peut prendre deux valeurs, <code>true</code> ou <code>false</code>. 
-    Si vous désactivez cette détection automatique, vous devrez adapter vos pages web : tout chemin vers une ressources réellement statique devra être préfixé par <code>/static</code>
-    (chemin relatif au contexte de l'application).
-    Pour plus de renseignements, veuillez vous reporter à la section <a href="advanced#servlet">Avancé - Architecture des servlets</a>.
-</p>
-<p>
-    <span class="label">Default</span> Par défaut, la valeur server.static.autodetect est <code>true</code>.
-</p>
-<p>
-    <span class="label label-info">Exemple</span> Accès à une ressource statique non gérée par WebMotion dans un fichier HTML :
-</p>
-<pre class="prettyprint">
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-
-<p>
-    <span class="label label-warning">Attention</span> 
-    La désactivation de la détection des ressources peut provoquer une incompatibilité 
-    avec les extensions ne supportant pas la désactivation.
-</p>
 
 <h2 id="properties" class="page-header">[properties] Configuration de l'application</h2>
 <p>

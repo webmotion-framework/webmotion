@@ -99,11 +99,10 @@
     <li>server.listener.class</li>
     <li>server.main.handler.class</li>
     <li>server.secret</li>
-    <li>server.static.autodetect</li>
 </ul>
 
 <p>
-    The following properties <code>server.encoding</code>, <code>server.error.page</code> and <code>server.static.autodetect</code> 
+    The following properties <code>server.encoding</code> and <code>server.error.page</code>
     are considered only from the main mapping file.
 </p>
 
@@ -335,39 +334,6 @@ public class Listener implements WebMotionServerListener {
     <span class="label label-info">Example</span> Definition of a key:
 </p>
 <pre>server.secret=012345678901234567890123456789_</pre>
-
-<h3>server.static.autodetect</h3>
-<p>
-    In its classical functioning, WebMotion automatically detects the resources considered as static
-    (HTML pages, images, scripts, stylesheets, ie every resource whose name contains an extension).
-    If you wish that your application handles the rendering of some resources considered as static, you will need to deactivate this automatic detection.
-    To do so, the <strong>server.static.autodetect</strong> property can take two values: <code>true</code> or <code>false</code>.
-    If you deactivate this automatic detection, you will need to adapt your web pages: 
-    every path to a real static resource will need to be prefixed by <code>/static</code> (relative path to the application context).
-    For more details, please report to the <a href="advanced#servlet">Advanced - Servelt architecture</a> section.
-</p>
-<p>
-    <span class="label">Default</span> By default, the value of server.static.autodetect is <code>true</code>.
-</p>
-<p>
-    <span class="label label-info">Example</span> Access to a static resource not managed by WebMotion in a HTML file:
-</p>
-<pre class="prettyprint">
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-
-<p>
-    <span class="label label-warning">Warning</span>
-    The deactivation of the resource detection can provoke an iIncompatibility
-    with th extensions which does not support the deactivation.
-</p>
 
 <h2 id="properties" class="page-header">[properties] Configuration of the application</h2>
 <p>
