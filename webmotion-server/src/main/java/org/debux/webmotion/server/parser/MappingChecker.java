@@ -29,6 +29,8 @@ import java.net.URL;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * check :
@@ -57,6 +59,7 @@ public class MappingChecker {
             return true;
             
         } catch (ClassNotFoundException ex) {
+            log.warn("Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
             return false;
         }
@@ -68,12 +71,14 @@ public class MappingChecker {
 
             Method method = WebMotionUtils.getMethod(clazz, methodName);
             if (method == null) {
+                log.warn("Invalid method name " + methodName + "for class name " + className);
                 log.debug("Invalid method name " + methodName + "for class name " + className);
                 return false;
             } else {
                 return true;
             }
         } catch (ClassNotFoundException ex) {
+            log.warn("Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
             return false;
         }
@@ -82,6 +87,22 @@ public class MappingChecker {
     public static boolean checkFile(String fileName) {
         ClassLoader classLoader = MappingChecker.class.getClassLoader();
         URL resource = classLoader.getResource(fileName);
-        return resource != null;
+        if (resource == null) {
+            log.warn("Invalid file " + fileName);
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean checkPattern(String regex) {
+        try {
+            Pattern.compile(regex);
+            return true;
+            
+        } catch (PatternSyntaxException ex) {
+            log.warn("Invalid pattern " + regex);
+            log.debug("Invalid pattern " + regex, ex);
+            return false;
+        }
     }
 }

@@ -27,6 +27,7 @@ package org.debux.webmotion.server.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,14 +36,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.ActionRule;
-import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.ErrorRule;
-import org.debux.webmotion.server.mapping.FilterRule;
-import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.FragmentUrl;
-import org.debux.webmotion.server.mapping.Properties;
+import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.mapping.Properties.PropertiesItem;
 import org.nuiton.util.Resource;
 import org.parboiled.Node;
@@ -233,9 +227,7 @@ public class MappingParser {
             rules.put("/sectionErrors/errorRule/errorException", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
-                    if(!MappingChecker.checkClassName(value)) {
-                        log.warn("Invalid exception " + value);
-                    }
+                    MappingChecker.checkClassName(value);
                     
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
                     errorRule.setError(value);
@@ -723,7 +715,7 @@ public class MappingParser {
     protected Mapping parse(URL url) {
         try {
             String name = url.toExternalForm();
-            log.info("Mapping " + name + " load");
+            log.info("Load mapping " + name);
             
             // Read the content in file
             InputStream stream = url.openStream();
@@ -748,7 +740,43 @@ public class MappingParser {
             Mapping mapping = tree.getMapping();
             mapping.setName(name);
             
-            log.info("Mapping " + name + " is loaded");
+            // Check
+            List<Rule> rules = new ArrayList<Rule>();
+            rules.addAll(mapping.getActionRules());
+            rules.addAll(mapping.getErrorRules());
+            rules.addAll(mapping.getFilterRules());
+            
+            Config config = mapping.getConfig();
+            String packageActions = config.getPackageActions();
+            String packageViews = config.getPackageViews();
+            
+            for (Rule rule : rules) {
+                Action action = rule.getAction();
+                if (action != null) {
+                    
+                    if (action.isView()) {
+                        String fullName = packageViews.replaceAll("\\.", "/") + "/" + action.getFullName();
+                        if (MappingChecker.isNotVariable(fullName)) {
+                            MappingChecker.checkFile(fullName);
+                        }
+
+                    } else if (action.isAction()) {
+                        String className = packageActions + "." + action.getClassName();
+                        String methodName = action.getMethodName();
+
+                        if (MappingChecker.isNotVariable(className)) {
+                            if (MappingChecker.isNotVariable(methodName)) {
+                                MappingChecker.checkMethodName(className, methodName);
+
+                            } else {
+                                MappingChecker.checkClassName(className);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            log.info("... loaded");
             return mapping;
 
         } catch (IOException ioe) {
