@@ -144,8 +144,7 @@ public class ParboiledMappingParser extends BaseParser {
                 "server.controller.scope",
                 "server.listener.class",
                 "server.main.handler.class",
-                "server.secret",
-                "server.static.autodetect");
+                "server.secret");
     }
     
     @SuppressSubnodes

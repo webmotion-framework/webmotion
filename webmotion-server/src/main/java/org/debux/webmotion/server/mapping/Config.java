@@ -62,7 +62,6 @@ public class Config {
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
     public static String SERVER_MAIN_HANDLER_CLASS = "server.main.handler.class";
     public static String SERVER_SECRET = "server.secret";
-    public static String SERVER_STATIC_AUTODETECT = "server.static.autodetect";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -103,9 +102,6 @@ public class Config {
     /** Secret use to manage secure on server */
     protected String secret;
     
-    /** Precises if the static ressources is detected by server */
-    protected boolean staticAutodetect = true;
-    
     /** Default contructor. */
     public Config() {
     }
@@ -145,8 +141,6 @@ public class Config {
                 throw new WebMotionException("Secret is too short, the value must contain more 31 characters.");
             }
             setSecret(value);
-        } else if (SERVER_STATIC_AUTODETECT.equals(name)) {
-            setStaticAutodetect(Boolean.valueOf(value));
         }
     }
     
@@ -262,14 +256,6 @@ public class Config {
 
     public void setSecret(String secret) {
         this.secret = secret;
-    }
-
-    public boolean isStaticAutodetect() {
-        return staticAutodetect;
-    }
-
-    public void setStaticAutodetect(boolean staticAutodetect) {
-        this.staticAutodetect = staticAutodetect;
     }
     
 }
