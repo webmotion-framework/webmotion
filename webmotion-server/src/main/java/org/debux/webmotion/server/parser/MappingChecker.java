@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.debux.webmotion.server.mapping.Action;
+import org.debux.webmotion.server.mapping.Rule;
 
 /**
  * check :
@@ -105,4 +107,42 @@ public class MappingChecker {
             return false;
         }
     }
+    
+    public static boolean checkActionRule(Rule rule, String packageTarget) {
+        Action action = rule.getAction();
+        if (action != null && action.isAction()) {
+            String className = action.getClassName();
+            if (packageTarget != null && !packageTarget.isEmpty()) {
+                className = packageTarget + "." + className;
+            }
+            String methodName = action.getMethodName();
+            
+            if (MappingChecker.isNotVariable(className)) {
+                if (MappingChecker.isNotVariable(methodName)) {
+                    return MappingChecker.checkMethodName(className, methodName);
+
+                } else {
+                    return MappingChecker.checkClassName(className);
+                }
+            }
+        }
+        return true;
+    }
+    
+    public static boolean checkViewRule(Rule rule, String packageTarget) {
+        Action action = rule.getAction();
+        if (action != null && action.isView()) {
+            
+            String fullName = action.getFullName();
+            if (packageTarget != null && !packageTarget.isEmpty()) {
+                fullName = packageTarget.replaceAll("\\.", "/") + "/" + fullName;
+            }
+            
+            if (MappingChecker.isNotVariable(fullName)) {
+                return MappingChecker.checkFile(fullName);
+            }
+        }
+        return true;
+    }
+    
 }

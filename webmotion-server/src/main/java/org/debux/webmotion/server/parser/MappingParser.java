@@ -741,39 +741,27 @@ public class MappingParser {
             mapping.setName(name);
             
             // Check
-            List<Rule> rules = new ArrayList<Rule>();
-            rules.addAll(mapping.getActionRules());
-            rules.addAll(mapping.getErrorRules());
-            rules.addAll(mapping.getFilterRules());
-            
             Config config = mapping.getConfig();
-            String packageActions = config.getPackageActions();
             String packageViews = config.getPackageViews();
             
-            for (Rule rule : rules) {
-                Action action = rule.getAction();
-                if (action != null) {
-                    
-                    if (action.isView()) {
-                        String fullName = packageViews.replaceAll("\\.", "/") + "/" + action.getFullName();
-                        if (MappingChecker.isNotVariable(fullName)) {
-                            MappingChecker.checkFile(fullName);
-                        }
-
-                    } else if (action.isAction()) {
-                        String className = packageActions + "." + action.getClassName();
-                        String methodName = action.getMethodName();
-
-                        if (MappingChecker.isNotVariable(className)) {
-                            if (MappingChecker.isNotVariable(methodName)) {
-                                MappingChecker.checkMethodName(className, methodName);
-
-                            } else {
-                                MappingChecker.checkClassName(className);
-                            }
-                        }
-                    }
-                }
+            String packageFilters = config.getPackageFilters();
+            List<FilterRule> filterRules = mapping.getFilterRules();
+            for (FilterRule filterRule : filterRules) {
+                MappingChecker.checkActionRule(filterRule, packageFilters);
+            }
+            
+            String packageActions = config.getPackageActions();
+            List<ActionRule> actionRules = mapping.getActionRules();
+            for (ActionRule actionRule : actionRules) {
+                MappingChecker.checkActionRule(actionRule, packageActions);
+                MappingChecker.checkViewRule(actionRule, packageViews);
+            }
+            
+            String packageErrors = config.getPackageErrors();
+            List<ErrorRule> errorRules = mapping.getErrorRules();
+            for (ErrorRule errorRule : errorRules) {
+                MappingChecker.checkActionRule(errorRule, packageErrors);
+                MappingChecker.checkViewRule(errorRule, packageViews);
             }
             
             log.info("... loaded");
