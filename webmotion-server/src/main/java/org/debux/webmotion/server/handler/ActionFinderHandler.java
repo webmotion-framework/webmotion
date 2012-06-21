@@ -32,9 +32,11 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
+import org.debux.webmotion.server.render.RenderError;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -65,8 +67,9 @@ public class ActionFinderHandler implements WebMotionHandler {
         } else {
             String extensionPath = mapping.getExtensionPath();
             if (extensionPath == null) {
-                throw new WebMotionException("Not mapping found for url " 
-                        + call.getContext().getUrl());
+                RenderError render = new RenderError(HttpServletResponse.SC_NOT_FOUND,
+                                            "Not mapping found for url " + call.getContext().getUrl());
+                call.setRender(render);
             }
         }
     }
