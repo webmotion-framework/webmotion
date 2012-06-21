@@ -27,7 +27,6 @@ package org.debux.webmotion.server.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -227,8 +226,6 @@ public class MappingParser {
             rules.put("/sectionErrors/errorRule/errorException", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
-                    MappingChecker.checkClassName(value);
-                    
                     ErrorRule errorRule = (ErrorRule) stack.peekLast();
                     errorRule.setError(value);
                 }
@@ -451,6 +448,7 @@ public class MappingParser {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                     value = value.replaceAll("\\\\\\{", "{");
                     value = value.replaceAll("\\\\\\}", "}");
+                    
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
                 }
@@ -598,6 +596,7 @@ public class MappingParser {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                     value = value.replaceAll("\\\\\\{", "{");
                     value = value.replaceAll("\\\\\\}", "}");
+                    
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
                 }
@@ -715,7 +714,6 @@ public class MappingParser {
     protected Mapping parse(URL url) {
         try {
             String name = url.toExternalForm();
-            log.info("Load mapping " + name);
             
             // Read the content in file
             InputStream stream = url.openStream();
@@ -739,32 +737,7 @@ public class MappingParser {
             // Get the mapping after the visit
             Mapping mapping = tree.getMapping();
             mapping.setName(name);
-            
-            // Check
-            Config config = mapping.getConfig();
-            String packageViews = config.getPackageViews();
-            
-            String packageFilters = config.getPackageFilters();
-            List<FilterRule> filterRules = mapping.getFilterRules();
-            for (FilterRule filterRule : filterRules) {
-                MappingChecker.checkActionRule(filterRule, packageFilters);
-            }
-            
-            String packageActions = config.getPackageActions();
-            List<ActionRule> actionRules = mapping.getActionRules();
-            for (ActionRule actionRule : actionRules) {
-                MappingChecker.checkActionRule(actionRule, packageActions);
-                MappingChecker.checkViewRule(actionRule, packageViews);
-            }
-            
-            String packageErrors = config.getPackageErrors();
-            List<ErrorRule> errorRules = mapping.getErrorRules();
-            for (ErrorRule errorRule : errorRules) {
-                MappingChecker.checkActionRule(errorRule, packageErrors);
-                MappingChecker.checkViewRule(errorRule, packageViews);
-            }
-            
-            log.info("... loaded");
+
             return mapping;
 
         } catch (IOException ioe) {

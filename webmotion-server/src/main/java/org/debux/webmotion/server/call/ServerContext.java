@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +38,11 @@ import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
-import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
+import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.MappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,9 @@ public class ServerContext {
     /** Main mapping file name to parse */
     protected String mappingFileName = "/mapping";
     
+    /** Absolute path on webapp */
+    protected String webappPath;
+    
     /**
      * Initialize the context.
      * 
@@ -127,6 +131,8 @@ public class ServerContext {
         this.handlerStats.register();
         this.serverManager.register();
         
+        webappPath = servletContext.getRealPath("/");
+        
         // Read the mapping
         this.loadMapping();
         
@@ -149,7 +155,8 @@ public class ServerContext {
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
         mapping = parser.parse(mappingFileName);
-
+        checkMapping(mapping);
+        
         // Create the handler factory
         Config config = mapping.getConfig();
         String className = config.getMainHandler();
@@ -167,118 +174,277 @@ public class ServerContext {
     }
 
     /**
+     * Check the mapping and extensions
+     * TODO: 20120620 jru : check pattern
+     * TODO: 20120620 jru : search class in global controller
+     * TODO: 20120620 jru : move check extension
+     * TODO: 20120620 jru : improve test is variable
+     */
+    public void checkMapping(Mapping mapping) {
+        log.info("Load mapping " + mapping.getName());
+        
+        Config config = mapping.getConfig();
+        String packageViews = webappPath + File.separatorChar + config.getPackageViews();
+
+        String packageFilters = config.getPackageFilters();
+        List<FilterRule> filterRules = mapping.getFilterRules();
+        for (FilterRule filterRule : filterRules) {
+            MappingChecker.checkActionRule(filterRule, packageFilters);
+        }
+
+        String packageActions = config.getPackageActions();
+        List<ActionRule> actionRules = mapping.getActionRules();
+        for (ActionRule actionRule : actionRules) {
+            MappingChecker.checkActionRule(actionRule, packageActions);
+            MappingChecker.checkViewRule(actionRule, packageViews);
+        }
+
+        String packageErrors = config.getPackageErrors();
+        List<ErrorRule> errorRules = mapping.getErrorRules();
+        for (ErrorRule errorRule : errorRules) {
+            String error = errorRule.getError();
+            if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
+                MappingChecker.checkClassName(error);
+            }
+            
+            MappingChecker.checkActionRule(errorRule, packageErrors);
+            MappingChecker.checkViewRule(errorRule, packageViews);
+        }
+        log.info("... loaded");
+
+        List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extension : extensionsRules) {
+            checkMapping(extension);
+        }
+    }
+    
+    /**
      * @return the instance of mapping parser
      */
     protected MappingParser getMappingParser() {
         return new MappingParser();
     }
         
+    /**
+     * @return factory contains all controllers
+     */
     public SingletonFactory<WebMotionController> getControllers() {
         return controllers;
     }
 
+    /**
+     * @return factory contains all handlers
+     */
     public SingletonFactory<WebMotionHandler> getHandlers() {
         return handlers;
     }
 
+    /**
+     * @return global controllers register
+     */
     public Map<String, Class<? extends WebMotionController>> getGlobalControllers() {
         return globalControllers;
     }
 
+    /**
+     * Set all global controllers.
+     * 
+     * @param globalControllers 
+     */
     public void setGlobalControllers(Map<String, Class<? extends WebMotionController>> globalControllers) {
         this.globalControllers = globalControllers;
     }
     
+    /**
+     * Add a global controller use the simple name as class name use in mapping.
+     * 
+     * @param clazz 
+     */
     public void addGlobalController(Class<? extends WebMotionController> clazz) {
         globalControllers.put(clazz.getSimpleName(), clazz);
     }
     
+    /**
+     * @return all injectors register
+     */
     public List<Injector> getInjectors() {
         return injectors;
     }
 
+    /**
+     * Set all injectors.
+     * 
+     * @param injectors 
+     */
     public void setInjectors(List<Injector> injectors) {
         this.injectors = injectors;
     }
     
+    /**
+     * Add a injector.
+     * 
+     * @param injector 
+     */
     public void addInjector(Injector injector) {
         injectors.add(injector);
     }
 
+    /**
+     * @return bean utils
+     */
     public BeanUtilsBean getBeanUtil() {
         return beanUtil;
     }
 
+    /**
+     * Set bean utils use for convertion.
+     * 
+     * @param beanUtil 
+     */
     public void setBeanUtil(BeanUtilsBean beanUtil) {
         this.beanUtil = beanUtil;
     }
 
+    /**
+     * @return converter utils
+     */
     public ConvertUtilsBean getConverter() {
         return converter;
     }
 
+    /**
+     * Set converter utils.
+     * 
+     * @param converter 
+     */
     public void setConverter(ConvertUtilsBean converter) {
         this.converter = converter;
     }
 
+    /**
+     * Add a converter.
+     * 
+     * @param converter
+     * @param clazz 
+     */
     public void addConverter(Converter converter, Class clazz) {
         this.converter.register(converter, clazz);
     }
 
+    /**
+     * @return manager for JMX
+     */
     public ServerContextManager getServerManager() {
         return serverManager;
     }
 
+    /**
+     * Set manager for jmx
+     * @param serverManager 
+     */
     public void setServerManager(ServerContextManager serverManager) {
         this.serverManager = serverManager;
     }
     
+    /**
+     * @return Manager server stats
+     */
     public HandlerStats getHandlerStats() {
         return handlerStats;
     }
 
+    /**
+     * @return Mbean on server stats
+     */
     public ServerStats getServerStats() {
         return serverStats;
     }
 
+    /**
+     * @return attributes store in server context
+     */
     public Map<String, Object> getAttributes() {
         return attributes;
     }
     
+    /**
+     * Add an attribut in server context.
+     * 
+     * @param name
+     * @param value 
+     */
     public void setAttribute(String name, Object value) {
         attributes.put(name, value);
     }
     
+    /**
+     * Get attribute by name.
+     * 
+     * @param name attribute name
+     * @return attribute value
+     */
     public Object getAttribute(String name) {
         return attributes.get(name);
     }
 
+    /**
+     * @return the main handler instance configure in the mapping
+     */
     public WebMotionHandler getMainHandler() {
         return mainHandler;
     }
 
+    /**
+     * @return the root mapping
+     */
     public Mapping getMapping() {
         return mapping;
     }
 
+    /**
+     * @return servlet context
+     */
     public ServletContext getServletContext() {
         return servletContext;
     }
 
+    /**
+     * @return secret use for security
+     */
     public String getSecret() {
         return secret;
     }
 
+    /**
+     * Set the secret manually.
+     * 
+     * @param secret 
+     */
     public void setSecret(String secret) {
         this.secret = secret;
     }
 
+    /**
+     * @return the mapping file name use to read the mapping/
+     */
     public String getMappingFileName() {
         return mappingFileName;
     }
 
+    /**
+     * Set the mapping file name use to read the mapping.
+     * 
+     * @param mappingFileName 
+     */
     public void setMappingFileName(String mappingFileName) {
         this.mappingFileName = mappingFileName;
+    }
+
+    /**
+     * @return absolute path on webapp
+     */
+    public String getWebappPath() {
+        return webappPath;
     }
     
 }

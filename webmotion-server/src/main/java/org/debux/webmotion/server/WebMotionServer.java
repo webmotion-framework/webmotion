@@ -65,22 +65,14 @@ public class WebMotionServer implements Filter {
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
             
-    /** Test if the path contains a extension */
-    protected static Pattern patternFile = Pattern.compile("\\.\\w{2,4}$");
-
     /** Current application context */
     protected ServerContext serverContext;
     
     /** Listeners on server */
     protected List<WebMotionServerListener> listeners;
     
-    /** Absolute path on webapp */
-    protected String path;
-    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // Remove path/. to path/
-        path = filterConfig.getServletContext().getRealPath("/");
         serverContext = initServerContext(filterConfig);
         
         // Extract listeners
@@ -157,7 +149,8 @@ public class WebMotionServer implements Filter {
             doResource(httpServletRequest, httpServletResponse);
             
         } else {
-            File file = new File(path, url);
+            String webappPath = serverContext.getWebappPath();
+            File file = new File(webappPath, url);
             if (file.exists()) {
                 // css js html png jpg jpeg xml ...
                 log.debug("Is file");

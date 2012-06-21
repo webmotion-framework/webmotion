@@ -24,8 +24,8 @@
  */
 package org.debux.webmotion.server.parser;
 
+import java.io.File;
 import java.lang.reflect.Method;
-import java.net.URL;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,9 +87,8 @@ public class MappingChecker {
     }
     
     public static boolean checkFile(String fileName) {
-        ClassLoader classLoader = MappingChecker.class.getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-        if (resource == null) {
+        File file = new File(fileName);
+        if (!file.exists()) {
             log.warn("Invalid file " + fileName);
             return false;
         }
