@@ -39,7 +39,8 @@
 <p>
     Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL correspond 
     à un fichier dans le répertoire de l'application web, alors l'url est considérée comme une
-    ressource static sinon l'url est considérée comme une action.
+    ressource static sinon l'url est considérée comme une action. Si aucune ressource ou action 
+    n'est finalement trouvée alors une erreur HTTP <code>404 Not found</code> est retourné au client.
 </p>
 
 <p>
