@@ -81,9 +81,9 @@ public class ErrorFinderHandler implements WebMotionHandler {
                     call.setRule(errorRule);
                     break;
 
-                } else if (error.startsWith("code:")) {
+                } else if (error.startsWith(ErrorRule.PREFIX_CODE)) {
                     String code = statusCode.toString();
-                    if (error.equals("code:" + code)) {
+                    if (error.equals(ErrorRule.PREFIX_CODE + code)) {
                         call.setRule(errorRule);
                         break;
                     }

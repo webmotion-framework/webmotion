@@ -33,6 +33,8 @@ package org.debux.webmotion.server.mapping;
  */
 public class ErrorRule extends Rule {
 
+    public static final String PREFIX_CODE = "code:";
+    
     protected String error;
 
     public String getError() {
