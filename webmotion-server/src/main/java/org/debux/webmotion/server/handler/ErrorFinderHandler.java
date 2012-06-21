@@ -77,13 +77,13 @@ public class ErrorFinderHandler implements WebMotionHandler {
             for (ErrorRule errorRule : errorRules) {
                 String error = errorRule.getError();
 
-                if(error == null) {
+                if (error == null) {
                     call.setRule(errorRule);
                     break;
 
-                } else if(error.startsWith("code:")) {
+                } else if (error.startsWith("code:")) {
                     String code = statusCode.toString();
-                    if(error.equals("code:" + code)) {
+                    if (error.equals("code:" + code)) {
                         call.setRule(errorRule);
                         break;
                     }
