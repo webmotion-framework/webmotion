@@ -737,6 +737,7 @@ public class MappingParser {
             // Get the mapping after the visit
             Mapping mapping = tree.getMapping();
             mapping.setName(name);
+            log.info("Parsed mapping " + name);
 
             return mapping;
 

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
@@ -106,6 +107,9 @@ public class ServerContext {
     /** Absolute path on webapp */
     protected String webappPath;
     
+    /** Util use to check the mapping */
+    protected MappingChecker mappingChecker;
+    
     /**
      * Initialize the context.
      * 
@@ -132,7 +136,7 @@ public class ServerContext {
         this.serverManager.register();
         
         webappPath = servletContext.getRealPath("/");
-        
+                
         // Read the mapping
         this.loadMapping();
         
@@ -155,7 +159,11 @@ public class ServerContext {
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
         mapping = parser.parse(mappingFileName);
+        
+        // Check mapping
+        mappingChecker = new MappingChecker();
         checkMapping(mapping);
+        mappingChecker.print();
         
         // Create the handler factory
         Config config = mapping.getConfig();
@@ -178,39 +186,33 @@ public class ServerContext {
      * TODO: 20120620 jru : check pattern
      * TODO: 20120620 jru : search class in global controller
      * TODO: 20120620 jru : move check extension
+     * TODO: 20120620 jru : check variable exsting
      * TODO: 20120620 jru : improve test is variable
      */
     public void checkMapping(Mapping mapping) {
-        log.info("Load mapping " + mapping.getName());
-        
         Config config = mapping.getConfig();
         String packageViews = webappPath + File.separatorChar + config.getPackageViews();
 
         String packageFilters = config.getPackageFilters();
         List<FilterRule> filterRules = mapping.getFilterRules();
         for (FilterRule filterRule : filterRules) {
-            MappingChecker.checkActionRule(filterRule, packageFilters);
+            mappingChecker.checkAction(filterRule, packageFilters);
         }
 
         String packageActions = config.getPackageActions();
         List<ActionRule> actionRules = mapping.getActionRules();
         for (ActionRule actionRule : actionRules) {
-            MappingChecker.checkActionRule(actionRule, packageActions);
-            MappingChecker.checkViewRule(actionRule, packageViews);
+            mappingChecker.checkAction(actionRule, packageActions);
+            mappingChecker.checkView(actionRule, packageViews);
         }
 
         String packageErrors = config.getPackageErrors();
         List<ErrorRule> errorRules = mapping.getErrorRules();
         for (ErrorRule errorRule : errorRules) {
-            String error = errorRule.getError();
-            if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
-                MappingChecker.checkClassName(error);
-            }
-            
-            MappingChecker.checkActionRule(errorRule, packageErrors);
-            MappingChecker.checkViewRule(errorRule, packageViews);
+            mappingChecker.checkError(errorRule);
+            mappingChecker.checkAction(errorRule, packageErrors);
+            mappingChecker.checkView(errorRule, packageViews);
         }
-        log.info("... loaded");
 
         List<Mapping> extensionsRules = mapping.getExtensionsRules();
         for (Mapping extension : extensionsRules) {

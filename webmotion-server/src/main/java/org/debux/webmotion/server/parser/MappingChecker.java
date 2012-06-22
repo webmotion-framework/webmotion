@@ -26,13 +26,16 @@ package org.debux.webmotion.server.parser;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.WebMotionServerListener;
+import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.*;
 
 /**
  * check :
@@ -47,67 +50,131 @@ public class MappingChecker {
 
     private static final Logger log = LoggerFactory.getLogger(MappingChecker.class);
     
-    public static boolean isNotVariable(String value) {
+    protected List<Warning> warnings;
+
+    public static class Warning {
+        protected Mapping mapping;
+        protected int line;
+        protected String message;
+
+        public Warning(Mapping mapping, int line, String message) {
+            this.mapping = mapping;
+            this.line = line;
+            this.message = message;
+        }
+
+        public int getLine() {
+            return line;
+        }
+
+        public void setLine(int line) {
+            this.line = line;
+        }
+
+        public Mapping getMapping() {
+            return mapping;
+        }
+
+        public void setMapping(Mapping mapping) {
+            this.mapping = mapping;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+
+    public MappingChecker() {
+        this.warnings = new ArrayList<Warning>();
+    }
+
+    public List<Warning> getWarnings() {
+        return warnings;
+    }
+    
+    public void addWarning(Mapping mapping, int line, String message) {
+        Warning warning = new Warning(mapping, line, message);
+        warnings.add(warning);
+    }
+    
+    public void addWarning(Rule rule, String message) {
+        Mapping mapping = rule.getMapping();
+        int line = rule.getLine();
+        Warning warning = new Warning(mapping, line, message);
+        warnings.add(warning);
+    }
+    
+    public void print() {
+        for (Warning warning : warnings) {
+            log.warn(warning.getMessage() + " " + warning.getMapping().getName() + ":" + warning.getLine());
+        }
+    }
+    
+    public boolean isNotVariable(String value) {
         return !isVariable(value);
     }
     
-    public static boolean isVariable(String value) {
+    public boolean isVariable(String value) {
         return value.contains("{") && value.contains("}");
     }
     
-    public static boolean checkClassName(String className) {
+    protected boolean checkClassName(Rule rule, String className) {
         try {
             Class.forName(className);
             return true;
             
         } catch (ClassNotFoundException ex) {
-            log.warn("Invalid class name " + className);
+            addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
             return false;
         }
     }
     
-    public static boolean checkMethodName(String className, String methodName) {
+    protected boolean checkMethodName(Rule rule, String className, String methodName) {
         try {
             Class<?> clazz = Class.forName(className);
 
             Method method = WebMotionUtils.getMethod(clazz, methodName);
             if (method == null) {
-                log.warn("Invalid method name " + methodName + "for class name " + className);
+                addWarning(rule, "Invalid method name " + methodName + "for class name " + className);
                 log.debug("Invalid method name " + methodName + "for class name " + className);
                 return false;
             } else {
                 return true;
             }
         } catch (ClassNotFoundException ex) {
-            log.warn("Invalid class name " + className);
+            addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
             return false;
         }
     }
     
-    public static boolean checkFile(String fileName) {
+    protected boolean checkFile(Rule rule, String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
-            log.warn("Invalid file " + fileName);
+            addWarning(rule, "Invalid file " + fileName);
             return false;
         }
         return true;
     }
     
-    public static boolean checkPattern(String regex) {
+    protected boolean checkPattern(Rule rule, String regex) {
         try {
             Pattern.compile(regex);
             return true;
             
         } catch (PatternSyntaxException ex) {
-            log.warn("Invalid pattern " + regex);
+            addWarning(rule, "Invalid pattern " + regex);
             log.debug("Invalid pattern " + regex, ex);
             return false;
         }
     }
     
-    public static boolean checkActionRule(Rule rule, String packageTarget) {
+    public boolean checkAction(Rule rule, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
             String className = action.getClassName();
@@ -116,19 +183,19 @@ public class MappingChecker {
             }
             String methodName = action.getMethodName();
             
-            if (MappingChecker.isNotVariable(className)) {
-                if (MappingChecker.isNotVariable(methodName)) {
-                    return MappingChecker.checkMethodName(className, methodName);
+            if (isNotVariable(className)) {
+                if (isNotVariable(methodName)) {
+                    return checkMethodName(rule, className, methodName);
 
                 } else {
-                    return MappingChecker.checkClassName(className);
+                    return checkClassName(rule, className);
                 }
             }
         }
         return true;
     }
     
-    public static boolean checkViewRule(Rule rule, String packageTarget) {
+    public boolean checkView(Rule rule, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isView()) {
             
@@ -137,11 +204,18 @@ public class MappingChecker {
                 fullName = packageTarget.replaceAll("\\.", "/") + "/" + fullName;
             }
             
-            if (MappingChecker.isNotVariable(fullName)) {
-                return MappingChecker.checkFile(fullName);
+            if (isNotVariable(fullName)) {
+                return checkFile(rule, fullName);
             }
         }
         return true;
+    }
+        
+    public void checkError(ErrorRule rule) {
+        String error = rule.getError();
+        if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
+            checkClassName(rule, error);
+        }
     }
     
 }
