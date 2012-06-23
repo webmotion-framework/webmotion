@@ -67,57 +67,22 @@ public class WebMotionServer implements Filter {
     /** Current application context */
     protected ServerContext serverContext;
     
-    /** Listeners on server */
-    protected List<WebMotionServerListener> listeners;
-    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        serverContext = initServerContext(filterConfig);
-        
-        // Extract listeners
-        listeners = new ArrayList<WebMotionServerListener>();
-        Mapping mapping = serverContext.getMapping();
-        extractServerListener(mapping);
-        
-        // Fire onStart
-        for (WebMotionServerListener listener : listeners) {
-            listener.onStart(serverContext);
-        }
-    }
-
-    /**
-     * Create the server context.
-     * @param filterConfig filter config
-     * @return server context
-     */
-    protected ServerContext initServerContext(FilterConfig filterConfig) {
-        ServerContext instance = new ServerContext();
+        serverContext = new ServerContext();
         
         // Get file name mapping in context param
         ServletContext servletContext = filterConfig.getServletContext();
         String mappingFileName = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileName != null && !mappingFileName.isEmpty()) {
-            instance.setMappingFileName(mappingFileName);
+            serverContext.setMappingFileName(mappingFileName);
         }
         
-        instance.contextInitialized(servletContext);
-        return instance;
+        serverContext.contextInitialized(servletContext);
     }
 
     @Override
     public void destroy() {
-        // Fire onStop
-        for (WebMotionServerListener listener : listeners) {
-            listener.onStop(serverContext);
-        }
-        
-        destroyServerContext();
-    }
-
-    /**
-     * Detroy the server context.
-     */
-    protected void destroyServerContext() {
         serverContext.contextDestroyed();
     }
 
@@ -249,37 +214,6 @@ public class WebMotionServer implements Filter {
             dispatcher.include(requestWrapper, response);
         } else {
             dispatcher.forward(requestWrapper, response);
-        }
-    }
-    
-    /**
-     * Search in mapping all server listeners.
-     * @param mapping mapping
-     */
-    public void extractServerListener(Mapping mapping) {
-        
-        Config config = mapping.getConfig();
-        String serverListenerClassName = config.getServerListener();
-        if (serverListenerClassName != null && !serverListenerClassName.isEmpty()) {
-            
-            // Create an instance
-            try {
-                Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(serverListenerClassName);
-                WebMotionServerListener serverListener = serverListenerClass.newInstance();
-                listeners.add(serverListener);
-
-            } catch (IllegalAccessException iae) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, iae);
-            } catch (InstantiationException ie) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, ie);
-            } catch (ClassNotFoundException cnfe) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, cnfe);
-            }
-        }
-            
-        List<Mapping> extensions = mapping.getExtensionsRules();
-        for (Mapping extensionMapping : extensions) {
-            extractServerListener(extensionMapping);
         }
     }
 

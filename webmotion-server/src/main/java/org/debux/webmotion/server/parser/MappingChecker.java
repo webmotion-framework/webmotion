@@ -33,9 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import org.debux.webmotion.server.WebMotionServerListener;
-import org.debux.webmotion.server.call.ServerContext;
-import org.debux.webmotion.server.mapping.*;
+import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.mapping.Action;
+import org.debux.webmotion.server.mapping.ErrorRule;
+import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.Rule;
 
 /**
  * check :
@@ -137,19 +139,23 @@ public class MappingChecker {
     protected boolean checkMethodName(Rule rule, String className, String methodName) {
         try {
             Class<?> clazz = Class.forName(className);
+            return checkMethodName(rule, clazz, methodName);
 
-            Method method = WebMotionUtils.getMethod(clazz, methodName);
-            if (method == null) {
-                addWarning(rule, "Invalid method name " + methodName + "for class name " + className);
-                log.debug("Invalid method name " + methodName + "for class name " + className);
-                return false;
-            } else {
-                return true;
-            }
         } catch (ClassNotFoundException ex) {
             addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
             return false;
+        }
+    }
+    
+    protected boolean checkMethodName(Rule rule, Class<?> clazz, String methodName) {
+        Method method = WebMotionUtils.getMethod(clazz, methodName);
+        if (method == null) {
+            addWarning(rule, "Invalid method name " + methodName + "for class name " + clazz.getSimpleName());
+            log.debug("Invalid method name " + methodName + "for class name " + clazz.getSimpleName());
+            return false;
+        } else {
+            return true;
         }
     }
     
@@ -172,6 +178,17 @@ public class MappingChecker {
             log.debug("Invalid pattern " + regex, ex);
             return false;
         }
+    }
+    
+    public boolean checkAction(Rule rule, Class<? extends WebMotionController> clazz) {
+        Action action = rule.getAction();
+        if (action != null && action.isAction()) {
+            String methodName = action.getMethodName();
+            if (isNotVariable(methodName)) {
+                return checkMethodName(rule, clazz, methodName);
+            }
+        }
+        return true;
     }
     
     public boolean checkAction(Rule rule, String packageTarget) {

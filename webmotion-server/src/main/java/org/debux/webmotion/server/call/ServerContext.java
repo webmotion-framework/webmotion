@@ -25,18 +25,12 @@
 package org.debux.webmotion.server.call;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.*;
 import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
-import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.*;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.*;
@@ -45,6 +39,7 @@ import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.MappingParser;
+import org.debux.webmotion.server.parser.MappingVisit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +105,9 @@ public class ServerContext {
     /** Util use to check the mapping */
     protected MappingChecker mappingChecker;
     
+    /** Listeners on server */
+    protected List<WebMotionServerListener> listeners;
+    
     /**
      * Initialize the context.
      * 
@@ -125,7 +123,7 @@ public class ServerContext {
         
         this.beanUtil = BeanUtilsBean.getInstance();
         this.converter = beanUtil.getConvertUtils();
-                
+
         // Register MBeans
         this.serverStats = new ServerStats();
         this.handlerStats = new HandlerStats();
@@ -140,6 +138,20 @@ public class ServerContext {
         // Read the mapping
         this.loadMapping();
         
+        // Extract listeners
+        listeners = new ArrayList<WebMotionServerListener>();
+        extractServerListener(mapping);
+        
+        // Fire onStart
+        for (WebMotionServerListener listener : listeners) {
+            listener.onStart(this);
+        }
+
+        // Check mapping
+        mappingChecker = new MappingChecker();
+        checkMapping(mapping);
+        mappingChecker.print();
+        
         log.info("WebMotion is started");
     }
 
@@ -147,6 +159,11 @@ public class ServerContext {
      * Destroy the context.
      */
     public void contextDestroyed() {
+        // Fire onStop
+        for (WebMotionServerListener listener : listeners) {
+            listener.onStop(this);
+        }
+        
         serverStats.unregister();
         handlerStats.unregister();
         serverManager.unregister();
@@ -159,11 +176,6 @@ public class ServerContext {
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
         mapping = parser.parse(mappingFileName);
-        
-        // Check mapping
-        mappingChecker = new MappingChecker();
-        checkMapping(mapping);
-        mappingChecker.print();
         
         // Create the handler factory
         Config config = mapping.getConfig();
@@ -181,43 +193,104 @@ public class ServerContext {
         mainHandler.init(mapping, this);
     }
 
+    
+    /**
+     * Search in mapping all server listeners.
+     * @param mapping mapping
+     */
+    public void extractServerListener(Mapping mapping) {
+        Config config = mapping.getConfig();
+        String serverListenerClassName = config.getServerListener();
+        if (serverListenerClassName != null && !serverListenerClassName.isEmpty()) {
+            
+            // Create an instance
+            try {
+                Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(serverListenerClassName);
+                WebMotionServerListener serverListener = serverListenerClass.newInstance();
+                listeners.add(serverListener);
+
+            } catch (IllegalAccessException iae) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, iae);
+            } catch (InstantiationException ie) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, ie);
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create server listener " + serverListenerClassName, cnfe);
+            }
+        }
+            
+        List<Mapping> extensions = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensions) {
+            extractServerListener(extensionMapping);
+        }
+    }
+    
     /**
      * Check the mapping and extensions
      * TODO: 20120620 jru : check pattern
-     * TODO: 20120620 jru : search class in global controller
+     * TODO: 20120620 jru : improve search class in global controller
      * TODO: 20120620 jru : move check extension
      * TODO: 20120620 jru : check variable exsting
      * TODO: 20120620 jru : improve test is variable
      */
     public void checkMapping(Mapping mapping) {
-        Config config = mapping.getConfig();
-        String packageViews = webappPath + File.separatorChar + config.getPackageViews();
+        MappingVisit visitor = new MappingVisit();
+        visitor.visit(mapping, new MappingVisit.Visitor() {
+                    protected String packageViews;
+                    protected String packageFilters;
+                    protected String packageActions;
+                    protected String packageErrors;
+                                
+                    @Override
+                    public void accept(Mapping mapping) {
+                        Config config = mapping.getConfig();
+                        packageViews = webappPath + File.separatorChar + config.getPackageViews();
+                        packageFilters = config.getPackageFilters();
+                        packageActions = config.getPackageActions();
+                        packageErrors = config.getPackageErrors();
+                    }
+                    
+                    @Override
+                    public void accept(Mapping mapping, FilterRule filterRule) {
+                        Class<? extends WebMotionController> globalController = getGlobalController(filterRule);
+                        if(globalController != null) {
+                            mappingChecker.checkAction(filterRule, globalController);
+                        } else {
+                            mappingChecker.checkAction(filterRule, packageFilters);
+                        }
+                    }
 
-        String packageFilters = config.getPackageFilters();
-        List<FilterRule> filterRules = mapping.getFilterRules();
-        for (FilterRule filterRule : filterRules) {
-            mappingChecker.checkAction(filterRule, packageFilters);
-        }
+                    @Override
+                    public void accept(Mapping mapping, ActionRule actionRule) {
+                        Class<? extends WebMotionController> globalController = getGlobalController(actionRule);
+                        if(globalController != null) {
+                            mappingChecker.checkAction(actionRule, globalController);
+                        } else {
+                            mappingChecker.checkAction(actionRule, packageActions);
+                        }
+                        mappingChecker.checkView(actionRule, packageViews);
+                    }
 
-        String packageActions = config.getPackageActions();
-        List<ActionRule> actionRules = mapping.getActionRules();
-        for (ActionRule actionRule : actionRules) {
-            mappingChecker.checkAction(actionRule, packageActions);
-            mappingChecker.checkView(actionRule, packageViews);
-        }
-
-        String packageErrors = config.getPackageErrors();
-        List<ErrorRule> errorRules = mapping.getErrorRules();
-        for (ErrorRule errorRule : errorRules) {
-            mappingChecker.checkError(errorRule);
-            mappingChecker.checkAction(errorRule, packageErrors);
-            mappingChecker.checkView(errorRule, packageViews);
-        }
-
-        List<Mapping> extensionsRules = mapping.getExtensionsRules();
-        for (Mapping extension : extensionsRules) {
-            checkMapping(extension);
-        }
+                    @Override
+                    public void accept(Mapping mapping, ErrorRule errorRule) {
+                        mappingChecker.checkError(errorRule);
+                        Class<? extends WebMotionController> globalController = getGlobalController(errorRule);
+                        if(globalController != null) {
+                            mappingChecker.checkAction(errorRule, globalController);
+                        } else {
+                            mappingChecker.checkAction(errorRule, packageErrors);
+                        }
+                        mappingChecker.checkView(errorRule, packageViews);
+                    }
+                    
+                    protected Class<? extends WebMotionController> getGlobalController(Rule rule) {
+                        Action action = rule.getAction();
+                        if (action != null && action.isAction()) {
+                            String className = action.getClassName();
+                            return globalControllers.get(className);
+                        }
+                        return null;
+                    }
+                });
     }
     
     /**
