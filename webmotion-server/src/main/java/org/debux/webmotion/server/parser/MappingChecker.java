@@ -126,7 +126,6 @@ public class MappingChecker {
     /**
      * Check the mapping and extensions
      * TODO: 20120620 jru : improve search class in global controller
-     * TODO: 20120620 jru : move check extension
      * TODO: 20120620 jru : check variable exsting
      * TODO: 20120620 jru : improve test is variable
      */
