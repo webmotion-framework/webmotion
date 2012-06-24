@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.mapping.*;
@@ -394,6 +395,8 @@ public class MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = new FragmentUrl();
+                    fragment.setValue(value);
+                    
                     Pattern pattern = Pattern.compile("^/$");
                     fragment.setPattern(pattern);
 
@@ -407,6 +410,8 @@ public class MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = new FragmentUrl();
+                    fragment.setValue(value);
+                    
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
 
@@ -448,9 +453,14 @@ public class MappingParser {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                     value = value.replaceAll("\\\\\\{", "{");
                     value = value.replaceAll("\\\\\\}", "}");
+                    fragment.setValue(value);
                     
-                    Pattern pattern = Pattern.compile("^" + value + "$");
-                    fragment.setPattern(pattern);
+                    try {
+                        Pattern pattern = Pattern.compile("^" + value + "$");
+                        fragment.setPattern(pattern);
+                    } catch (PatternSyntaxException ex) {
+                        log.debug("Invalid pattern " + value, ex);
+                    }
                 }
             });
 
@@ -596,9 +606,14 @@ public class MappingParser {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
                     value = value.replaceAll("\\\\\\{", "{");
                     value = value.replaceAll("\\\\\\}", "}");
+                    fragment.setValue(value);
                     
-                    Pattern pattern = Pattern.compile("^" + value + "$");
-                    fragment.setPattern(pattern);
+                    try {
+                        Pattern pattern = Pattern.compile("^" + value + "$");
+                        fragment.setPattern(pattern);
+                    } catch (PatternSyntaxException ex) {
+                        log.debug("Invalid pattern " + value, ex);
+                    }
                 }
             });
 
@@ -606,6 +621,8 @@ public class MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     FragmentUrl fragment = (FragmentUrl) stack.peekLast();
+                    fragment.setValue(value);
+                    
                     Pattern pattern = Pattern.compile("^" + value + "$");
                     fragment.setPattern(pattern);
                 }
@@ -629,19 +646,23 @@ public class MappingParser {
                         ClassLoader classLoader = getClass().getClassLoader();
                         List<URL> resources = Resource.getResources(value, classLoader);
                         if (resources.isEmpty()) {
-                            log.warn("Extension not found for " + value);
-                        }
-                        
-                        for (URL resource : resources) {
-                            MappingParser parser = new MappingParser();
-
-                            Mapping extensionMapping = parser.parse(resource);
-                            extensionMapping.setExtensionPath(path);
+                            Mapping extensionMapping = new Mapping();
+                            extensionMapping.setName(value);
                             extensionsRules.add(extensionMapping);
                             
-                            Properties extensionProperties = extensionMapping.getProperties();
-                            Properties properties = mapping.getProperties();
-                            properties.addProperties(extensionProperties);
+                        } else {
+                            
+                            for (URL resource : resources) {
+                                MappingParser parser = new MappingParser();
+
+                                Mapping extensionMapping = parser.parse(resource);
+                                extensionMapping.setExtensionPath(path);
+                                extensionsRules.add(extensionMapping);
+
+                                Properties extensionProperties = extensionMapping.getProperties();
+                                Properties properties = mapping.getProperties();
+                                properties.addProperties(extensionProperties);
+                            }
                         }
 
                     } catch (IOException ex) {

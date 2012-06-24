@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 public class FragmentUrl {
     protected String param;
     protected String name;
+    protected String value;
     protected Pattern pattern;
 
     public String getName() {
@@ -67,4 +68,12 @@ public class FragmentUrl {
         this.pattern = pattern;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
 }
