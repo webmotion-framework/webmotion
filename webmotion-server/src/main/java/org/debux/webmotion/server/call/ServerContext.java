@@ -102,9 +102,6 @@ public class ServerContext {
     /** Absolute path on webapp */
     protected String webappPath;
     
-    /** Util use to check the mapping */
-    protected MappingChecker mappingChecker;
-    
     /** Listeners on server */
     protected List<WebMotionServerListener> listeners;
     
@@ -133,10 +130,10 @@ public class ServerContext {
         this.handlerStats.register();
         this.serverManager.register();
         
-        webappPath = servletContext.getRealPath("/");
+        this.webappPath = servletContext.getRealPath("/");
                 
         // Read the mapping
-        this.loadMapping();
+        loadMapping();
         
         // Extract listeners
         listeners = new ArrayList<WebMotionServerListener>();
@@ -148,9 +145,7 @@ public class ServerContext {
         }
 
         // Check mapping
-        mappingChecker = new MappingChecker();
-        checkMapping(mapping);
-        mappingChecker.print();
+        checkMapping();
         
         log.info("WebMotion is started");
     }
@@ -198,7 +193,7 @@ public class ServerContext {
      * Search in mapping all server listeners.
      * @param mapping mapping
      */
-    public void extractServerListener(Mapping mapping) {
+    protected void extractServerListener(Mapping mapping) {
         Config config = mapping.getConfig();
         String serverListenerClassName = config.getServerListener();
         if (serverListenerClassName != null && !serverListenerClassName.isEmpty()) {
@@ -226,73 +221,13 @@ public class ServerContext {
     
     /**
      * Check the mapping and extensions
-     * TODO: 20120620 jru : check pattern
-     * TODO: 20120620 jru : improve search class in global controller
-     * TODO: 20120620 jru : move check extension
-     * TODO: 20120620 jru : check variable exsting
-     * TODO: 20120620 jru : improve test is variable
      */
-    public void checkMapping(Mapping mapping) {
-        MappingVisit visitor = new MappingVisit();
-        visitor.visit(mapping, new MappingVisit.Visitor() {
-                    protected String packageViews;
-                    protected String packageFilters;
-                    protected String packageActions;
-                    protected String packageErrors;
-                                
-                    @Override
-                    public void accept(Mapping mapping) {
-                        Config config = mapping.getConfig();
-                        packageViews = webappPath + File.separatorChar + config.getPackageViews();
-                        packageFilters = config.getPackageFilters();
-                        packageActions = config.getPackageActions();
-                        packageErrors = config.getPackageErrors();
-                    }
-                    
-                    @Override
-                    public void accept(Mapping mapping, FilterRule filterRule) {
-                        Class<? extends WebMotionController> globalController = getGlobalController(filterRule);
-                        if(globalController != null) {
-                            mappingChecker.checkAction(filterRule, globalController);
-                        } else {
-                            mappingChecker.checkAction(filterRule, packageFilters);
-                        }
-                    }
-
-                    @Override
-                    public void accept(Mapping mapping, ActionRule actionRule) {
-                        Class<? extends WebMotionController> globalController = getGlobalController(actionRule);
-                        if(globalController != null) {
-                            mappingChecker.checkAction(actionRule, globalController);
-                        } else {
-                            mappingChecker.checkAction(actionRule, packageActions);
-                        }
-                        mappingChecker.checkView(actionRule, packageViews);
-                    }
-
-                    @Override
-                    public void accept(Mapping mapping, ErrorRule errorRule) {
-                        mappingChecker.checkError(errorRule);
-                        Class<? extends WebMotionController> globalController = getGlobalController(errorRule);
-                        if(globalController != null) {
-                            mappingChecker.checkAction(errorRule, globalController);
-                        } else {
-                            mappingChecker.checkAction(errorRule, packageErrors);
-                        }
-                        mappingChecker.checkView(errorRule, packageViews);
-                    }
-                    
-                    protected Class<? extends WebMotionController> getGlobalController(Rule rule) {
-                        Action action = rule.getAction();
-                        if (action != null && action.isAction()) {
-                            String className = action.getClassName();
-                            return globalControllers.get(className);
-                        }
-                        return null;
-                    }
-                });
+    public void checkMapping() {
+        MappingChecker mappingChecker = new MappingChecker();
+        mappingChecker.checkMapping(this, mapping);
+        mappingChecker.print();
     }
-    
+            
     /**
      * @return the instance of mapping parser
      */

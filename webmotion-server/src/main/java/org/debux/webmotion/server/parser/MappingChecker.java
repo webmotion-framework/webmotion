@@ -28,16 +28,16 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.mapping.Action;
-import org.debux.webmotion.server.mapping.ErrorRule;
-import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.*;
+import org.debux.webmotion.server.parser.MappingVisit.Visitor;
 
 /**
  * check :
@@ -52,6 +52,7 @@ public class MappingChecker {
 
     private static final Logger log = LoggerFactory.getLogger(MappingChecker.class);
     
+    protected MappingVisit visitor;
     protected List<Warning> warnings;
 
     public static class Warning {
@@ -92,6 +93,7 @@ public class MappingChecker {
 
     public MappingChecker() {
         this.warnings = new ArrayList<Warning>();
+        this.visitor = new MappingVisit();
     }
 
     public List<Warning> getWarnings() {
@@ -116,82 +118,146 @@ public class MappingChecker {
         }
     }
     
-    public boolean isNotVariable(String value) {
+    public void checkMapping(ServerContext context, Mapping mapping) {
+        Visitor mappingVisitor = getMappingVisitor(context, mapping);
+        visitor.visit(mapping, mappingVisitor);
+    }
+    
+    /**
+     * Check the mapping and extensions
+     * TODO: 20120620 jru : improve search class in global controller
+     * TODO: 20120620 jru : move check extension
+     * TODO: 20120620 jru : check variable exsting
+     * TODO: 20120620 jru : improve test is variable
+     */
+    protected MappingVisit.Visitor getMappingVisitor(final ServerContext context, Mapping mapping) {
+        return new MappingVisit.Visitor() {
+            protected String packageViews;
+            protected String packageFilters;
+            protected String packageActions;
+            protected String packageErrors;
+
+            @Override
+            public void accept(Mapping mapping) {
+                Config config = mapping.getConfig();
+                packageViews = context.getWebappPath() + File.separatorChar + config.getPackageViews();
+                packageFilters = config.getPackageFilters();
+                packageActions = config.getPackageActions();
+                packageErrors = config.getPackageErrors();
+                
+                List<ActionRule> actionRules = mapping.getActionRules();
+                List<ErrorRule> errorRules = mapping.getErrorRules();
+                List<FilterRule> filterRules = mapping.getFilterRules();
+                List<Mapping> extensionsRules = mapping.getExtensionsRules();
+                
+                if (actionRules.isEmpty() && errorRules.isEmpty() &&
+                        filterRules.isEmpty() && extensionsRules.isEmpty()) {
+                    addWarning(mapping, 0, "Mapping empty");
+                }
+            }
+            
+            @Override
+            public void accept(Mapping mapping, FilterRule filterRule) {
+                Class<? extends WebMotionController> globalController = getGlobalController(filterRule);
+                if (globalController != null) {
+                    checkAction(filterRule, globalController);
+                } else {
+                    checkAction(filterRule, packageFilters);
+                }
+            }
+
+            @Override
+            public void accept(Mapping mapping, ActionRule actionRule) {
+                Class<? extends WebMotionController> globalController = getGlobalController(actionRule);
+                if (globalController != null) {
+                    checkAction(actionRule, globalController);
+                } else {
+                    checkAction(actionRule, packageActions);
+                }
+                checkView(actionRule, packageViews);
+                checkFragmentUrl(actionRule, actionRule.getRuleUrl());
+                checkFragmentUrl(actionRule, actionRule.getRuleParameters());
+            }
+
+            @Override
+            public void accept(Mapping mapping, ErrorRule errorRule) {
+                checkError(errorRule);
+                Class<? extends WebMotionController> globalController = getGlobalController(errorRule);
+                if (globalController != null) {
+                    checkAction(errorRule, globalController);
+                } else {
+                    checkAction(errorRule, packageErrors);
+                }
+                checkView(errorRule, packageViews);
+            }
+
+            protected Class<? extends WebMotionController> getGlobalController(Rule rule) {
+                Action action = rule.getAction();
+                if (action != null && action.isAction()) {
+                    String className = action.getClassName();
+                    
+                    Map<String, Class<? extends WebMotionController>> globalControllers = context.getGlobalControllers();
+                    return globalControllers.get(className);
+                }
+                return null;
+            }
+        };
+    }
+    
+    protected boolean isNotVariable(String value) {
         return !isVariable(value);
     }
     
-    public boolean isVariable(String value) {
+    protected boolean isVariable(String value) {
         return value.contains("{") && value.contains("}");
     }
-    
-    protected boolean checkClassName(Rule rule, String className) {
+
+    protected void checkClassName(Rule rule, String className) {
         try {
             Class.forName(className);
-            return true;
             
         } catch (ClassNotFoundException ex) {
             addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
-            return false;
         }
     }
     
-    protected boolean checkMethodName(Rule rule, String className, String methodName) {
+    protected void checkMethodName(Rule rule, String className, String methodName) {
         try {
             Class<?> clazz = Class.forName(className);
-            return checkMethodName(rule, clazz, methodName);
+            checkMethodName(rule, clazz, methodName);
 
         } catch (ClassNotFoundException ex) {
             addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
-            return false;
         }
     }
     
-    protected boolean checkMethodName(Rule rule, Class<?> clazz, String methodName) {
+    protected void checkMethodName(Rule rule, Class<?> clazz, String methodName) {
         Method method = WebMotionUtils.getMethod(clazz, methodName);
         if (method == null) {
             addWarning(rule, "Invalid method name " + methodName + "for class name " + clazz.getSimpleName());
-            log.debug("Invalid method name " + methodName + "for class name " + clazz.getSimpleName());
-            return false;
-        } else {
-            return true;
         }
     }
     
-    protected boolean checkFile(Rule rule, String fileName) {
+    protected void checkFile(Rule rule, String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
             addWarning(rule, "Invalid file " + fileName);
-            return false;
-        }
-        return true;
-    }
-    
-    protected boolean checkPattern(Rule rule, String regex) {
-        try {
-            Pattern.compile(regex);
-            return true;
-            
-        } catch (PatternSyntaxException ex) {
-            addWarning(rule, "Invalid pattern " + regex);
-            log.debug("Invalid pattern " + regex, ex);
-            return false;
         }
     }
     
-    public boolean checkAction(Rule rule, Class<? extends WebMotionController> clazz) {
+    protected void checkAction(Rule rule, Class<? extends WebMotionController> clazz) {
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
             String methodName = action.getMethodName();
             if (isNotVariable(methodName)) {
-                return checkMethodName(rule, clazz, methodName);
+                checkMethodName(rule, clazz, methodName);
             }
         }
-        return true;
     }
     
-    public boolean checkAction(Rule rule, String packageTarget) {
+    protected void checkAction(Rule rule, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
             String className = action.getClassName();
@@ -202,17 +268,16 @@ public class MappingChecker {
             
             if (isNotVariable(className)) {
                 if (isNotVariable(methodName)) {
-                    return checkMethodName(rule, className, methodName);
+                    checkMethodName(rule, className, methodName);
 
                 } else {
-                    return checkClassName(rule, className);
+                    checkClassName(rule, className);
                 }
             }
         }
-        return true;
     }
     
-    public boolean checkView(Rule rule, String packageTarget) {
+    protected void checkView(Rule rule, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isView()) {
             
@@ -222,17 +287,25 @@ public class MappingChecker {
             }
             
             if (isNotVariable(fullName)) {
-                return checkFile(rule, fullName);
+                checkFile(rule, fullName);
             }
         }
-        return true;
     }
         
-    public void checkError(ErrorRule rule) {
+    protected void checkError(ErrorRule rule) {
         String error = rule.getError();
         if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
             checkClassName(rule, error);
         }
     }
     
+    protected void checkFragmentUrl(Rule rule, List<FragmentUrl> fragments) {
+        for (FragmentUrl fragment : fragments) {
+            String value = fragment.getValue();
+            Pattern pattern = fragment.getPattern();
+            if (value != null && pattern == null) {
+                addWarning(rule, "Invalid pattern " + value);
+            }
+        }
+    }
 }
