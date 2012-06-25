@@ -52,20 +52,34 @@ import org.debux.webmotion.server.parser.MappingVisit.Visitor;
  * <li>view file</li>
  * <li>pattern</li>
  * </ul>
+ * 
  * @author julien
  */
 public class MappingChecker {
 
+    /** Logger */
     private static final Logger log = LoggerFactory.getLogger(MappingChecker.class);
     
+    /** Pattern to get all variable like {var} in String */
     public static Pattern VARIABLE_PATTERN = Pattern.compile("(^|[^\\\\])\\{((\\p{Alnum}|\\.)+)\\}");
     
+    /** Visitor uses to look the mapping */
     protected MappingVisit visitor;
+    
+    /** All alerts found in the mapping */
     protected List<Warning> warnings;
 
+    /**
+     * Saves warning information.
+     */
     public static class Warning {
+        /** Current mapping */
         protected Mapping mapping;
+        
+        /** Current line number in the mapping */
         protected int line;
+        
+        /** Alert message on the line of the mapping */
         protected String message;
 
         public Warning(Mapping mapping, int line, String message) {
@@ -104,26 +118,46 @@ public class MappingChecker {
         }
     }
 
+    /** Default constructor */
     public MappingChecker() {
         this.warnings = new ArrayList<Warning>();
         this.visitor = new MappingVisit();
     }
 
+    /**
+     * @return all warnings.
+     */
     public List<Warning> getWarnings() {
         return warnings;
     }
     
-    public void addWarning(Mapping mapping, int line, String message) {
+    /**
+     * Add a warning
+     * 
+     * @param mapping
+     * @param line
+     * @param message 
+     */
+    protected void addWarning(Mapping mapping, int line, String message) {
         Warning warning = new Warning(mapping, line, message);
         warnings.add(warning);
     }
     
-    public void addWarning(Rule rule, String message) {
+    /**
+     * Add a warning on rule.
+     * 
+     * @param rule current rule
+     * @param message warning message
+     */
+    protected void addWarning(Rule rule, String message) {
         Mapping mapping = rule.getMapping();
         int line = rule.getLine();
         addWarning(mapping, line, message);
     }
     
+    /**
+     * Log the warning
+     */
     public void print() {
         for (Warning warning : warnings) {
             log.warn(warning.toString());

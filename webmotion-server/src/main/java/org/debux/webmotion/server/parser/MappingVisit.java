@@ -28,11 +28,16 @@ import java.util.List;
 import org.debux.webmotion.server.mapping.*;
 
 /**
- *
+ * Visitor pattern to look into the mapping. Implements Visitor class to add 
+ * behavior. The visitor method is call on each extensions and rules.
+ * 
  * @author julien
  */
 public class MappingVisit {
-    
+  
+    /**
+     * Use to add behaviour during run.
+     */
     public static class Visitor {
         public void accept(Mapping mapping) {
         }
