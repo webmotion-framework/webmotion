@@ -125,7 +125,6 @@ public class MappingChecker {
     
     /**
      * Check the mapping and extensions
-     * TODO: 20120620 jru : improve search class in global controller
      * TODO: 20120620 jru : check variable exsting
      * TODO: 20120620 jru : improve test is variable
      */
@@ -135,6 +134,8 @@ public class MappingChecker {
             protected String packageFilters;
             protected String packageActions;
             protected String packageErrors;
+            
+            protected Map<String, Class<? extends WebMotionController>> globalControllers;
 
             @Override
             public void accept(Mapping mapping) {
@@ -143,6 +144,8 @@ public class MappingChecker {
                 packageFilters = config.getPackageFilters();
                 packageActions = config.getPackageActions();
                 packageErrors = config.getPackageErrors();
+                
+                globalControllers = context.getGlobalControllers();
                 
                 List<ActionRule> actionRules = mapping.getActionRules();
                 List<ErrorRule> errorRules = mapping.getErrorRules();
@@ -154,51 +157,25 @@ public class MappingChecker {
                     addWarning(mapping, 0, "Mapping empty");
                 }
             }
-            
+
             @Override
             public void accept(Mapping mapping, FilterRule filterRule) {
-                Class<? extends WebMotionController> globalController = getGlobalController(filterRule);
-                if (globalController != null) {
-                    checkAction(filterRule, globalController);
-                } else {
-                    checkAction(filterRule, packageFilters);
-                }
+                checkAction(filterRule, globalControllers, packageFilters);
             }
 
             @Override
             public void accept(Mapping mapping, ActionRule actionRule) {
-                Class<? extends WebMotionController> globalController = getGlobalController(actionRule);
-                if (globalController != null) {
-                    checkAction(actionRule, globalController);
-                } else {
-                    checkAction(actionRule, packageActions);
-                }
-                checkView(actionRule, packageViews);
                 checkFragmentUrl(actionRule, actionRule.getRuleUrl());
                 checkFragmentUrl(actionRule, actionRule.getRuleParameters());
+                checkAction(actionRule, globalControllers, packageActions);
+                checkView(actionRule, packageViews);
             }
 
             @Override
             public void accept(Mapping mapping, ErrorRule errorRule) {
                 checkError(errorRule);
-                Class<? extends WebMotionController> globalController = getGlobalController(errorRule);
-                if (globalController != null) {
-                    checkAction(errorRule, globalController);
-                } else {
-                    checkAction(errorRule, packageErrors);
-                }
+                checkAction(errorRule, globalControllers, packageErrors);
                 checkView(errorRule, packageViews);
-            }
-
-            protected Class<? extends WebMotionController> getGlobalController(Rule rule) {
-                Action action = rule.getAction();
-                if (action != null && action.isAction()) {
-                    String className = action.getClassName();
-                    
-                    Map<String, Class<? extends WebMotionController>> globalControllers = context.getGlobalControllers();
-                    return globalControllers.get(className);
-                }
-                return null;
             }
         };
     }
@@ -235,7 +212,7 @@ public class MappingChecker {
     protected void checkMethodName(Rule rule, Class<?> clazz, String methodName) {
         Method method = WebMotionUtils.getMethod(clazz, methodName);
         if (method == null) {
-            addWarning(rule, "Invalid method name " + methodName + "for class name " + clazz.getSimpleName());
+            addWarning(rule, "Invalid method name " + methodName + " for class name " + clazz.getSimpleName());
         }
     }
     
@@ -246,31 +223,29 @@ public class MappingChecker {
         }
     }
     
-    protected void checkAction(Rule rule, Class<? extends WebMotionController> clazz) {
-        Action action = rule.getAction();
-        if (action != null && action.isAction()) {
-            String methodName = action.getMethodName();
-            if (isNotVariable(methodName)) {
-                checkMethodName(rule, clazz, methodName);
-            }
-        }
-    }
-    
-    protected void checkAction(Rule rule, String packageTarget) {
+    protected void checkAction(Rule rule, Map<String, Class<? extends WebMotionController>> controllers, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
             String className = action.getClassName();
-            if (packageTarget != null && !packageTarget.isEmpty()) {
-                className = packageTarget + "." + className;
-            }
             String methodName = action.getMethodName();
             
-            if (isNotVariable(className)) {
+            Class<? extends WebMotionController> clazz = controllers.get(className);
+            if (clazz != null) {
                 if (isNotVariable(methodName)) {
-                    checkMethodName(rule, className, methodName);
-
-                } else {
-                    checkClassName(rule, className);
+                    checkMethodName(rule, clazz, methodName);
+                }
+                
+            } else {
+                if (packageTarget != null && !packageTarget.isEmpty()) {
+                    className = packageTarget + "." + className;
+                }
+            
+                if (isNotVariable(className)) {
+                    if (isNotVariable(methodName)) {
+                        checkMethodName(rule, className, methodName);
+                    } else {
+                        checkClassName(rule, className);
+                    }
                 }
             }
         }
