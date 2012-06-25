@@ -100,6 +100,7 @@ public class HandlerStats implements HandlerStatsMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
+            log.debug("Error during register the MBean", ex);
             log.warn("Error during register the MBean");
         }    
     }
@@ -114,6 +115,7 @@ public class HandlerStats implements HandlerStatsMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
+            log.debug("Error during register the MBean", ex);
             log.warn("Error during unregister the MBean");
         }
     }

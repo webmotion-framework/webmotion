@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server.mbean;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,5 +68,10 @@ public interface ServerContextManagerMXBean {
      * @return error page status (enabled/disabled/forced)
      */
     String getErrorPageStatus();
+    
+    /**
+     * @return get all warnings in mapping
+     */
+    List<String> getWarnings();
     
 }

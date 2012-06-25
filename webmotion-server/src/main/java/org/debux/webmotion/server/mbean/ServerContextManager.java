@@ -25,7 +25,9 @@
 package org.debux.webmotion.server.mbean;
 
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -33,6 +35,8 @@ import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.State;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.parser.MappingChecker;
+import org.debux.webmotion.server.parser.MappingChecker.Warning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +65,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.registerMBean(this, name);
                         
         } catch (Exception ex) {
+            log.debug("Error during register the MBean", ex);
             log.warn("Error during register the MBean");
         }    
     }
@@ -75,6 +80,7 @@ public class ServerContextManager implements ServerContextManagerMXBean {
             mBeanServer.unregisterMBean(name);
             
         } catch (Exception ex) {
+            log.debug("Error during register the MBean", ex);
             log.warn("Error during unregister the MBean");
         }
     }
@@ -128,6 +134,21 @@ public class ServerContextManager implements ServerContextManagerMXBean {
         Mapping mapping = serverContext.getMapping();
         Config config = mapping.getConfig();
         return config.getErrorPage().toString();
+    }
+
+    @Override
+    public List<String> getWarnings() {
+        MappingChecker mappingChecker = new MappingChecker();
+        Mapping mapping = serverContext.getMapping();
+        mappingChecker.checkMapping(serverContext, mapping);
+        
+        List<Warning> warnings = mappingChecker.getWarnings();
+        List<String> result = new ArrayList<String>(warnings.size());
+        for (Warning warning : warnings) {
+            result.add(warning.toString());
+        }
+        
+        return result;
     }
     
 }
