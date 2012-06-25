@@ -40,12 +40,18 @@ import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingVisit.Visitor;
 
 /**
- * check :
+ * Uses to check the mapping file after the initialization of the server. 
+ * This warnings are displayed at the startup, as warning log with the indication 
+ * on the mapping path, the line number and the message.
+ * This class checks :
  * <ul>
  * <li>class name</li>
  * <li>method name</li>
+ * <li>variable</li>
+ * <li>empty mapping</li>
+ * <li>view file</li>
+ * <li>pattern</li>
  * </ul>
- * 
  * @author julien
  */
 public class MappingChecker {
@@ -91,6 +97,11 @@ public class MappingChecker {
         public void setMessage(String message) {
             this.message = message;
         }
+
+        @Override
+        public String toString() {
+            return message + " " + mapping.getName() + ":" + line;
+        }
     }
 
     public MappingChecker() {
@@ -115,7 +126,7 @@ public class MappingChecker {
     
     public void print() {
         for (Warning warning : warnings) {
-            log.warn(warning.getMessage() + " " + warning.getMapping().getName() + ":" + warning.getLine());
+            log.warn(warning.toString());
         }
     }
     
