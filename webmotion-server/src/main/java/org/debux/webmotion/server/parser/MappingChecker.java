@@ -29,11 +29,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
@@ -51,6 +51,8 @@ import org.debux.webmotion.server.parser.MappingVisit.Visitor;
 public class MappingChecker {
 
     private static final Logger log = LoggerFactory.getLogger(MappingChecker.class);
+    
+    public static Pattern VARIABLE_PATTERN = Pattern.compile("(^|[^\\\\])\\{((\\p{Alnum}|\\.)+)\\}");
     
     protected MappingVisit visitor;
     protected List<Warning> warnings;
@@ -108,8 +110,7 @@ public class MappingChecker {
     public void addWarning(Rule rule, String message) {
         Mapping mapping = rule.getMapping();
         int line = rule.getLine();
-        Warning warning = new Warning(mapping, line, message);
-        warnings.add(warning);
+        addWarning(mapping, line, message);
     }
     
     public void print() {
@@ -125,8 +126,6 @@ public class MappingChecker {
     
     /**
      * Check the mapping and extensions
-     * TODO: 20120620 jru : check variable exsting
-     * TODO: 20120620 jru : improve test is variable
      */
     protected MappingVisit.Visitor getMappingVisitor(final ServerContext context, Mapping mapping) {
         return new MappingVisit.Visitor() {
@@ -165,8 +164,13 @@ public class MappingChecker {
 
             @Override
             public void accept(Mapping mapping, ActionRule actionRule) {
-                checkFragmentUrl(actionRule, actionRule.getRuleUrl());
-                checkFragmentUrl(actionRule, actionRule.getRuleParameters());
+                List<FragmentUrl> fragments = new ArrayList<FragmentUrl>();
+                fragments.addAll(actionRule.getRuleUrl());
+                fragments.addAll(actionRule.getRuleParameters());
+                
+                checkFragments(actionRule, fragments);
+                checkVariables(actionRule, fragments);
+                
                 checkAction(actionRule, globalControllers, packageActions);
                 checkView(actionRule, packageViews);
             }
@@ -185,7 +189,8 @@ public class MappingChecker {
     }
     
     protected boolean isVariable(String value) {
-        return value.contains("{") && value.contains("}");
+        Matcher matcher = VARIABLE_PATTERN.matcher(value);
+        return matcher.find();
     }
 
     protected void checkClassName(Rule rule, String className) {
@@ -273,12 +278,37 @@ public class MappingChecker {
         }
     }
     
-    protected void checkFragmentUrl(Rule rule, List<FragmentUrl> fragments) {
+    protected void checkFragments(Rule rule, List<FragmentUrl> fragments) {
         for (FragmentUrl fragment : fragments) {
             String value = fragment.getValue();
             Pattern pattern = fragment.getPattern();
             if (value != null && pattern == null) {
                 addWarning(rule, "Invalid pattern " + value);
+            }
+        }
+    }
+    
+    protected void checkVariables(Rule rule, List<FragmentUrl> fragments) {
+        List<String> availableVariables = new ArrayList<String>();
+        for (FragmentUrl fragment : fragments) {
+            String name = fragment.getName();
+            String param = fragment.getParam();
+            if (name != null) {
+                availableVariables.add(name);
+            } else if (param != null) {
+                availableVariables.add(param);
+            }
+        }
+        
+        Action action = rule.getAction();
+        if (action != null) {
+            String fullName = action.getFullName();
+            Matcher matcher = VARIABLE_PATTERN.matcher(fullName);
+            while (matcher.find()) {
+                String variable = matcher.group(2);
+                if (!availableVariables.contains(variable)) {
+                    addWarning(rule, "Invalid variable " + variable);
+                }
             }
         }
     }
