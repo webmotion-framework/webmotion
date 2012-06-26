@@ -39,25 +39,67 @@ public class MappingVisit {
      * Use to add behaviour during run.
      */
     public static class Visitor {
+        
+        /**
+         * Call on the mapping and each extension.
+         * 
+         * @param mapping current mapping
+         */
         public void accept(Mapping mapping) {
         }
         
+        /**
+         * Call each rule in mapping.
+         * 
+         * @param mapping current mapping
+         * @param rule current rule
+         */
         public void accept(Mapping mapping, Rule rule) {
         }
         
+        /**
+         * Call each rule type of ActionRule in mapping.
+         * 
+         * @param mapping current mapping
+         * @param actionRule current rule
+         */
         public void accept(Mapping mapping, ActionRule actionRule) {
         }
         
+        /**
+         * Call each rule type of ErrorRule in mapping.
+         * 
+         * @param mapping current mapping
+         * @param errorRule current rule
+         */
         public void accept(Mapping mapping, ErrorRule errorRule) {
         }
         
+        /**
+         * Call each rule type of FilterRule in mapping.
+         * 
+         * @param mapping current mapping
+         * @param filterRule current rule
+         */
         public void accept(Mapping mapping, FilterRule filterRule) {
         }
         
+        /**
+         * Call each extension in mapping.
+         * 
+         * @param mapping current mapping
+         * @param extension current extension
+         */
         public void accept(Mapping mapping, Mapping extension) {
         }
     }
     
+    /**
+     * Implements the visit on mapping.
+     * 
+     * @param mapping current mapping
+     * @param visitor current visitor implementation
+     */
     public void visit(Mapping mapping, Visitor visitor) {
         visitor.accept(mapping);
         

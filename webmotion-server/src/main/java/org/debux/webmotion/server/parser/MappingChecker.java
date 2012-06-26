@@ -134,9 +134,9 @@ public class MappingChecker {
     /**
      * Add a warning
      * 
-     * @param mapping
-     * @param line
-     * @param message 
+     * @param mapping current mapping
+     * @param line current line number
+     * @param message warning message
      */
     protected void addWarning(Mapping mapping, int line, String message) {
         Warning warning = new Warning(mapping, line, message);
@@ -164,13 +164,23 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Verify the mapping and the extensions.
+     * 
+     * @param context server context
+     * @param mapping mapping to verify
+     */
     public void checkMapping(ServerContext context, Mapping mapping) {
         Visitor mappingVisitor = getMappingVisitor(context, mapping);
         visitor.visit(mapping, mappingVisitor);
     }
-    
+
     /**
-     * Check the mapping and extensions
+     * Return the visitor use to check the mapping.
+     * 
+     * @param context server context
+     * @param mapping mapping to verify
+     * @return a visitor use tto ckeck the mapping
      */
     protected MappingVisit.Visitor getMappingVisitor(final ServerContext context, Mapping mapping) {
         return new MappingVisit.Visitor() {
@@ -229,15 +239,30 @@ public class MappingChecker {
         };
     }
     
+    /**
+     * Test if the value not contains a variable like "{var"}.
+     * @param value value to test
+     * @return true if the string not contains a variable otherwise false
+     */
     protected boolean isNotVariable(String value) {
         return !isVariable(value);
     }
     
+    /**
+     * Test if the value contains a variable like "{var"}.
+     * @param value value to test
+     * @return true if the string contains a variable otherwise false
+     */
     protected boolean isVariable(String value) {
         Matcher matcher = VARIABLE_PATTERN.matcher(value);
         return matcher.find();
     }
 
+    /**
+     * Check class name
+     * @param rule current rule tested
+     * @param className class name to check
+     */
     protected void checkClassName(Rule rule, String className) {
         try {
             Class.forName(className);
@@ -248,6 +273,12 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check class name and method name.
+     * @param rule current rule tested
+     * @param className class name to check
+     * @param methodName method name to check
+     */
     protected void checkMethodName(Rule rule, String className, String methodName) {
         try {
             Class<?> clazz = Class.forName(className);
@@ -259,6 +290,12 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check method name in class
+     * @param rule current rule tested
+     * @param clazz class to search method
+     * @param methodName method name to check
+     */
     protected void checkMethodName(Rule rule, Class<?> clazz, String methodName) {
         Method method = WebMotionUtils.getMethod(clazz, methodName);
         if (method == null) {
@@ -266,6 +303,11 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check file name on the file system.
+     * @param rule current rule tested
+     * @param fileName file name to check
+     */
     protected void checkFile(Rule rule, String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -273,6 +315,12 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check action is valid in rule.
+     * @param rule current rule tested
+     * @param controllers controllers outside the package
+     * @param packageTarget package name found action
+     */
     protected void checkAction(Rule rule, Map<String, Class<? extends WebMotionController>> controllers, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
@@ -301,6 +349,11 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check view is valid in rule.
+     * @param rule current rule tested
+     * @param packageTarget package name found view
+     */
     protected void checkView(Rule rule, String packageTarget) {
         Action action = rule.getAction();
         if (action != null && action.isView()) {
@@ -316,6 +369,10 @@ public class MappingChecker {
         }
     }
         
+    /**
+     * Ckeck exception is valid in rule.
+     * @param rule current rule tested
+     */
     protected void checkError(ErrorRule rule) {
         String error = rule.getError();
         if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
@@ -323,6 +380,11 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check fragments contains valid patterns in rule.
+     * @param rule current rule tested
+     * @param fragments fragments to check
+     */
     protected void checkFragments(Rule rule, List<FragmentUrl> fragments) {
         for (FragmentUrl fragment : fragments) {
             String value = fragment.getValue();
@@ -333,6 +395,11 @@ public class MappingChecker {
         }
     }
     
+    /**
+     * Check action contains valid variables in rule.
+     * @param rule current rule tested
+     * @param fragments fragments contains variables
+     */
     protected void checkVariables(Rule rule, List<FragmentUrl> fragments) {
         List<String> availableVariables = new ArrayList<String>();
         for (FragmentUrl fragment : fragments) {
