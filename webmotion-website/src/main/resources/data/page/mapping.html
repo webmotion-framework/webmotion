@@ -58,6 +58,14 @@
     <li><code>[extensions]</code>&nbsp;<a href="#extensions">Les extensions utilisées par l'application</a></li>
 </ul>
 
+<p>
+    Le fichier mapping est parsé et vérifié au démarrage du serveur web. En cas 
+    d'erreurs de syntaxe dans le fichier de mapping, WebMotion ne pourra pas démarrer. 
+    Après la lecture du fichier de mapping, des alertes peuvent être affichées 
+    dans la console mais ne bloque pas le démarrage (exemple si une classe 
+    ou une méthode n'existe pas).
+</p>
+
 <h2 id="comment" class="page-header">Commentaires</h2>
 <p>
     Vous pouvez mettre des commentaires dans le fichier mapping en préfixant vos ligne par un <code>#</code>.
