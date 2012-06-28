@@ -702,6 +702,163 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 }
 </pre>
 
+<h2 class="page-header" id="integration">Intégration de templates de page</h2>
+<p>
+    WebMotion intégre directement comme template de page les JSP. Pour pouvoir 
+    supporter d'autres vues il vous faut configurer votre fichier <code>web.xml</code>, 
+    et déclarer une servlet pour faire réaliser le rendu. Pour la plus part des templates 
+    de pages, il en existe une fournit par la libairie.
+</p>
+
+<h3>Configuration pour Groovy</h3>
+
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en groovy dans WebMotion.
+    Pour plus de renseignement consulter le site de <a href="http://groovy.codehaus.org/">Groovy</a>.
+</p>
+<p>
+    Ajouter la dépendences vers groovy-servlet :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId>org.codehaus.groovy&lt;/groupId&gt;
+    &lt;artifactId>groovy-servlet&lt;/artifactId&gt;
+    &lt;version>2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;template&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.TemplateServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;template&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.gsp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Exemple de page en groovy :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;% 3.times { %&gt;
+            Hello World!
+        &lt;% } %&gt;
+        &lt;br&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h3>Configuration pour Sacalate</h3>
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en scala dans WebMotion.
+    Pour plus de renseignement consulter le site de <a href="http://scalate.fusesource.org/">Scalate</a>.
+</p>
+<p>
+    Ajouter la dépendences vers scalate-core :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId>org.fusesource.scalate&lt;/groupId&gt;
+    &lt;artifactId>scalate-core&lt;/artifactId&gt;
+    &lt;version>1.5.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;filter&gt;
+        &lt;filter-name&gt;TemplateEngineFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.fusesource.scalate.servlet.TemplateEngineFilter&lt;/filter-class&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name>TemplateEngineFilter&lt;/filter-name&gt;
+        &lt;url-pattern>/*.ssp&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Exemple de page en scala :
+</p>
+<pre class="prettyprint">
+&lt;%@ var user: User %&gt;
+&lt;p&gt;Hi ${user.name},&lt;/p&gt;
+#for (i &lt;- 1 to 3)
+&lt;p&gt;${i}&lt;/p&gt;
+#end
+&lt;p&gt;See, I can count!&lt;/p&gt;
+</pre>
+
+<h3>Configuration pour ZK</h3>
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en zk dans WebMotion.
+    Pour plus de renseignement consulter le site de <a href="http://www.zkoss.org/">ZK</a>.
+</p>
+<p>
+    Ajouter la dépendences vers  :
+</p>
+<pre class="prettyprint">
+&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;ZK CE&lt;/id&gt;
+        &lt;name&gt;ZK CE Repository&lt;/name&gt;
+        &lt;url&gt;http://mavensync.zkoss.org/maven2&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+...
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkbind&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zul&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkplus&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zhtml&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Aucune configuration particulière est nécessaire dans le fichier <code>web.xml</code> 
+    de votre application pour faire fonctionner ZK :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+&lt;/web-app&gt;
+</pre>
+<p>
+    Exemple de page en zul :
+</p>
+<pre class="prettyprint">
+&lt;zk&gt;
+    &lt;window title="New page title" border="normal"&gt;
+        New content here !
+    &lt;/window&gt;
+&lt;/zk&gt;
+</pre>
+
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
     <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
