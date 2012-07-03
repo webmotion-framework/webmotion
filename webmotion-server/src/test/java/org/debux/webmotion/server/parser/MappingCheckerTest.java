@@ -25,6 +25,7 @@
 package org.debux.webmotion.server.parser;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingChecker.Warning;
@@ -82,14 +84,14 @@ public class MappingCheckerTest {
     
     @Test
     public void testInvalidCheckClassName() {
-        checker.checkClassName(rule, "MappingCheckerTest");
+        checker.checkClassName(rule, Object.class, "MappingCheckerTest");
         List<Warning> warnings = checker.getWarnings();
         AssertJUnit.assertEquals(1, warnings.size());
     }
     
     @Test
     public void testValidCheckClassName() {
-        checker.checkClassName(rule, "org.debux.webmotion.server.parser.MappingCheckerTest");
+        checker.checkClassName(rule, Object.class, "org.debux.webmotion.server.parser.MappingCheckerTest");
         List<Warning> warnings = checker.getWarnings();
         AssertJUnit.assertEquals(0, warnings.size());
     }
@@ -215,4 +217,62 @@ public class MappingCheckerTest {
         AssertJUnit.assertFalse(warnings.isEmpty());
         checker.print();
     }
+    
+    private static abstract class TestInvalidCheckModfiers4Class {}
+    
+    @Test
+    public void testInvalidCheckModfiers4Class() {
+        checker.checkModfiers(rule, TestInvalidCheckModfiers4Class.class);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(3, warnings.size());
+    }
+    
+    @Test
+    public void testValidCheckModfiers4Class() {
+        checker.checkModfiers(rule, MappingCheckerTest.class);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(0, warnings.size());
+    }
+    
+    public class TestInvalidCheckModfiers4Method {
+        public void valid() {}
+        private void invalid() {}
+    }
+    
+    @Test
+    public void testInvalidCheckModfiers4Method() throws NoSuchMethodException {
+        Method method = TestInvalidCheckModfiers4Method.class.getDeclaredMethod("invalid");
+        checker.checkModfiers(rule, method);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(1, warnings.size());
+    }
+    
+    @Test
+    public void testValidCheckModfiers4Method() throws NoSuchMethodException {
+        Method method = TestInvalidCheckModfiers4Method.class.getDeclaredMethod("valid");
+        checker.checkModfiers(rule, method);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(0, warnings.size());
+    }
+    
+    @Test
+    public void testInvalidCheckSuperClass() throws NoSuchMethodException {
+        checker.checkSuperClass(rule, WebMotionController.class, MappingCheckerTest.class);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(1, warnings.size());
+    }
+    
+    @Test
+    public void testValidCheckSuperClass() throws NoSuchMethodException {
+        checker.checkSuperClass(rule, WebMotionController.class, WebMotionFilter.class);
+        
+        List<Warning> warnings = checker.getWarnings();
+        AssertJUnit.assertEquals(0, warnings.size());
+    }
+    
 }

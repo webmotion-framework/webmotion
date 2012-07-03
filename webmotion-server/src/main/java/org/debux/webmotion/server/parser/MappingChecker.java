@@ -26,6 +26,7 @@ package org.debux.webmotion.server.parser;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingVisit.Visitor;
@@ -214,7 +216,7 @@ public class MappingChecker {
 
             @Override
             public void accept(Mapping mapping, FilterRule filterRule) {
-                checkAction(filterRule, globalControllers, packageFilters);
+                checkAction(filterRule, globalControllers, packageFilters, WebMotionFilter.class);
             }
 
             @Override
@@ -226,14 +228,14 @@ public class MappingChecker {
                 checkFragments(actionRule, fragments);
                 checkVariables(actionRule, fragments);
                 
-                checkAction(actionRule, globalControllers, packageActions);
+                checkAction(actionRule, globalControllers, packageActions, WebMotionController.class);
                 checkView(actionRule, packageViews);
             }
 
             @Override
             public void accept(Mapping mapping, ErrorRule errorRule) {
                 checkError(errorRule);
-                checkAction(errorRule, globalControllers, packageErrors);
+                checkAction(errorRule, globalControllers, packageErrors, WebMotionController.class);
                 checkView(errorRule, packageViews);
             }
         };
@@ -263,25 +265,85 @@ public class MappingChecker {
      * @param rule current rule tested
      * @param className class name to check
      */
-    protected void checkClassName(Rule rule, String className) {
+    protected void checkClassName(Rule rule, Class superClass, String className) {
         try {
-            Class.forName(className);
+            Class<?> clazz = Class.forName(className);
+            checkModfiers(rule, clazz);
+            checkSuperClass(rule, superClass, clazz);
             
         } catch (ClassNotFoundException ex) {
             addWarning(rule, "Invalid class name " + className);
             log.debug("Invalid class name " + className, ex);
         }
     }
+
+    /**
+     * Check super class for a class
+     * @param rule current rule tested
+     * @param superClass super class to check
+     * @param clazz  class to ckeck
+     */
+    protected void checkSuperClass(Rule rule, Class superClass, Class clazz) {
+        if (!superClass.isAssignableFrom(clazz)) {
+            addWarning(rule, "Requires super class " + superClass.getSimpleName() + " for " + clazz.getSimpleName());
+        }
+    }
+    
+    /**
+     * Check modifiers for the class
+     * @param rule current rule tested
+     * @param clazz class to check
+     */
+    protected void checkModfiers(Rule rule, Class clazz) {
+        String className = clazz.getSimpleName();
+        
+        int modifiers = clazz.getModifiers();
+        
+        if (Modifier.isAbstract(modifiers)) {
+            addWarning(rule, "The class is abstract " + className);
+        }
+        if (Modifier.isStatic(modifiers)) {
+            addWarning(rule, "The class is static " + className);
+        }
+        if (!Modifier.isPublic(modifiers)) {
+            addWarning(rule, "The class is not public " + className);
+        }
+    }
+    
+    /**
+     * Check modifiers for the class
+     * @param rule current rule tested
+     * @param method method to check
+     */
+    protected void checkModfiers(Rule rule, Method method) {
+        String methodName = method.getName();
+        String className = method.getDeclaringClass().getSimpleName();
+        
+        int modifiers = method.getModifiers();
+
+        if (Modifier.isAbstract(modifiers)) {
+            addWarning(rule, "The method is abstract " + methodName + " for class name " + className);
+        }
+        if (Modifier.isStatic(modifiers)) {
+            addWarning(rule, "The method is static " + methodName + " for class name " + className);
+        }
+        if (!Modifier.isPublic(modifiers)) {
+            addWarning(rule, "The method is not public " + methodName + " for class name " + className);
+        }
+    }
     
     /**
      * Check class name and method name.
      * @param rule current rule tested
+     * @param superClass super class to check
      * @param className class name to check
      * @param methodName method name to check
      */
-    protected void checkMethodName(Rule rule, String className, String methodName) {
+    protected void checkMethodName(Rule rule, Class superClass, String className, String methodName) {
         try {
             Class<?> clazz = Class.forName(className);
+            checkModfiers(rule, clazz);
+            checkSuperClass(rule, superClass, clazz);
             checkMethodName(rule, clazz, methodName);
 
         } catch (ClassNotFoundException ex) {
@@ -300,6 +362,8 @@ public class MappingChecker {
         Method method = WebMotionUtils.getMethod(clazz, methodName);
         if (method == null) {
             addWarning(rule, "Invalid method name " + methodName + " for class name " + clazz.getSimpleName());
+        } else {
+            checkModfiers(rule, method);
         }
     }
     
@@ -320,8 +384,11 @@ public class MappingChecker {
      * @param rule current rule tested
      * @param controllers controllers outside the package
      * @param packageTarget package name found action
+     * @param superClass super class for action
      */
-    protected void checkAction(Rule rule, Map<String, Class<? extends WebMotionController>> controllers, String packageTarget) {
+    protected void checkAction(Rule rule, Map<String, Class<? extends WebMotionController>> controllers, 
+            String packageTarget, Class superClass) {
+        
         Action action = rule.getAction();
         if (action != null && action.isAction()) {
             String className = action.getClassName();
@@ -340,9 +407,9 @@ public class MappingChecker {
             
                 if (isNotVariable(className)) {
                     if (isNotVariable(methodName)) {
-                        checkMethodName(rule, className, methodName);
+                        checkMethodName(rule, superClass, className, methodName);
                     } else {
-                        checkClassName(rule, className);
+                        checkClassName(rule, superClass, className);
                     }
                 }
             }
@@ -376,7 +443,7 @@ public class MappingChecker {
     protected void checkError(ErrorRule rule) {
         String error = rule.getError();
         if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
-            checkClassName(rule, error);
+            checkClassName(rule, Exception.class, error);
         }
     }
     
