@@ -53,6 +53,9 @@ import org.debux.webmotion.server.parser.MappingVisit.Visitor;
  * <li>empty mapping</li>
  * <li>view file</li>
  * <li>pattern</li>
+ * <li>super class</li>
+ * <li>class modifer</li>
+ * <li>mathod modifer</li>
  * </ul>
  * 
  * @author julien
@@ -301,9 +304,6 @@ public class MappingChecker {
         
         if (Modifier.isAbstract(modifiers)) {
             addWarning(rule, "The class is abstract " + className);
-        }
-        if (Modifier.isStatic(modifiers)) {
-            addWarning(rule, "The class is static " + className);
         }
         if (!Modifier.isPublic(modifiers)) {
             addWarning(rule, "The class is not public " + className);

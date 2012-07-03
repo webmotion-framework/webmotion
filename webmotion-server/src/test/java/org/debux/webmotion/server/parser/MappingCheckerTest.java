@@ -225,7 +225,7 @@ public class MappingCheckerTest {
         checker.checkModfiers(rule, TestInvalidCheckModfiers4Class.class);
         
         List<Warning> warnings = checker.getWarnings();
-        AssertJUnit.assertEquals(3, warnings.size());
+        AssertJUnit.assertEquals(2, warnings.size());
     }
     
     @Test
