@@ -722,7 +722,7 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 <pre class="prettyprint">
 &lt;dependency&gt;
     &lt;groupId>org.codehaus.groovy&lt;/groupId&gt;
-    &lt;artifactId>groovy-servlet&lt;/artifactId&gt;
+    &lt;artifactId>groovy-all&lt;/artifactId&gt;
     &lt;version>2.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
@@ -733,11 +733,11 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 <pre class="prettyprint">
 &lt;web-app&gt;
     &lt;servlet&gt;
-        &lt;servlet-name&gt;template&lt;/servlet-name&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
         &lt;servlet-class&gt;groovy.servlet.TemplateServlet&lt;/servlet-class&gt;
     &lt;/servlet&gt;
     &lt;servlet-mapping&gt;
-        &lt;servlet-name&gt;template&lt;/servlet-name&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
         &lt;url-pattern&gt;*.gsp&lt;/url-pattern&gt;
     &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;
@@ -778,14 +778,14 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 </p>
 <pre class="prettyprint">
 &lt;web-app&gt;
-    &lt;filter&gt;
-        &lt;filter-name&gt;TemplateEngineFilter&lt;/filter-name&gt;
-        &lt;filter-class&gt;org.fusesource.scalate.servlet.TemplateEngineFilter&lt;/filter-class&gt;
-    &lt;/filter&gt;
-    &lt;filter-mapping&gt;
-        &lt;filter-name>TemplateEngineFilter&lt;/filter-name&gt;
-        &lt;url-pattern>/*.ssp&lt;/url-pattern&gt;
-    &lt;/filter-mapping&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.fusesource.scalate.servlet.TemplateEngineServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.ssp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;
 </pre>
 
@@ -793,12 +793,12 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
     Exemple de page en scala :
 </p>
 <pre class="prettyprint">
-&lt;%@ var user: User %&gt;
-&lt;p&gt;Hi ${user.name},&lt;/p&gt;
-#for (i &lt;- 1 to 3)
-&lt;p&gt;${i}&lt;/p&gt;
-#end
-&lt;p&gt;See, I can count!&lt;/p&gt;
+&lt;%
+  var foo = "hello"
+  foo += " there"
+  foo += " you!"
+%&gt;
+&lt;p>${foo}&lt;/p&gt;
 </pre>
 
 <h3>Configuration pour ZK</h3>
