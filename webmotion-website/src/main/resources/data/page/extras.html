@@ -841,11 +841,14 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 </pre>
 
 <p>
-    Aucune configuration particulière est nécessaire dans le fichier <code>web.xml</code> 
-    de votre application pour faire fonctionner ZK :
+    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
 </p>
 <pre class="prettyprint">
 &lt;web-app&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;servlet.path.outside&lt;/param-name&gt;
+        &lt;param-value&gt;/zkau&lt;/param-value&gt;
+    &lt;/context-param&gt;
 &lt;/web-app&gt;
 </pre>
 <p>
