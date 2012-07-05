@@ -723,7 +723,7 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 &lt;dependency&gt;
     &lt;groupId>org.codehaus.groovy&lt;/groupId&gt;
     &lt;artifactId>groovy-all&lt;/artifactId&gt;
-    &lt;version>2.0&lt;/version&gt;
+    &lt;version>2.0.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 
@@ -739,6 +739,14 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
     &lt;servlet-mapping&gt;
         &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
         &lt;url-pattern&gt;*.gsp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.GroovyServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.groovy&lt;/url-pattern&gt;
     &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;
 </pre>
@@ -810,14 +818,6 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
     Ajouter la dépendences vers  :
 </p>
 <pre class="prettyprint">
-&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;ZK CE&lt;/id&gt;
-        &lt;name&gt;ZK CE Repository&lt;/name&gt;
-        &lt;url&gt;http://mavensync.zkoss.org/maven2&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-...
 &lt;dependency&gt;
     &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
     &lt;artifactId&gt;zkbind&lt;/artifactId&gt;
