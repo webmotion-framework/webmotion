@@ -40,6 +40,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mbean.ServerStats;
@@ -74,8 +75,14 @@ public class WebMotionServer implements Filter {
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
             
+    /** Filter parameter to configure servlets path outside WebMotion. The value is separated by comma */
+    protected final static String PARAM_SERVLET_PATH_OUTSIDE = "servlet.path.outside";
+            
     /** Current application context */
     protected ServerContext serverContext;
+    
+    /** Current servlet path outside */
+    protected String[] outsideServletPath;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -83,9 +90,17 @@ public class WebMotionServer implements Filter {
         
         // Get file name mapping in context param
         ServletContext servletContext = filterConfig.getServletContext();
-        String mappingFileName = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
-        if (mappingFileName != null && !mappingFileName.isEmpty()) {
-            serverContext.setMappingFileName(mappingFileName);
+        String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
+        if (mappingFileNameParam != null && !mappingFileNameParam.isEmpty()) {
+            serverContext.setMappingFileName(mappingFileNameParam);
+        }
+        
+        // Get file name mapping in context param
+        String servletPathOutsideParam = servletContext.getInitParameter(PARAM_SERVLET_PATH_OUTSIDE);
+        if (servletPathOutsideParam != null && !servletPathOutsideParam.isEmpty()) {
+            outsideServletPath = servletPathOutsideParam.split(",");
+        } else {
+            outsideServletPath = new String[]{};
         }
         
         serverContext.contextInitialized(servletContext);
@@ -113,6 +128,14 @@ public class WebMotionServer implements Filter {
         String contextPath = httpServletRequest.getContextPath();
         String url = StringUtils.substringAfter(uri, contextPath);
         log.debug("Pass in filter = " + url);
+        
+        // Search if url is servlet path
+        for (String path : outsideServletPath) {
+            if (url.startsWith(path)) {
+                url = PATH_SERVLET + url;
+                break;
+            }
+        }
         
         if (url.startsWith(PATH_DEPLOY) || url.equals("/")) {
             log.debug("Is deploy");

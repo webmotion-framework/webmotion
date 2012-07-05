@@ -78,17 +78,16 @@
 </pre>
 
 <p>
-    <span class="label label-info">Exemple</span> Accès à une ressource statique explicitement :
+    Il est possible de préciser à WebMotion d'ignorer certains path en plus du path <code>/servlet</code>.
+    Le paramètre <code>servlet.path.outside</code> est utilisé dans ce cas dans le web.xml.
+    Les valeurs sont séparées par des virgules.
 </p>
+
 <pre class="prettyprint">
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;link rel="stylesheet" href="<strong>static</strong>/css/my-style.css"&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;servlet.path.outside&lt;/param-name&gt;
+    &lt;param-value&gt;/path&lt;/param-value&gt;
+&lt;/context-param&gt;
 </pre>
 
 <p>
