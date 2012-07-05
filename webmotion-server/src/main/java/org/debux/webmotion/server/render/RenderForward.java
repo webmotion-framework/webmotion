@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server.render;
 
+import static org.debux.webmotion.server.WebMotionServer.PATH_DEPLOY;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.AsyncContext;
@@ -75,7 +76,7 @@ public class RenderForward extends Render {
         }
                
         String path = url;
-        if (!url.startsWith("/deploy")) {
+        if (!url.startsWith(PATH_DEPLOY)) {
             path = context.getExtensionPath() + url;
         }
         

@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.call;
 
+import static org.debux.webmotion.server.WebMotionServer.PATH_DEPLOY;
+import static org.debux.webmotion.server.WebMotionServer.PATH_ERROR;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -399,12 +401,12 @@ public class HttpContext {
         }
         
         // Force old extension in url for include
-        if (!url.startsWith("/deploy") && currentExtension != null) {
+        if (!url.startsWith(PATH_DEPLOY) && currentExtension != null) {
             url = currentExtension + url;
             
         } else {
             // Delete deploy path
-            url = url.replaceFirst("^/deploy", "");
+            url = url.replaceFirst("^" + PATH_DEPLOY, "");
         }
         
         // Delete current extension processed
@@ -436,7 +438,7 @@ public class HttpContext {
             }
         }
         
-        return url != null && (url.startsWith("/error") || url.startsWith("/deploy/error"));
+        return url != null && (url.startsWith(PATH_ERROR) || url.startsWith(PATH_DEPLOY + PATH_ERROR));
     }
         
     /**

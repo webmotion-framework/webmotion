@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.render;
 
+import static org.debux.webmotion.server.WebMotionServer.PATH_DEPLOY;
+import static org.debux.webmotion.server.WebMotionServer.PATH_STATIC;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -62,7 +64,7 @@ public class RenderRedirect extends Render {
         HttpServletRequest request = context.getRequest();
         
         if (url.startsWith("/")) {
-            if (!url.startsWith("/static") && !url.startsWith("/deploy")) {
+            if (!url.startsWith(PATH_STATIC) && !url.startsWith(PATH_DEPLOY)) {
                 url = context.getExtensionPath() + url;
             }
             url = request.getContextPath() + url;

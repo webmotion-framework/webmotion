@@ -57,6 +57,27 @@
 </pre>
 
 <p>
+    Il existe un path <code>/servlet</code> qui vous permet de ne pas exécuter le traitement 
+    du filtre proposé par WebMotion. L'intéret est de pouvoir utiliser d'autre servlets 
+    n'entrant pas dans le cadre de WebMotion.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Déclaration d'une servlet dans le <code>web.xml</code> :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;MyServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.debux.webmotion.MyServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;MyServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/servlet/my/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
     <span class="label label-info">Exemple</span> Accès à une ressource statique explicitement :
 </p>
 <pre class="prettyprint">

@@ -28,8 +28,6 @@ import java.io.File;
 import org.debux.webmotion.server.call.ServerContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -61,6 +59,18 @@ public class WebMotionServer implements Filter {
     
     private static final Logger log = LoggerFactory.getLogger(WebMotionServer.class);
 
+    /** Path uses to manage action in WebMotion */
+    public static final String PATH_DEPLOY = "/deploy";
+    
+    /** Path uses to manage error in WebMotion */
+    public static final String PATH_ERROR = "/error";
+    
+    /** Path uses to manage resources outside WebMotion */
+    public static final String PATH_STATIC = "/static";
+    
+    /** Path uses to manage servlets outside WebMotion  */
+    public static final String PATH_SERVLET = "/servlet";
+    
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
             
@@ -104,13 +114,17 @@ public class WebMotionServer implements Filter {
         String url = StringUtils.substringAfter(uri, contextPath);
         log.debug("Pass in filter = " + url);
         
-        if (url.startsWith("/deploy") || url.equals("/")) {
+        if (url.startsWith(PATH_DEPLOY) || url.equals("/")) {
             log.debug("Is deploy");
             doAction(httpServletRequest, httpServletResponse);
             
-        } else if (url.startsWith("/static")) {
+        } else if (url.startsWith(PATH_STATIC)) {
             log.debug("Is static");
             doResource(httpServletRequest, httpServletResponse);
+            
+        } else if (url.startsWith(PATH_SERVLET)) {
+            log.debug("Is servlet");
+            chain.doFilter(request, response);
             
         } else {
             String webappPath = serverContext.getWebappPath();
@@ -181,7 +195,7 @@ public class WebMotionServer implements Filter {
             public String getServletPath() {
                 String servletPath = super.getServletPath();
                 if (servletPath != null) {
-                    return servletPath.replaceFirst("/static", "");
+                    return servletPath.replaceFirst(PATH_STATIC, "");
                 }
                 return null;
             }
@@ -190,7 +204,7 @@ public class WebMotionServer implements Filter {
             public String getPathInfo() {
                 String pathInfo = super.getPathInfo();
                 if (pathInfo != null) {
-                    return pathInfo.replaceFirst("/static", "");
+                    return pathInfo.replaceFirst(PATH_STATIC, "");
                 }
                 return null;
             }
@@ -199,7 +213,7 @@ public class WebMotionServer implements Filter {
             public String getRequestURI() {
                 String requestURI = super.getRequestURI();
                 if (requestURI != null) {
-                    return requestURI.replaceFirst("/static", "");
+                    return requestURI.replaceFirst(PATH_STATIC, "");
                 }
                 return null;
             }
