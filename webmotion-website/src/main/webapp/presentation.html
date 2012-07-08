@@ -65,9 +65,9 @@
             <article>
                 <h3>Qui suis-je ?</h3>
                 <ul>
-                    <li>Code Lutin</li>
                     <li>Ingénieur</li>
                     <li>Développeur Java & web</li>
+                    <li>Code Lutin</li>
                     <li>Impliqué dans le libre</li>
                 </ul>
                 <p>Créateur du framework Java web WebMotion</p>
@@ -280,7 +280,7 @@ public class Album {
                 <ul>
                     <li>Permettre une vision globale des chemins de votre application web</li>
                     <li>Inciter à la réutilisation de morceaux fonctionnels</li>
-                    <li>Gestion des paramètres (conversion implicite en objets Java)</li>
+                    <li>Gérer les paramètres (conversion implicite en objets Java)</li>
                 </ul>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -392,7 +392,7 @@ public class Album {
                 <h3>Les sections du fichier de routes</h3>
                 <ul>
                     <li>
-                        section actions<br/><small>pour réaliser les liaisons entre une url vers une action (java, url, view, ...)</small>
+                        section actions<br/><small>pour réaliser les liaisons entre une url et une action (java, url, view, ...)</small>
                         <pre class="code">
 [actions]
 GET            /path                      Class.method
@@ -406,7 +406,7 @@ GET            /path/_*                    Class.method
 </pre>
                     </li>
                     <li>
-                        section erreurs<br/><small>pour réaliser les liaisons entre un code d'erreur ou une exception vers une action</small>
+                        section erreurs<br/><small>pour réaliser les liaisons entre une erreur et une action</small>
                        <pre class="code">
 [errors]
 code:500                                  Class.method
@@ -545,7 +545,7 @@ String value = cookie.getValue();
                 <h4>Avantages</h4>
                 <ul>
                     <li>Structuration, comme des inclusions de fichiers</li>
-                    <li>Réutilisation, partage entre application</li>
+                    <li>Réutilisation, partage entre applications</li>
                     <li>Modularité, détection automatique des extensions</li>
                 </ul>
                 <h4>Exemple d'extensions (Wiki, Forum, Blog, ...)</h4>
