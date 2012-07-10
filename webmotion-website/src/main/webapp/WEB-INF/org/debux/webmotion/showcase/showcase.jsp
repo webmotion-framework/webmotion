@@ -315,7 +315,7 @@ ${file.content}
         
         <hr/>
         <footer style="text-align: center">
-            <p>Powered by WikiMotion and WebMotion</p>
+            <p>Powered by WikiMotion and WebMotion - version 2.3</p>
         </footer>
 
         <!-- Piwik -->
