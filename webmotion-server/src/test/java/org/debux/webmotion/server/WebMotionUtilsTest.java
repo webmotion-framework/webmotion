@@ -116,4 +116,22 @@ public class WebMotionUtilsTest {
         AssertJUnit.assertFalse(generateSecret.isEmpty());
     }
     
+    @Test
+    public void testSplit() {
+        String[] result = "test".split(",");
+        AssertJUnit.assertEquals(1, result.length);
+        
+        result = "test,".split(",");
+        AssertJUnit.assertEquals(1, result.length);
+        
+        result = "test,test".split(",");
+        AssertJUnit.assertEquals(2, result.length);
+        
+        result = ",".split(",");
+        AssertJUnit.assertEquals(0, result.length);
+        
+        result = "".split(",");
+        AssertJUnit.assertEquals(1, result.length);
+    }
+    
 }

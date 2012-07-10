@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.server.call;
 
-import java.io.File;
 import java.util.*;
 import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -39,7 +38,6 @@ import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.MappingParser;
-import org.debux.webmotion.server.parser.MappingVisit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,21 +193,26 @@ public class ServerContext {
      */
     protected void extractServerListener(Mapping mapping) {
         Config config = mapping.getConfig();
-        String serverListenerClassName = config.getServerListener();
-        if (serverListenerClassName != null && !serverListenerClassName.isEmpty()) {
+        String serverListenerClassNames = config.getServerListener();
+        if (serverListenerClassNames != null && !serverListenerClassNames.isEmpty()) {
             
-            // Create an instance
-            try {
-                Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(serverListenerClassName);
-                WebMotionServerListener serverListener = serverListenerClass.newInstance();
-                listeners.add(serverListener);
+            // Split name by comma
+            String[] serverListenerClassName = serverListenerClassNames.split(",");
+            for (String className : serverListenerClassName) {
+                
+                // Create an instance
+                try {
+                    Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(className);
+                    WebMotionServerListener serverListener = serverListenerClass.newInstance();
+                    listeners.add(serverListener);
 
-            } catch (IllegalAccessException iae) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, iae);
-            } catch (InstantiationException ie) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, ie);
-            } catch (ClassNotFoundException cnfe) {
-                throw new WebMotionException("Error during create server listener " + serverListenerClassName, cnfe);
+                } catch (IllegalAccessException iae) {
+                    throw new WebMotionException("Error during create server listener " + className, iae);
+                } catch (InstantiationException ie) {
+                    throw new WebMotionException("Error during create server listener " + className, ie);
+                } catch (ClassNotFoundException cnfe) {
+                    throw new WebMotionException("Error during create server listener " + className, cnfe);
+                }
             }
         }
             
