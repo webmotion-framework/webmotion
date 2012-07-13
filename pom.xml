@@ -504,6 +504,14 @@
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-surefire-report-plugin</artifactId>
                             <version>2.12</version>
+                            <configuration>
+                                <reportsDirectories>
+                                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                                    <reportsDirectory>${project.build.directory}/it/glassfish/target/failsafe-reports</reportsDirectory>
+                                    <reportsDirectory>${project.build.directory}/it/jetty/target/failsafe-reports</reportsDirectory>
+                                    <reportsDirectory>${project.build.directory}/it/tomcat/target/failsafe-reports</reportsDirectory>
+                                </reportsDirectories>
+                            </configuration>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
