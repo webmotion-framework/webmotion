@@ -24,11 +24,9 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.*;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +52,7 @@ public class ExecutorParametersConvertorHandlerTest {
         handler.converter = handler.beanUtil.getConvertUtils();
     }
     
-    public <T> T[] toArray(T ... values) {
+    public static <T> T[] toArray(T ... values) {
         return values;
     }
     
@@ -63,7 +61,7 @@ public class ExecutorParametersConvertorHandlerTest {
      * @param values
      * @return 
      */
-    public Map<String, Object> toMap(String ... values) {
+    public static Map<String, Object> toMap(String ... values) {
         Map<String, Object> result = new LinkedHashMap<String, Object>();
         
         for (String value : values) {
@@ -157,12 +155,19 @@ public class ExecutorParametersConvertorHandlerTest {
         AssertJUnit.assertEquals("value", ((ClassExemple) convert).attribute2);
     }
     
-    @Test
     public void testConvertListObject(List<ClassExemple> list) throws Exception {
+    }
+    
+    @Test
+    public void testConvertListObject() throws Exception {
+        Method method = getClass().getMethod("testConvertListObject", List.class);
+        Class<?> type = method.getParameterTypes()[0];
+        Type genericType = method.getGenericParameterTypes()[0];
+                
         Object convert = handler.convert(
-                toArray(toMap("obj1.attribute1", "obj1.attribute2"), toMap("obj2.attribute1", "obj2.attribute2")),
-                list.getClass(), null);
-        
+                toArray(toMap("attribute1", "attribute2"), toMap("attribute1", "attribute2")),
+                type, genericType);
+
         AssertJUnit.assertEquals(ArrayList.class, convert.getClass());
         AssertJUnit.assertEquals(2, ((ArrayList) convert).size());
     }
