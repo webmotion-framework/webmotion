@@ -95,7 +95,7 @@ public class WebMotionServer implements Filter {
             serverContext.setMappingFileName(mappingFileNameParam);
         }
         
-        // Get file name mapping in context param
+        // Get exclude path in context param
         String servletPathOutsideParam = servletContext.getInitParameter(PARAM_SERVLET_PATH_OUTSIDE);
         if (servletPathOutsideParam != null && !servletPathOutsideParam.isEmpty()) {
             outsideServletPath = servletPathOutsideParam.split(",");
