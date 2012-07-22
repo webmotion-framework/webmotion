@@ -79,25 +79,25 @@
 
 <p>
     Il est possible de préciser à WebMotion d'ignorer certains path en plus du path <code>/servlet</code>.
-    Le paramètre <code>servlet.path.outside</code> est utilisé dans ce cas dans le web.xml.
+    Le paramètre <code>wm.exclude.paths</code> est utilisé dans ce cas dans le web.xml.
     Les valeurs sont séparées par des virgules.
 </p>
 
 <pre class="prettyprint">
 &lt;context-param&gt;
-    &lt;param-name&gt;servlet.path.outside&lt;/param-name&gt;
+    &lt;param-name&gt;wm.exclude.paths&lt;/param-name&gt;
     &lt;param-value&gt;/path&lt;/param-value&gt;
 &lt;/context-param&gt;
 </pre>
 
 <p>
     Vous pouvez aussi modifier le nom du fichier de mapping chargé en positonnant
-    le paramètre <code>mapping.file.name</code> dans le web.xml ainsi :
+    le paramètre <code>wm.mapping.file.name</code> dans le web.xml ainsi :
 </p>
 
 <pre class="prettyprint">
 &lt;context-param&gt;
-    &lt;param-name&gt;mapping.file.name&lt;/param-name&gt;
+    &lt;param-name&gt;wm.mapping.file.name&lt;/param-name&gt;
     &lt;param-value&gt;/mapping&lt;/param-value&gt;
 &lt;/context-param&gt;
 </pre>

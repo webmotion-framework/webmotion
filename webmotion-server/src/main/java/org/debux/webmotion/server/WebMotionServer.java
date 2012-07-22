@@ -73,16 +73,16 @@ public class WebMotionServer implements Filter {
     public static final String PATH_SERVLET = "/servlet";
     
     /** Filter parameter to configure mapping file name by default is mapping */
-    protected final static String PARAM_MAPPING_FILE_NAME = "mapping.file.name";
+    protected final static String PARAM_MAPPING_FILE_NAME = "wm.mapping.file.name";
             
-    /** Filter parameter to configure servlets path outside WebMotion. The value is separated by comma */
-    protected final static String PARAM_SERVLET_PATH_OUTSIDE = "servlet.path.outside";
+    /** Filter parameter to configure excludes path for WebMotion. The value is separated by comma */
+    protected final static String PARAM_EXCLUDE_PATHS = "wm.exclude.paths";
             
     /** Current application context */
     protected ServerContext serverContext;
     
-    /** Current servlet path outside */
-    protected String[] outsideServletPath;
+    /** Current exclude paths */
+    protected String[] excludePaths;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -96,11 +96,11 @@ public class WebMotionServer implements Filter {
         }
         
         // Get exclude path in context param
-        String servletPathOutsideParam = servletContext.getInitParameter(PARAM_SERVLET_PATH_OUTSIDE);
-        if (servletPathOutsideParam != null && !servletPathOutsideParam.isEmpty()) {
-            outsideServletPath = servletPathOutsideParam.split(",");
+        String excludePathsParam = servletContext.getInitParameter(PARAM_EXCLUDE_PATHS);
+        if (excludePathsParam != null && !excludePathsParam.isEmpty()) {
+            excludePaths = excludePathsParam.split(",");
         } else {
-            outsideServletPath = new String[]{};
+            excludePaths = new String[]{};
         }
         
         serverContext.contextInitialized(servletContext);
@@ -129,8 +129,8 @@ public class WebMotionServer implements Filter {
         String url = StringUtils.substringAfter(uri, contextPath);
         log.debug("Pass in filter = " + url);
         
-        // Search if url is servlet path
-        for (String path : outsideServletPath) {
+        // Search if url is exclude path
+        for (String path : excludePaths) {
             if (url.startsWith(path)) {
                 url = PATH_SERVLET + url;
                 break;
