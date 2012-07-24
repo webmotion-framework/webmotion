@@ -119,10 +119,14 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
         for (int position = 0; position < parameterNames.length; position ++) {
             String name = parameterNames[position];
-            Object value = parameters.get(name);
             Class<?> type = parameterTypes[position];
             Type genericType = genericParameterTypes[position];
 
+            Object value = parameters.get(name);
+            if (value == null) {
+                value = parameters;
+            }
+            
             try {
                 value = convert(value, type, genericType);
                 convertedParameters.put(name, value);
@@ -151,13 +155,13 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             Collection instance;
             if (type.isInterface()) {
-                if(List.class.isAssignableFrom(type)) {
+                if (List.class.isAssignableFrom(type)) {
                     instance = new ArrayList();
 
-                } else if(Set.class.isAssignableFrom(type)) {
+                } else if (Set.class.isAssignableFrom(type)) {
                     instance = new HashSet();
 
-                } else if(SortedSet.class.isAssignableFrom(type)) {
+                } else if (SortedSet.class.isAssignableFrom(type)) {
                     instance = new TreeSet();
 
                 } else {
