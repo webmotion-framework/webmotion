@@ -123,9 +123,10 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             Type genericType = genericParameterTypes[position];
 
             Object value = parameters.get(name);
-            if (value == null) {
-                value = parameters;
-            }
+// FIXME: 20120724 jru  Must protect the injected objects
+//            if (value == null) {
+//                value = parameters;
+//            }
             
             try {
                 value = convert(value, type, genericType);
