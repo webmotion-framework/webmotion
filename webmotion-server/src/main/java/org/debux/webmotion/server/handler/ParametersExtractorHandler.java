@@ -32,6 +32,7 @@ import org.debux.webmotion.server.mapping.FragmentUrl;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
@@ -94,7 +95,14 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             String name = expression.getName();
             
             if (!StringUtils.isEmpty(name)) {
-                tmp.put(name, new String[]{path.get(position)});
+                String value = path.get(position);
+                
+                String[] currentValues = (String[]) tmp.get(name);
+                if (currentValues == null) {
+                    tmp.put(name, new String[]{value});
+                } else {
+                    tmp.put(name, ArrayUtils.add(currentValues, value));
+                }
             }
             position ++;
         }
@@ -105,9 +113,15 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             String param = expression.getParam();
             
             if(!StringUtils.isEmpty(name)) {
-                Object values = extractParameters.get(param);
+                String[] values = (String[]) extractParameters.get(param);
                 if (values != null) {
-                    tmp.put(name, values);
+                    
+                    String[] currentValues = (String[]) tmp.get(name);
+                    if (currentValues == null) {
+                        tmp.put(name, values);
+                    } else {
+                        tmp.put(name, ArrayUtils.addAll(currentValues, values));
+                    }
                 }
             }
         }
