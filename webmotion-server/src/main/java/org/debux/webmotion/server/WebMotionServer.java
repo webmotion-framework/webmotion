@@ -40,7 +40,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mbean.ServerStats;
@@ -137,7 +136,7 @@ public class WebMotionServer implements Filter {
             }
         }
         
-        if (url.startsWith(PATH_DEPLOY) || url.equals("/")) {
+        if (url.startsWith(PATH_DEPLOY) || url.startsWith(PATH_ERROR) || url.equals("/")) {
             log.debug("Is deploy");
             doAction(httpServletRequest, httpServletResponse);
             
