@@ -115,8 +115,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
         List<String> protectedParameters = executor.getProtectedParameters();
 
         // Save object in call
-        Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
-        executor.setParameters(convertedParameters);
+        Map<String, Object> convertedParameters = executor.getParameters();
 
         for (int position = 0; position < parameterNames.length; position ++) {
             String name = parameterNames[position];
@@ -125,7 +124,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             if (!protectedParameters.contains(name)) {
                 Object value = parameters.get(name);
-    // FIXME: 20120724 jru  Must protect the injected objects
+    // FIXME: 20120724 jru Must protect the injected objects
     //            if (value == null) {
     //                value = parameters;
     //            }
@@ -139,6 +138,11 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                             + name + " with value " + value 
                             + " before invoke the method", ex);
                 }
+            } else {
+                // FIXME: 20120728 jru Replace LinkedHashMap by other object to garanty the parameters order
+                Object value = convertedParameters.get(name);
+                convertedParameters.remove(name);
+                convertedParameters.put(name, value);
             }
         }
     }

@@ -271,8 +271,8 @@ public class WebMotionMainHandler implements WebMotionHandler {
     public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
         return Arrays.asList(
                     ExecutorInstanceCreatorHandler.class,
-                    ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,
+                    ExecutorParametersConvertorHandler.class,
                     ExecutorParametersValidatorHandler.class
                 );
     }

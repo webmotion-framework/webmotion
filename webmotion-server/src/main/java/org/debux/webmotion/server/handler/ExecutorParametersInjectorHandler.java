@@ -34,6 +34,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.ClientSession;
@@ -88,29 +89,26 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
         Executor executor = call.getCurrent();
         
         Method executorMethod = executor.getMethod();
+        String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
         Class<?>[] parameterTypes = executorMethod.getParameterTypes();
         Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
+        
         Map<String, Object> parameters = executor.getParameters();
         List<String> protectedParameters = executor.getProtectedParameters();
 
         // Search a value with a type
         int index = 0;
-        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-            String name = entry.getKey();
-            Object value = entry.getValue();
+        for (String name : parameterNames) {
+            Class<?> type = parameterTypes[index];
+            Type generic = genericParameterTypes[index];
 
-            if (value == null) {
-                Class<?> type = parameterTypes[index];
-                Type generic = genericParameterTypes[index];
+            for (Injector injector : injectors) {
+                Object inject = injector.getValue(mapping, call, type, generic);
 
-                for (Injector injector : injectors) {
-                    Object inject = injector.getValue(mapping, call, type, generic);
-
-                    if (inject != null) {
-                        log.debug("Inject " + name + " for type " + type + " the value " + inject);
-                        protectedParameters.add(name);
-                        parameters.put(name, inject);
-                    }
+                if (inject != null) {
+                    log.debug("Inject " + name + " for type " + type + " the value " + inject);
+                    protectedParameters.add(name);
+                    parameters.put(name, inject);
                 }
             }
 

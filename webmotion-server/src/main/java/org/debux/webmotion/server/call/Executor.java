@@ -60,7 +60,7 @@ public class Executor {
     protected Rule rule;
 
     public Executor() {
-        parameters = new LinkedHashMap<String, Object>();
+        this.parameters = new LinkedHashMap<String, Object>();
         this.protectedParameters = new LinkedList<String>();
     }
 
