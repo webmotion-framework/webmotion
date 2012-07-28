@@ -26,6 +26,8 @@ package org.debux.webmotion.server.call;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.mapping.Rule;
@@ -51,11 +53,15 @@ public class Executor {
     /** Parameters */
     protected Map<String, Object> parameters;
     
+    /** The parameters injected by the injector. */
+    protected List<String> protectedParameters;
+
     /** Rule uses to create the Executor */
     protected Rule rule;
 
     public Executor() {
         parameters = new LinkedHashMap<String, Object>();
+        this.protectedParameters = new LinkedList<String>();
     }
 
     public Map<String, Object> getParameters() {
@@ -68,6 +74,14 @@ public class Executor {
     
     public WebMotionController getInstance() {
         return instance;
+    }
+
+    public List<String> getProtectedParameters() {
+        return protectedParameters;
+    }
+
+    public void setProtectedParameters(List<String> protectedParameters) {
+        this.protectedParameters = protectedParameters;
     }
 
     public void setInstance(WebMotionController instance) {

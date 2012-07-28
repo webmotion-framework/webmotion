@@ -91,6 +91,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
         Class<?>[] parameterTypes = executorMethod.getParameterTypes();
         Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
         Map<String, Object> parameters = executor.getParameters();
+        List<String> protectedParameters = executor.getProtectedParameters();
 
         // Search a value with a type
         int index = 0;
@@ -107,6 +108,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
                     if (inject != null) {
                         log.debug("Inject " + name + " for type " + type + " the value " + inject);
+                        protectedParameters.add(name);
                         parameters.put(name, inject);
                     }
                 }

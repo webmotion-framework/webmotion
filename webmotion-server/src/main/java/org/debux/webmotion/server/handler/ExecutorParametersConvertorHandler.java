@@ -104,7 +104,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
     @Override
     public void handle(Mapping mapping, Call call) {
         Executor executor = call.getCurrent();
-
+        
         Method executorMethod = executor.getMethod();
         String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
 
@@ -112,6 +112,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
         Map<String, Object> parameters = call.getAliasParameters();
         Class<?>[] parameterTypes = executorMethod.getParameterTypes();
         Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
+        List<String> protectedParameters = executor.getProtectedParameters();
 
         // Save object in call
         Map<String, Object> convertedParameters = new LinkedHashMap<String, Object>(parameterNames.length);
@@ -122,20 +123,22 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             Class<?> type = parameterTypes[position];
             Type genericType = genericParameterTypes[position];
 
-            Object value = parameters.get(name);
-// FIXME: 20120724 jru  Must protect the injected objects
-//            if (value == null) {
-//                value = parameters;
-//            }
-            
-            try {
-                value = convert(value, type, genericType);
-                convertedParameters.put(name, value);
+            if (!protectedParameters.contains(name)) {
+                Object value = parameters.get(name);
+    // FIXME: 20120724 jru  Must protect the injected objects
+    //            if (value == null) {
+    //                value = parameters;
+    //            }
 
-            } catch (Exception ex) {
-                throw new WebMotionException("Error during converting parameter " 
-                        + name + " with value " + value 
-                        + " before invoke the method", ex);
+                try {
+                    value = convert(value, type, genericType);
+                    convertedParameters.put(name, value);
+
+                } catch (Exception ex) {
+                    throw new WebMotionException("Error during converting parameter " 
+                            + name + " with value " + value 
+                            + " before invoke the method", ex);
+                }
             }
         }
     }
