@@ -26,6 +26,7 @@ package org.debux.webmotion.server.handler;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,14 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
     protected List<Injector> injectors;
 
+    public ExecutorParametersInjectorHandler() {
+        injectors = new ArrayList<Injector>();
+        injectors.addAll(getBasicInjector());
+    }
+
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        injectors = context.getInjectors();
-        injectors.addAll(getBasicInjector());
+        injectors.addAll(context.getInjectors());
     }
 
     @Override
