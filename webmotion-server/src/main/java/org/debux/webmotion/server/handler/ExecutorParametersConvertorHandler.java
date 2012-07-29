@@ -138,11 +138,6 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                             + name + " with value " + value 
                             + " before invoke the method", ex);
                 }
-            } else {
-                // FIXME: 20120728 jru Replace LinkedHashMap by other object to garanty the parameters order
-                Object value = convertedParameters.get(name);
-                convertedParameters.remove(name);
-                convertedParameters.put(name, value);
             }
         }
     }

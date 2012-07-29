@@ -77,7 +77,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersInjectorHandler.class);
 
     protected List<Injector> injectors;
-    
+
     @Override
     public void init(Mapping mapping, ServerContext context) {
         injectors = context.getInjectors();
@@ -102,6 +102,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
             Class<?> type = parameterTypes[index];
             Type generic = genericParameterTypes[index];
 
+            parameters.put(name, null);
+            
             for (Injector injector : injectors) {
                 Object inject = injector.getValue(mapping, call, type, generic);
 
