@@ -99,7 +99,6 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
             
         } catch (ValidationException ve) {
             log.warn("MethodValidator not supported", ve);
-            return;
         }
     }
     

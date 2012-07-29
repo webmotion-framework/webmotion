@@ -124,7 +124,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             if (!protectedParameters.contains(name)) {
                 Object value = parameters.get(name);
-    // FIXME: 20120724 jru Must protect the injected objects
+    // FIXME: 20120724 jru Must protect the null objects
     //            if (value == null) {
     //                value = parameters;
     //            }
