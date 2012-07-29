@@ -79,14 +79,12 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
 
     protected List<Injector> injectors;
 
-    public ExecutorParametersInjectorHandler() {
-        injectors = new ArrayList<Injector>();
-        injectors.addAll(getBasicInjector());
-    }
-
     @Override
     public void init(Mapping mapping, ServerContext context) {
-        injectors.addAll(context.getInjectors());
+        if (injectors == null) {
+            injectors = context.getInjectors();
+            addBasicInjectors(context);
+        }
     }
 
     @Override
@@ -141,10 +139,10 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
     }
 
     /**
-     * @return All basic injector.
+     * Add All basic injectors.
      */
-    protected List<Injector> getBasicInjector() {
-        return Arrays.asList(
+    protected void addBasicInjectors(ServerContext context) {
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -153,7 +151,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -162,7 +161,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -171,7 +171,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -180,7 +181,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -189,7 +191,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -198,7 +201,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -207,7 +211,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -216,7 +221,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -225,7 +231,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -234,7 +241,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -243,7 +251,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -252,7 +261,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -265,7 +275,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -274,7 +285,8 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            },
+            });
+        context.addInjector(
             new  Injector() {
                 @Override
                 public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -283,8 +295,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     }
                     return null;
                 }
-            }
-        );
+            });
     }
     
 }
