@@ -280,6 +280,7 @@
                         <div class="tab-pane active fade in" id="demo">
                             <c:forEach var="path" items="${path_demo}">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
+                                    <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" href="<c:url value="/test${path}"/>" target="_blank">Try it »</a>
                                     http://serverName:port/contextPath<strong>${path}</strong>
                                 </div>
                                 <iframe src="<c:url value="/test${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
@@ -290,6 +291,7 @@
                         <c:forEach var="file" items="${files}" varStatus="status">
                             <div id="${status.index}" class="tab-pane fade in">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
+                                    <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="Save();">Download »</a>
                                     <strong>Path :</strong> ${file.path}
                                 </div>
                                     <c:if test="${empty file.content}">
