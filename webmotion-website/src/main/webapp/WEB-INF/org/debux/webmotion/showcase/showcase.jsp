@@ -291,7 +291,6 @@
                         <c:forEach var="file" items="${files}" varStatus="status">
                             <div id="${status.index}" class="tab-pane fade in">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
-                                    <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="Save();">Download »</a>
                                     <strong>Path :</strong> ${file.path}
                                 </div>
                                     <c:if test="${empty file.content}">
