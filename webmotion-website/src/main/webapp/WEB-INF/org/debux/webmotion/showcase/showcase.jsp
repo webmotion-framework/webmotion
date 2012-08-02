@@ -49,8 +49,8 @@
         <![endif]--> 
         
         <!-- Le styles --> 
-        <link rel="stylesheet" href="<c:url value="/bootstrap/css/bootstrap.css"/>">
         <link rel="stylesheet" href="<c:url value="/prettify/prettify.css"/>" type="text/css"/>
+        <link rel="stylesheet" href="<c:url value="/bootstrap/css/bootstrap.css"/>">
         <link rel="stylesheet" href="<c:url value="/css/style.css"/>">
         
         <script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script> 
@@ -68,6 +68,27 @@
                 clear: both;
                 padding-left: 5px;
                 padding-top: 10px;
+            }
+            ol.linenums li {
+                color: #BEBEC5;
+                list-style-type: decimal;
+            }
+            ol.linenums li {
+                background: transparent;
+            }
+            .prettyprint.linenums {
+                -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+                -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+                box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+            }
+            ol.linenums {
+                margin: 0 0 0 33px; /* IE indents via margin-left */
+            } 
+            ol.linenums li {
+                padding-left: 12px;
+                color: #bebec5;
+                line-height: 18px;
+                text-shadow: 0 1px 0 #fff;
             }
         </style>
         
@@ -291,6 +312,9 @@
                         <c:forEach var="file" items="${files}" varStatus="status">
                             <div id="${status.index}" class="tab-pane fade in">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
+                                    <c:if test="${not empty file.content}">
+                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).hide();$(source${status.index}).show();" target="_blank">Get source »</a>
+                                    </c:if>
                                     <strong>Path :</strong> ${file.path}
                                 </div>
                                     <c:if test="${empty file.content}">
@@ -302,7 +326,10 @@
 
                                     </c:if>
                                     <c:if test="${not empty file.content}">
-                                        <pre class="prettyprint" style="background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;">
+                                        <pre id="content${status.index}" class="prettyprint linenums" style="background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;">
+${file.content}
+                                        </pre>
+                                        <pre id="source${status.index}" style="display: none;background-color: white;border: 1px solid #DEE6ED;padding: 8.5px;">
 ${file.content}
                                         </pre>
                                     </c:if>
