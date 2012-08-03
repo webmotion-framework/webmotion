@@ -69,26 +69,30 @@
                 padding-left: 5px;
                 padding-top: 10px;
             }
-            ol.linenums li {
-                color: #BEBEC5;
-                list-style-type: decimal;
-            }
-            ol.linenums li {
-                background: transparent;
-            }
+            
             .prettyprint.linenums {
                 -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
                 -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
                 box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
             }
-            ol.linenums {
-                margin: 0 0 0 33px; /* IE indents via margin-left */
-            } 
-            ol.linenums li {
+                        
+            .linenums ol {
+                margin: 0 0 9px 30px;
+            }
+            .linenums li {
+                list-style-type: decimal;
                 padding-left: 12px;
                 color: #bebec5;
+                background: transparent;
                 line-height: 18px;
                 text-shadow: 0 1px 0 #fff;
+            }
+            .hideline ol {
+                margin-left: 0px;
+            }
+            .hideline li {
+                list-style-type: none;
+                padding-left: 0px;
             }
         </style>
         
@@ -313,7 +317,8 @@
                             <div id="${status.index}" class="tab-pane fade in">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
                                     <c:if test="${not empty file.content}">
-                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).hide();$(source${status.index}).show();" target="_blank">Get source »</a>
+                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('linenums');$(content${status.index}).addClass('hideline');" target="_blank">Hide lines »</a>
+                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('hideline');$(content${status.index}).addClass('linenums');" target="_blank">Show lines »</a>
                                     </c:if>
                                     <strong>Path :</strong> ${file.path}
                                 </div>
@@ -327,11 +332,7 @@
                                     </c:if>
                                     <c:if test="${not empty file.content}">
                                         <pre id="content${status.index}" class="prettyprint linenums" style="background-color: #F4F7FB;border: 1px solid #DEE6ED;padding: 8.5px;">
-${file.content}
-                                        </pre>
-                                        <pre id="source${status.index}" style="display: none;background-color: white;border: 1px solid #DEE6ED;padding: 8.5px;">
-${file.content}
-                                        </pre>
+${file.content}</pre>
                                     </c:if>
                             </div>
                         </c:forEach>
