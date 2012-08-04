@@ -317,8 +317,8 @@
                             <div id="${status.index}" class="tab-pane fade in">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
                                     <c:if test="${not empty file.content}">
-                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('linenums');$(content${status.index}).addClass('hideline');" target="_blank">Hide lines »</a>
-                                        <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('hideline');$(content${status.index}).addClass('linenums');" target="_blank">Show lines »</a>
+                                        <a id="hideLines${status.index}" class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('linenums');$(content${status.index}).addClass('hideline');$('#hideLines${status.index}').hide();$('#showLines${status.index}').show();" target="_blank">Hide lines »</a>
+                                        <a id="showLines${status.index}" class="btn btn-primary" style="display: none; float: right; position: relative;top: -5px;right: -21px;" onclick="$(content${status.index}).removeClass('hideline');$(content${status.index}).addClass('linenums');$('#hideLines${status.index}').show();$('#showLines${status.index}').hide();" target="_blank">Show lines »</a>
                                     </c:if>
                                     <strong>Path :</strong> ${file.path}
                                 </div>
