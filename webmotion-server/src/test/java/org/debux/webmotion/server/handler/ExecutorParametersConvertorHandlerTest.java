@@ -50,6 +50,7 @@ public class ExecutorParametersConvertorHandlerTest {
         handler = new ExecutorParametersConvertorHandler();
         handler.beanUtil = BeanUtilsBean.getInstance();
         handler.converter = handler.beanUtil.getConvertUtils();
+        handler.propertyUtils = handler.beanUtil.getPropertyUtils();
     }
     
     public static <T> T[] toArray(T ... values) {
@@ -153,6 +154,15 @@ public class ExecutorParametersConvertorHandlerTest {
         AssertJUnit.assertEquals(ClassExemple.class, convert.getClass());
         AssertJUnit.assertEquals("value", ((ClassExemple) convert).attribute1);
         AssertJUnit.assertEquals("value", ((ClassExemple) convert).attribute2);
+    }
+    
+    @Test
+    public void testConvertNullObject() throws Exception {
+        Object convert = handler.convert(
+                toMap("attribute=value"),
+                ClassExemple.class, null);
+        
+        AssertJUnit.assertNull(convert);
     }
     
     public void testConvertListObject(List<ClassExemple> list) throws Exception {
