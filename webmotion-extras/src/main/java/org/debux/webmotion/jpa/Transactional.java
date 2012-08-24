@@ -98,7 +98,7 @@ public abstract class Transactional extends WebMotionFilter {
         // Create generic DAO each time if callback an action on an other entity
         if (entityName != null) {
             String fullEntityName = null;
-            if (packageEntityName != null) {
+            if (packageEntityName != null && !packageEntityName.isEmpty()) {
                 fullEntityName = packageEntityName + "." + entityName;
             } else {
                 fullEntityName = entityName;
