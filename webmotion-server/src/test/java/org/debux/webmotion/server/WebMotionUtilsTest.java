@@ -134,4 +134,10 @@ public class WebMotionUtilsTest {
         AssertJUnit.assertEquals(1, result.length);
     }
     
+    @Test
+    public void testIsPrimitive() {
+        AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.TYPE));
+        AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.class));
+    }
+
 }

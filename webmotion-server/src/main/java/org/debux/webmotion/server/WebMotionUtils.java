@@ -89,6 +89,24 @@ public class WebMotionUtils {
     }
     
     /**
+     * Determine if the class is primitive type even if the class is the wrapper 
+     * on a primitive type.
+     * @param clazz class to verify
+     * @return true is a primitive type or wrapper on primitive type else false
+     */    
+    public static boolean isPrimitiveType(Class<?> clazz) {
+        return clazz.isPrimitive() || 
+               clazz.equals(Boolean.class) || 
+               clazz.equals(Integer.class) ||
+               clazz.equals(Character.class) ||
+               clazz.equals(Byte.class) ||
+               clazz.equals(Short.class) ||
+               clazz.equals(Double.class) ||
+               clazz.equals(Long.class) ||
+               clazz.equals(Float.class);
+    }
+    
+    /**
      * Capitalizes a full qualified class name.
      * Example:
      * <code>WebMotionUtils.capitalizeClass("org.webmotion.myclass")</code> will return 
