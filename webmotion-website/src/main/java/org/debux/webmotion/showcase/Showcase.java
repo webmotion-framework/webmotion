@@ -733,13 +733,15 @@ public class Showcase extends WebMotionController {
     public Render login() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
+                    "/login?name=john&passwd=azerty",
                     "/login?user.name=john&user.passwd=azerty",
-                    "/login?name=john&passwd=azerty"
+                    "/login?username=john&userpasswd=azerty"
                 ),
                 
                 "files", Arrays.asList(
                     getConfig(false, true, false, false)
-                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 55, 2)),
+                        .addContent(getFirstMapping(SECTION_ACTIONS, INDEX_ACTIONS + 55, 2))
+                        .addContent(getContentMapping(INDEX_ACTIONS + 91, 1)),
                     getJavaContent("Auth.java"),
                     getJavaContent("User.java")
                 ) 

@@ -146,4 +146,4 @@ DELETE      /simulate                                   action:Action.execute
 *           /forward/dynamic/{method}                   forward:/forward/{method}
 *           /forward/get                                Dynamic.get
 *           /forward/set                                Dynamic.set
-GET         /login?name={}&passwd={}                    Auth.login
+GET         /login?name={}&passwd={}                                  Auth.login

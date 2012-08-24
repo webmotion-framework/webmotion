@@ -181,19 +181,19 @@
                                         <li><a id="act" href="./act">Action</a></li>
                                         <li><a id="view" href="./view">View</a></li>
                                         <li><a id="url" href="./url">Url</a></li>
-                                        <li class="space"><a id="forward" href="./forward">Forward</a> <span class="label label-info">New</span></li>
+                                        <li class="space"><a id="forward" href="./forward">Forward</a></li>
                                         
                                         <li><a id="helloParameters" href="./helloParameters">Parameters</a></li>
                                         <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                         <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
-                                        <li><a id="login" href="./login">Renamed parameters</a></li>
+                                        <li><a id="login" href="./login">Object parameters</a> <span class="label label-info">New</span></li>
                                         <li class="space"><a id="select" href="./select">Parameters static</a></li>
                                         
                                         <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
                                         <li><a id="text" href="./text">Dynamic view</a></li>
                                         <li><a id="helloView" href="./helloView">Dynamic jsp view</a></li>
                                         <li><a id="wikipedia" href="./wikipedia">Dynamic url or redirect</a></li>
-                                        <li class="space"><a id="dynamic_forward" href="./dynamic_forward">Dynamic forward</a> <span class="label label-info">New</span></li>
+                                        <li class="space"><a id="dynamic_forward" href="./dynamic_forward">Dynamic forward</a></li>
                                         
                                         <li><a id="form" href="./form">Method</a></li>
                                         <li class="space"><a id="media" href="./media">Multiple method</a></li>
@@ -224,7 +224,7 @@
                                 </li>
                                 <li><strong>Properties</strong>
                                     <ul>
-                                        <li><a id="properties" href="./properties">Basic</a> <span class="label label-info">New</span></li>
+                                        <li><a id="properties" href="./properties">Basic</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -262,9 +262,9 @@
                                     <ul>
                                         <li><a id="shop" href="./shop">Validation</a></li>
                                         <li><a id="message" href="./message">Flash message</a></li>
-                                        <li><a id="cookie" href="./cookie">Cookie manager</a> <span class="label label-info">New</span></li>
-                                        <li><a id="cookie_object" href="./cookie_object">Cookie manager<br/>(object)</a> <span class="label label-info">New</span></li>
-                                        <li><a id="client_session" href="./client_session">Client session</a> <span class="label label-info">New</span></li>
+                                        <li><a id="cookie" href="./cookie">Cookie manager</a></li>
+                                        <li><a id="cookie_object" href="./cookie_object">Cookie manager<br/>(object)</a></li>
+                                        <li><a id="client_session" href="./client_session">Client session</a></li>
                                         <li><a id="file" href="./file">File</a></li>
                                         <li><a id="upload" href="./upload">File with progress</a></li>
                                         <li><a id="page" href="./page">Include</a></li>
@@ -275,16 +275,16 @@
                                 <li><strong>Server</strong>
                                     <ul>
                                         <li><a id="listener" href="./listener">Server listener</a></li>
-                                        <li><a id="converter" href="./converter">Converter</a> <span class="label label-info">New</span></li>
-                                        <li><a id="injector" href="./injector">Injector</a> <span class="label label-info">New</span></li>
-                                        <li><a id="global" href="./global">Global controller</a> <span class="label label-info">New</span></li>
+                                        <li><a id="converter" href="./converter">Converter</a></li>
+                                        <li><a id="injector" href="./injector">Injector</a></li>
+                                        <li><a id="global" href="./global">Global controller</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>Extras</strong>
                                     <ul>
                                         <li><a id="spring" href="./spring">Spring</a></li>
-                                        <li><a id="sitemesh" href="./sitemesh">SiteMesh</a> <span class="label label-info">New</span></li>
-                                        <li><a id="jpa" href="./jpa">Hibernate/JPA</a> <span class="label label-info">New</span></li>
+                                        <li><a id="sitemesh" href="./sitemesh">SiteMesh</a></li>
+                                        <li><a id="jpa" href="./jpa">Hibernate/JPA</a></li>
                                     </ul>
                                 </li>
                             </ul>
