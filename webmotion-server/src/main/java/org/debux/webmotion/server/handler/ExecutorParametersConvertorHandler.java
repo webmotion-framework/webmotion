@@ -43,6 +43,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -93,11 +94,13 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
     protected BeanUtilsBean beanUtil;
     protected ConvertUtilsBean converter;
-
+    protected PropertyUtilsBean propertyUtils;
+    
     @Override
     public void init(Mapping mapping, ServerContext context) {
         beanUtil = context.getBeanUtil();
         converter = context.getConverter();
+        propertyUtils = beanUtil.getPropertyUtils();
     }
 
     @Override
@@ -123,10 +126,9 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             if (!protectedParameters.contains(name)) {
                 Object value = parameters.get(name);
-    // FIXME: 20120724 jru Must protect the null objects
-    //            if (value == null) {
-    //                value = parameters;
-    //            }
+                if (value == null && !WebMotionUtils.isPrimitiveType(type)) {
+                    value = parameters;
+                }
 
                 try {
                     value = convert(value, type, genericType);
@@ -263,21 +265,31 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
         // Manage simple object
         } else if (value instanceof Map) {
             Object instance = type.newInstance();
+            boolean one = false;
             
             Map<String, ?> attributes = (Map) value;
             for (Map.Entry<String, ?> attribut : attributes.entrySet()) {
                 String attributName = attribut.getKey();
                 Object attributeValue = attribut.getValue();
                 
-                Field field = type.getDeclaredField(attributName);
-                Class<?> attributeType = field.getType();
-                
-                genericType = field.getGenericType();
-                Object attributeConverted = convert(attributeValue, attributeType, genericType);
-                beanUtil.setProperty(instance, attributName, attributeConverted);
+                boolean writeable = propertyUtils.isWriteable(instance, attributName);
+                if (writeable) {
+                    one = true;
+                    
+                    Field field = type.getDeclaredField(attributName);
+                    Class<?> attributeType = field.getType();
+
+                    genericType = field.getGenericType();
+                    Object attributeConverted = convert(attributeValue, attributeType, genericType);
+                    beanUtil.setProperty(instance, attributName, attributeConverted);
+                }
             }
             
-            result = instance;
+            if (one) {
+                result = instance;
+            } else {
+                result = null;
+            }
 
         } else if (value instanceof UploadFile) {
             if (File.class.isAssignableFrom(type)) {
