@@ -187,7 +187,7 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
-    public void login() throws IOException {
+    public void loginParameterNamed() throws IOException {
         String url = getAbsoluteUrl("login?user.name=john&user.passwd=azerty");
         HttpGet request = new HttpGet(url);
         
@@ -196,7 +196,16 @@ public class ActionMappingIT extends AbstractIT {
     }
     
     @Test
-    public void loginRenamed() throws IOException {
+    public void loginParameterRenamed() throws IOException {
+        String url = getAbsoluteUrl("login?username=john&userpasswd=azerty");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
+    }
+    
+    @Test
+    public void login() throws IOException {
         String url = getAbsoluteUrl("login?name=john&passwd=azerty");
         HttpGet request = new HttpGet(url);
         

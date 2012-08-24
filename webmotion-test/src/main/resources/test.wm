@@ -110,8 +110,8 @@ POST        /person                                     Person.save
 *           /notfound                                   NotFound.send
 *           /media                                      view:media.jsp
 GET,POST    /video                                      Media.get
-GET         /login?user.name={}&user.passwd={}                Auth.login
-GET         /login?name={user.name}&passwd={user.passwd}      Auth.login
+GET         /login?user.name={}&user.passwd={}                        Auth.login
+GET         /login?username={user.name}&userpasswd={user.passwd}      Auth.login
 *           /helloView?name={who}                       view:helloParameters.jsp
 *           /select?param=value                         view:selectValue.jsp
 *           /select                                     view:select.jsp
@@ -146,3 +146,4 @@ DELETE      /simulate                                   action:Action.execute
 *           /forward/dynamic/{method}                   forward:/forward/{method}
 *           /forward/get                                Dynamic.get
 *           /forward/set                                Dynamic.set
+GET         /login?name={}&passwd={}                    Auth.login
