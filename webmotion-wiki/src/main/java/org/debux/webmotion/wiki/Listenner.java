@@ -38,9 +38,9 @@ import org.debux.webmotion.wiki.service.WikiConfig;
 public class Listenner implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
-        Mapping mapping = context.getMapping();
-        Properties properties = mapping.getProperties();
+    public void onStart(Mapping mapping, ServerContext context) {
+        Mapping rootMapping = context.getMapping();
+        Properties properties = rootMapping.getProperties();
         WikiConfig.instance = new WikiConfig(properties);
     }
 
