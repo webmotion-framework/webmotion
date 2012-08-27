@@ -67,17 +67,17 @@ public class Showcase extends WebMotionController {
         InputStream stream = Showcase.class.getClassLoader().getResourceAsStream(name);
         String content = IOUtils.toString(stream);
         content = content.replace("/test", "");
-        if(content.contains("#L%\n */\n")) {
-            content = StringUtils.substringAfter(content, "#L%\n */\n");
+        if (content.contains("#L" + "%\n */\n")) {
+            content = StringUtils.substringAfter(content, "#L" + "%\n */\n");
         }
-        if(content.contains("#L%\n  -->\n")) {
-            content = StringUtils.substringAfter(content, "#L%\n  -->\n");
+        if (content.contains("#L" + "%\n  -->\n")) {
+            content = StringUtils.substringAfter(content, "#L" + "%\n  -->\n");
         }
-        if(content.contains("# #L%\n###\n")) {
+        if (content.contains("# #L" + "%\n###\n")) {
             content = StringUtils.substringAfter(content, "# #L%\n###\n");
         }
-        if(content.contains("<%--\n  #%L")) {
-            content = StringUtils.substringAfter(content, "  #L%\n  --%>\n");
+        if (content.contains("<%--\n  #%" + "L")) {
+            content = StringUtils.substringAfter(content, "  #L" + "%\n  --%>\n");
         }
         return content;
     }
