@@ -57,12 +57,13 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webmotion-extras</artifactId>
+            <artifactId>webmotion-extra-all</artifactId>
             <version>${project.version}</version>
+            <type>pom</type>
             <scope>runtime</scope>
-        </dependency>
+        </dependency-->
         
         <!-- Utils -->
         <dependency>

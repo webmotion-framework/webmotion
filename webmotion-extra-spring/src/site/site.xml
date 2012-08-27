@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="Webmotion">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.1</version>
+    </skin>
+  
+    <bannerLeft>
+        <name>${project.name}</name>
+    </bannerLeft>
+  
+    <publishDate position="left"/>
+    <version position="left"/>
+    <poweredBy></poweredBy>
+
+    <body>
+        <links>
+            <item name="Webmotion" href="http://www.webmotion-framework.org"/>
+        </links>
+
+        <menu name="Projects">
+            <item name="Parent" href="../project-summary.html" />
+            <item name="Server" href="../webmotion/project-summary.html" />
+            <item name="Extras" href="../webmotion-extra-all/project-summary.html" />
+            <item name="Test" href="../webmotion-test/project-summary.html" />
+            <item name="Archetype" href="../webmotion-archetype/project-summary.html" />
+            <item name="WikiMotion" href="../wikimotion/project-summary.html" />
+            <item name="Website" href="../webmotion-website/project-summary.html" />
+        </menu>
+
+        <menu ref="reports"/>
+
+    </body>
+</project>

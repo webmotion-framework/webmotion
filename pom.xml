@@ -50,7 +50,12 @@
 
     <modules>
         <module>webmotion-server</module>
-        <module>webmotion-extras</module>
+        <!--<module>webmotion-extras</module>-->
+        <module>webmotion-extra-jpa</module>
+        <!--<module>webmotion-extra-shiro</module>-->
+        <module>webmotion-extra-sitemesh</module>
+        <module>webmotion-extra-spring</module>
+        <module>webmotion-extra-all</module>
         <module>webmotion-wiki</module>
         <module>webmotion-test</module>
         <module>webmotion-website</module>
@@ -69,7 +74,19 @@
                 <role>architect</role>
                 <role>developer</role>
             </roles>
-            <timezone>+1</timezone>
+            <timezone>Europe/Paris</timezone>
+        </developer>
+        <developer>
+            <id>tchemit</id>
+            <name>Tony Chemit</name>
+            <email>chemit at codelutin dot comg</email>
+            <url>http://www.debux.org</url>
+            <organization>Code Lutin</organization>
+            <organizationUrl>http://www.codelutin.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Paris</timezone>
         </developer>
     </developers>
     
@@ -84,7 +101,7 @@
                 <role>user</role>
                 <role>reporter</role>
             </roles>        
-            <timezone>+1</timezone>
+            <timezone>Europe/Paris</timezone>
         </contributor>
         <contributor>
             <name>Kevin Morin</name>
@@ -93,7 +110,7 @@
             <roles>
                 <role>translator</role>
             </roles>
-            <timezone>+1</timezone>
+            <timezone>Europe/Paris</timezone>
         </contributor>
     </contributors>
     
