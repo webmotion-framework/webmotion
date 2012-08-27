@@ -24,7 +24,7 @@
 ###
 [config]
 package.views=WEB-INF/org.debux.webmotion.test
-server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
+server.listener.class=org.debux.webmotion.jpa.JpaListener
 
 [filters]
 *           /note/*                            Jpa.tx          persistenceUnitName=notes,entityName=org.debux.webmotion.test.Note,callback=/note

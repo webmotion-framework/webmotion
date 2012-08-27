@@ -1,8 +1,8 @@
 /*
  * #%L
- * WebMotion extra sitemesh
+ * WebMotion extra spring
  * 
- * $Id$
+ * $Id: SpringMainHandler.java 2004 2012-08-27 10:49:23Z tchemit $
  * $HeadURL$
  * %%
  * Copyright (C) 2011 - 2012 Debux
@@ -22,28 +22,33 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.sitemesh;
+package org.debux.webmotion.spring;
 
-import org.debux.webmotion.server.WebMotionMainHandler;
+import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Add configuration to use SiteMesh, just add SiteMesh add global filter.
+ * Add configuration to use Spring. It changes the main handler in mapping file.
  * 
  * @author julien
  */
-public class SiteMeshMainHandler extends WebMotionMainHandler {
+public class SpringListener implements WebMotionServerListener {
 
-    private static final Logger log = LoggerFactory.getLogger(SiteMeshMainHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringListener.class);
 
     @Override
-    protected void initHandlers(Mapping mapping, ServerContext context) {
-        super.initHandlers(mapping, context);
-        
-        context.addGlobalController(SiteMesh.class);
+    public void onStart(Mapping mapping, ServerContext context) {
+        Config config = mapping.getConfig();
+        config.setMainHandler("org.debux.webmotion.spring.SpringMainHandler");
     }
 
+    @Override
+    public void onStop(ServerContext context) {
+        // Do nothing
+    }
+    
 }

@@ -31,7 +31,7 @@
 
     <!-- SiteMesh configuration -->
     <listener>
-        <listener-class>org.debux.webmotion.sitemesh.SiteMeshListener</listener-class>
+        <listener-class>org.debux.webmotion.sitemesh.SiteMeshServletListener</listener-class>
     </listener>  
   
 </web-fragment>

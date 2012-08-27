@@ -24,7 +24,7 @@
 ###
 [config]
 package.views=WEB-INF/org.debux.webmotion.test
-server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 
 [filters]
 *           /sitemesh/*                                 SiteMesh.decorate       layout=decorator.html

@@ -26,6 +26,7 @@ package org.debux.webmotion.test;
 
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
  * Basic listener.
@@ -35,7 +36,7 @@ import org.debux.webmotion.server.call.ServerContext;
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.setAttribute("key", "value");
     }
 

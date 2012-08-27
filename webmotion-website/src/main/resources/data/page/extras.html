@@ -45,18 +45,18 @@
 <pre class="prettyprint">
 &lt;dependency&gt;
     &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
-    &lt;artifactId&gt;webmotion-extras&lt;/artifactId&gt;
-    &lt;version&gt;2.2&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
+    &lt;artifactId&gt;webmotion-extra-all&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
 &lt;/dependency&gt;
 </pre>
 
 <p>
-    Pour utiliser l'ensemble des extras, il vous suffit de définir comme handler principal 
-    <code>WebMotionExtrasMainHandler</code> dans votre fichier de mapping ainsi :
+    Pour utiliser l'ensemble des extras, il vous suffit de définir les listenners suivant 
+    dans votre fichier de mapping :
 </p>
 <pre>
 [config]
-server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener
 </pre>
 
 <p>
@@ -92,10 +92,22 @@ $ mvn archetype:generate \
 
 <p>
     Si vous souhaitez uniquement utiliser Spring dans votre projet, vous pouvez modifier la section <code>[config]</code> 
-    de votre fichier de mapping et le principal handler applicatif, comme suit :
+    de votre fichier de mapping, comme suit :
 </p>
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
+server.listener.class=org.debux.webmotion.spring.SpringListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-spring&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>
@@ -180,10 +192,22 @@ public class SpringController extends WebMotionController {
 
 <p>
     Pour pouvoir utiliser seulement SiteMesh dans votre projet vous pouvez modifier la section <code>[config]</code>  
-    de votre fichier de mapping et le principal handler applicatif, comme suit :
+    de votre fichier de mapping comme suit :
 </p>
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-sitemesh&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>
@@ -279,7 +303,19 @@ public class Listener implements WebMotionServerListener {
     de votre fichier de mapping et le principal handler applicatif, comme suit :
 </p>
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
+server.listener.class=org.debux.webmotion.jpa.JpaListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-jpa&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>

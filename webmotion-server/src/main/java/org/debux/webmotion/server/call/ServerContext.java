@@ -130,17 +130,16 @@ public class ServerContext {
         
         this.webappPath = servletContext.getRealPath("/");
                 
-        // Read the mapping
-        loadMapping();
-        
-        // Extract listeners
-        listeners = new ArrayList<WebMotionServerListener>();
-        extractServerListener(mapping);
+        // Read the mapping in the current project
+        MappingParser parser = getMappingParser();
+        mapping = parser.parse(mappingFileName);
         
         // Fire onStart
-        for (WebMotionServerListener listener : listeners) {
-            listener.onStart(this);
-        }
+        listeners = new ArrayList<WebMotionServerListener>();
+        onStartServerListener(mapping);
+        
+        // Load mapping
+        loadMapping();
 
         // Check mapping
         checkMapping();
@@ -166,10 +165,6 @@ public class ServerContext {
      * Load the mapping
      */
     public void loadMapping() {
-        // Read the mapping in the current project
-        MappingParser parser = getMappingParser();
-        mapping = parser.parse(mappingFileName);
-        
         // Create the handler factory
         Config config = mapping.getConfig();
         String className = config.getMainHandler();
@@ -185,13 +180,12 @@ public class ServerContext {
         // Init handlers
         mainHandler.init(mapping, this);
     }
-
     
     /**
-     * Search in mapping all server listeners.
+     * Search in mapping all server listeners and fire onStart
      * @param mapping mapping
      */
-    protected void extractServerListener(Mapping mapping) {
+    protected void onStartServerListener(Mapping mapping) {
         Config config = mapping.getConfig();
         String serverListenerClassNames = config.getServerListener();
         if (serverListenerClassNames != null && !serverListenerClassNames.isEmpty()) {
@@ -204,8 +198,11 @@ public class ServerContext {
                 try {
                     Class<WebMotionServerListener> serverListenerClass = (Class<WebMotionServerListener>) Class.forName(className);
                     WebMotionServerListener serverListener = serverListenerClass.newInstance();
-                    listeners.add(serverListener);
+                    
+                    serverListener.onStart(mapping, this);
 
+                    listeners.add(serverListener);
+                    
                 } catch (IllegalAccessException iae) {
                     throw new WebMotionException("Error during create server listener " + className, iae);
                 } catch (InstantiationException ie) {
@@ -218,7 +215,7 @@ public class ServerContext {
             
         List<Mapping> extensions = mapping.getExtensionsRules();
         for (Mapping extensionMapping : extensions) {
-            extractServerListener(extensionMapping);
+            onStartServerListener(extensionMapping);
         }
     }
     

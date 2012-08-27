@@ -29,6 +29,7 @@ import com.google.gson.JsonParser;
 import org.apache.commons.beanutils.converters.AbstractConverter;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
  * Converter listener.
@@ -38,7 +39,7 @@ import org.debux.webmotion.server.call.ServerContext;
 public class ConverterListener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addConverter(new AbstractConverter() {
             @Override
             protected Object convertToType(Class type, Object value) throws Throwable {

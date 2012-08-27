@@ -22,7 +22,7 @@
 #if ($usesExtras == 'y' || $usesExtras == 'Y')
         <dependency>
             <groupId>org.debux.webmotion</groupId>
-            <artifactId>webmotion-extras</artifactId>
+            <artifactId>webmotion-extra-all</artifactId>
             <version>2.3</version>
         </dependency>
         

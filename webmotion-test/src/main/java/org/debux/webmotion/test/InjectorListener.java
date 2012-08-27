@@ -39,7 +39,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 public class InjectorListener implements WebMotionServerListener {
     
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         // Create config
         Config config = new Config();
         config.setParameter("A value from the config object");

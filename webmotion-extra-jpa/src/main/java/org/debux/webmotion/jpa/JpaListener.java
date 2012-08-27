@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
-import org.debux.webmotion.server.WebMotionMainHandler;
+import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.ServerContext;
@@ -48,19 +48,22 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class JpaMainHandler extends WebMotionMainHandler {
+public class JpaListener implements WebMotionServerListener {
 
-    private static final Logger log = LoggerFactory.getLogger(JpaMainHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(JpaListener.class);
 
     @Override
-    protected void initHandlers(Mapping mapping, ServerContext context) {
-        super.initHandlers(mapping, context);
-        
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(Jpa.class);
         
         context.addInjector(new GenericDaoInjector());
         context.addInjector(new EntityManagerInjector());
         context.addInjector(new EntityTransactionManager());
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        // Do nothing
     }
 
     /**

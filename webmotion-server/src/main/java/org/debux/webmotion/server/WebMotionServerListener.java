@@ -25,6 +25,7 @@
 package org.debux.webmotion.server;
 
 import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
  * The class is used to listen start/stop of the server. Thus you can execute 
@@ -38,8 +39,9 @@ public interface WebMotionServerListener {
     /**
      * Call when the server start.
      * @param context server context
+     * @param mapping current mapping
      */
-    public void onStart(ServerContext context);
+    public void onStart(Mapping mapping, ServerContext context);
     
     /**
      * Call when the server stop.
