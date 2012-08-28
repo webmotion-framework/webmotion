@@ -45,18 +45,17 @@
 <pre class="prettyprint">
 &lt;dependency&gt;
     &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
-    &lt;artifactId&gt;webmotion-extras&lt;/artifactId&gt;
-    &lt;version&gt;2.2&lt;/version&gt; &lt;-- Check the last available version --&gt;
+    &lt;artifactId&gt;webmotion-extra-all&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Check the last available version --&gt;
 &lt;/dependency&gt;
 </pre>
 
 <p>
-    To use all the extras, you need to define <code>WebMotionExtrasMainHandler</code>
-    as the main handler in your mapping file like this:
+    To use all the extras, you need to define the following listenners in your mapping file:
 </p>
 <pre>
 [config]
-server.main.handler.class=org.debux.webmotion.WebMotionExtrasMainHandler
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener
 </pre>
 
 <p>
@@ -73,7 +72,7 @@ $ mvn archetype:generate \
     -DarchetypeRepository=http://debux.org/maven/repo \
     -DarchetypeGroupId=org.debux.webmotion \
     -DarchetypeArtifactId=webmotion-archetype \
-    -DarchetypeVersion=2.2 \
+    -DarchetypeVersion=2.3 \
     -DgroupId=org.example \
     -DartifactId=myapp \
     -Dpackage=org.example.myapp \
@@ -92,10 +91,22 @@ $ mvn archetype:generate \
 
 <p>
     If you only want to use Spring in your project, you can modify the <code>[config]</code> section
-    in your mapping file and the applicative main handler like this:
+    in your mapping file like this:
 </p>
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.spring.SpringMainHandler
+server.listener.class=org.debux.webmotion.spring.SpringListener
+</pre>
+
+<p>
+    With the maven dependency:
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-spring&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Check the last available version --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>
@@ -183,7 +194,19 @@ public class SpringController extends WebMotionController {
     section in your mapping file and the applicative main handler like this:
 </p>
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
+server.listener.class=org.debux.webmotion.spring.SiteMeshListener
+</pre>
+
+<p>
+    With the maven dependency:
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-sitemesh&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Check the last available version --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>
@@ -193,7 +216,7 @@ server.main.handler.class=org.debux.webmotion.sitemesh.SiteMeshMainHandler
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(SiteMesh.class);
     }
 
@@ -280,7 +303,19 @@ public class Listener implements WebMotionServerListener {
 </p>
 
 <pre>[config]
-server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
+server.listener.class=org.debux.webmotion.spring.JpaListener
+</pre>
+
+<p>
+    With the maven dependency:
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-jpa&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Check the last available version --&gt;
+&lt;/dependency&gt;
 </pre>
 
 <p>
@@ -291,7 +326,7 @@ server.main.handler.class=org.debux.webmotion.jpa.JpaMainHandler
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(Jpa.class);
         
         context.addInjector(new GenericDaoInjector());

@@ -169,7 +169,7 @@ public class MyHandler implements WebMotionHandler {
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addConverter(new Converter() {
             @Override
             public Object convert(Class type, Object value) {
@@ -196,7 +196,7 @@ public class Listener implements WebMotionServerListener {
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addInjector(new Injector() {
             @Override
             public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
@@ -241,7 +241,7 @@ public class AController extends WebMotionController {
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(org.debux.jpa.Transaction.class);
     }
 

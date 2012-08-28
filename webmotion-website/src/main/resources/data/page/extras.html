@@ -74,7 +74,7 @@ $ mvn archetype:generate \
     -DarchetypeRepository=http://debux.org/maven/repo \
     -DarchetypeGroupId=org.debux.webmotion \
     -DarchetypeArtifactId=webmotion-archetype \
-    -DarchetypeVersion=2.2 \
+    -DarchetypeVersion=2.3 \
     -DgroupId=org.example \
     -DartifactId=myapp \
     -Dpackage=org.example.myapp \
@@ -217,7 +217,7 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(SiteMesh.class);
     }
 
@@ -325,7 +325,7 @@ server.listener.class=org.debux.webmotion.jpa.JpaListener
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
+    public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(Jpa.class);
         
         context.addInjector(new GenericDaoInjector());

@@ -620,9 +620,9 @@ public Render run(Properties configuration) {
 public class Listener implements WebMotionServerListener {
 
     @Override
-    public void onStart(ServerContext context) {
-        Mapping mapping = context.getMapping();
-        Properties configuration = mapping.getProperties();
+    public void onStart(Mapping mapping, ServerContext context) {
+        Mapping rootMapping = context.getMapping();
+        Properties configuration = rootMapping.getProperties();
         ...
     }
 
