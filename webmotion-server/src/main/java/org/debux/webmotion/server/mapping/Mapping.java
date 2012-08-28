@@ -54,6 +54,9 @@ public class Mapping {
     /** Represents action section */
     protected List<ActionRule> actionRules;
 
+    /** Mapping declare use as extension, if null it is the root mapping */
+    protected Mapping parentMapping;
+    
     /** Represents extension section */
     protected List<Mapping> extensionsRules;
 
@@ -134,4 +137,12 @@ public class Mapping {
         this.name = name;
     }
 
+    public Mapping getParentMapping() {
+        return parentMapping;
+    }
+
+    public void setParentMapping(Mapping parentMapping) {
+        this.parentMapping = parentMapping;
+    }
+    
 }

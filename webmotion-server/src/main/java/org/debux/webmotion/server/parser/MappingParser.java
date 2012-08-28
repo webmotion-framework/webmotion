@@ -648,6 +648,7 @@ public class MappingParser {
                         if (resources.isEmpty()) {
                             Mapping extensionMapping = new Mapping();
                             extensionMapping.setName(value);
+                            extensionMapping.setParentMapping(mapping);
                             extensionsRules.add(extensionMapping);
                             
                         } else {
@@ -657,6 +658,7 @@ public class MappingParser {
 
                                 Mapping extensionMapping = parser.parse(resource);
                                 extensionMapping.setExtensionPath(path);
+                                extensionMapping.setParentMapping(mapping);
                                 extensionsRules.add(extensionMapping);
 
                                 Properties extensionProperties = extensionMapping.getProperties();

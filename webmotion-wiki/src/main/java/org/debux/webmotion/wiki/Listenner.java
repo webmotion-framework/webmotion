@@ -39,8 +39,8 @@ public class Listenner implements WebMotionServerListener {
 
     @Override
     public void onStart(Mapping mapping, ServerContext context) {
-        Mapping rootMapping = context.getMapping();
-        Properties properties = rootMapping.getProperties();
+        Mapping parent = mapping.getParentMapping();
+        Properties properties = parent.getProperties();
         WikiConfig.instance = new WikiConfig(properties);
     }
 
