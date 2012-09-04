@@ -798,6 +798,17 @@ public class Book {
 </pre>
 
 <p>
+    WebMotion permet de passer plus simplement les attributs sous forme de paramètre pour les objets simples, 
+    sur l'exemple précédent de la façon suivante <code>http://localhost/webmotion-sample/action?<strong>isbn=007&amp;title=James%20Bond</strong></code>.
+    Vous pouvez aussi expliciter la conversion depuis le fichier de mapping :
+</p>
+<pre>
+GET         /action?isbn={book.isbn}&amp;title={book.isbn}            Service.action
+GET         /action?isbn={book}&amp;title={book}                      Service.action
+GET         /action?isbn={}&amp;title={}                              Service.action
+</pre>
+
+<p>
     <span class="label label-info">Note</span> 
     Il est possible de combiner les types, c'est-à-dire avoir des listes d'objet ou des objets en association avec d'autres objets.
     Pour l'URL <code>http://localhost/webmotion-sample/action?<strong>users.user1.name=titi&amp;users.user1.age=10

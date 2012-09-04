@@ -735,16 +735,17 @@ public class Showcase extends WebMotionController {
                 "path_demo", Arrays.asList(
                     "/login?name=john&passwd=azerty",
                     "/login?user.name=john&user.passwd=azerty",
-                    "/login?username=john&userpasswd=azerty"
+                    "/login?username=john&userpasswd=azerty",
+                    "/auth?name=john&passwd=azerty"
                 ),
                 
                 "files", Arrays.asList(
                     getConfig(false, true, false, false)
                         .addContent(getFirstMapping(SECTION_ACTIONS, INDEX_ACTIONS + 55, 2))
-                        .addContent(getContentMapping(INDEX_ACTIONS + 91, 1)),
+                        .addContent(getContentMapping(INDEX_ACTIONS + 91, 2)),
                     getJavaContent("Auth.java"),
                     getJavaContent("User.java")
-                ) 
+                )
         );
     }
     

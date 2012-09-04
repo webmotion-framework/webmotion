@@ -122,6 +122,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
                     } else {
                         tmp.put(name, ArrayUtils.addAll(currentValues, values));
                     }
+                    tmp.put(name + "." + param, values);
                 }
             }
         }
@@ -139,24 +140,22 @@ public class ParametersExtractorHandler implements WebMotionHandler {
             
             for (position = 0; position < split.length; position++) {
 
+                String name = split[position];
+                ParameterTree next = map.get(name);
+                if (next == null) {
+                    next = new ParameterTree();
+                    map.put(name, next);
+                }
+                    
                 if (position == split.length - 1) {
-                    ParameterTree next = new ParameterTree();
                     next.setValue(value);
                     
-                    map.put(split[position], next);
-                    
                 } else {
-                    String name = split[position];
-
-                    ParameterTree next = map.get(name);
-                    if (next == null) {
-                        next = new ParameterTree();
-                        map.put(name, next);
-                        
-                        next.setTree(new LinkedHashMap<String, ParameterTree>());
-                    }
-                    
                     map = next.getTree();
+                    if (map == null) {
+                        map = new LinkedHashMap<String, ParameterTree>();
+                        next.setTree(map);
+                    }
                 }
             }
         }

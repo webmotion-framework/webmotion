@@ -263,9 +263,17 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                     tabConverted[index] = objectConverted;
                 }
             }
+
+        } else if (value instanceof UploadFile) {
+            if (File.class.isAssignableFrom(type)) {
+                UploadFile uploadFile = (UploadFile) value;
+                result = uploadFile.getFile();
+            } else {
+                result = value;
+            }
             
         // Manage simple object
-        } else if (tree != null) {
+        } else if (converter.lookup(type) == null) {
             Object instance = type.newInstance();
             boolean one = false;
             
@@ -290,14 +298,6 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                 result = instance;
             } else {
                 result = null;
-            }
-
-        } else if (value instanceof UploadFile) {
-            if (File.class.isAssignableFrom(type)) {
-                UploadFile uploadFile = (UploadFile) value;
-                result = uploadFile.getFile();
-            } else {
-                result = value;
             }
             
         // Other simple convertion (string, string[], int, int[], ...)
