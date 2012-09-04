@@ -67,4 +67,14 @@
 
     </dependencies>
 
+    <build>
+        <finalName>webmotion-extra-all</finalName>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
