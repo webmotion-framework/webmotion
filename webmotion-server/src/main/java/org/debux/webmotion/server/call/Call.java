@@ -53,8 +53,8 @@ public class Call {
     /** The parameters contained in request URL (POST, GET) and in multi-part request. */
     protected Map<String, Object> extractParameters;
     
-    /** The parameters contained in URL with the mapping-defined names. */
-    protected Map<String, Object> aliasParameters;
+    /** All parameters contained in request, URL, default, aliases. */
+    protected ParameterTree parameterTree;
 
     /** Action rule or error rule selected in mapping by given URL. */
     protected Rule rule;
@@ -81,11 +81,42 @@ public class Call {
     protected boolean async;
     
     /**
+     * Represent the parameters as a tree. It contains URL, default, request, 
+     * aliases parameters.
+     */
+    public static class ParameterTree {
+        
+        protected Map<String, ParameterTree> tree;
+        
+        protected Object value;
+
+        public Map<String, ParameterTree> getTree() {
+            return tree;
+        }
+
+        public void setTree(Map<String, ParameterTree> tree) {
+            this.tree = tree;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
+        
+        public boolean isEmpty() {
+            return tree == null || tree.isEmpty();
+        }
+    }
+    
+    /**
      * Default contructor use to create wrapper to test
      */
     public Call() {
         this.extractParameters = new LinkedHashMap<String, Object>();
-        this.aliasParameters = new LinkedHashMap<String, Object>();
+        this.parameterTree = new ParameterTree();
         this.filterRules = new LinkedList<FilterRule>();
         this.filters = new LinkedList<Executor>();
     }
@@ -122,12 +153,12 @@ public class Call {
         return render;
     }
 
-    public Map<String, Object> getAliasParameters() {
-        return aliasParameters;
+    public ParameterTree getParameterTree() {
+        return parameterTree;
     }
 
-    public void setAliasParameters(Map<String, Object> aliasParameters) {
-        this.aliasParameters = aliasParameters;
+    public void setParameterTree(ParameterTree parameterTree) {
+        this.parameterTree = parameterTree;
     }
 
     public Map<String, Object> getExtractParameters() {

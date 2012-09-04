@@ -50,6 +50,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.UploadFile;
 import org.slf4j.Logger;
@@ -111,7 +112,9 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
         String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
 
         // Sort parameters and convert
-        Map<String, Object> parameters = call.getAliasParameters();
+        Call.ParameterTree parameterTree = call.getParameterTree();
+        Map<String, ParameterTree> tree = parameterTree.getTree();
+        
         Class<?>[] parameterTypes = executorMethod.getParameterTypes();
         Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
         List<String> protectedParameters = executor.getProtectedParameters();
@@ -125,34 +128,36 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
             Type genericType = genericParameterTypes[position];
 
             if (!protectedParameters.contains(name)) {
-                Object value = parameters.get(name);
-                if (value == null && !WebMotionUtils.isPrimitiveType(type)) {
-                    value = parameters;
+                ParameterTree nextTree = tree.get(name);
+                if (nextTree == null && !WebMotionUtils.isPrimitiveType(type)) {
+                    nextTree = parameterTree;
                 }
 
                 try {
-                    value = convert(value, type, genericType);
+                    Object value = convert(nextTree, type, genericType);
                     convertedParameters.put(name, value);
 
                 } catch (Exception ex) {
                     throw new WebMotionException("Error during converting parameter " 
-                            + name + " with value " + value 
-                            + " before invoke the method", ex);
+                            + name + " before invoke the method", ex);
                 }
             }
         }
     }
     
-    protected Object convert(Object value, Class<?> type, Type genericType) throws Exception {
+    protected Object convert(Call.ParameterTree parameterTree , Class<?> type, Type genericType) throws Exception {
         Object result = null;
 
-        if (value == null) {
+        if (parameterTree == null) {
             return null;
         }
         
         if (genericType == null) {
             genericType = type.getGenericSuperclass();
         }
+        
+        Map<String, ParameterTree> tree = parameterTree.getTree();
+        Object value = parameterTree.getValue();
         
         // Manage collection
         if (Collection.class.isAssignableFrom(type)) {
@@ -181,17 +186,16 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                 convertType = (Class) parameterizedType.getActualTypeArguments()[0];
             }
 
-            if (value instanceof Map) {
-                Map<?, ?> map = (Map) value;
-                for (Map.Entry<?, ?> entry : map.entrySet()) {
-                    Object object = entry.getValue();
+            if (tree != null) {
+                for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
+                    ParameterTree object = entry.getValue();
                     Object converted = convert(object, convertType, null);
                     instance.add(converted);
                 }
             } else {
                 Object[] tab = (Object[]) value;
                 for (Object object : tab) {
-                    Object converted = convert(object, convertType, null);
+                    Object converted = converter.convert(object, convertType);
                     instance.add(converted);
                 }
             }
@@ -220,12 +224,11 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                 convertValueType = (Class) parameterizedType.getActualTypeArguments()[1];
             }
 
-            Map<?, ?> map = (Map) value;
-            for (Map.Entry entry : map.entrySet()) {
-                Object mapKey = entry.getKey();
-                Object mapValue = entry.getValue();
+            for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
+                String mapKey = entry.getKey();
+                ParameterTree mapValue = entry.getValue();
 
-                Object convertedKey = convert(mapKey, convertKeyType, null);
+                Object convertedKey = converter.convert(mapKey, convertKeyType);
                 Object convertedValue = convert(mapValue, convertValueType, null);
 
                 instance.put(convertedKey, convertedValue);
@@ -237,14 +240,13 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
         } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
             
-            if (value instanceof Map) {
-                Map<?, ?> map = (Map) value;
-                Object[] tabConverted = (Object[]) Array.newInstance(componentType, map.size());
+            if (tree != null) {
+                Object[] tabConverted = (Object[]) Array.newInstance(componentType, tree.size());
                 result = tabConverted;
                 
                 int index = 0;
-                for (Map.Entry<?, ?> entry : map.entrySet()) {
-                    Object object = entry.getValue();
+                for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
+                    ParameterTree object = entry.getValue();
                     Object objectConverted = convert(object, componentType, null);
                     tabConverted[index] = objectConverted;
                     index ++;
@@ -257,20 +259,19 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
                 
                 for (int index = 0; index < tab.length; index++) {
                     Object object = tab[index];
-                    Object objectConverted = convert(object, componentType, null);
+                    Object objectConverted = converter.convert(object, componentType);
                     tabConverted[index] = objectConverted;
                 }
             }
             
         // Manage simple object
-        } else if (value instanceof Map) {
+        } else if (tree != null) {
             Object instance = type.newInstance();
             boolean one = false;
             
-            Map<String, ?> attributes = (Map) value;
-            for (Map.Entry<String, ?> attribut : attributes.entrySet()) {
+            for (Map.Entry<String, ParameterTree> attribut : tree.entrySet()) {
                 String attributName = attribut.getKey();
-                Object attributeValue = attribut.getValue();
+                ParameterTree attributeValue = attribut.getValue();
                 
                 boolean writeable = propertyUtils.isWriteable(instance, attributName);
                 if (writeable) {

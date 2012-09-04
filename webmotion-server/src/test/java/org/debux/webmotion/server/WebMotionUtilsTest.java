@@ -28,7 +28,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.nuiton.util.Resource;
@@ -138,6 +141,21 @@ public class WebMotionUtilsTest {
     public void testIsPrimitive() {
         AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.TYPE));
         AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.class));
+    }
+    
+    @Test
+    public void testreplaceDynamicName() {
+        Map<String, Call.ParameterTree> tree = new LinkedHashMap<String, Call.ParameterTree>();
+        
+        Call.ParameterTree value = new Call.ParameterTree();
+        tree.put("test", value);
+        value.setValue("value");
+        
+        Call.ParameterTree parameterTree = new Call.ParameterTree();
+        parameterTree.setTree(tree);
+        
+        String result = WebMotionUtils.replaceDynamicName("{test}", parameterTree);
+        AssertJUnit.assertEquals("value", result);
     }
 
 }

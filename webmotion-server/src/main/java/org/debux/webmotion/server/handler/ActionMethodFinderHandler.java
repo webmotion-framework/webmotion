@@ -66,13 +66,13 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
         Render render = call.getRender();
         Rule rule = call.getRule();
         // Test if it directly mapped on view or urlor not action found in extension
-        if(render == null && rule != null) {
+        if (render == null && rule != null) {
             
-            Map<String, Object> parameters = call.getAliasParameters();
+            Call.ParameterTree parameterTree = call.getParameterTree();
             Action action = rule.getAction();
 
             String className = action.getClassName();
-            className = WebMotionUtils.replaceDynamicName(className, parameters);
+            className = WebMotionUtils.replaceDynamicName(className, parameterTree);
             className = WebMotionUtils.capitalizeClass(className);
 
             Config config = mapping.getConfig();
@@ -92,7 +92,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
                 }
 
                 String methodName = action.getMethodName();
-                methodName = WebMotionUtils.replaceDynamicName(methodName, parameters);
+                methodName = WebMotionUtils.replaceDynamicName(methodName, parameterTree);
                 Method method = WebMotionUtils.getMethod(clazz, methodName);
                 if (method == null) {
                     throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);

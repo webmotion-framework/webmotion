@@ -36,6 +36,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
@@ -58,8 +59,6 @@ public class ParametersExtractorHandler implements WebMotionHandler {
 
     @Override
     public void handle(Mapping mapping, Call call) {
-        // Save result in call
-        Map<String, Object> aliasParameters = call.getAliasParameters();
         
         // Not action found in extension ?
         ActionRule actionRule = (ActionRule) call.getRule();
@@ -69,6 +68,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         
         // Contains all parameters
         Map<String, Object> tmp = new LinkedHashMap<String, Object>();
+        ParameterTree parameterTree = call.getParameterTree();
         
         // Add default parameters
         List<FilterRule> filterRules = call.getFilterRules();
@@ -127,32 +127,40 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         }
         
         // Transform dot by map
+        Map<String, ParameterTree> tree = new LinkedHashMap<String, ParameterTree>();
         for (Map.Entry<String, Object> entry : tmp.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             
             // Manage object.property=value
-            Map<String, Object> map = aliasParameters;
+            Map<String, ParameterTree> map = tree;
             
             String[] split = key.split("\\.");
             
             for (position = 0; position < split.length; position++) {
 
                 if (position == split.length - 1) {
-                    map.put(split[position], value);
+                    ParameterTree next = new ParameterTree();
+                    next.setValue(value);
+                    
+                    map.put(split[position], next);
                     
                 } else {
                     String name = split[position];
 
-                    Map<String, Object> next = (Map<String, Object>) map.get(name);
+                    ParameterTree next = map.get(name);
                     if (next == null) {
-                        next = new LinkedHashMap<String, Object>();
+                        next = new ParameterTree();
                         map.put(name, next);
+                        
+                        next.setTree(new LinkedHashMap<String, ParameterTree>());
                     }
-
-                    map = next;
+                    
+                    map = next.getTree();
                 }
             }
         }
+        
+        parameterTree.setTree(tree);
     }
 }

@@ -31,6 +31,7 @@ import org.debux.webmotion.server.mapping.Action;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Rule;
@@ -59,15 +60,17 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
     public void handle(Mapping mapping, Call call) {
         Rule rule = call.getRule();
         if (rule != null) {
+            
             Action action = rule.getAction();
-            Map<String, Object> parameters = call.getAliasParameters();
+            ParameterTree parameterTree = call.getParameterTree();
+            
             if (action.isView()) {
                 String pageName = action.getFullName();
-                pageName = WebMotionUtils.replaceDynamicName(pageName, parameters);
+                pageName = WebMotionUtils.replaceDynamicName(pageName, parameterTree);
 
                 Map<String, Object> model = null;
-                if(parameters != null) {
-                    model = convert(parameters);
+                if (!parameterTree.isEmpty()) {
+                    model = convert(parameterTree, "");
                 }
                         
                 Render render = new RenderView(pageName, model);
@@ -75,20 +78,20 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
 
             } else if (action.isRedirect()) {
                 String url = action.getFullName();
-                url = WebMotionUtils.replaceDynamicName(url, parameters);
+                url = WebMotionUtils.replaceDynamicName(url, parameterTree);
 
                 Render render = new RenderRedirect(url, null);
                 call.setRender(render);
                 
             } else if (action.isForward()) {
                 String url = action.getFullName();
-                url = WebMotionUtils.replaceDynamicName(url, parameters);
+                url = WebMotionUtils.replaceDynamicName(url, parameterTree);
 
                 Map<String, Object> model = null;
-                if(parameters != null) {
-                    model = convert(parameters);
+                if (!parameterTree.isEmpty()) {
+                    model = convert(parameterTree, "");
                 }
-                        
+
                 Render render = new RenderForward(url, model, null);
                 call.setRender(render);
             }
@@ -98,27 +101,29 @@ public class ActionExecuteRenderHandler implements WebMotionHandler {
     /**
      * Replace all array contains only one element to the first value.
      */
-    protected Map<String, Object> convert(Map<String, Object> parameters) {
-        Map<String, Object> converted = new HashMap<String, Object>(parameters.size());
+    protected Map<String, Object> convert(ParameterTree parameterTree, String prefix) {
+        Map<String, ParameterTree> tree = parameterTree.getTree();
+        Map<String, Object> converted = new HashMap<String, Object>(tree.size());
         
-        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-            String name = entry.getKey();
-            Object value = entry.getValue();
+        for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
+            String name = prefix + entry.getKey();
+            ParameterTree nextTree = entry.getValue();
+            Object value = nextTree.getValue();
 
-            if(value != null) {
+            if (value != null) {
                 Class clazz = value.getClass();
                 if (clazz.isArray()) {
                     Object[] array = (Object[]) value;
-                    if(array.length == 1) {
+                    if (array.length == 1) {
                         value = array[0];
                     }
-
-                } else if (Map.class.isAssignableFrom(clazz)) {
-                    Map map = (Map) value;
-                    value = convert(map);
                 }
+                converted.put(name, value);
+                
+            } else {
+                Map<String, Object> map = convert(nextTree, name + ".");
+                converted.putAll(map);
             }
-            converted.put(name, value);
         }
         
         return converted;

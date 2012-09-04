@@ -38,6 +38,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 
@@ -220,17 +222,20 @@ public class WebMotionUtils {
      * @param parameters request parameters
      * @return name with parameter values
      */
-    public static String replaceDynamicName(String name, Map<String, Object> parameters) {
+    public static String replaceDynamicName(String name, Call.ParameterTree parameterTree) {
         Matcher matcher = dynamicNamePattern.matcher(name);
         while (matcher.find()) {
             String paramName = matcher.group(1);
             
-            Object values = parameters.get(paramName);
-            if(values.getClass().isArray()) {
+            Map<String, ParameterTree> tree = parameterTree.getTree();
+            ParameterTree treeValue = tree.get(paramName);
+            Object values = treeValue.getValue();
+            
+            if (values.getClass().isArray()) {
                 values = ((Object[]) values)[0];
             }
             
-            if(values instanceof String) {
+            if (values instanceof String) {
                 String value = (String) values;
                 name = name.replace("{" + paramName + "}", value);
             }
