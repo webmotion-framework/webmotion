@@ -48,21 +48,28 @@
         </dependency>
 
         <!-- Shiro -->
-        <!--dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        
+<!--        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.2.0</version>
+        </dependency>-->
 
         <!-- Utils -->
-        <dependency>
+<!--        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- Servlet -->
         <dependency>
@@ -103,14 +110,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
