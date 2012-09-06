@@ -89,25 +89,27 @@ public class Shiro extends WebMotionFilter {
      * @param rememberMe
      * @return 
      */
-    public Render auth(String username, String password, boolean rememberMe) {
+    public Render isAuthenticated(String username, String password, Boolean rememberMe) {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
             if (username != null && !username.isEmpty()) {
                 // Try to log the user
                 UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-                token.setRememberMe(rememberMe);
+                if (rememberMe != null) {
+                    token.setRememberMe(rememberMe);
+                }
                 
                 try {
                     currentUser.login(token);
+                    doProcess();
+                    return null;
 
                 } catch (AuthenticationException e) {
                     log.error(e.getMessage(), e);
-                    return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
                 }
             }
         }
-        doProcess();
-        return null;
+        return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
     }
     
     /**
