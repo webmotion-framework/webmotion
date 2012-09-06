@@ -46,6 +46,8 @@ public class ShiroListener implements WebMotionServerListener {
         // Basic configuration
         PropertiesRealm realm = new PropertiesRealm();
         realm.setResourcePath("classpath:shiro.properties");
+        realm.init();
+        
         SecurityManager securityManager = new DefaultSecurityManager(realm);
         SecurityUtils.setSecurityManager(securityManager);
     }
