@@ -25,10 +25,9 @@
 package org.debux.webmotion.shiro;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.DefaultSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.text.PropertiesRealm;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -48,7 +47,7 @@ public class ShiroListener implements WebMotionServerListener {
         realm.setResourcePath("classpath:shiro.properties");
         realm.init();
         
-        SecurityManager securityManager = new DefaultSecurityManager(realm);
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(realm);
         SecurityUtils.setSecurityManager(securityManager);
     }
 

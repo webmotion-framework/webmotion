@@ -25,11 +25,17 @@
 package org.debux.webmotion.shiro;
 
 import java.net.HttpURLConnection;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.subject.WebSubject;
 import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +49,20 @@ public class Shiro extends WebMotionFilter {
     private static final Logger log = LoggerFactory.getLogger(Shiro.class);
     
     /**
+     * Get the subject in http context.
+     * @param request
+     * @param response
+     * @return 
+     */
+    public Subject getSubject(HttpContext context) {
+        HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
+        
+        Subject subject = new WebSubject.Builder(request, response).buildWebSubject();
+        return subject;
+    }
+    
+    /**
      * Log the user by username and password.
      * 
      * @param username
@@ -50,8 +70,8 @@ public class Shiro extends WebMotionFilter {
      * @param rememberMe
      * @return 
      */
-    public Render login(String username, String password, boolean rememberMe) {
-        Subject currentUser = SecurityUtils.getSubject();
+    public Render login(HttpContext context, String username, String password, boolean rememberMe) {
+        Subject currentUser = getSubject(context);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(rememberMe);
 
@@ -71,9 +91,10 @@ public class Shiro extends WebMotionFilter {
      * 
      * @return 
      */
-    public Render logout() {
+    public Render logout(HttpContext context) {
         try {
-            SecurityUtils.getSubject().logout();
+            Subject currentUser = getSubject(context);
+            currentUser.logout();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -89,8 +110,8 @@ public class Shiro extends WebMotionFilter {
      * @param rememberMe
      * @return 
      */
-    public Render isAuthenticated(String username, String password, Boolean rememberMe) {
-        Subject currentUser = SecurityUtils.getSubject();
+    public Render isAuthenticated(HttpContext context, String username, String password, Boolean rememberMe) {
+        Subject currentUser = getSubject(context);
         if (!currentUser.isAuthenticated()) {
             if (username != null && !username.isEmpty()) {
                 // Try to log the user
@@ -108,8 +129,11 @@ public class Shiro extends WebMotionFilter {
                     log.error(e.getMessage(), e);
                 }
             }
+            return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
         }
-        return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
+        
+        doProcess();
+        return null;
     }
     
     /**
@@ -118,8 +142,8 @@ public class Shiro extends WebMotionFilter {
      * @param role
      * @return 
      */
-    public Render hasRole(String role) {
-        Subject currentUser = SecurityUtils.getSubject();
+    public Render hasRole(HttpContext context, String role) {
+        Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
             if (currentUser.hasRole(role)) {
                 doProcess();
@@ -138,8 +162,8 @@ public class Shiro extends WebMotionFilter {
      * @param permission
      * @return 
      */
-    public Render isPermitted(String permission) {
-        Subject currentUser = SecurityUtils.getSubject();
+    public Render isPermitted(HttpContext context, String permission) {
+        Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
             if (currentUser.isPermitted(permission)) {
                 doProcess();
