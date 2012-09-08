@@ -31,7 +31,11 @@
     </head>
     <body>
         <h1>Menu</h1>
-        <a href="<c:url value="./auth/admin/index"/>">Admin part</a>
-        <a href="<c:url value="./auth/guest/index"/>">Guest part</a>
+        <div>
+            <a href="<c:url value="./auth/admin/index"/>">Admin part</a>
+        </div>
+        <div>
+            <a href="<c:url value="./auth/guest/index"/>">Guest part</a>
+        </div>
     </body>
 </html>

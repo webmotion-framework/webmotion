@@ -29,7 +29,8 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 [filters]
 *           /auth/*                            Shiro.isAuthenticated
 *           /auth/admin/*                      Shiro.hasRole     role=admin
-*           /auth/guest/*                      Shiro.hasRole     role=guest
+*           /auth/admin/*                      Shiro.isPermitted     permission=access
+*           /auth/guest/*                      Shiro.isPermitted     permission=access
 
 [errors]
 code:401                                       view:login.html
@@ -37,5 +38,6 @@ code:403                                       view:forbidden.html
 
 [actions]
 GET        /menu                               view:menu.jsp
-GET        /auth/admin/index                   view:admin_index.html
-GET        /auth/guest/index                   view:guest_index.html
+GET        /logout                             Shiro.logout
+GET        /auth/admin/index                   view:admin_index.jsp
+GET        /auth/guest/index                   view:guest_index.jsp
