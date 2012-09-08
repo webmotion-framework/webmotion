@@ -25,7 +25,10 @@
 package org.debux.webmotion.shiro;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.text.PropertiesRealm;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.debux.webmotion.server.WebMotionServerListener;
@@ -42,18 +45,35 @@ public class ShiroListener implements WebMotionServerListener {
     public void onStart(Mapping mapping, ServerContext context) {
         context.addGlobalController(Shiro.class);
         
-        // Basic configuration
-        PropertiesRealm realm = new PropertiesRealm();
-        realm.setResourcePath("classpath:shiro.properties");
-        realm.init();
-        
+        Realm realm = getRealm();
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(realm);
+        
+        DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager();
+        sessionManager.setSessionDAO(getSessionDAO());
+        
         SecurityUtils.setSecurityManager(securityManager);
     }
 
     @Override
     public void onStop(ServerContext context) {
         // Do nothing
+    }
+    
+    /**
+     * @return basic realm in properties file on classpath
+     */
+    protected Realm getRealm() {
+        PropertiesRealm realm = new PropertiesRealm();
+        realm.setResourcePath("classpath:shiro.properties");
+        realm.init();
+        return realm;
+    }
+    
+    /**
+     * @return session dao to how store the session
+     */
+    protected SessionDAO getSessionDAO() {
+        return new MemorySessionDAO();
     }
     
 }
