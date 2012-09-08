@@ -28,9 +28,8 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 
 [filters]
 *           /auth/*                            Shiro.isAuthenticated
-*           /auth/admin/*                      Shiro.hasRole     role=admin
-*           /auth/admin/*                      Shiro.isPermitted     permission=access
-*           /auth/guest/*                      Shiro.isPermitted     permission=access
+*           /auth/admin/*                      Shiro.hasRole           role=admin
+*           /auth/guest/*                      Shiro.isPermitted       permission=access
 
 [errors]
 code:401                                       view:login.html
