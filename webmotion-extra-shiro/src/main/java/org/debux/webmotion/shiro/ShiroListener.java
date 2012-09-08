@@ -46,11 +46,12 @@ public class ShiroListener implements WebMotionServerListener {
         context.addGlobalController(Shiro.class);
         
         Realm realm = getRealm();
+        
+//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+//        sessionManager.setSessionDAO(getSessionDAO());
+        
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(realm);
-        
-        DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager();
-        sessionManager.setSessionDAO(getSessionDAO());
-        
+//        securityManager.setSessionManager(sessionManager);
         SecurityUtils.setSecurityManager(securityManager);
     }
 
