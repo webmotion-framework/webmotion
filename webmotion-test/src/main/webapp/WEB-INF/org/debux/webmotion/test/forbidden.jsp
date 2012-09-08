@@ -22,6 +22,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,5 +31,8 @@
     </head>
     <body>
         <h1>Access denied</h1>
+        <div>
+            <a href="<c:url value="../../menu"/>">Menu</a>
+        </div>
     </body>
 </html>

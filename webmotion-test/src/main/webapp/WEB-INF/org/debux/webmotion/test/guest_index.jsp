@@ -34,5 +34,8 @@
         <div>
             <a href="<c:url value="../../logout"/>">Logout</a>
         </div>
+        <div>
+            <a href="<c:url value="../../menu"/>">Menu</a>
+        </div>
     </body>
 </html>

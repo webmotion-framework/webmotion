@@ -32,11 +32,12 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 *           /auth/guest/*                      Shiro.isPermitted       permission=access
 
 [errors]
-code:401                                       view:login.html
-code:403                                       view:forbidden.html
+code:401                                       view:login.jsp
+code:403                                       view:forbidden.jsp
 
 [actions]
+GET        /logout                             Shiro.logout                redirect=/menu
+
 GET        /menu                               view:menu.jsp
-GET        /logout                             Shiro.logout
 GET        /auth/admin/index                   view:admin_index.jsp
 GET        /auth/guest/index                   view:guest_index.jsp
