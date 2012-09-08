@@ -70,10 +70,12 @@ public class Shiro extends WebMotionFilter {
      * @param rememberMe
      * @return 
      */
-    public Render login(HttpContext context, String username, String password, boolean rememberMe) {
+    public Render login(HttpContext context, String username, String password, Boolean rememberMe, String redirect) {
         Subject currentUser = getSubject(context);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        token.setRememberMe(rememberMe);
+        if (rememberMe != null) {
+            token.setRememberMe(rememberMe);
+        }
 
         try {
             currentUser.login(token);
@@ -83,7 +85,12 @@ public class Shiro extends WebMotionFilter {
             return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
         }
 
-        return renderJSON(currentUser.getPrincipal());
+        if (redirect != null && !redirect.isEmpty()) {
+            return renderURL(redirect);
+            
+        } else {
+            return renderJSON(currentUser.getPrincipal());
+        }
     }
     
     /**
@@ -91,14 +98,20 @@ public class Shiro extends WebMotionFilter {
      * 
      * @return 
      */
-    public Render logout(HttpContext context) {
+    public Render logout(HttpContext context, String redirect) {
         try {
             Subject currentUser = getSubject(context);
             currentUser.logout();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return renderStatus(HttpURLConnection.HTTP_OK);
+        
+        if (redirect != null && !redirect.isEmpty()) {
+            return renderURL(redirect);
+            
+        } else {
+            return renderSuccess();
+        }
     }
     
     /**
