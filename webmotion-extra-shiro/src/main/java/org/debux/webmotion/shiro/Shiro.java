@@ -25,17 +25,17 @@
 package org.debux.webmotion.shiro;
 
 import java.net.HttpURLConnection;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.WebSubject;
 import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.render.Render;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +142,11 @@ public class Shiro extends WebMotionFilter {
      * @param role
      * @return 
      */
-    public Render hasRole(HttpContext context, String role) {
+    public Render hasRole(HttpContext context, Call call) {
+        FilterRule rule = (FilterRule) call.getCurrentRule();
+        Map<String, String[]> defaultParameters = rule.getDefaultParameters();
+        String role = defaultParameters.get("role")[0];
+        
         Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
             if (currentUser.hasRole(role)) {
@@ -162,7 +166,11 @@ public class Shiro extends WebMotionFilter {
      * @param permission
      * @return 
      */
-    public Render isPermitted(HttpContext context, String permission) {
+    public Render isPermitted(HttpContext context, Call call) {
+        FilterRule rule = (FilterRule) call.getCurrentRule();
+        Map<String, String[]> defaultParameters = rule.getDefaultParameters();
+        String permission = defaultParameters.get("permission")[0];
+        
         Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
             if (currentUser.isPermitted(permission)) {
