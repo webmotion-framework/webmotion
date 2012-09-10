@@ -25,12 +25,16 @@
 package org.debux.webmotion.shiro;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.crypto.hash.Sha1Hash;
+import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.text.PropertiesRealm;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -46,6 +50,10 @@ public class ShiroListener implements WebMotionServerListener {
         context.addGlobalController(Shiro.class);
         
         Realm realm = getRealm();
+        if (realm instanceof AuthenticatingRealm) {
+            AuthenticatingRealm authenticatingRealm = (AuthenticatingRealm) realm;
+            authenticatingRealm.setCredentialsMatcher(getMatcher());
+        }
         
 //        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 //        sessionManager.setSessionDAO(getSessionDAO());
@@ -68,6 +76,17 @@ public class ShiroListener implements WebMotionServerListener {
         realm.setResourcePath("classpath:shiro.properties");
         realm.init();
         return realm;
+    }
+    
+    /**
+     * Get the hash on password. 
+     * In Java : String hashedPassword = new Sha256Hash("password").toHex();
+     * @return the matcher use to encode the password
+     */
+    protected CredentialsMatcher getMatcher() {
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(Sha256Hash.ALGORITHM_NAME);
+        matcher.setStoredCredentialsHexEncoded(true);
+        return matcher;
     }
     
     /**
