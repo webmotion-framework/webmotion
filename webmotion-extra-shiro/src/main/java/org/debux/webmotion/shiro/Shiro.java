@@ -26,12 +26,10 @@ package org.debux.webmotion.shiro;
 
 import java.net.HttpURLConnection;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.subject.WebSubject;
 import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
@@ -55,10 +53,7 @@ public class Shiro extends WebMotionFilter {
      * @return 
      */
     public Subject getSubject(HttpContext context) {
-        HttpServletRequest request = context.getRequest();
-        HttpServletResponse response = context.getResponse();
-        
-        Subject subject = new WebSubject.Builder(request, response).buildWebSubject();
+        Subject subject = SecurityUtils.getSubject();
         return subject;
     }
     
@@ -82,7 +77,7 @@ public class Shiro extends WebMotionFilter {
 
         } catch (AuthenticationException e) {
             log.error(e.getMessage(), e);
-            return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
+            throw e;
         }
 
         if (redirect != null && !redirect.isEmpty()) {
@@ -140,6 +135,7 @@ public class Shiro extends WebMotionFilter {
 
                 } catch (AuthenticationException e) {
                     log.error(e.getMessage(), e);
+                    throw e;
                 }
             }
             return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);

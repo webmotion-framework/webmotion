@@ -23,6 +23,7 @@
   #L%
   -->
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
         <title>Shiro login</title>
@@ -31,8 +32,12 @@
     <body>
         <h1>Login</h1>
         <p>
-            admin/admin or guest/guest
+            Admin account (username/password) : admin/admin<br/>
+            Guest account (username/password) : guest/guest
         </p>
+        <c:if test="${param.error}">
+            <p style="color: firebrick">The username or password is incorrect !</p>
+        </c:if>
         <form>
             <div>
                 Username : <input type="text" name="username"/>

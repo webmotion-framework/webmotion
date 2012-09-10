@@ -32,8 +32,9 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 *           /auth/guest/*                      Shiro.isPermitted       permission=access
 
 [errors]
-code:401                                       view:login.jsp
-code:403                                       view:forbidden.jsp
+code:401                                            view:login.jsp
+code:403                                            view:forbidden.jsp
+org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
 
 [actions]
 GET        /logout                             Shiro.logout                redirect=/menu

@@ -89,7 +89,8 @@ public class ShiroListener implements WebMotionServerListener {
      * @return session manager to how store the user
      */
     protected SessionManager getSessionManager() {
-        return new ServletContainerSessionManager();
+        ServletContainerSessionManager sessionManager = new ServletContainerSessionManager();
+        return sessionManager;
     }
     
 }

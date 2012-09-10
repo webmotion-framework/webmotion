@@ -24,18 +24,24 @@
   -->
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
     <head>
         <title>Shiro menu</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <h1>Menu</h1>
+        <h1>Menu <shiro:principal/></h1>
         <div>
             <a href="<c:url value="./auth/admin/index"/>">Admin part</a>
         </div>
         <div>
             <a href="<c:url value="./auth/guest/index"/>">Guest part</a>
         </div>
+        <shiro:user>
+            <div>
+                <a href="<c:url value="./logout"/>">Logout</a>
+            </div>
+        </shiro:user>
     </body>
 </html>

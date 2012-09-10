@@ -30,5 +30,8 @@
     <name>webmotion_shiro_extra</name>
     
     <!-- Shiro configuration -->
-
+    <listener>
+        <listener-class>org.debux.webmotion.shiro.ShiroServletListener</listener-class>
+    </listener>
+    
 </web-fragment>
