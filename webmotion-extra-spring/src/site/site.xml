@@ -23,8 +23,6 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
-
-
 <project name="Webmotion">
     <skin>
         <groupId>org.apache.maven.skins</groupId>
@@ -48,11 +46,18 @@
         <menu name="Projects">
             <item name="Parent" href="../project-summary.html" />
             <item name="Server" href="../webmotion/project-summary.html" />
-            <item name="Extras" href="../webmotion-extra-all/project-summary.html" />
             <item name="Test" href="../webmotion-test/project-summary.html" />
             <item name="Archetype" href="../webmotion-archetype/project-summary.html" />
             <item name="WikiMotion" href="../wikimotion/project-summary.html" />
             <item name="Website" href="../webmotion-website/project-summary.html" />
+        </menu>
+
+        <menu name="Extras">
+            <item name="All" href="../webmotion-extra-all/project-summary.html" />
+            <item name="Spring" href="../webmotion-extra-spring/project-summary.html" />
+            <item name="SiteMesh" href="../webmotion-extra-sitemesh/project-summary.html" />
+            <item name="Hibernate" href="../webmotion-extra-jpa/project-summary.html" />
+            <item name="Shiro" href="../webmotion-extra-shiro/project-summary.html" />
         </menu>
 
         <menu ref="reports"/>
