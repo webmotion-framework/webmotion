@@ -27,14 +27,16 @@ package org.debux.webmotion.shiro;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.crypto.hash.Sha1Hash;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.text.PropertiesRealm;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -55,11 +57,8 @@ public class ShiroListener implements WebMotionServerListener {
             authenticatingRealm.setCredentialsMatcher(getMatcher());
         }
         
-//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-//        sessionManager.setSessionDAO(getSessionDAO());
-        
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(realm);
-//        securityManager.setSessionManager(sessionManager);
+        securityManager.setSessionManager(getSessionManager());
         SecurityUtils.setSecurityManager(securityManager);
     }
 
@@ -90,10 +89,10 @@ public class ShiroListener implements WebMotionServerListener {
     }
     
     /**
-     * @return session dao to how store the session
+     * @return session manager to how store the user
      */
-    protected SessionDAO getSessionDAO() {
-        return new MemorySessionDAO();
+    protected SessionManager getSessionManager() {
+        return new ServletContainerSessionManager();
     }
     
 }
