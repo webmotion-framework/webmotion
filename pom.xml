@@ -51,7 +51,7 @@
     <modules>
         <module>webmotion-server</module>
         <module>webmotion-extra-jpa</module>
-        <!--<module>webmotion-extra-shiro</module>-->
+        <module>webmotion-extra-shiro</module>
         <module>webmotion-extra-sitemesh</module>
         <module>webmotion-extra-spring</module>
         <module>webmotion-extra-all</module>
