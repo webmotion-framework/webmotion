@@ -84,7 +84,7 @@ $ mvn archetype:generate \
 
 <h2 class="page-header" id="spring">Spring</h2>
 <p>
-    WebMotion propose l'injection de dépendances basée sur Spring. Elle vous 
+    WebMotion propose l'injection de dépendances basée sur <a href="http://www.springsource.org/">Spring</a>. Elle vous 
     permet de gérer les contrôleurs WebMotionController dans Spring. Ainsi vous 
     disposez de l'ensemble des fonctionnalités de Spring comme la gestion des scopes 
     (request/session/singleton/prototype) pour vos objets ou la gestion des transactions.
@@ -184,7 +184,7 @@ public class SpringController extends WebMotionController {
 
 <h2 class="page-header" id="sitemesh">SiteMesh</h2>
 <p>
-    La partie SiteMesh vous permet de décorer vos pages avec un layout. Une intégration 
+    La partie <a href="http://www.sitemesh.org">SiteMesh</a> vous permet de décorer vos pages avec un layout. Une intégration 
     de SiteMesh a été réalisée pour pouvoir l'utiliser directement dans votre mapping sans 
     les fichiers de configuration de SiteMesh. Cependant, il sera toujours possible 
     de l'utiliser selon la documentation de SiteMesh.
@@ -208,23 +208,6 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
     &lt;artifactId&gt;webmotion-extra-sitemesh&lt;/artifactId&gt;
     &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
 &lt;/dependency&gt;
-</pre>
-
-<p>
-    Vous pouvez aussi ajouter la configuration en Java dans un listener ainsi :
-</p>
-<pre class="prettyprint">
-public class Listener implements WebMotionServerListener {
-
-    @Override
-    public void onStart(Mapping mapping, ServerContext context) {
-        context.addGlobalController(SiteMesh.class);
-    }
-
-    @Override
-    public void onStop(ServerContext context) {
-    }
-}
 </pre>
 
 <h3>Utilisation</h3>
@@ -294,7 +277,7 @@ public class Listener implements WebMotionServerListener {
 
 <h2 class="page-header" id="hibernate">Hibernate</h2>
 <p>
-    L'intégration d'Hibernate vous donne accès à des actions pour réaliser un CRUD sur
+    L'intégration d'<a href="http://www.hibernate.org/">Hibernate</a> vous donne accès à des actions pour réaliser un CRUD sur
     vos entités et permet la gestion de la transaction. Il repose sur JPA. 
 </p>
 
@@ -316,27 +299,6 @@ server.listener.class=org.debux.webmotion.jpa.JpaListener
     &lt;artifactId&gt;webmotion-extra-jpa&lt;/artifactId&gt;
     &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
 &lt;/dependency&gt;
-</pre>
-
-<p>
-    Vous pouvez aussi ajouter la configuration en Java dans un listener ainsi :
-</p>
-<pre class="prettyprint">
-public class Listener implements WebMotionServerListener {
-
-    @Override
-    public void onStart(Mapping mapping, ServerContext context) {
-        context.addGlobalController(Jpa.class);
-        
-        context.addInjector(new GenericDaoInjector());
-        context.addInjector(new EntityManagerInjector());
-        context.addInjector(new EntityTransactionManager());
-    }
-
-    @Override
-    public void onStop(ServerContext context) {
-    }
-}
 </pre>
 
 <h3>Pre-requis</h3>
@@ -737,6 +699,56 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
     ...
 }
 </pre>
+
+<h2 class="page-header" id="shiro">Shiro</h2>
+<p>
+    WebMotion propose par le biais de <a href="http://shiro.apache.org/">Shiro</a>,
+    la sécurisation de votre site internet. Shiro vous permet de gérer les 
+    authentications et les autorisations de vos utilisateurs. L'intégration vous 
+    permet de rajouter simplement dans votre fichier de mapping les filtres 
+    pour mettre en place la sécurisation de vos urls.
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement Shiro dans votre projet vous pouvez modifier la section <code>[config]</code>  
+    de votre fichier de mapping comme suit :
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.shiro.ShiroListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-shiro&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Pensez à vérifier la dernière version disponible --&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    De base l'extra vous propose une configuration simple dans un fichier properties.
+</p>
+
+<h3>Utilisation</h3>
+
+<h4>Authentification</h4>
+<h5>Formulaire</h5>
+<h5>AJAX</h5>
+<h5>Lougout</h5>
+
+<h4>Autorisation</h4>
+<h5>Rôle</h5>
+<h5>Permission</h5>
+
+<h4>Avancé</h4>
+<p>
+    Vous pouvez personaliser l'ensemble du SecurityManager en redéfinisssant le listener.
+</p>
+
 
 <h2 class="page-header" id="integration">Intégration de templates de page</h2>
 <p>
