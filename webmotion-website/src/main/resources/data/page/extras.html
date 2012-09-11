@@ -730,21 +730,101 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 </pre>
 
 <p>
-    De base l'extra vous propose une configuration simple dans un fichier properties.
+    De base l'extra vous propose une configuration simple dans un fichier properties. 
+    Il doit se trouver dans le classpath de votre projet et se nommer <code>shiro.properties</code>.
+</p>
+
+<pre class="prettyprint">
+user.adminUser = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, adminRole
+role.adminRole = "adminPermission"
+</pre>
+
+<p>
+    Les lignes commençant par <code>user.</code> définit un utilisateur, avec comme login la valeur après le point.
+    Après le égale vous trouvez le mot de passe encodé en sha256 suivi des rôles de l'utilisateur.
+    Les lignes commençant par <code>role.</code> définit un role, avec comme nom la valeur après le point.
+    Après le égale vous trouvez l'ensemble des permissions donné par le rôle.
+    Vous pouvez vous reporter à la 
+    <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/text/PropertiesRealm.html">javadoc</a> 
+    de Shiro pour plus de renseignement.
 </p>
 
 <h3>Utilisation</h3>
 
 <h4>Authentification</h4>
-<h5>Formulaire</h5>
+
+<h5>Login</h5>
+<p>
+    Pour détecter si l'utilisateur n'est pas connecté il faut utiliser le filtre <code>Shiro.isAuthenticated</code>,
+    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié.
+</p>
+<pre>
+[filters]
+*           /auth/*                            Shiro.isAuthenticated
+
+[errors]
+code:401                                       view:login.jsp
+</pre>
+
+<p>
+    Au niveau du formulaire d'authentification vous pouvez soit préciser une 
+    action de login avec la redirection vers une page sur laquelle l'utilisateur va
+    être rediriger après s'être authentifié.
+</p>
+<pre>
+[actions]
+GET        /login                               Shiro.login     redirect=/menu
+</pre>
+
+<p>
+    Soit ne pas préciser d'action dans votre formulaire, et automatiquement la 
+    dernière page accédée sera affichée.
+</p>
+
+<p>
+    Une exception <code>AuthenticationException</code> est levée si l'authentification 
+    se passe mal. Ainsi vous pouvez rafficher la page de login en précisant une erreur 
+    d'authentification.
+</p>
+<pre>
+[errors]
+org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
+</pre>
+
+<h5>Logout</h5>
+<p>
+    Pour gérer la déconnection, il faut rajouter une action dans votre fichier de mapping
+    en précisant la redirection après la déconnection :
+</p>
+<pre>
+[actions]
+GET        /logout                             Shiro.logout                redirect=/menu
+</pre>
+
 <h5>AJAX</h5>
-<h5>Lougout</h5>
+<p>
+    Vous pouvez utiliser les actions de <code>login</code> et <code>logout</code>, 
+    sans redirection pour un usage en <code>AJAX</code>.
+</p>
+
+<pre>
+[actions]
+GET        /login                              Shiro.login
+GET        /logout                             Shiro.logout
+</pre>
 
 <h4>Autorisation</h4>
 <h5>Rôle</h5>
 <h5>Permission</h5>
+<h5>Forbidden</h5>
 
 <h4>Avancé</h4>
+<h5>Mot de passe</h5>
+<h5>TagLib</h5>
+<p>
+    Shiro propose
+</p>
+<h5>Configuration</h5>
 <p>
     Vous pouvez personaliser l'ensemble du SecurityManager en redéfinisssant le listener.
 </p>
