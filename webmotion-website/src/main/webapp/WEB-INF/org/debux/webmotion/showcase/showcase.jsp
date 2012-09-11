@@ -285,6 +285,7 @@
                                         <li><a id="spring" href="./spring">Spring</a></li>
                                         <li><a id="sitemesh" href="./sitemesh">SiteMesh</a></li>
                                         <li><a id="jpa" href="./jpa">Hibernate/JPA</a></li>
+                                        <li><a id="shiro" href="./shiro">Shiro</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                             </ul>

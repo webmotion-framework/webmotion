@@ -43,10 +43,10 @@ import org.slf4j.LoggerFactory;
 public class Showcase extends WebMotionController {
 
     protected static final int INDEX_PROPERTIES = 6;
-    protected static final int INDEX_EXTENSIONS = 10;
-    protected static final int INDEX_FILTERS = 20;
-    protected static final int INDEX_ERRORS = 26;
-    protected static final int INDEX_ACTIONS = 34;
+    protected static final int INDEX_EXTENSIONS = 11;
+    protected static final int INDEX_FILTERS = 21;
+    protected static final int INDEX_ERRORS = 27;
+    protected static final int INDEX_ACTIONS = 35;
     
     protected static final String SECTION_PROPERTIES = "properties";
     protected static final String SECTION_ACTIONS = "actions";
@@ -1060,6 +1060,24 @@ public class Showcase extends WebMotionController {
                     getConfig(false, true, false, false)
                         .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 88, 3)),
                     getJavaContent("Dynamic.java")
+                )
+        );
+    }
+
+    public Render shiro() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/shiro/menu"
+                ),
+                
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", getFile("shiro.wm")),
+                    new FileContent("src/main/resources/shiro.properties", getFile("shiro.properties")),
+                    getPageContent("menu.jsp"),
+                    getPageContent("admin_index.jsp"),
+                    getPageContent("guest_index.jsp"),
+                    getPageContent("login.jsp"),
+                    getPageContent("forbidden.jsp")
                 )
         );
     }
