@@ -40,7 +40,7 @@ number = 10
 /                                                       injector.wm
 /                                                       converter.wm
 /                                                       note.wm
-/shiro                                                  shiro.wm
+/                                                       shiro.wm
 
 [filters]
 *           /path/*                                     Filter.pass

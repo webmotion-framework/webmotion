@@ -1067,7 +1067,7 @@ public class Showcase extends WebMotionController {
     public Render shiro() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/shiro/menu"
+                    "/menu"
                 ),
                 
                 "files", Arrays.asList(

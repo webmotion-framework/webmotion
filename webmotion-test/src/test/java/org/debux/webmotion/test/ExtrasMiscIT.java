@@ -83,7 +83,7 @@ public class ExtrasMiscIT extends AbstractIT {
     
     @Test
     public void shiroLogin() throws IOException {
-        String url = getAbsoluteUrl("shiro/auth/admin/index");
+        String url = getAbsoluteUrl("auth/admin/index");
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
@@ -92,7 +92,7 @@ public class ExtrasMiscIT extends AbstractIT {
     
     @Test
     public void shiroError() throws IOException {
-        String url = getAbsoluteUrl("shiro/auth/admin/index?username=aa&password=aa");
+        String url = getAbsoluteUrl("auth/admin/index?username=aa&password=aa");
         HttpGet request = new HttpGet(url);
      
         String result = execute(request);
@@ -102,7 +102,7 @@ public class ExtrasMiscIT extends AbstractIT {
     
     @Test
     public void shiroForbidden() throws IOException {
-        String url = getAbsoluteUrl("shiro/auth/admin/index?username=guest&password=guest");
+        String url = getAbsoluteUrl("auth/admin/index?username=guest&password=guest");
         HttpGet request = new HttpGet(url);
      
         String result = execute(request);
@@ -111,7 +111,7 @@ public class ExtrasMiscIT extends AbstractIT {
     
     @Test
     public void shiroAuthorized() throws IOException {
-        String url = getAbsoluteUrl("shiro/auth/guest/index?username=guest&password=guest");
+        String url = getAbsoluteUrl("auth/guest/index?username=guest&password=guest");
         HttpGet request = new HttpGet(url);
      
         String result = execute(request);
