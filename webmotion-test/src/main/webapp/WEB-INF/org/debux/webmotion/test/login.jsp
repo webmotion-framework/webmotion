@@ -46,6 +46,9 @@
                 Password : <input type="password" name="password"/>
             </div>
             <div>
+                Remember me : <input type="checkbox" name="rememberMe" value="true"/>
+            </div>
+            <div>
                 <input type="submit" value="login"/>
             </div>
         </form>
