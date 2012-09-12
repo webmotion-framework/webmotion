@@ -749,6 +749,14 @@ role.adminRole = "adminPermission"
     de Shiro pour plus de renseignement.
 </p>
 
+<p>
+    Pour générer les mots de passe en sha256, vous pouvez utiliser le code java suivant :
+</p>
+<pre class="prettyprint">
+String hashedPassword = new Sha256Hash("password").toHex();
+System.out.println(hashedPassword);
+</pre>
+
 <h3>Utilisation</h3>
 
 <h4>Authentification</h4>
@@ -782,6 +790,31 @@ GET        /login                               Shiro.login     redirect=/menu
 </p>
 
 <p>
+    Voici un exemple de formulaire pour l'authentification :
+</p>
+<pre class="prettyprint">
+&lt;form&gt;
+    &lt;div&gt;
+        Username : &lt;input type="text" name="username"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Password : &lt;input type="password" name="password"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Remember me : &lt;input type="checkbox" name="rememberMe" value="true"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;input type="submit" value="login"/&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    Le paramètre <code>remenberMe</code> est utilisé pour retenir automatiquement 
+    le dernier utilisateur connecté.
+</p>
+
+<p>
     Une exception <code>AuthenticationException</code> est levée si l'authentification 
     se passe mal. Ainsi vous pouvez rafficher la page de login en précisant une erreur 
     d'authentification.
@@ -790,6 +823,7 @@ GET        /login                               Shiro.login     redirect=/menu
 [errors]
 org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
 </pre>
+
 
 <h5>Logout</h5>
 <p>
@@ -814,22 +848,99 @@ GET        /logout                             Shiro.logout
 </pre>
 
 <h4>Autorisation</h4>
+
 <h5>Rôle</h5>
+<p>
+    Pour vérifier un rôle d'utilisateur il suffit de rajouter le filtre <code>Shiro.hasRole</code> :
+</p>
+<pre>
+*           /user/*                      Shiro.hasRole           role=user
+</pre>
+
+<p>
+    Il est possible de vérifier plusieurs rôles ainsi :
+</p>
+<pre>
+*           /tester/*                      Shiro.hasRole          role=user,role=tester
+</pre>
+
 <h5>Permission</h5>
+<p>
+    Pour vérifier une permission il suffit de rajouter le filtre <code>Shiro.isPermitted</code> :
+</p>
+<pre>
+*           /guest/*                      Shiro.isPermitted       permission=access
+</pre>
+
+<p>
+    Il est possible de vérifier plusieurs permissions ainsi :
+</p>
+<pre>
+*           /tester/*                      Shiro.isPermitted      permission=access,permission=tester
+</pre>
+
 <h5>Forbidden</h5>
+<p>
+    Si l'utilisateur n'est pas autoriser à accéder à une url, une erreur HTTP avec le code <code>503</code> 
+    est retournée au client. Pour gérer le cas dans votre application, vous pouvez rajouter une règle de mapping 
+    ainsi :
+</p>
+<pre>
+[errors]
+code:403                                            view:forbidden.jsp
+</pre>
 
 <h4>Avancé</h4>
-<h5>Mot de passe</h5>
-<h5>RemenberMe</h5>
 <h5>TagLib</h5>
 <p>
-    Shiro propose
+    Shiro propose un ensemble de taglib, WebMotion est compatible avec. Vous pouvez vous reporter à la 
+    <a href="http://shiro.apache.org/web.html#Web-taglibrary">documentation</a> 
+    de Shiro pour plus de renseignement.
 </p>
+<pre class="prettyprint">
+&lt;%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %&gt;
+&lt;shiro:user&gt;
+    &lt;a href="logout"&gt;Logout&lt;/a&gt;
+&lt;/shiro:user&gt;
+</pre>
+
 <h5>Configuration</h5>
 <p>
-    Vous pouvez personaliser l'ensemble du SecurityManager en redéfinisssant le listener.
+    Vous pouvez personaliser l'ensemble du SecurityManager en redéfinisssant le listener. 
+    Vous avez accès :
 </p>
+<ul>
+    <li>au realm, permet de définir le stockage des utilistateurs et des permissions</li>
+    <li>au matcher, permet de définir comment est stocker les mot de passe</li>
+    <li>à la session, permet de définir le stockage de la session</li>
+</ul>
 
+<pre class="prettyprint">
+public class MyShiroListener extends ShiroListener {
+
+    @Override
+    protected Realm getRealm() {
+        // ...
+    }
+
+    @Override
+    protected CredentialsMatcher getMatcher() {
+        // ...
+    }
+
+    @Override
+    protected SessionManager getSessionManager() {
+        // ...
+    }
+}
+</pre>
+<p>
+    Avec comme fichier de mapping :
+</p>
+<pre>
+[config]
+server.listener.class=org.debux.webmotion.exemple.MyShiroListener
+</pre>
 
 <h2 class="page-header" id="templates">Intégration de templates de page</h2>
 <p>
