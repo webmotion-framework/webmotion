@@ -38,6 +38,7 @@
     <li>un moteur d'IOC avec Spring</li>
     <li>un système de layoutage avec SiteMesh</li>
     <li>un helper pour la gestion d'une base de données avec Hibernate</li>
+    <li>une gestion de la sécurité avec Shiro</li>
 </ul>
 <p>
     Pour utiliser les extras, il est nécessaire de rajouter la dépendance Maven suivante :
@@ -56,14 +57,8 @@
 </p>
 <pre>
 [config]
-server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener,org.debux.webmotion.spring.ShiroListener
 </pre>
-
-<p>
-    Comme pour WebMotion, la partie extras repose sur un fragment web, qui inclut 
-    l'ensemble des éléments web pour le bon fonctionnement de Spring, de SiteMesh 
-    et d'Hibernate.
-</p>
 
 <p>
     Vous pouvez utiliser l'archetype maven pour créer votre projet avec les 
@@ -81,6 +76,31 @@ $ mvn archetype:generate \
     -Dversion=1.0-SNAPSHOT \
     -DusesExtras=Y
 </pre>
+
+<p>
+    Un extra est comparable à un système de plugin. Vous pouvez réaliser vos propre 
+    extra. Généralement un extra regroupe dans un listener :
+</p>
+<ul>
+    <li>les controlleurs globaux</li>
+    <li>les convertisseurs</li>
+    <li>les modifications du fichier mapping (par exemple le remplacement du MainHandler)</li>
+</ul>
+
+<p>
+    Comme pour WebMotion, la partie extras peut reposer sur un fragment web, qui inclut 
+    l'ensemble des éléments web, c'est à dire :
+</p>
+<ul>
+    <li>les filtres</li>
+    <li>les listenners</li>
+    <li>les servlets</li>
+</ul>
+
+<p>
+    Pour plus de renseignements, veuillez vous reporter 
+    à la section <a href="advanced">Avancé</a>.
+</p>
 
 <h2 class="page-header" id="spring">Spring</h2>
 <p>
@@ -764,7 +784,7 @@ System.out.println(hashedPassword);
 <h5>Login</h5>
 <p>
     Pour détecter si l'utilisateur n'est pas connecté il faut utiliser le filtre <code>Shiro.isAuthenticated</code>,
-    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié.
+    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le rediriger vers la page de login.
 </p>
 <pre>
 [filters]
@@ -773,21 +793,6 @@ System.out.println(hashedPassword);
 [errors]
 code:401                                       view:login.jsp
 </pre>
-
-<p>
-    Au niveau du formulaire d'authentification vous pouvez soit préciser une 
-    action de login avec la redirection vers une page sur laquelle l'utilisateur va
-    être rediriger après s'être authentifié.
-</p>
-<pre>
-[actions]
-GET        /login                               Shiro.login     redirect=/menu
-</pre>
-
-<p>
-    Soit ne pas préciser d'action dans votre formulaire, et automatiquement la 
-    dernière page accédée sera affichée.
-</p>
 
 <p>
     Voici un exemple de formulaire pour l'authentification :
@@ -808,6 +813,21 @@ GET        /login                               Shiro.login     redirect=/menu
     &lt;/div&gt;
 &lt;/form&gt;
 </pre>
+
+<p>
+    Au niveau du formulaire d'authentification vous pouvez soit préciser une 
+    action de login avec la redirection vers une page sur laquelle l'utilisateur va
+    être rediriger après s'être authentifié.
+</p>
+<pre>
+[actions]
+GET        /login                               Shiro.login     redirect=/menu
+</pre>
+
+<p>
+    Soit ne pas préciser d'action dans votre formulaire, et automatiquement la 
+    dernière page accédée sera affichée.
+</p>
 
 <p>
     Le paramètre <code>remenberMe</code> est utilisé pour retenir automatiquement 

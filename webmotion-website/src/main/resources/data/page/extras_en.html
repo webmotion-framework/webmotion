@@ -38,6 +38,7 @@
     <li>a IoC engine with Springg</li>
     <li>a layout system with SiteMesh</li>
     <li>a helper for the database management with Hibernate</li>
+    <li>a security manager based on Shiro</li>
 </ul>
 <p>
     To use the extras, you need to add the following Maven dependency:
@@ -55,13 +56,8 @@
 </p>
 <pre>
 [config]
-server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener,org.debux.webmotion.spring.ShiroListener
 </pre>
-
-<p>
-    As for WebMotion, the extra part relies on a web fragment, which includes
-    all the web elements for the smooth running of Spring, SiteMesh and Hibernate.
-</p>
 
 <p>
     You can use the Maven archetype to create a project with the extras by setting
