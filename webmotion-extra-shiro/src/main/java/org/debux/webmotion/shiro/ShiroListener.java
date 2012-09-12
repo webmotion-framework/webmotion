@@ -39,7 +39,8 @@ import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- *
+ * Listenner to declare Shiro as extra.
+ * 
  * @author julien
  */
 public class ShiroListener implements WebMotionServerListener {

@@ -25,9 +25,12 @@
 package org.debux.webmotion.shiro;
 
 import java.net.HttpURLConnection;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -41,7 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Shiro is a global controller to manage authentification and authorization.
+ * 
  * @author julien
  */
 public class Shiro extends WebMotionFilter {
@@ -159,19 +163,24 @@ public class Shiro extends WebMotionFilter {
     public Render hasRole(HttpContext context, Call call) {
         FilterRule rule = (FilterRule) call.getCurrentRule();
         Map<String, String[]> defaultParameters = rule.getDefaultParameters();
-        String role = defaultParameters.get("role")[0];
+        
+        String[] values = defaultParameters.get("role");
+        List<String> roles = Arrays.asList(values);
         
         Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
-            if (currentUser.hasRole(role)) {
+            
+            boolean[] hasRoles = currentUser.hasRoles(roles);
+            if (BooleanUtils.and(hasRoles)) {
                 doProcess();
+                return null;
             } else {
                 return renderError(HttpURLConnection.HTTP_FORBIDDEN);
             }
+            
         } else {
             return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
         }
-        return null;
     }
     
     /**
@@ -183,19 +192,23 @@ public class Shiro extends WebMotionFilter {
     public Render isPermitted(HttpContext context, Call call) {
         FilterRule rule = (FilterRule) call.getCurrentRule();
         Map<String, String[]> defaultParameters = rule.getDefaultParameters();
-        String permission = defaultParameters.get("permission")[0];
+        
+        String[] permissions = defaultParameters.get("permission");
         
         Subject currentUser = getSubject(context);
         if (currentUser.isAuthenticated()) {
-            if (currentUser.isPermitted(permission)) {
+            
+            boolean[] permitted = currentUser.isPermitted(permissions);
+            if (BooleanUtils.and(permitted)) {
                 doProcess();
+                return null;
             } else {
                 return renderError(HttpURLConnection.HTTP_FORBIDDEN);
             }
+            
         } else {
             return renderError(HttpURLConnection.HTTP_UNAUTHORIZED);
         }
-        return null;
     }
     
 }
