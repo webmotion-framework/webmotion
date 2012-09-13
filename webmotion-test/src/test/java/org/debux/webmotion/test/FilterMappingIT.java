@@ -25,6 +25,7 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,11 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result, result.contains("value = 42\nBefore filter\nAction log\nAction render\nAfter filter"));
+        AssertJUnit.assertTrue(result, result.contains("value = 42" + SystemUtils.LINE_SEPARATOR + 
+                "Before filter" + SystemUtils.LINE_SEPARATOR + 
+                "Action log" + SystemUtils.LINE_SEPARATOR + 
+                "Action render" + SystemUtils.LINE_SEPARATOR + 
+                "After filter"));
     }
     
     @Test
