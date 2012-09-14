@@ -50,7 +50,7 @@ public class FilterMappingIT extends AbstractIT {
         AssertJUnit.assertTrue(result, result.contains("value = 42" + SystemUtils.LINE_SEPARATOR + 
                 "Before filter" + SystemUtils.LINE_SEPARATOR + 
                 "Action log" + SystemUtils.LINE_SEPARATOR + 
-                "Action render" + SystemUtils.LINE_SEPARATOR + 
+                "Action render\n" + 
                 "After filter"));
     }
     
