@@ -299,7 +299,19 @@
                 <artifactId>ST4</artifactId>
                 <version>4.0.4</version>
             </dependency>
-            
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>11.0.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.9.8</version>
+            </dependency>
+        
             <!-- Logger -->
             <dependency>
                 <groupId>org.slf4j</groupId>

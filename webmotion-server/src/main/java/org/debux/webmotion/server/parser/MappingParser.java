@@ -27,18 +27,15 @@ package org.debux.webmotion.server.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.mapping.*;
+import org.debux.webmotion.server.mapping.Properties;
 import org.debux.webmotion.server.mapping.Properties.PropertiesItem;
-import org.nuiton.util.Resource;
 import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.buffers.InputBuffer;
@@ -639,36 +636,29 @@ public class MappingParser {
                 @Override
                 public void acceptBefore(String value) {
                     String path = (String) stack.removeLast();
-
                     List<Mapping> extensionsRules = mapping.getExtensionsRules();
 
-                    try {
-                        ClassLoader classLoader = getClass().getClassLoader();
-                        List<URL> resources = Resource.getResources(value, classLoader);
-                        if (resources.isEmpty()) {
-                            Mapping extensionMapping = new Mapping();
-                            extensionMapping.setName(value);
+                    Collection<String> resources = WebMotionUtils.getResources(value);
+                    if (resources.isEmpty()) {
+                        Mapping extensionMapping = new Mapping();
+                        extensionMapping.setName(value);
+                        extensionMapping.setParentMapping(mapping);
+                        extensionsRules.add(extensionMapping);
+
+                    } else {
+
+                        for (String resource : resources) {
+                            MappingParser parser = new MappingParser();
+
+                            Mapping extensionMapping = parser.parse(resource);
+                            extensionMapping.setExtensionPath(path);
                             extensionMapping.setParentMapping(mapping);
                             extensionsRules.add(extensionMapping);
-                            
-                        } else {
-                            
-                            for (URL resource : resources) {
-                                MappingParser parser = new MappingParser();
 
-                                Mapping extensionMapping = parser.parse(resource);
-                                extensionMapping.setExtensionPath(path);
-                                extensionMapping.setParentMapping(mapping);
-                                extensionsRules.add(extensionMapping);
-
-                                Properties extensionProperties = extensionMapping.getProperties();
-                                Properties properties = mapping.getProperties();
-                                properties.addProperties(extensionProperties);
-                            }
+                            Properties extensionProperties = extensionMapping.getProperties();
+                            Properties properties = mapping.getProperties();
+                            properties.addProperties(extensionProperties);
                         }
-
-                    } catch (IOException ex) {
-                        throw new WebMotionException("Error during read the file mapping with path in " + value, ex);
                     }
                 }
             });
@@ -714,7 +704,7 @@ public class MappingParser {
      * @return true if the file exists otherwise false
      */
     public boolean exists(String fileName) {
-        return getClass().getResource(fileName) != null;
+        return getClass().getClassLoader().getResource(fileName) != null;
     }
     
     /**
@@ -724,7 +714,7 @@ public class MappingParser {
      * @return the representation of the file
      */
     public Mapping parse(String fileName) {
-        URL url = getClass().getResource(fileName);
+        URL url = getClass().getClassLoader().getResource(fileName);
         return parse(url);
     }
     

@@ -93,10 +93,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.nuiton</groupId>
-            <artifactId>nuiton-utils</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+     
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk16</artifactId>
@@ -162,7 +167,7 @@
             <groupId>org.parboiled</groupId>
             <artifactId>parboiled-java</artifactId>
         </dependency>
-                    
+        
     </dependencies>
   
     <build>

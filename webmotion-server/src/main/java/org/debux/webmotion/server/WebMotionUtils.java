@@ -24,16 +24,15 @@
  */
 package org.debux.webmotion.server;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Multimap;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletRequest;
@@ -42,6 +41,11 @@ import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.reflections.Reflections;
+import org.reflections.Store;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 /**
  * Util class.
@@ -358,5 +362,27 @@ public class WebMotionUtils {
                 
         // By default
         return userHome + File.separator + ".config";
+    }
+    
+    /**
+     * @return all ressource with pattern
+     */
+    public static Collection<String> getResources(String regex) {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage(""))
+                .setScanners(new ResourcesScanner()));
+        
+        Store store = reflections.getStore();
+        Multimap<String, String> mmap = store.get(ResourcesScanner.class);
+        
+        final Pattern pattern = Pattern.compile(regex);
+        Predicate predicate = new Predicate<String>() {
+            @Override
+            public boolean apply(String input) {
+                return pattern.matcher(input).matches();
+            }
+        };
+        Collection<String> resources = Collections2.filter(mmap.values(), predicate);
+        return resources;
     }
 }

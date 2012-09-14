@@ -27,14 +27,10 @@ package org.debux.webmotion.server;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.nuiton.util.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -108,7 +104,7 @@ public class WebMotionUtilsTest {
     
     @Test
     public void testGetResourcesDirectory() throws IOException, URISyntaxException {
-        List<URL> resources = Resource.getResources("mapping/.*");
+        Collection<String> resources = WebMotionUtils.getResources("mapping/.*");
         AssertJUnit.assertFalse(resources.isEmpty());
     }
 
