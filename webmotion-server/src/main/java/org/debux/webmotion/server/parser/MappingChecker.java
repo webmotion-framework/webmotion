@@ -40,6 +40,7 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingVisit.Visitor;
+import org.debux.webmotion.server.websocket.WebMotionWebSocket;
 
 /**
  * Uses to check the mapping file after the initialization of the server. 
@@ -236,6 +237,12 @@ public class MappingChecker {
             }
 
             @Override
+            public void accept(Mapping mapping, WebSocketRule webSocketRule) {
+                String className = webSocketRule.getAction().getFullName();
+                checkClassName(webSocketRule, WebMotionWebSocket.class, packageActions, className);
+            }
+            
+            @Override
             public void accept(Mapping mapping, ErrorRule errorRule) {
                 checkError(errorRule);
                 checkAction(errorRule, globalControllers, packageErrors, WebMotionController.class);
@@ -268,8 +275,12 @@ public class MappingChecker {
      * @param rule current rule tested
      * @param className class name to check
      */
-    protected void checkClassName(Rule rule, Class superClass, String className) {
+    protected void checkClassName(Rule rule, Class superClass, String packageTarget, String className) {
         try {
+            if (packageTarget != null && !packageTarget.isEmpty()) {
+                className = packageTarget + "." + className;
+            }
+            
             Class<?> clazz = Class.forName(className);
             checkModfiers(rule, clazz);
             checkSuperClass(rule, superClass, clazz);
@@ -401,15 +412,11 @@ public class MappingChecker {
                 }
                 
             } else {
-                if (packageTarget != null && !packageTarget.isEmpty()) {
-                    className = packageTarget + "." + className;
-                }
-            
                 if (isNotVariable(className)) {
                     if (isNotVariable(methodName)) {
                         checkMethodName(rule, superClass, className, methodName);
                     } else {
-                        checkClassName(rule, superClass, className);
+                        checkClassName(rule, superClass, packageTarget, className);
                     }
                 }
             }
@@ -443,7 +450,7 @@ public class MappingChecker {
     protected void checkError(ErrorRule rule) {
         String error = rule.getError();
         if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
-            checkClassName(rule, Exception.class, error);
+            checkClassName(rule, Exception.class, null, error);
         }
     }
     

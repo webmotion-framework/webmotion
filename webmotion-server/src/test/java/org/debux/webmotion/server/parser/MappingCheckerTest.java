@@ -84,14 +84,14 @@ public class MappingCheckerTest {
     
     @Test
     public void testInvalidCheckClassName() {
-        checker.checkClassName(rule, Object.class, "MappingCheckerTest");
+        checker.checkClassName(rule, Object.class, null, "MappingCheckerTest");
         List<Warning> warnings = checker.getWarnings();
         AssertJUnit.assertEquals(1, warnings.size());
     }
     
     @Test
     public void testValidCheckClassName() {
-        checker.checkClassName(rule, Object.class, "org.debux.webmotion.server.parser.MappingCheckerTest");
+        checker.checkClassName(rule, Object.class, "org.debux.webmotion.server.parser", "MappingCheckerTest");
         List<Warning> warnings = checker.getWarnings();
         AssertJUnit.assertEquals(0, warnings.size());
     }
