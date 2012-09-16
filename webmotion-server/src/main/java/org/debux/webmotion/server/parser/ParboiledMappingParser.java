@@ -302,7 +302,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     // Section action
     public Rule sectionActions() {
-        return Sequence(actionSection(), ZeroOrMore(FirstOf(comment(), actionRule())));
+        return Sequence(actionSection(), ZeroOrMore(FirstOf(comment(), actionRule(), wsRule())));
     }
     
     public Rule actionSection() {
@@ -449,7 +449,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     @SuppressSubnodes
     public Rule actionJavaValue() {
-        return OneOrMore(Sequence(actionIdentifier(), ZeroOrMore(".", actionIdentifier())));
+        return Sequence(actionIdentifier(), OneOrMore(".", actionIdentifier()));
     }
     
     public Rule actionIdentifier() {
@@ -480,6 +480,38 @@ public class ParboiledMappingParser extends BaseParser {
     @SuppressSubnodes
     public Rule actionDefaultValue() {
         return ZeroOrMore(LetterParameterValue());
+    }
+    
+    public Rule wsRule() {
+        return Sequence(
+                    "WS",
+                    WhiteSpace(),
+                    wsPath(),
+                    WhiteSpace(),
+                    wsAction(),
+                    NewLine()
+            );
+    }
+    
+    public Rule wsPath() {
+        return OneOrMore(
+            FirstOf(
+                actionPathStatic(),
+                actionPathSlash()
+            )
+        );
+    }
+        
+    public Rule wsAction() {
+        return Sequence(
+                Optional("action:"),
+                wsActionValue()
+            );
+    }
+        
+    @SuppressSubnodes
+    public Rule wsActionValue() {
+        return Sequence(actionIdentifier(), ZeroOrMore(".", actionIdentifier()));
     }
     
     // Common

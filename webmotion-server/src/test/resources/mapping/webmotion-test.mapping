@@ -42,6 +42,7 @@ code:500                                                    forward:/test/tutu
 
 [actions]
 #<method>   <url>                                           <action>
+WS          /ws/chat                                        action:Chat
 *           /                                               action:Test.index
 *           /index                                          view:test/index.html
 *           /google                                         url:http://www.google.fr
