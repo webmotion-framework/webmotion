@@ -302,7 +302,7 @@ public class ParboiledMappingParser extends BaseParser {
     
     // Section action
     public Rule sectionActions() {
-        return Sequence(actionSection(), ZeroOrMore(FirstOf(comment(), actionRule(), wsRule())));
+        return Sequence(actionSection(), ZeroOrMore(FirstOf(comment(), actionRule(), webSocketRule())));
     }
     
     public Rule actionSection() {
@@ -482,18 +482,19 @@ public class ParboiledMappingParser extends BaseParser {
         return ZeroOrMore(LetterParameterValue());
     }
     
-    public Rule wsRule() {
+    public Rule webSocketRule() {
         return Sequence(
                     "WS",
                     WhiteSpace(),
-                    wsPath(),
+                    webSocketPath(),
                     WhiteSpace(),
-                    wsAction(),
+                    webSocketAction(),
                     NewLine()
             );
     }
     
-    public Rule wsPath() {
+    @SuppressSubnodes
+    public Rule webSocketPath() {
         return OneOrMore(
             FirstOf(
                 actionPathStatic(),
@@ -502,15 +503,15 @@ public class ParboiledMappingParser extends BaseParser {
         );
     }
         
-    public Rule wsAction() {
+    public Rule webSocketAction() {
         return Sequence(
                 Optional("action:"),
-                wsActionValue()
+                webSocketActionValue()
             );
     }
         
     @SuppressSubnodes
-    public Rule wsActionValue() {
+    public Rule webSocketActionValue() {
         return Sequence(actionIdentifier(), ZeroOrMore(".", actionIdentifier()));
     }
     
