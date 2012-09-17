@@ -80,9 +80,6 @@ public class WebMotionServer implements Filter {
     /** Current application context */
     protected ServerContext serverContext;
     
-    /** Current exclude paths */
-    protected String[] excludePaths;
-    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         serverContext = new ServerContext();
@@ -97,9 +94,9 @@ public class WebMotionServer implements Filter {
         // Get exclude path in context param
         String excludePathsParam = servletContext.getInitParameter(PARAM_EXCLUDE_PATHS);
         if (excludePathsParam != null && !excludePathsParam.isEmpty()) {
-            excludePaths = excludePathsParam.split(",");
+            serverContext.setExcludePaths(excludePathsParam.split(","));
         } else {
-            excludePaths = new String[]{};
+             serverContext.setExcludePaths(new String[]{});
         }
         
         serverContext.contextInitialized(servletContext);
@@ -129,7 +126,7 @@ public class WebMotionServer implements Filter {
         log.debug("Pass in filter = " + url);
         
         // Search if url is exclude path
-        for (String path : excludePaths) {
+        for (String path :  serverContext.getExcludePaths()) {
             if (url.startsWith(path)) {
                 url = PATH_SERVLET + url;
                 break;

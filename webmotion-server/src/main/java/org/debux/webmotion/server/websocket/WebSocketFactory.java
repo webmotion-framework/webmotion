@@ -25,41 +25,15 @@ package org.debux.webmotion.server.websocket;
  */
 
 /**
- * Simple class to manage the websocket. The outbound object use to send message to 
- * the client. Only message text is supported.
+ * Interface use to manage create a new websocket.
  * 
  * @author julien
  */
-public class WebMotionWebSocket implements WebSocketFactory {
-
-    @Override
-    public WebSocketInbound createSocket() {
-        return new DefaultWebSocket();
-    }
+public interface WebSocketFactory {
     
-    public static class  DefaultWebSocket implements WebSocketInbound {
-        protected WebSocketOutbound outbound;
-
-        @Override
-        public void setOutbound(WebSocketOutbound outbound) {
-            this.outbound = outbound;
-        }
-
-        @Override
-        public WebSocketOutbound getOutbound() {
-            return outbound;
-        }
-
-        @Override
-        public void receiveTextMessage(String message) {
-        }
-
-        @Override
-        public void onOpen() {
-        }
-
-        @Override
-        public void onClose() {
-        }
-    }
+    /**
+     * Create a new websocket.
+     */
+    WebSocketInbound createSocket();
+    
 }

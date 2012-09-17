@@ -37,9 +37,4 @@ public interface WebSocketOutbound {
      */
     void sendTextMessage(String message);
     
-    /**
-     * Call to send a message for all clients.
-     * @param message 
-     */
-    void broadcastTextMessage(String message);
 }

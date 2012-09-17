@@ -24,11 +24,17 @@
  */
 package org.debux.webmotion.server.call;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration.Dynamic;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.*;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
@@ -38,6 +44,7 @@ import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.MappingParser;
+import org.debux.webmotion.server.websocket.WebSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +110,9 @@ public class ServerContext {
     /** Listeners on server */
     protected List<WebMotionServerListener> listeners;
     
+    /** Current exclude paths */
+    protected String[] excludePaths;
+    
     /**
      * Initialize the context.
      * 
@@ -143,6 +153,9 @@ public class ServerContext {
 
         // Check mapping
         checkMapping();
+        
+        // Create websockets
+        createWebSockets(mapping, "");
         
         log.info("WebMotion is started");
     }
@@ -227,7 +240,81 @@ public class ServerContext {
         mappingChecker.checkMapping(this, mapping);
         mappingChecker.print();
     }
-            
+
+    /**
+     * Create websockets
+     */
+    public void createWebSockets(Mapping mapping, String mappingPath) {
+        List<WebSocketRule> webSocketRules = mapping.getWebSocketRules();
+        for (WebSocketRule webSocketRule : webSocketRules) {
+            try {
+                String path = mappingPath;
+                if (mappingPath.endsWith("/")) {
+                    path = StringUtils.substringBeforeLast(path, "/");
+                }
+                path += webSocketRule.getPath();
+                
+                String className = webSocketRule.getAction().getFullName();
+                
+                Config config = mapping.getConfig();
+                String packageName = config.getPackageActions();
+                String fullQualifiedName = null;
+                if (packageName == null || packageName.isEmpty()) {
+                    fullQualifiedName = className;
+                } else {
+                    fullQualifiedName = packageName + "." + className;
+                }
+                
+                Class<WebSocketFactory> factoryClass = (Class<WebSocketFactory>) Class.forName(fullQualifiedName);
+                WebSocketFactory factory = factoryClass.newInstance();
+                
+                String wrapperClassName = null;
+                if (WebMotionUtils.isTomcatContainer(servletContext)) {
+                    wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketTomcatWrapper";
+                    
+                } else if (WebMotionUtils.isGlassfishContainer(servletContext)) {
+                    wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketGlassfishWrapper";
+                    
+                } else if (WebMotionUtils.isJettyContainer(servletContext)) {
+                    wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketJettyWrapper";
+                    
+                } else {
+                    throw new WebMotionException("Unsupported WebSocket on application server");
+                }
+                
+                Class<Servlet> wrapperClass = (Class<Servlet>) Class.forName(wrapperClassName);
+                Constructor<Servlet> constructor = wrapperClass.getConstructor(WebSocketFactory.class);
+                Servlet wrapper = constructor.newInstance(factory);
+                
+                Dynamic servlet = servletContext.addServlet(className, wrapper);
+                servlet.addMapping(path);
+                
+                excludePaths = ArrayUtils.add(excludePaths, path);
+                
+            } catch (IllegalArgumentException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (InvocationTargetException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (NoSuchMethodException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (SecurityException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (InstantiationException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (IllegalAccessException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            } catch (ClassNotFoundException ex) {
+                throw new WebMotionException("Error during create the websocket", ex);
+            }
+        }
+        
+        List<Mapping> extensions = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensions) {
+            String extensionPath = extensionMapping.getExtensionPath();
+            createWebSockets(extensionMapping, extensionPath);
+        }
+    }
+    
     /**
      * @return the instance of mapping parser
      */
@@ -456,5 +543,20 @@ public class ServerContext {
     public String getWebappPath() {
         return webappPath;
     }
-    
+
+    /**
+     * @return current path exclude in filter
+     */
+    public String[] getExcludePaths() {
+        return excludePaths;
+    }
+
+    /**
+     * Set exclude path in filter
+     * @param excludePaths 
+     */
+    public void setExcludePaths(String[] excludePaths) {
+        this.excludePaths = excludePaths;
+    }
+
 }

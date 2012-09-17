@@ -42,9 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.servlet.AsyncListener;
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionContextable;
@@ -100,6 +98,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
         HttpServletResponse response = context.getResponse();
+        ServletContext servletContext = context.getServletContext();
 
         // Search if the request is execute to sync or async mode
         boolean isSyncRequest = true;
@@ -127,7 +126,7 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         } else {
             // Only the first request is execute at async mode
             AsyncContext asyncContext;
-            if (WebMotionUtils.isTomcatContainer(request)) {
+            if (WebMotionUtils.isTomcatContainer(servletContext)) {
                 request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
                 // Tomcat patch : force the dispatcher type
                 asyncContext = request.startAsync(new HttpServletRequestWrapper(request) {

@@ -128,7 +128,6 @@ public class MappingVisit {
         for (WebSocketRule webSocketRule : webSocketRules) {
             visitor.accept(mapping, (Rule) webSocketRule);
             visitor.accept(mapping, webSocketRule);
-            
         }
 
         List<ErrorRule> errorRules = mapping.getErrorRules();

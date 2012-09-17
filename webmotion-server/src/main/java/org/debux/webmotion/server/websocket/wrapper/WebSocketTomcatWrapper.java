@@ -1,16 +1,16 @@
-package org.debux.webmotion.server.websocket;
+package org.debux.webmotion.server.websocket.wrapper;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.LinkedList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
-import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.websocket.WebSocketFactory;
+import org.debux.webmotion.server.websocket.WebSocketInbound;
+import org.debux.webmotion.server.websocket.WebSocketOutbound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,11 +47,10 @@ public class WebSocketTomcatWrapper extends WebSocketServlet {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketTomcatWrapper.class);
     
-    protected Class<WebSocketInbound> inboundClass;
-    protected List<WebSocketInboundWrapper> connections = new LinkedList<WebSocketInboundWrapper>();
+    protected WebSocketFactory factory;
 
-    public WebSocketTomcatWrapper(Class<WebSocketInbound> inboundClass) {
-        this.inboundClass = inboundClass;
+    public WebSocketTomcatWrapper(WebSocketFactory factory) {
+            this.factory = factory;
     }
 
     /**
@@ -65,21 +64,10 @@ public class WebSocketTomcatWrapper extends WebSocketServlet {
      * Use before tomcat introduce request in method
      */
     protected StreamInbound createWebSocketInbound(String string) {
-        try {
-            WebSocketInbound inbound = inboundClass.newInstance();
-            
-            WebSocketInboundWrapper wrapper = new WebSocketInboundWrapper(inbound);
-            connections.add(wrapper);
-            
-            inbound.setOutbound(wrapper);
-            
-            return wrapper;
-            
-        } catch (InstantiationException ex) {
-            throw new WebMotionException("Error during create WebMotionWebSocket", ex);
-        } catch (IllegalAccessException ex) {
-            throw new WebMotionException("Error during create WebMotionWebSocket", ex);
-        }
+        WebSocketInbound inbound = factory.createSocket();
+        WebSocketInboundWrapper wrapper = new WebSocketInboundWrapper(inbound);
+        inbound.setOutbound(wrapper);
+        return wrapper;
     }
     
     public class WebSocketInboundWrapper extends MessageInbound implements WebSocketOutbound {
@@ -109,13 +97,6 @@ public class WebSocketTomcatWrapper extends WebSocketServlet {
         @Override
         protected void onClose(int status) {
             inbound.onClose();
-        }
-        
-        @Override
-        public void broadcastTextMessage(String message) {
-            for (WebSocketInboundWrapper connection : connections) {
-                connection.sendTextMessage(message);
-            }
         }
         
         @Override

@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Call.ParameterTree;
@@ -260,24 +260,24 @@ public class WebMotionUtils {
     /**
      * @return true if webmotion in Tomcat container.
      */
-    public static boolean isTomcatContainer(ServletRequest request) {
-        String serverInfo = request.getServletContext().getServerInfo();
+    public static boolean isTomcatContainer(ServletContext context) {
+        String serverInfo = context.getServerInfo();
         return serverInfo.contains("Tomcat");
     }
 
     /**
      * @return true if webmotion in Glassfish container.
      */
-    public static boolean isGlassfishContainer(ServletRequest request) {
-        String serverInfo = request.getServletContext().getServerInfo();
+    public static boolean isGlassfishContainer(ServletContext context) {
+        String serverInfo = context.getServerInfo();
         return serverInfo.contains("GlassFish");
     }
 
     /**
      * @return true if webmotion in Jetty container.
      */
-    public static boolean isJettyContainer(ServletRequest request) {
-        String serverInfo = request.getServletContext().getServerInfo();
+    public static boolean isJettyContainer(ServletContext context) {
+        String serverInfo = context.getServerInfo();
         return serverInfo.contains("Jetty");
     }
 
