@@ -179,6 +179,26 @@
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-websockets</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-framework</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-utils</artifactId>
+        </dependency>
+        
     </dependencies>
   
     <build>
