@@ -59,6 +59,9 @@ public class ServerContext {
     
     private static final Logger log = LoggerFactory.getLogger(ServerContext.class);
 
+    /* ServerContext name to store attributes */
+    public static final String ATTRIBUTES_SERVER_CONTEXT = "wm.server.context";
+            
     /** Factory of controllers*/
     protected SingletonFactory<WebMotionController> controllers;
     

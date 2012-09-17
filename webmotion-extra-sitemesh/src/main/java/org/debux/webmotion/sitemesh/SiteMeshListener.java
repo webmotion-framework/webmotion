@@ -24,9 +24,21 @@
  */
 package org.debux.webmotion.sitemesh;
 
+import java.io.IOException;
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.sitemesh.builder.SiteMeshFilterBuilder;
+import org.sitemesh.config.ConfigurableSiteMeshFilter;
+import org.sitemesh.config.PathBasedDecoratorSelector;
+import org.sitemesh.content.Content;
+import org.sitemesh.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +51,36 @@ public class SiteMeshListener implements WebMotionServerListener {
 
     private static final Logger log = LoggerFactory.getLogger(SiteMeshListener.class);
 
+    /** Current filter */
+    protected static Filter filter = new ConfigurableSiteMeshFilter() {
+        @Override
+        protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
+            builder.setCustomDecoratorSelector(new PathBasedDecoratorSelector<WebAppContext>() {
+
+                @Override
+                public String[] selectDecoratorPaths(Content content, WebAppContext siteMeshContext) throws IOException {
+                    // Search the filter into the attibutes of the request
+                    HttpServletRequest request = siteMeshContext.getRequest();
+                    String[] layouts = (String[]) request.getAttribute(SiteMesh.LAYOUTS);
+                    if (layouts != null) {
+                        return layouts;
+                    } else {
+                        // Else use SiteMesh in classic mode 
+                        String[] selectDecoratorPaths = super.selectDecoratorPaths(content, siteMeshContext);
+                        return selectDecoratorPaths;
+                    }
+                }
+            });
+        }
+    };
+            
     @Override
     public void onStart(Mapping mapping, ServerContext context) {
+        // Add filter into webapp
+        ServletContext servletContext = context.getServletContext();
+        FilterRegistration registration = servletContext.addFilter("sitemesh", filter);
+        registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE), true, "/*");
+            
         context.addGlobalController(SiteMesh.class);
     }
 

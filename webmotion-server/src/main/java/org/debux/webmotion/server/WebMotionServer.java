@@ -70,41 +70,19 @@ public class WebMotionServer implements Filter {
     
     /** Path uses to manage servlets outside WebMotion  */
     public static final String PATH_SERVLET = "/servlet";
-    
-    /** Filter parameter to configure mapping file name by default is mapping */
-    protected final static String PARAM_MAPPING_FILE_NAME = "wm.mapping.file.name";
-            
-    /** Filter parameter to configure excludes path for WebMotion. The value is separated by comma */
-    protected final static String PARAM_EXCLUDE_PATHS = "wm.exclude.paths";
-            
+
     /** Current application context */
     protected ServerContext serverContext;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        serverContext = new ServerContext();
-        
-        // Get file name mapping in context param
         ServletContext servletContext = filterConfig.getServletContext();
-        String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
-        if (mappingFileNameParam != null && !mappingFileNameParam.isEmpty()) {
-            serverContext.setMappingFileName(mappingFileNameParam);
-        }
-        
-        // Get exclude path in context param
-        String excludePathsParam = servletContext.getInitParameter(PARAM_EXCLUDE_PATHS);
-        if (excludePathsParam != null && !excludePathsParam.isEmpty()) {
-            serverContext.setExcludePaths(excludePathsParam.split(","));
-        } else {
-             serverContext.setExcludePaths(new String[]{});
-        }
-        
-        serverContext.contextInitialized(servletContext);
+        serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT);
     }
 
     @Override
     public void destroy() {
-        serverContext.contextDestroyed();
+        // Do nothing
     }
 
     @Override

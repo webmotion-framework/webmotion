@@ -24,6 +24,12 @@
  */
 package org.debux.webmotion.shiro;
 
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.concurrent.Callable;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -32,8 +38,14 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.text.PropertiesRealm;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.subject.ExecutionException;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.mgt.WebSecurityManager;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
+import org.apache.shiro.web.servlet.ShiroHttpServletResponse;
 import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
+import org.apache.shiro.web.subject.WebSubject;
 import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -45,8 +57,114 @@ import org.debux.webmotion.server.mapping.Mapping;
  */
 public class ShiroListener implements WebMotionServerListener {
 
+    /** Current filter */
+    protected static Filter filter = new Filter() {
+        @Override
+        public void init(FilterConfig filterConfig) throws ServletException {
+            // Do nothing
+        }
+
+        @Override
+        public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, final FilterChain chain) throws IOException, ServletException {
+            Throwable t = null;
+
+            try {
+                final ServletRequest request = prepareServletRequest(servletRequest, servletResponse, chain);
+                final ServletResponse response = prepareServletResponse(request, servletResponse, chain);
+
+                final Subject subject = createSubject(request, response);
+
+                //noinspection unchecked
+                subject.execute(new Callable() {
+
+                    @Override
+                    public Object call() throws Exception {
+                        executeChain(request, response, chain);
+                        return null;
+                    }
+                });
+            } catch (ExecutionException ex) {
+                t = ex.getCause();
+            } catch (Throwable throwable) {
+                t = throwable;
+            }
+
+            if (t != null) {
+                if (t instanceof ServletException) {
+                    throw (ServletException) t;
+                }
+                if (t instanceof IOException) {
+                    throw (IOException) t;
+                }
+                //otherwise it's not one of the two exceptions expected by the filter method signature - wrap it in one:
+                String msg = "Filtered request failed.";
+                throw new ServletException(msg, t);
+            }
+        }
+
+        protected void executeChain(ServletRequest request, ServletResponse response, FilterChain origChain)
+                throws IOException, ServletException {
+            origChain.doFilter(request, response);
+        }
+
+        protected ServletResponse prepareServletResponse(ServletRequest request, ServletResponse response, FilterChain chain) {
+            ServletResponse toUse = response;
+            if (!isHttpSessions() && (request instanceof ShiroHttpServletRequest)
+                    && (response instanceof HttpServletResponse)) {
+                //the ShiroHttpServletResponse exists to support URL rewriting for session ids.  This is only needed if
+                //using Shiro sessions (i.e. not simple HttpSession based sessions):
+                toUse = wrapServletResponse((HttpServletResponse) response, (ShiroHttpServletRequest) request);
+            }
+            return toUse;
+        }
+
+        protected ServletRequest prepareServletRequest(ServletRequest request, ServletResponse response, FilterChain chain) {
+            ServletRequest toUse = request;
+            if (request instanceof HttpServletRequest) {
+                HttpServletRequest http = (HttpServletRequest) request;
+                toUse = wrapServletRequest(http);
+            }
+            return toUse;
+        }
+
+        protected ServletResponse wrapServletResponse(HttpServletResponse orig, ShiroHttpServletRequest request) {
+            return new ShiroHttpServletResponse(orig, request.getServletContext(), request);
+        }
+
+        protected ServletRequest wrapServletRequest(HttpServletRequest orig) {
+            return new ShiroHttpServletRequest(orig, orig.getServletContext(), isHttpSessions());
+        }
+
+        protected boolean isHttpSessions() {
+            return getSecurityManager().isHttpSessionMode();
+        }
+
+        protected WebSubject createSubject(ServletRequest request, ServletResponse response) {
+            return new WebSubject.Builder(getSecurityManager(), request, response).buildWebSubject();
+        }
+
+        public WebSecurityManager getSecurityManager() {
+            return (WebSecurityManager) SecurityUtils.getSecurityManager();
+        }
+
+        @Override
+        public void destroy() {
+            // Do nothing
+        }
+    };
+        
     @Override
     public void onStart(Mapping mapping, ServerContext context) {
+         // Add filter into webapp
+        ServletContext servletContext = context.getServletContext();
+        FilterRegistration registration = servletContext.addFilter("shiro", filter);
+        registration.addMappingForUrlPatterns(
+                EnumSet.of(DispatcherType.FORWARD,
+                DispatcherType.INCLUDE,
+                DispatcherType.REQUEST,
+                DispatcherType.ERROR),
+                true, "/*");
+    
         context.addGlobalController(Shiro.class);
         
         Realm realm = getRealm();
