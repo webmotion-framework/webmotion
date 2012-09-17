@@ -492,7 +492,6 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-websocket</artifactId>
                 <version>8.1.0.v20120127</version>
-                <scope>provided</scope>
             </dependency>
 
         </dependencies>
@@ -619,6 +618,13 @@
                             <contextPath>/${project.build.finalName}</contextPath>
                         </webApp>
                     </configuration>
+<!--                    <dependencies>
+                        <dependency>
+                            <groupId>org.eclipse.jetty</groupId>
+                            <artifactId>jetty-websocket</artifactId>
+                            <version>8.1.0.v20120127</version>
+                        </dependency>
+                    </dependencies>-->
                 </plugin>
                 
                 <plugin>
