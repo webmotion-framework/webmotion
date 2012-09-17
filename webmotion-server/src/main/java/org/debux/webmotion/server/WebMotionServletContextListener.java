@@ -48,9 +48,10 @@ public class WebMotionServletContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         serverContext = new ServerContext();
+        ServletContext servletContext = event.getServletContext();
+        servletContext.setAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT, serverContext);
         
         // Get file name mapping in context param
-        ServletContext servletContext = event.getServletContext();
         String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileNameParam != null && !mappingFileNameParam.isEmpty()) {
             serverContext.setMappingFileName(mappingFileNameParam);
@@ -65,7 +66,6 @@ public class WebMotionServletContextListener implements ServletContextListener {
         }
         
         serverContext.contextInitialized(servletContext);
-        servletContext.setAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT, serverContext);
     }
 
     @Override

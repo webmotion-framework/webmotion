@@ -71,13 +71,9 @@ public class WebMotionServer implements Filter {
     /** Path uses to manage servlets outside WebMotion  */
     public static final String PATH_SERVLET = "/servlet";
 
-    /** Current application context */
-    protected ServerContext serverContext;
-    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        ServletContext servletContext = filterConfig.getServletContext();
-        serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT);
+        // Do nothing
     }
 
     @Override
@@ -89,6 +85,7 @@ public class WebMotionServer implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = ((HttpServletRequest) request);
         HttpServletResponse httpServletResponse = ((HttpServletResponse) response);
+        ServerContext serverContext = getServerContext(httpServletRequest);
         
         String uri = null;
         DispatcherType dispatcherType = request.getDispatcherType();
@@ -146,6 +143,7 @@ public class WebMotionServer implements Filter {
         long start = System.currentTimeMillis();
         
         // Create call context use in handler to get information on user request
+        ServerContext serverContext = getServerContext(request);
         Call call = new Call(serverContext, request, response);
         
         // Apply config
@@ -226,6 +224,16 @@ public class WebMotionServer implements Filter {
         } else {
             dispatcher.forward(requestWrapper, response);
         }
+    }
+    
+    /**
+     * @param request request to found servlet context
+     * @return server context in servlet context
+     */
+    protected ServerContext getServerContext(HttpServletRequest request) {
+        ServletContext servletContext = request.getServletContext();
+        ServerContext serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT);
+        return serverContext;
     }
 
 }
