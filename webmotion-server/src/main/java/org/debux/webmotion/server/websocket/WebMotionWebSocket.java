@@ -1,5 +1,3 @@
-package org.debux.webmotion.server.websocket;
-
 /*
  * #%L
  * WebMotion server
@@ -23,6 +21,7 @@ package org.debux.webmotion.server.websocket;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+package org.debux.webmotion.server.websocket;
 
 /**
  * Simple class to manage the websocket. The outbound object use to send message to 

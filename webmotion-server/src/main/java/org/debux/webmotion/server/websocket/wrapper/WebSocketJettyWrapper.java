@@ -24,88 +24,73 @@
 package org.debux.webmotion.server.websocket.wrapper;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.catalina.websocket.MessageInbound;
-import org.apache.catalina.websocket.StreamInbound;
-import org.apache.catalina.websocket.WebSocketServlet;
-import org.apache.catalina.websocket.WsOutbound;
 import org.debux.webmotion.server.websocket.WebSocketFactory;
 import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.debux.webmotion.server.websocket.WebSocketOutbound;
+import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
+
+import org.eclipse.jetty.websocket.WebSocketServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
- * Wrapper on tomcat servlet to run websocket.
+ * Wrapper on Jetty servlet to run websocket.
  * 
  * @author julien
  */
-public class WebSocketTomcatWrapper extends WebSocketServlet {
-
-    private static final Logger log = LoggerFactory.getLogger(WebSocketTomcatWrapper.class);
+public class WebSocketJettyWrapper extends WebSocketServlet {
     
+    private static final Logger log = LoggerFactory.getLogger(WebSocketJettyWrapper.class);
+
     protected WebSocketFactory factory;
 
-    public WebSocketTomcatWrapper(WebSocketFactory factory) {
+    public WebSocketJettyWrapper(WebSocketFactory factory) {
             this.factory = factory;
     }
 
-    /**
-     * Use since tomcat introduce request in method
-     */
-    protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
-        return createWebSocketInbound(subProtocol);
-    }
-
-    /**
-     * Use before tomcat introduce request in method
-     */
-    protected StreamInbound createWebSocketInbound(String string) {
+    @Override
+    public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
         WebSocketInbound inbound = factory.createSocket();
-        WebSocketInboundWrapper wrapper = new WebSocketInboundWrapper(inbound);
+        WebSocketWrapper wrapper = new WebSocketWrapper(inbound);
         inbound.setOutbound(wrapper);
         return wrapper;
     }
     
-    public class WebSocketInboundWrapper extends MessageInbound implements WebSocketOutbound {
+    public class WebSocketWrapper implements OnTextMessage, WebSocketOutbound {
         
+        protected Connection connection;
         protected WebSocketInbound inbound;
 
-        public WebSocketInboundWrapper(WebSocketInbound inbound) {
+        public WebSocketWrapper(WebSocketInbound inbound) {
             this.inbound = inbound;
         }
         
         @Override
-        protected void onBinaryMessage(ByteBuffer message)  throws IOException {
-            throw new UnsupportedOperationException("Binary message not supported.");
+        public void onMessage(String message) {
+            inbound.receiveTextMessage(message);
         }
 
         @Override
-        protected void onTextMessage(CharBuffer message) throws IOException {
-            String msg = message.toString();
-            inbound.receiveTextMessage(msg);
-        }
-
-        @Override
-        protected void onOpen(WsOutbound outbound) {
+        public void onOpen(Connection connection) {
+            this.connection = connection;
             inbound.onOpen();
         }
 
         @Override
-        protected void onClose(int status) {
+        public void onClose(int code, String message) {
             inbound.onClose();
         }
-        
+
         @Override
         public void sendTextMessage(String message) {
             try {
-                CharBuffer buffer = CharBuffer.wrap(message);
-                getWsOutbound().writeTextMessage(buffer);
+                connection.sendMessage(message);
             } catch (IOException ioe) {
                 log.error("Error sending message", ioe);
             }
         }
-
+        
     }
 }

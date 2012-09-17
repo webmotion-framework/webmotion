@@ -1,5 +1,3 @@
-package org.debux.webmotion.server.websocket.wrapper;
-
 /*
  * #%L
  * WebMotion server
@@ -23,6 +21,7 @@ package org.debux.webmotion.server.websocket.wrapper;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+package org.debux.webmotion.server.websocket.wrapper;
 
 import com.sun.grizzly.tcp.Request;
 import com.sun.grizzly.websockets.DataFrame;

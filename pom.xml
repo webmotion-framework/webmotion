@@ -55,7 +55,7 @@
         <module>webmotion-extra-sitemesh</module>
         <module>webmotion-extra-spring</module>
         <module>webmotion-extra-all</module>
-        <module>webmotion-wiki</module>
+        <!--<module>webmotion-wiki</module>-->
         <module>webmotion-test</module>
         <module>webmotion-website</module>
         <module>webmotion-archetype</module>
@@ -335,20 +335,6 @@
 
             <!-- Servlet -->
             <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>8.1.0.v20120127</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>3.0.20100224</version>
-                <scope>test</scope>
-            </dependency>
-            
-            <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>6.0</version>
@@ -465,6 +451,13 @@
                 <scope>provided</scope>
             </dependency>
             
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-servlet-api</artifactId>
+                <version>7.0.28</version>
+                <scope>test</scope>
+            </dependency>
+            
             <!-- GlassFish 3.1.2.2 -->
             <dependency>
                 <groupId>com.sun.grizzly</groupId>
@@ -493,7 +486,15 @@
                 <version>1.9.50</version>
                 <scope>provided</scope>
             </dependency>
-        
+            
+            <!-- Jetty 8 -->
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-websocket</artifactId>
+                <version>8.1.0.v20120127</version>
+                <scope>provided</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

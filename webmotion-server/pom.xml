@@ -125,16 +125,12 @@
         </dependency>
 
         <!-- Servlet -->
+        <!-- You must have the dependcy before javaee-api -->
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>servlet-api</artifactId>
-        </dependency>
-            
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -168,7 +164,7 @@
             <artifactId>parboiled-java</artifactId>
         </dependency>
         
-        <!-- Application server -->
+        <!-- Tomcat 7.0.28 -->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
@@ -179,6 +175,7 @@
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
 
+        <!-- GlassFish 3.1.2.2 -->
         <dependency>
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-websockets</artifactId>
@@ -199,6 +196,12 @@
             <artifactId>grizzly-utils</artifactId>
         </dependency>
         
+        <!-- Jetty 8 -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+        </dependency>
+            
     </dependencies>
   
     <build>
