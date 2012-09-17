@@ -273,14 +273,26 @@ public class MappingChecker {
     /**
      * Check class name
      * @param rule current rule tested
+     * @param superClass super class to check
+     * @param packageTarget package contains the class
      * @param className class name to check
      */
     protected void checkClassName(Rule rule, Class superClass, String packageTarget, String className) {
+        if (packageTarget != null && !packageTarget.isEmpty()) {
+            className = packageTarget + "." + className;
+        }
+
+        checkClassName(rule, superClass, className);
+    }
+
+    /**
+     * Check class name
+     * @param rule current rule tested
+     * @param superClass super class to check
+     * @param className class name to check
+     */
+    protected void checkClassName(Rule rule, Class superClass, String className) {
         try {
-            if (packageTarget != null && !packageTarget.isEmpty()) {
-                className = packageTarget + "." + className;
-            }
-            
             Class<?> clazz = Class.forName(className);
             checkModfiers(rule, clazz);
             checkSuperClass(rule, superClass, clazz);
@@ -412,11 +424,15 @@ public class MappingChecker {
                 }
                 
             } else {
+                if (packageTarget != null && !packageTarget.isEmpty()) {
+                    className = packageTarget + "." + className;
+                }
+            
                 if (isNotVariable(className)) {
                     if (isNotVariable(methodName)) {
                         checkMethodName(rule, superClass, className, methodName);
                     } else {
-                        checkClassName(rule, superClass, packageTarget, className);
+                        checkClassName(rule, superClass, className);
                     }
                 }
             }
@@ -450,7 +466,7 @@ public class MappingChecker {
     protected void checkError(ErrorRule rule) {
         String error = rule.getError();
         if (error != null && !error.startsWith(ErrorRule.PREFIX_CODE)) {
-            checkClassName(rule, Exception.class, null, error);
+            checkClassName(rule, Exception.class, error);
         }
     }
     
