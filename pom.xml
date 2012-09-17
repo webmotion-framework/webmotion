@@ -55,7 +55,7 @@
         <module>webmotion-extra-sitemesh</module>
         <module>webmotion-extra-spring</module>
         <module>webmotion-extra-all</module>
-        <!--<module>webmotion-wiki</module>-->
+        <module>webmotion-wiki</module>
         <module>webmotion-test</module>
         <module>webmotion-website</module>
         <module>webmotion-archetype</module>
