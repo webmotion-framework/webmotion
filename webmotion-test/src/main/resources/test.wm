@@ -149,5 +149,5 @@ DELETE      /simulate                                   action:Action.execute
 *           /forward/set                                Dynamic.set
 GET         /login?name={}&passwd={}                                  Auth.login
 GET         /auth?name={user}&passwd={user}                           Auth.login
-GET         /echoChat/index                             view:echoChat.jsp
-WS          /echoChat/ws                                EchoChat
+#GET         /echoChat/index                             view:echoChat.jsp
+#WS          /echoChat/ws                                EchoChat
