@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.mapping.Config;
@@ -262,7 +263,7 @@ public class WebMotionUtils {
      */
     public static boolean isTomcatContainer(ServletContext context) {
         String serverInfo = context.getServerInfo();
-        return serverInfo.contains("Tomcat");
+        return StringUtils.containsIgnoreCase(serverInfo, "tomcat");
     }
 
     /**
@@ -270,7 +271,7 @@ public class WebMotionUtils {
      */
     public static boolean isGlassfishContainer(ServletContext context) {
         String serverInfo = context.getServerInfo();
-        return serverInfo.contains("GlassFish");
+        return StringUtils.containsIgnoreCase(serverInfo, "glassfish");
     }
 
     /**
@@ -278,7 +279,7 @@ public class WebMotionUtils {
      */
     public static boolean isJettyContainer(ServletContext context) {
         String serverInfo = context.getServerInfo();
-        return serverInfo.contains("Jetty");
+        return StringUtils.containsIgnoreCase(serverInfo, "jetty");
     }
 
     /**
