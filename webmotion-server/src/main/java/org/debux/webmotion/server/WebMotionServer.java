@@ -46,7 +46,7 @@ import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.websocket.WebMotionWebSocket;
+import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,7 +163,7 @@ public class WebMotionServer implements Filter {
         serverStats.registerCallTime(call, start);
 
         // Dispatch on servlet to manage websocket
-        WebMotionWebSocket socket = (WebMotionWebSocket) request.getAttribute(WebMotionWebSocket.ATTRIBUTE_WEBSOCKET);
+        WebSocketInbound socket = (WebSocketInbound) request.getAttribute(WebSocketInbound.ATTRIBUTE_WEBSOCKET);
         if (socket != null) {
             ServletContext servletContext = request.getServletContext();
             RequestDispatcher dispatcher = servletContext.getNamedDispatcher(SERVLET_WEBSOCKET);

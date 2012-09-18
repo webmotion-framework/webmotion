@@ -40,7 +40,6 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingVisit.Visitor;
-import org.debux.webmotion.server.websocket.WebMotionWebSocket;
 
 /**
  * Uses to check the mapping file after the initialization of the server. 

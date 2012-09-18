@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.websocket.WebMotionWebSocket;
+import org.debux.webmotion.server.websocket.WebSocketInbound;
 
 /**
  * The render is returning when the client want to create a websocket 
@@ -39,9 +39,9 @@ import org.debux.webmotion.server.websocket.WebMotionWebSocket;
  * @author julien
  */
 public class RenderWebSocket extends Render {
-    protected WebMotionWebSocket socket;
+    protected WebSocketInbound socket;
 
-    public RenderWebSocket(WebMotionWebSocket socket) {
+    public RenderWebSocket(WebSocketInbound socket) {
         this.socket = socket;
     }
     
@@ -49,7 +49,7 @@ public class RenderWebSocket extends Render {
     public void create(Mapping mapping, Call call) throws IOException, ServletException {
         HttpContext context = call.getContext();
         HttpServletRequest request = context.getRequest();
-        request.setAttribute(WebMotionWebSocket.ATTRIBUTE_WEBSOCKET, socket);
+        request.setAttribute(WebSocketInbound.ATTRIBUTE_WEBSOCKET, socket);
     }
     
 }
