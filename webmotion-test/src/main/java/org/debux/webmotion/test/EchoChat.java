@@ -31,8 +31,6 @@ import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.render.RenderWebSocket;
 import org.debux.webmotion.server.websocket.WebMotionWebSocket;
-import org.debux.webmotion.server.websocket.WebSocketInbound;
-import org.debux.webmotion.server.websocket.WebSocketOutbound;
 
 /**
  *
@@ -41,7 +39,7 @@ import org.debux.webmotion.server.websocket.WebSocketOutbound;
 public class EchoChat extends WebMotionController {
 
     public Render createSocket(ServerContext context) {
-        EchoChatWebSocket socket = new EchoChatWebSocket();
+        WebMotionWebSocket socket = new EchoChatWebSocket();
         return new RenderWebSocket(socket);
     }
 
@@ -51,9 +49,9 @@ public class EchoChat extends WebMotionController {
         public void onOpen() {
             // Store all connections
             ServerContext serverContext = getServerContext();
-            List<WebSocketInbound> connections = (List<WebSocketInbound>) serverContext.getAttribute("connections");
+            List<WebMotionWebSocket> connections = (List<WebMotionWebSocket>) serverContext.getAttribute("connections");
             if (connections == null) {
-                connections = new ArrayList<WebSocketInbound>();
+                connections = new ArrayList<WebMotionWebSocket>();
                 serverContext.setAttribute("connections", connections);
             }
             connections.add(this);
@@ -63,10 +61,9 @@ public class EchoChat extends WebMotionController {
         public void receiveTextMessage(String message) {
             // Broadcast the message
             ServerContext serverContext = getServerContext();
-            List<WebSocketInbound> connections = (List<WebSocketInbound>) serverContext.getAttribute("connections");
-            for (WebSocketInbound inbound : connections) {
-                WebSocketOutbound outbound = inbound.getOutbound();
-                outbound.sendTextMessage(message);
+            List<WebMotionWebSocket> connections = (List<WebMotionWebSocket>) serverContext.getAttribute("connections");
+            for (WebMotionWebSocket socket : connections) {
+                socket.sendTextMessage(message);
             }
         }
         

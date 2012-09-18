@@ -151,3 +151,5 @@ GET         /login?name={}&passwd={}                                  Auth.login
 GET         /auth?name={user}&passwd={user}                           Auth.login
 GET         /echoChat/index                             view:echoChat.jsp
 GET         /echoChat/ws                                EchoChat.createSocket
+GET         /ping/index                                 view:ping.jsp
+GET         /ping/ws                                    Ping.createSocket

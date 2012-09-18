@@ -24,7 +24,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Echo Chat</title>
+        <title>Ping</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
         <script>
@@ -37,45 +37,47 @@
                 output = document.getElementById("output");
             
                 connection.onopen = function () {
-                    connection.send("Open");
+                    ping("Open");
                 };
 
                 connection.onclose = function () {
-                    connection.send("Close");
+                    ping("Close");
                 };
 
                 connection.onerror = function (error) {
                     console.log(error);
-                    writeToScreen("Error " + error);
                 };
 
                 connection.onmessage = function (e) {
-                    console.log(e);
-                    writeToScreen(e.data);
+                    var message = JSON.parse(e.data);
+                    console.log(message);
+                    alert(message.result);
                 };
             }
             
-            function send() {
-                var form = document.getElementById("chat");
+            function submitPing() {
+                var form = document.getElementById("ping");
                 var message = form.elements['message'].value;
-                connection.send(message);
+                ping(message);
             }
-
-            function writeToScreen(message) {
-                var pre = document.createElement("p");
-                pre.style.wordWrap = "break-word";
-                pre.innerHTML = message;
-                output.appendChild(pre);
+            
+            function ping(message) {
+                var event = {
+                    method : "ping",
+                    params : {
+                        message : message
+                    }
+                }
+                connection.send(JSON.stringify(event));
             }
         </script>
     </head>
     <body onload="init()">
-        <h1>Echo Chat</h1>
-        <div id="output" style="width: 300px; height: 150px; border: 1px solid black; overflow: auto;"></div>
+        <h1>Ping</h1>
         
-        <form id="chat" onsubmit="send(); return false;">
+        <form id="ping" onsubmit="submitPing(); return false;">
             Message <input type="text" name="message"/> 
-            <input type="submit" value="Send"/>
+            <input type="submit" value="Ping"/>
         </form>
         
     </body>

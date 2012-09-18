@@ -42,11 +42,6 @@ public interface WebSocketInbound {
     void setOutbound(WebSocketOutbound outbound);
     
     /**
-     * @return the current outbound
-     */
-    WebSocketOutbound getOutbound();
-
-    /**
      * Set the current context.
      * @param request 
      */

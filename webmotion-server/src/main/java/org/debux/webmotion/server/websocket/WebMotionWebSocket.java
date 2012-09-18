@@ -32,7 +32,7 @@ import org.debux.webmotion.server.call.ServerContext;
  * 
  * @author julien
  */
-public class WebMotionWebSocket implements WebSocketInbound {
+public class WebMotionWebSocket implements WebSocketInbound, WebSocketOutbound {
 
     /**
      * Current servlet context.
@@ -50,8 +50,8 @@ public class WebMotionWebSocket implements WebSocketInbound {
     }
 
     @Override
-    public WebSocketOutbound getOutbound() {
-        return outbound;
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
     @Override
@@ -71,17 +71,22 @@ public class WebMotionWebSocket implements WebSocketInbound {
     }
 
     @Override
-    public ServletContext getServletContext() {
-        return servletContext;
-    }
-
-    @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
     public ServerContext getServerContext() {
         return (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTE_SERVER_CONTEXT);
+    }
+
+    @Override
+    public void sendTextMessage(String message) {
+        outbound.sendTextMessage(message);
+    }
+
+    @Override
+    public void sendDataMessage(byte[] bytes) {
+        outbound.sendDataMessage(bytes);
     }
 
 }
