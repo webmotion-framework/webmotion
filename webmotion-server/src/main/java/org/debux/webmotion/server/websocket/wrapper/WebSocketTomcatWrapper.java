@@ -26,12 +26,12 @@ package org.debux.webmotion.server.websocket.wrapper;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
-import org.debux.webmotion.server.websocket.WebSocketFactory;
 import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.debux.webmotion.server.websocket.WebSocketOutbound;
 import org.slf4j.Logger;
@@ -44,30 +44,22 @@ import org.slf4j.LoggerFactory;
 public class WebSocketTomcatWrapper extends WebSocketServlet {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketTomcatWrapper.class);
-    
-    protected WebSocketFactory factory;
-
-    public WebSocketTomcatWrapper(WebSocketFactory factory) {
-            this.factory = factory;
-    }
 
     /**
      * Use since tomcat introduce request in method
      */
+    @Override
     protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
-        return createWebSocketInbound(subProtocol);
-    }
-
-    /**
-     * Use before tomcat introduce request in method
-     */
-    protected StreamInbound createWebSocketInbound(String string) {
-        WebSocketInbound inbound = factory.createSocket();
+        WebSocketInbound inbound = (WebSocketInbound) request.getAttribute(WebSocketInbound.ATTRIBUTE_WEBSOCKET);
         WebSocketInboundWrapper wrapper = new WebSocketInboundWrapper(inbound);
         inbound.setOutbound(wrapper);
+        
+        ServletContext servletContext = request.getServletContext();
+        inbound.setServletContext(servletContext);
+            
         return wrapper;
     }
-    
+
     public class WebSocketInboundWrapper extends MessageInbound implements WebSocketOutbound {
         
         protected WebSocketInbound inbound;
@@ -78,7 +70,8 @@ public class WebSocketTomcatWrapper extends WebSocketServlet {
         
         @Override
         protected void onBinaryMessage(ByteBuffer message)  throws IOException {
-            throw new UnsupportedOperationException("Binary message not supported.");
+            byte[] bytes = message.array();
+            inbound.receiveDataMessage(bytes);
         }
 
         @Override
@@ -102,6 +95,16 @@ public class WebSocketTomcatWrapper extends WebSocketServlet {
             try {
                 CharBuffer buffer = CharBuffer.wrap(message);
                 getWsOutbound().writeTextMessage(buffer);
+            } catch (IOException ioe) {
+                log.error("Error sending message", ioe);
+            }
+        }
+
+        @Override
+        public void sendDataMessage(byte[] bytes) {
+                try {
+                ByteBuffer buffer = ByteBuffer.wrap(bytes);
+                getWsOutbound().writeBinaryMessage(buffer);
             } catch (IOException ioe) {
                 log.error("Error sending message", ioe);
             }

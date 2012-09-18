@@ -36,4 +36,10 @@ public interface WebSocketOutbound {
      */
     void sendTextMessage(String message);
     
+    /**
+     * Call to send a message to client.
+     * @param message 
+     */
+    void sendDataMessage(byte[] bytes);
+    
 }

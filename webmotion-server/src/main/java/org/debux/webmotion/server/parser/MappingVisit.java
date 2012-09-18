@@ -67,15 +67,6 @@ public class MappingVisit {
         }
         
         /**
-         * Call each rule type of WebSocketRule in mapping.
-         * 
-         * @param mapping current mapping
-         * @param webSocketRule current rule
-         */
-        public void accept(Mapping mapping, WebSocketRule webSocketRule) {
-        }
-        
-        /**
          * Call each rule type of ErrorRule in mapping.
          * 
          * @param mapping current mapping
@@ -122,12 +113,6 @@ public class MappingVisit {
         for (ActionRule actionRule : actionRules) {
             visitor.accept(mapping, (Rule) actionRule);
             visitor.accept(mapping, actionRule);
-        }
-
-        List<WebSocketRule> webSocketRules = mapping.getWebSocketRules();
-        for (WebSocketRule webSocketRule : webSocketRules) {
-            visitor.accept(mapping, (Rule) webSocketRule);
-            visitor.accept(mapping, webSocketRule);
         }
 
         List<ErrorRule> errorRules = mapping.getErrorRules();

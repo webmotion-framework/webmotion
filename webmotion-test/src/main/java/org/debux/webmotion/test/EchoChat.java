@@ -26,6 +26,10 @@ package org.debux.webmotion.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.render.Render;
+import org.debux.webmotion.server.render.RenderWebSocket;
 import org.debux.webmotion.server.websocket.WebMotionWebSocket;
 import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.debux.webmotion.server.websocket.WebSocketOutbound;
@@ -34,22 +38,32 @@ import org.debux.webmotion.server.websocket.WebSocketOutbound;
  *
  * @author julien
  */
-public class EchoChat extends WebMotionWebSocket {
+public class EchoChat extends WebMotionController {
 
-    protected List<WebSocketInbound> connections = new ArrayList<WebSocketInbound>();
-    
-    @Override
-    public WebSocketInbound createSocket() {
+    public Render createSocket(ServerContext context) {
         EchoChatWebSocket socket = new EchoChatWebSocket();
-        connections.add(socket);
-        return socket;
+        return new RenderWebSocket(socket);
     }
 
-    public class EchoChatWebSocket extends DefaultWebSocket {
+    public class EchoChatWebSocket extends WebMotionWebSocket {
+
+        @Override
+        public void onOpen() {
+            // Store all connections
+            ServerContext serverContext = getServerContext();
+            List<WebSocketInbound> connections = (List<WebSocketInbound>) serverContext.getAttribute("connections");
+            if (connections == null) {
+                connections = new ArrayList<WebSocketInbound>();
+                serverContext.setAttribute("connections", connections);
+            }
+            connections.add(this);
+        }
 
         @Override
         public void receiveTextMessage(String message) {
             // Broadcast the message
+            ServerContext serverContext = getServerContext();
+            List<WebSocketInbound> connections = (List<WebSocketInbound>) serverContext.getAttribute("connections");
             for (WebSocketInbound inbound : connections) {
                 WebSocketOutbound outbound = inbound.getOutbound();
                 outbound.sendTextMessage(message);

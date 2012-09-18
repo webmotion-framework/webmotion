@@ -46,6 +46,7 @@ import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.websocket.WebMotionWebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +72,9 @@ public class WebMotionServer implements Filter {
     /** Path uses to manage servlets outside WebMotion  */
     public static final String PATH_SERVLET = "/servlet";
 
+    /* Servlet name to store delegate to websocket servlet */
+    public static final String SERVLET_WEBSOCKET = "wm.websocket";
+            
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // Do nothing
@@ -157,6 +161,14 @@ public class WebMotionServer implements Filter {
         // Register call in mbean
         ServerStats serverStats = serverContext.getServerStats();
         serverStats.registerCallTime(call, start);
+
+        // Dispatch on servlet to manage websocket
+        WebMotionWebSocket socket = (WebMotionWebSocket) request.getAttribute(WebMotionWebSocket.ATTRIBUTE_WEBSOCKET);
+        if (socket != null) {
+            ServletContext servletContext = request.getServletContext();
+            RequestDispatcher dispatcher = servletContext.getNamedDispatcher(SERVLET_WEBSOCKET);
+            dispatcher.forward(request, response);
+        }
     }
     
     /**
@@ -225,14 +237,14 @@ public class WebMotionServer implements Filter {
             dispatcher.forward(requestWrapper, response);
         }
     }
-    
+
     /**
      * @param request request to found servlet context
      * @return server context in servlet context
      */
     protected ServerContext getServerContext(HttpServletRequest request) {
         ServletContext servletContext = request.getServletContext();
-        ServerContext serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT);
+        ServerContext serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTE_SERVER_CONTEXT);
         return serverContext;
     }
 

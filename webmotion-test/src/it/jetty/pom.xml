@@ -126,13 +126,6 @@
             <artifactId>testng</artifactId>
         </dependency>
         
-        <!-- Jetty 8 -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        
     </dependencies>
 
     <build>

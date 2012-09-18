@@ -31,10 +31,19 @@ import com.sun.grizzly.websockets.WebSocket;
 import com.sun.grizzly.websockets.WebSocketApplication;
 import com.sun.grizzly.websockets.WebSocketEngine;
 import com.sun.grizzly.websockets.WebSocketListener;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import org.debux.webmotion.server.websocket.WebSocketFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.debux.webmotion.server.websocket.WebSocketOutbound;
 import org.slf4j.Logger;
@@ -51,14 +60,11 @@ public class WebSocketGlassfishWrapper extends HttpServlet {
     
     private final WebSocketApplicationWrapper app = new WebSocketApplicationWrapper();
 
-    protected WebSocketFactory factory;
-
-    public WebSocketGlassfishWrapper(WebSocketFactory factory) {
-            this.factory = factory;
-    }
+    protected ServletContext servletContext;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
+        servletContext = config.getServletContext();
         WebSocketEngine.getEngine().register(app);
     }
 
@@ -66,9 +72,8 @@ public class WebSocketGlassfishWrapper extends HttpServlet {
         
         protected WebSocketInbound inbound;
 
-        public WebSocketWrapper(WebSocketInbound inbound, ProtocolHandler handler, WebSocketListener... listeners) {
+        public WebSocketWrapper(ProtocolHandler handler, WebSocketListener... listeners) {
             super(handler, listeners);
-            this.inbound = inbound;
         }
 
         @Override
@@ -76,21 +81,69 @@ public class WebSocketGlassfishWrapper extends HttpServlet {
             send(message);
         }
 
+        @Override
+        public void sendDataMessage(byte[] bytes) {
+            send(bytes);
+        }
+        
         public WebSocketInbound getInbound() {
             return inbound;
         }
+
+        public void setInbound(WebSocketInbound inbound) {
+            this.inbound = inbound;
+        }
+
     }
     
     public class WebSocketApplicationWrapper extends WebSocketApplication {
-
+        
         @Override
         public WebSocket createWebSocket(ProtocolHandler handler, WebSocketListener... listeners) {
-            WebSocketInbound inbound = factory.createSocket();
-            WebSocketWrapper wrapper = new WebSocketWrapper(inbound, handler, listeners);
+            WebSocketWrapper wrapper = new WebSocketWrapper(handler, listeners);
+            
+            HttpServletRequest request = wrapper.getRequest();
+            HttpServletResponse response = wrapper.getResponse();
+            
+            // Wrap undefined method
+            doAction(new HttpServletRequestWrapper(request) {
+                        @Override
+                        public DispatcherType getDispatcherType() {
+                            return DispatcherType.REQUEST;
+                        }
+                        @Override
+                        public ServletContext getServletContext() {
+                            return servletContext;
+                        }
+                    }, response);
+            
+            WebSocketInbound inbound = (WebSocketInbound) request.getAttribute(WebSocketInbound.ATTRIBUTE_WEBSOCKET);
             inbound.setOutbound(wrapper);
+            inbound.setServletContext(servletContext);
+            
+            wrapper.setInbound(inbound);
+            
             return wrapper;
         }
+        
+        // Glassfish not pass in WebMotionServerFilter, so it is forced here.
+        protected void doAction(HttpServletRequest request, HttpServletResponse response) {
+            long start = System.currentTimeMillis();
 
+            // Create call context use in handler to get information on user request
+            ServerContext serverContext = (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTE_SERVER_CONTEXT);
+            Call call = new Call(serverContext, request, response);
+
+            // Execute the main handler
+            Mapping mapping = serverContext.getMapping();
+            WebMotionHandler mainHandler = serverContext.getMainHandler();
+            mainHandler.handle(mapping, call);
+
+            // Register call in mbean
+            ServerStats serverStats = serverContext.getServerStats();
+            serverStats.registerCallTime(call, start);
+        }
+            
         @Override
         public boolean isApplicationRequest(Request request) {
             return true;
@@ -120,6 +173,15 @@ public class WebSocketGlassfishWrapper extends HttpServlet {
                 WebSocketWrapper wrapper = (WebSocketWrapper) socket;
                 WebSocketInbound inbound = wrapper.getInbound();
                 inbound.receiveTextMessage(text);
+            }
+        }
+
+        @Override
+        public void onMessage(WebSocket socket, byte[] bytes) {
+            if (socket instanceof WebSocketWrapper) {
+                WebSocketWrapper wrapper = (WebSocketWrapper) socket;
+                WebSocketInbound inbound = wrapper.getInbound();
+                inbound.receiveDataMessage(bytes);
             }
         }
         

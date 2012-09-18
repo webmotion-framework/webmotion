@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -49,7 +50,7 @@ public class WebMotionServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         serverContext = new ServerContext();
         ServletContext servletContext = event.getServletContext();
-        servletContext.setAttribute(ServerContext.ATTRIBUTES_SERVER_CONTEXT, serverContext);
+        servletContext.setAttribute(ServerContext.ATTRIBUTE_SERVER_CONTEXT, serverContext);
         
         // Get file name mapping in context param
         String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
@@ -65,9 +66,47 @@ public class WebMotionServletContextListener implements ServletContextListener {
              serverContext.setExcludePaths(new String[]{});
         }
         
+        createWebSockets(servletContext);
         serverContext.contextInitialized(servletContext);
     }
 
+    /**
+     * Create websockets
+     */
+    public void createWebSockets(ServletContext servletContext) {
+        try {
+            String wrapperClassName = null;
+            if (WebMotionUtils.isTomcatContainer(servletContext)) {
+                wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketTomcatWrapper";
+
+            } else if (WebMotionUtils.isGlassfishContainer(servletContext)) {
+                wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketGlassfishWrapper";
+
+            } else if (WebMotionUtils.isJettyContainer(servletContext)) {
+                wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketJettyWrapper";
+
+            } else {
+                return;
+            }
+
+            Class<Servlet> wrapperClass = (Class<Servlet>) Class.forName(wrapperClassName);
+            Servlet wrapper = wrapperClass.newInstance();
+            
+            servletContext.addServlet(WebMotionServer.SERVLET_WEBSOCKET, wrapper);
+            
+        } catch (IllegalArgumentException ex) {
+            throw new WebMotionException("Error during create the websocket", ex);
+        } catch (SecurityException ex) {
+            throw new WebMotionException("Error during create the websocket", ex);
+        } catch (InstantiationException ex) {
+            throw new WebMotionException("Error during create the websocket", ex);
+        } catch (IllegalAccessException ex) {
+            throw new WebMotionException("Error during create the websocket", ex);
+        } catch (ClassNotFoundException ex) {
+            throw new WebMotionException("Error during create the websocket", ex);
+        }
+    }
+    
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         serverContext.contextDestroyed();

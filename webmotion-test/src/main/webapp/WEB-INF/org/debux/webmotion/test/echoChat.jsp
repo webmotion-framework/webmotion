@@ -21,6 +21,8 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,7 +34,8 @@
             var output;
             
             function init() {
-                connection = new WebSocket("ws://localhost:9080/webmotion-test/test/echoChat/ws");
+                var url = window.location.toString().replace("http", "ws").replace("index", "ws");
+                connection = new WebSocket(url);
                 output = document.getElementById("output");
             
                 connection.onopen = function () {
@@ -44,12 +47,12 @@
                 };
 
                 connection.onerror = function (error) {
-                    console.log("WebSocket Error " + error);
+                    console.log(error);
                     writeToScreen("Error " + error);
                 };
 
                 connection.onmessage = function (e) {
-                    console.log("Server: " + e.data);
+                    console.log(e);
                     writeToScreen(e.data);
                 };
             }
@@ -70,11 +73,12 @@
     </head>
     <body onload="init()">
         <h1>Echo Chat</h1>
-        <div id="output" style="width: 300px; height: 150px; border: 1px solid black; overflow: auto;">
-        </div>
+        <div id="output" style="width: 300px; height: 150px; border: 1px solid black; overflow: auto;"></div>
+        
         <form id="chat" onsubmit="send(); return false;">
             Message <input type="text" name="message"/> 
             <input type="submit" value="Send"/>
         </form>
+        
     </body>
 </html>

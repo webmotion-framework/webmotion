@@ -23,42 +23,65 @@
  */
 package org.debux.webmotion.server.websocket;
 
+import javax.servlet.ServletContext;
+import org.debux.webmotion.server.call.ServerContext;
+
 /**
  * Simple class to manage the websocket. The outbound object use to send message to 
- * the client. Only message text is supported.
+ * the client.
  * 
  * @author julien
  */
-public class WebMotionWebSocket implements WebSocketFactory {
+public class WebMotionWebSocket implements WebSocketInbound {
+
+    /**
+     * Current servlet context.
+     */
+    protected ServletContext servletContext;
+    
+    /**
+     * Wrapper used to send message.
+     */
+    protected WebSocketOutbound outbound;
 
     @Override
-    public WebSocketInbound createSocket() {
-        return new DefaultWebSocket();
+    public void setOutbound(WebSocketOutbound outbound) {
+        this.outbound = outbound;
     }
-    
-    public static class  DefaultWebSocket implements WebSocketInbound {
-        protected WebSocketOutbound outbound;
 
-        @Override
-        public void setOutbound(WebSocketOutbound outbound) {
-            this.outbound = outbound;
-        }
-
-        @Override
-        public WebSocketOutbound getOutbound() {
-            return outbound;
-        }
-
-        @Override
-        public void receiveTextMessage(String message) {
-        }
-
-        @Override
-        public void onOpen() {
-        }
-
-        @Override
-        public void onClose() {
-        }
+    @Override
+    public WebSocketOutbound getOutbound() {
+        return outbound;
     }
+
+    @Override
+    public void receiveTextMessage(String message) {
+    }
+
+    @Override
+    public void receiveDataMessage(byte[] bytes) {
+    }
+
+    @Override
+    public void onOpen() {
+    }
+
+    @Override
+    public void onClose() {
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
+
+    @Override
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    public ServerContext getServerContext() {
+        return (ServerContext) servletContext.getAttribute(ServerContext.ATTRIBUTE_SERVER_CONTEXT);
+    }
+
 }

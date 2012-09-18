@@ -24,11 +24,12 @@
 package org.debux.webmotion.server.websocket.wrapper;
 
 import java.io.IOException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import org.debux.webmotion.server.websocket.WebSocketFactory;
 import org.debux.webmotion.server.websocket.WebSocketInbound;
 import org.debux.webmotion.server.websocket.WebSocketOutbound;
 import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.WebSocket.OnBinaryMessage;
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 
 import org.eclipse.jetty.websocket.WebSocketServlet;
@@ -44,21 +45,19 @@ public class WebSocketJettyWrapper extends WebSocketServlet {
     
     private static final Logger log = LoggerFactory.getLogger(WebSocketJettyWrapper.class);
 
-    protected WebSocketFactory factory;
-
-    public WebSocketJettyWrapper(WebSocketFactory factory) {
-            this.factory = factory;
-    }
-
     @Override
     public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-        WebSocketInbound inbound = factory.createSocket();
+        WebSocketInbound inbound = (WebSocketInbound) request.getAttribute(WebSocketInbound.ATTRIBUTE_WEBSOCKET);
         WebSocketWrapper wrapper = new WebSocketWrapper(inbound);
         inbound.setOutbound(wrapper);
+
+        ServletContext servletContext = request.getServletContext();
+        inbound.setServletContext(servletContext);
+            
         return wrapper;
     }
     
-    public class WebSocketWrapper implements OnTextMessage, WebSocketOutbound {
+    public class WebSocketWrapper implements OnTextMessage, OnBinaryMessage, WebSocketOutbound {
         
         protected Connection connection;
         protected WebSocketInbound inbound;
@@ -90,6 +89,20 @@ public class WebSocketJettyWrapper extends WebSocketServlet {
             } catch (IOException ioe) {
                 log.error("Error sending message", ioe);
             }
+        }
+
+        @Override
+        public void sendDataMessage(byte[] bytes) {
+            try {
+                connection.sendMessage(bytes, 0, bytes.length);
+            } catch (IOException ioe) {
+                log.error("Error sending message", ioe);
+            }
+        }
+
+        @Override
+        public void onMessage(byte[] bytes, int offset, int length) {
+            inbound.receiveDataMessage(bytes);
         }
         
     }

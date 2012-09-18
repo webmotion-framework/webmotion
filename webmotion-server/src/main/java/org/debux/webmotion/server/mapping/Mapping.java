@@ -54,9 +54,6 @@ public class Mapping {
     /** Represents action section */
     protected List<ActionRule> actionRules;
 
-    /** Represents websockets in action section */
-    protected List<WebSocketRule> webSocketRules;
-
     /** Mapping declare use as extension, if null it is the root mapping */
     protected Mapping parentMapping;
     
@@ -73,7 +70,6 @@ public class Mapping {
         this.errorRules = new ArrayList<ErrorRule>();
         this.filterRules = new ArrayList<FilterRule>();
         this.actionRules = new ArrayList<ActionRule>();
-        this.webSocketRules = new ArrayList<WebSocketRule>();
         this.extensionsRules = new LinkedList<Mapping>();
     }
     
@@ -147,14 +143,6 @@ public class Mapping {
 
     public void setParentMapping(Mapping parentMapping) {
         this.parentMapping = parentMapping;
-    }
-
-    public List<WebSocketRule> getWebSocketRules() {
-        return webSocketRules;
-    }
-
-    public void setWebSocketRules(List<WebSocketRule> webSocketRules) {
-        this.webSocketRules = webSocketRules;
     }
     
 }

@@ -237,12 +237,6 @@ public class MappingChecker {
             }
 
             @Override
-            public void accept(Mapping mapping, WebSocketRule webSocketRule) {
-                String className = webSocketRule.getAction().getFullName();
-                checkClassName(webSocketRule, WebMotionWebSocket.class, packageActions, className);
-            }
-            
-            @Override
             public void accept(Mapping mapping, ErrorRule errorRule) {
                 checkError(errorRule);
                 checkAction(errorRule, globalControllers, packageErrors, WebMotionController.class);

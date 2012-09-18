@@ -23,6 +23,8 @@
  */
 package org.debux.webmotion.server.websocket;
 
+import javax.servlet.ServletContext;
+
 /**
  * Interface use to manage inbound connection for a websocket.
  * 
@@ -30,6 +32,9 @@ package org.debux.webmotion.server.websocket;
  */
 public interface WebSocketInbound {
     
+    /* WebSocketInbound name to store attributes */
+    public static final String ATTRIBUTE_WEBSOCKET = "wm.websocket";
+            
     /**
      * Set the outbound to send message for the client.
      * @param outbound 
@@ -40,12 +45,29 @@ public interface WebSocketInbound {
      * @return the current outbound
      */
     WebSocketOutbound getOutbound();
+
+    /**
+     * Set the current context.
+     * @param request 
+     */
+    void setServletContext(ServletContext servletContext);
+    
+    /**
+     * @return current context.
+     */
+    ServletContext getServletContext();
     
     /**
      * Call when the client send a message.
      * @param message 
      */
     void receiveTextMessage(String message);
+    
+    /**
+     * Call when the client send a message.
+     * @param message 
+     */
+    void receiveDataMessage(byte[] bytes);
     
     /**
      * Call when the client open a new connection.

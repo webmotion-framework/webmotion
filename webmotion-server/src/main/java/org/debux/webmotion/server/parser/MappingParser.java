@@ -625,45 +625,6 @@ public class MappingParser {
                 }
             });
 
-            rules.put("/sectionActions/webSocketRule", new Visit() {
-                @Override
-                public void acceptBefore(Node node, InputBuffer inputBuffer) {
-                    List<WebSocketRule> webSockets = mapping.getWebSocketRules();
-                    
-                    WebSocketRule webSocket = new WebSocketRule();
-                    webSocket.setLine(getLine(node, inputBuffer));
-                    webSocket.setMapping(mapping);
-                    webSockets.add(webSocket);
-                    
-                    stack.addLast(webSocket);
-                }
-
-                @Override
-                public void acceptAfter(String value) {
-                    stack.removeLast();
-                }
-            });
-
-            rules.put("/sectionActions/webSocketRule/webSocketPath", new Visit() {
-                @Override
-                public void acceptBefore(String value) {
-                    WebSocketRule webSocket = (WebSocketRule) stack.peekLast();
-                    webSocket.setPath(value);
-                }
-            });
-
-            rules.put("/sectionActions/webSocketRule/webSocketAction/webSocketActionValue", new Visit() {
-                @Override
-                public void acceptBefore(String value) {
-                    Action action = new Action();
-                    action.setType(Action.Type.ACTION);
-                    action.setFullName(value);
-                    
-                    WebSocketRule webSocket = (WebSocketRule) stack.peekLast();
-                    webSocket.setAction(action);
-                }
-            });
-
             rules.put("/sectionExtensions/extensionRule/extensionPath", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
