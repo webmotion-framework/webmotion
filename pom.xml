@@ -186,6 +186,11 @@
         <!-- Default encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Server version -->
+        <tomcat.version>7.0.29</tomcat.version>
+        <jetty.version>8.1.0.v20120127</jetty.version>
+        <grizzly.version>1.9.50</grizzly.version>
     </properties>
     
     <dependencyManagement>
@@ -440,21 +445,21 @@
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-catalina</artifactId>
-                <version>7.0.28</version>
+                <version>${tomcat.version}</version>
                 <scope>provided</scope>
             </dependency>
                     
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
-                <version>7.0.28</version>
+                <version>${tomcat.version}</version>
                 <scope>provided</scope>
             </dependency>
             
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-servlet-api</artifactId>
-                <version>7.0.28</version>
+                <version>${tomcat.version}</version>
                 <scope>test</scope>
             </dependency>
             
@@ -462,28 +467,28 @@
             <dependency>
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-websockets</artifactId>
-                <version>1.9.50</version>
+                <version>${grizzly.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-http</artifactId>
-                <version>1.9.50</version>
+                <version>${grizzly.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-framework</artifactId>
-                <version>1.9.50</version>
+                <version>${grizzly.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-utils</artifactId>
-                <version>1.9.50</version>
+                <version>${grizzly.version}</version>
                 <scope>provided</scope>
             </dependency>
             
@@ -491,7 +496,7 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-websocket</artifactId>
-                <version>8.1.0.v20120127</version>
+                <version>${jetty.version}</version>
             </dependency>
 
         </dependencies>
@@ -611,20 +616,13 @@
                 <plugin>
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
-                    <version>8.1.0.v20120127</version>
+                    <version>${jetty.version}</version>
                     <configuration>
                         <scanIntervalSeconds>10</scanIntervalSeconds>
                         <webApp>
                             <contextPath>/${project.build.finalName}</contextPath>
                         </webApp>
                     </configuration>
-<!--                    <dependencies>
-                        <dependency>
-                            <groupId>org.eclipse.jetty</groupId>
-                            <artifactId>jetty-websocket</artifactId>
-                            <version>8.1.0.v20120127</version>
-                        </dependency>
-                    </dependencies>-->
                 </plugin>
                 
                 <plugin>
