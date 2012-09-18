@@ -126,6 +126,13 @@
             <artifactId>testng</artifactId>
         </dependency>
         
+        <!-- Jetty 8 -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
@@ -152,6 +159,7 @@
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
+                
                 <configuration>
                     <stopPort>8095</stopPort>
                     <stopKey>STOP</stopKey>
@@ -161,6 +169,7 @@
                         </connector>
                     </connectors>
                 </configuration>
+                
                 <executions>
                     <execution>
                         <id>start-jetty</id>
