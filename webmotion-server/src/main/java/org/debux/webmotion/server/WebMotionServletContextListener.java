@@ -29,6 +29,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.debux.webmotion.server.call.ServerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Listener use to initialized the WebMotion ServerContext.
@@ -36,6 +38,8 @@ import org.debux.webmotion.server.call.ServerContext;
  * @author julien
  */
 public class WebMotionServletContextListener implements ServletContextListener {
+    
+    private static final Logger log = LoggerFactory.getLogger(WebMotionServletContextListener.class);
 
     /** Current application context */
     protected ServerContext serverContext;
@@ -86,6 +90,7 @@ public class WebMotionServletContextListener implements ServletContextListener {
                 wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketJettyWrapper";
 
             } else {
+                log.warn("The websockets are not supported");
                 return;
             }
 
@@ -95,15 +100,15 @@ public class WebMotionServletContextListener implements ServletContextListener {
             servletContext.addServlet(WebMotionServer.SERVLET_WEBSOCKET, wrapper);
             
         } catch (IllegalArgumentException ex) {
-            throw new WebMotionException("Error during create the websocket", ex);
+            log.warn("The websockets are not supported", ex);
         } catch (SecurityException ex) {
-            throw new WebMotionException("Error during create the websocket", ex);
+            log.warn("The websockets are not supported", ex);
         } catch (InstantiationException ex) {
-            throw new WebMotionException("Error during create the websocket", ex);
+            log.warn("The websockets are not supported", ex);
         } catch (IllegalAccessException ex) {
-            throw new WebMotionException("Error during create the websocket", ex);
+            log.warn("The websockets are not supported", ex);
         } catch (ClassNotFoundException ex) {
-            throw new WebMotionException("Error during create the websocket", ex);
+            log.warn("The websockets are not supported", ex);
         }
     }
     
