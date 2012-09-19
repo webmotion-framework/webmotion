@@ -1082,4 +1082,34 @@ public class Showcase extends WebMotionController {
         );
     }
 
+    public Render wsText() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/echoChat/index"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 93, 2)),
+                    getJavaContent("EchoChat.java"),
+                    getPageContent("echoChat.jsp")
+                )
+        );
+    }
+
+    public Render wsJSON() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/ping/index"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false)
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 95, 2)),
+                    getJavaContent("Ping.java"),
+                    getPageContent("ping.jsp")
+                )
+        );
+    }
+
 }

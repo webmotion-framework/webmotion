@@ -254,6 +254,12 @@
                                         <li><a id="template" href="./template">StringTemplate</a></li>
                                     </ul>
                                 </li>
+                                <li><strong>Websocket</strong>
+                                    <ul>
+                                        <li><a id="ws_text" href="./ws_text">Text</a> <span class="label label-info">New</span></li>
+                                        <li><a id="ws_json" href="./ws_json">JSON</a> <span class="label label-info">New</span></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                         <div id="misc" class="tab-pane fade in">

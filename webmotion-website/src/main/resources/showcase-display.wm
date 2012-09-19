@@ -89,3 +89,5 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /forward                                    Showcase.forward
 *           /dynamic_forward                            Showcase.dynamicForward
 *           /shiro                                      Showcase.shiro
+*           /ws_text                                    Showcase.wsText
+*           /ws_json                                    Showcase.wsJSON
