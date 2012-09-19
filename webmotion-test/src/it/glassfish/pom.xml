@@ -100,6 +100,11 @@
             <artifactId>jstl</artifactId>
         </dependency>
         
+         <dependency>
+             <groupId>com.ning</groupId>
+             <artifactId>async-http-client</artifactId>
+         </dependency>
+
         <!-- Logger -->
         <dependency>
             <groupId>org.slf4j</groupId>

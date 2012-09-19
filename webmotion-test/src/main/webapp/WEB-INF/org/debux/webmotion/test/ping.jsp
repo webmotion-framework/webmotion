@@ -37,11 +37,9 @@
                 output = document.getElementById("output");
             
                 connection.onopen = function () {
-                    ping("Open");
                 };
 
                 connection.onclose = function () {
-                    ping("Close");
                 };
 
                 connection.onerror = function (error) {
