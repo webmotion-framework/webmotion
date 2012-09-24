@@ -38,7 +38,7 @@ import org.debux.webmotion.server.websocket.WebMotionWebSocket;
  */
 public class EchoChat extends WebMotionController {
 
-    public Render createSocket(ServerContext context) {
+    public Render createSocket() {
         WebMotionWebSocket socket = new EchoChatWebSocket();
         return new RenderWebSocket(socket);
     }
