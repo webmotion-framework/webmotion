@@ -32,13 +32,13 @@
 <h2 class="page-header" id="controller">Extras</h2>
 <p>
     Les extras de WebMotion sont un ensemble de fonctionnalités supplémentaires pour
-    aider à la réalisation d'application web. Ils regroupent :
+    aider à la réalisation d'applications web. Ils regroupent :
 </p>
 <ul>
     <li>un moteur d'IOC avec Spring</li>
     <li>un système de layoutage avec SiteMesh</li>
     <li>un helper pour la gestion d'une base de données avec Hibernate</li>
-    <li>une gestion de la sécurité avec Shiro</li>
+    <li>une gestion de la sécurité avec Apache Shiro</li>
 </ul>
 <p>
     Pour utiliser les extras, il est nécessaire de rajouter la dépendance Maven suivante :
@@ -74,22 +74,22 @@ $ mvn archetype:generate \
     -DartifactId=myapp \
     -Dpackage=org.example.myapp \
     -Dversion=1.0-SNAPSHOT \
-    -DusesExtras=Y
+    <b>-DusesExtras=Y</b>
 </pre>
 
 <p>
-    Un extra est comparable à un système de plugin. Vous pouvez réaliser vos propre 
+    Un extra est comparable à un système de plugin. Vous pouvez réaliser vos propres 
     extra. Généralement un extra regroupe dans un listener :
 </p>
 <ul>
-    <li>les controlleurs globaux</li>
+    <li>les contrôleurs globaux</li>
     <li>les convertisseurs</li>
     <li>les modifications du fichier mapping (par exemple le remplacement du MainHandler)</li>
 </ul>
 
 <p>
-    Comme pour WebMotion, la partie extras peut reposer sur un fragment web, qui inclut 
-    l'ensemble des éléments web, c'est à dire :
+    Comme pour WebMotion, la partie extras peut reposer sur un fragment web, qui inclue 
+    l'ensemble des éléments web, c'est-à-dire :
 </p>
 <ul>
     <li>les filtres</li>
@@ -720,10 +720,10 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 }
 </pre>
 
-<h2 class="page-header" id="shiro">Shiro</h2>
+<h2 class="page-header" id="shiro">Apache Shiro</h2>
 <p>
-    WebMotion propose par le biais de <a href="http://shiro.apache.org/">Shiro</a>,
-    la sécurisation de votre site internet. Shiro vous permet de gérer les 
+    WebMotion propose par le biais de <a href="http://shiro.apache.org/">Apache Shiro</a>,
+    la sécurisation de votre site internet. Apache Shiro vous permet de gérer les 
     authentications et les autorisations de vos utilisateurs. L'intégration vous 
     permet de rajouter simplement dans votre fichier de mapping les filtres 
     pour mettre en place la sécurisation de vos urls.
@@ -750,23 +750,23 @@ server.listener.class=org.debux.webmotion.shiro.ShiroListener
 </pre>
 
 <p>
-    De base l'extra vous propose une configuration simple dans un fichier properties. 
+    Par défaut, l'extra vous propose une configuration simple à partir d'un fichier de propriétés. 
     Il doit se trouver dans le classpath de votre projet et se nommer <code>shiro.properties</code>.
 </p>
 
 <pre class="prettyprint">
-user.adminUser = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, adminRole
-role.adminRole = "adminPermission"
+user.root = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, administrator
+role.administrator = "adminPermission"
 </pre>
 
 <p>
-    Les lignes commençant par <code>user.</code> définit un utilisateur, avec comme login la valeur après le point.
-    Après le égale vous trouvez le mot de passe encodé en sha256 suivi des rôles de l'utilisateur.
-    Les lignes commençant par <code>role.</code> définit un role, avec comme nom la valeur après le point.
-    Après le égale vous trouvez l'ensemble des permissions donné par le rôle.
+    Les lignes commençant par <code>user.</code> définissent les utilisateurs dont le nom d'utilisateur est situé après le point.
+    Après le signe égal se trouve le mot de passe hashé en sha256 suivi des rôles de l'utilisateur.
+    Les lignes commençant par <code>role.</code> définissent les rôles dont la clé définissant le rôle est située après le point.
+    Après le signe égale se trouve l'ensemble des permissions attribuées à ce rôle.
     Vous pouvez vous reporter à la 
     <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/text/PropertiesRealm.html">javadoc</a> 
-    de Shiro pour plus de renseignement.
+    de Apache Shiro pour plus de renseignements.
 </p>
 
 <p>
@@ -784,7 +784,7 @@ System.out.println(hashedPassword);
 <h5>Login</h5>
 <p>
     Pour détecter si l'utilisateur n'est pas connecté il faut utiliser le filtre <code>Shiro.isAuthenticated</code>,
-    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le rediriger vers la page de login.
+    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le rediriger vers la page de connexion.
 </p>
 <pre>
 [filters]
@@ -815,9 +815,7 @@ code:401                                       view:login.jsp
 </pre>
 
 <p>
-    Au niveau du formulaire d'authentification vous pouvez soit préciser une 
-    action de login avec la redirection vers une page sur laquelle l'utilisateur va
-    être rediriger après s'être authentifié.
+    Il est possible de définir une action de redirection après une authentification réussite:
 </p>
 <pre>
 [actions]
@@ -825,29 +823,26 @@ GET        /login                               Shiro.login     redirect=/menu
 </pre>
 
 <p>
-    Soit ne pas préciser d'action dans votre formulaire, et automatiquement la 
-    dernière page accédée sera affichée.
+    Si aucune redirection post-authentification n'est précisée, l'utilisateur sera automatiquement redirigé vers la dernière page affichée.
 </p>
 
 <p>
-    Le paramètre <code>remenberMe</code> est utilisé pour retenir automatiquement 
+    Le paramètre <code>rememberMe</code> est utilisé pour retenir automatiquement 
     le dernier utilisateur connecté.
 </p>
 
 <p>
-    Une exception <code>AuthenticationException</code> est levée si l'authentification 
-    se passe mal. Ainsi vous pouvez rafficher la page de login en précisant une erreur 
-    d'authentification.
+    Une exception <code>AuthenticationException</code> est levée si une erreur survient lors de l'authentification 
+    Ainsi vous pouvez rafficher la page de login en précisant un message d'erreur.
 </p>
 <pre>
 [errors]
 org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
 </pre>
 
-
-<h5>Logout</h5>
+<h5>Déconnexion</h5>
 <p>
-    Pour gérer la déconnection, il faut rajouter une action dans votre fichier de mapping
+    Pour gérer la déconnexion, il faut rajouter une action dans votre fichier de mapping
     en précisant la redirection après la déconnection :
 </p>
 <pre>
@@ -869,7 +864,7 @@ GET        /logout                             Shiro.logout
 
 <h4>Autorisation</h4>
 
-<h5>Rôle</h5>
+<h5>Rôles</h5>
 <p>
     Pour vérifier un rôle d'utilisateur il suffit de rajouter le filtre <code>Shiro.hasRole</code> :
 </p>
@@ -884,7 +879,7 @@ GET        /logout                             Shiro.logout
 *           /tester/*                      Shiro.hasRole          role=user,role=tester
 </pre>
 
-<h5>Permission</h5>
+<h5>Permissions</h5>
 <p>
     Pour vérifier une permission il suffit de rajouter le filtre <code>Shiro.isPermitted</code> :
 </p>
@@ -899,9 +894,9 @@ GET        /logout                             Shiro.logout
 *           /tester/*                      Shiro.isPermitted      permission=access,permission=tester
 </pre>
 
-<h5>Forbidden</h5>
+<h5>Accès interdit</h5>
 <p>
-    Si l'utilisateur n'est pas autoriser à accéder à une url, une erreur HTTP avec le code <code>503</code> 
+    Si l'utilisateur n'est pas autorisé à accéder à une URL, une erreur HTTP avec le code <code>403</code> 
     est retournée au client. Pour gérer le cas dans votre application, vous pouvez rajouter une règle de mapping 
     ainsi :
 </p>
@@ -915,7 +910,7 @@ code:403                                            view:forbidden.jsp
 <p>
     Shiro propose un ensemble de taglib, WebMotion est compatible avec. Vous pouvez vous reporter à la 
     <a href="http://shiro.apache.org/web.html#Web-taglibrary">documentation</a> 
-    de Shiro pour plus de renseignement.
+    Apache Shiro pour plus de renseignements.
 </p>
 <pre class="prettyprint">
 &lt;%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %&gt;
@@ -930,9 +925,9 @@ code:403                                            view:forbidden.jsp
     Vous avez accès :
 </p>
 <ul>
-    <li>au realm, permet de définir le stockage des utilistateurs et des permissions</li>
-    <li>au matcher, permet de définir comment est stocker les mot de passe</li>
-    <li>à la session, permet de définir le stockage de la session</li>
+    <li>au realm, qui permet de définir le stockage des utilistateurs et des permissions</li>
+    <li>au matcher, qui permet de définir comment sont stockés les mots de passe</li>
+    <li>à la session, qui permet de définir le stockage de la session</li>
 </ul>
 
 <pre class="prettyprint">
@@ -968,18 +963,18 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
     supporter d'autres vues il vous faut configurer votre fichier <code>web.xml</code>, 
     et déclarer une servlet pour faire réaliser le rendu. Pour la plus part des templates 
     de pages, il en existe une fournit par la libairie. Vous pouvez retrouver un exemple des 
-    configurations suivant sur le svn à l'adresse suivante 
+    configurations suivant sur le SVN à l'adresse suivante 
     <a href="http://svn.debux.org/webmotion-ext/webmotion-pages/">http://svn.debux.org/webmotion-ext/webmotion-pages/</a>.
 </p>
 
 <h3>Configuration pour Groovy</h3>
 
 <p>
-    Voici la configuration nécessaire pour l'utilisation de page en groovy dans WebMotion.
+    Voici la configuration nécessaire pour l'utilisation de page en Groovy dans WebMotion.
     Pour plus de renseignement consulter le site de <a href="http://groovy.codehaus.org/">Groovy</a>.
 </p>
 <p>
-    Ajouter la dépendences vers groovy-servlet :
+    Ajouter la dépendance vers groovy-servlet :
 </p>
 <pre class="prettyprint">
 &lt;dependency&gt;
@@ -990,7 +985,7 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 </pre>
 
 <p>
-    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
 </p>
 <pre class="prettyprint">
 &lt;web-app&gt;
@@ -1014,7 +1009,7 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 </pre>
 
 <p>
-    Exemple de page en groovy :
+    Exemple de page en Groovy :
 </p>
 <pre class="prettyprint">
 &lt;html&gt;
@@ -1027,13 +1022,13 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 &lt;/html&gt;
 </pre>
 
-<h3>Configuration pour Sacalate</h3>
+<h3>Configuration pour Scalate</h3>
 <p>
-    Voici la configuration nécessaire pour l'utilisation de page en scala dans WebMotion.
-    Pour plus de renseignement consulter le site de <a href="http://scalate.fusesource.org/">Scalate</a>.
+    Voici la configuration nécessaire pour l'utilisation de page en Scala dans WebMotion.
+    Pour plus de renseignements consulter le site de <a href="http://scalate.fusesource.org/">Scalate</a>.
 </p>
 <p>
-    Ajouter la dépendences vers scalate-core :
+    Ajouter la dépendance vers scalate-core :
 </p>
 <pre class="prettyprint">
 &lt;dependency&gt;
@@ -1044,7 +1039,7 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 </pre>
 
 <p>
-    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
 </p>
 <pre class="prettyprint">
 &lt;web-app&gt;
@@ -1060,7 +1055,7 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 </pre>
 
 <p>
-    Exemple de page en scala :
+    Exemple de page en Scala :
 </p>
 <pre class="prettyprint">
 &lt;%
@@ -1073,11 +1068,11 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 
 <h3>Configuration pour ZK</h3>
 <p>
-    Voici la configuration nécessaire pour l'utilisation de page en zk dans WebMotion.
-    Pour plus de renseignement consulter le site de <a href="http://www.zkoss.org/">ZK</a>.
+    Voici la configuration nécessaire pour l'utilisation de page en ZK dans WebMotion.
+    Pour plus de renseignements consulter le site de <a href="http://www.zkoss.org/">ZK</a>.
 </p>
 <p>
-    Ajouter la dépendences vers  :
+    Ajouter les dépendances nécessaires :
 </p>
 <pre class="prettyprint">
 &lt;dependency&gt;
@@ -1103,7 +1098,7 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
 </pre>
 
 <p>
-    Ajouter les lignes suivante dans le fichier <code>web.xml</code> de votre application :
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
 </p>
 <pre class="prettyprint">
 &lt;web-app&gt;

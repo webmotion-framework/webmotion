@@ -32,33 +32,35 @@
 <h2 class="page-header" id="servlet">Architecture des servlets</h2>
 <p>
     Le framework est géré par un filtre. Le filtre analyse 
-    l'intégralité des requêtes entrantes et les aiguille vers une ressource statique (html, jsp, css, ...) 
-    ou vers une action définie dans le fichier de mapping.
+    l'intégralité des requêtes entrantes et les aiguille soit vers une ressource statique (html, jsp, css, ...) 
+    soit vers une action définie dans le fichier de mapping.
 </p>
 
 <p>
     Le filtre aiguille les requêtes de la façon suivante, si le path de l'URL correspond 
-    à un fichier dans le répertoire de l'application web, alors l'url est considérée comme une
-    ressource static sinon l'url est considérée comme une action. Si aucune ressource ou action 
-    n'est finalement trouvée alors une erreur HTTP <code>404 Not found</code> est retourné au client.
+    à un fichier dans le répertoire de l'application web, alors l'URL est considérée comme une
+    ressource statique. Sinon, l'URL est considérée comme une action. Si aucune ressource ou action 
+    n'est finalement trouvée alors une erreur HTTP <code>404 Not found</code> est retournée au client.
 </p>
 
 <p>
-    Il est possible de préciser explicitement si l'url est une ressource static ou une action,
-    il vous suffit d'appeller explicitement dans l'url le path <code>/static</code> ou <code>/deploy</code>.
+    Il est possible de préciser explicitement si l'URL est une ressource statique ou une action,
+    il vous suffit d'appeler explicitement dans l'URL le path <code>/static</code> (ressource statique) ou <code>/deploy</code> (action dynamique).
 </p>
 
+<!--
+TODO Write a better sample with a mapping file, a frontend snippet code
 <p>
     <span class="label label-info">Exemple</span> Retourne sur /readme la resource statique :
 </p>
 <pre>
 [actions]
 *           /readme                                     url:/static/README
-</pre>
+</pre>-->
 
 <p>
     Il existe un path <code>/servlet</code> qui vous permet de ne pas exécuter le traitement 
-    du filtre proposé par WebMotion. L'intéret est de pouvoir utiliser d'autre servlets 
+    du filtre proposé par WebMotion. L'intérêt est de pouvoir utiliser d'autre servlets 
     n'entrant pas dans le cadre de WebMotion.
 </p>
 <p>

@@ -516,9 +516,9 @@ public class RenderAccept extends Render {
 
 <h2 class="page-header" id="websocket">WebSocket</h2>
 <p>
-    Les websocket est un protocole de communication entre le client et le serveur. Il permet 
-    une connexion permanente pour réaliser du push/pull. Pour établir la connexion le client 
-    envoi une requête en <code>GET</code> avec des headers spéciaux.
+    WebSocket est un protocole de communication entre le client et le serveur. Il permet 
+    une connexion permanente pour réaliser du push/pull (communication bidirectionnelle). Pour établir la connexion le client 
+    envoi une requête en <code>GET</code> avec des headers spécifiques.
 </p>
 
 <p>
@@ -546,7 +546,7 @@ GET           /echo/ws                    Echo.createSocket
 
 <p>
     La méthode doit retourner un render de type WebSocket. Il existe une
-    implatation simple pour envoyer et recevoir les messages dans votre WebSocket.
+    implantation simple pour envoyer et recevoir les messages dans votre WebSocket.
 </p>
 <pre class="prettyprint">
 public class Echo extends WebMotionController {
@@ -570,7 +570,8 @@ public class Echo extends WebMotionController {
     Il existe aussi une implantation avec le support de message en JSON. 
     Il faut envoyer un message avec un objet JSON avec le nom de la méthode et 
     les paramètres pour éxécuter une méthode dans la WebSocket. 
-    
+</p>
+<p>
     Après l'exécution de la méthode, un message avec un objet JSON est retourné 
     qui contient le nom de la méthode exécutée et le retour de la méthode.
 </p>
@@ -641,7 +642,7 @@ public class EchoWebSocket extends WebMotionWebSocket {
 </pre>
 
 <p>
-    Il est bien sur possible de paramètrer votre méthode et donc votre WebSocket.
+    Il est bien sûr possible de paramètrer votre méthode et donc votre WebSocket.
 </p>
 <pre class="prettyprint">
 public class Echo extends WebMotionController {
