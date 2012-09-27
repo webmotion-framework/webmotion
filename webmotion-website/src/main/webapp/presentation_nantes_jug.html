@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  WebMotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 - 2012 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+-->
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex,nofollow,noarchive">
+        
+        <title>WebMotion presentation</title>
+        <style>
+            .footer {
+                color: black;
+                width: 100%;
+                text-align: center;
+                font-size: 15px;
+                left: 0px;
+                letter-spacing: 0px;
+                line-height: 18px;
+                position: absolute;
+                top: 644px;
+            }
+            pre.code {
+                margin-bottom: 0px;
+                margin-top: 20px;
+                border-radius: 3px;
+            }
+        </style>
+        <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
+    </head>
+    
+    <body style="display: none;" onload="document.getElementById('filter').childNodes[7].style.display='none'">
+        <section class="slides layout-widescreen">
+
+            <article>
+                <h1>WebMotion</h1>
+                <h2>Une plateforme web pour Java</h2>
+
+                <p>Julien Ruchaud - Code Lutin</p>
+                <p><a href="http://www.nantesjug.org/">JUG Nantes 2012</a> - <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a></p>
+            </article>
+
+            <article>
+                <h3>Qui suis-je ?</h3>
+                <ul>
+                    <li>Ingénieur</li>
+                    <li>Développeur Java & web</li>
+                    <li>Code Lutin</li>
+                    <li>Impliqué dans le libre</li>
+                </ul>
+                <p>Créateur du framework Java web WebMotion</p>
+                <p style="margin-top: 50px">
+                    <img class="centered" src="http://www.codelutin.com/_media/minilutinorange-codelutin.jpeg" />
+                </p>
+                <p style="text-align: center;">
+                    <a href="http://www.codelutin.com">http://www.codelutin.com</a>
+                </p>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+
+            <article>
+                <h3>Plan</h3>
+                <h4>
+                    Présentation générale
+                </h4>
+                <ul>
+                    <li>Les origines</li>
+                    <li>Philosophie du projet</li>
+                    <li>Environnement technique</li>
+                </ul>
+                <h4>
+                    Présentation fonctionnelle
+                </h4>
+                <ul>
+                    <li>Mapping</li>
+                    <li>Contrôlleur</li>
+                    <li>Rendu</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h1>Présentation générale</h1>
+                <h2>Les origines</h2>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+
+            <article>
+                <h3>Attente d'un framework web</h3>
+                <ul>
+                    <li>Gére la liaison entre le client et le serveur</li>
+                    <li>Abstraction des problèmes liés aux serveurs d'application</li>
+                    <li>Garantie une liberté sur les outils de développement/li>
+                    <li>Coût d'entrée faible</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Les frameworks actuels</h3>
+                <h4>API JEE avec les Servlets</h4>
+                <ul>
+                    <li>Limitation de la configuration (web.xml)</li>
+                    <li>Difficulté pour manipuler les paramètres</li>
+                    <li>API trop basique</li>
+                </ul>
+                <ul>
+                    <li>Reste un standard connu</li>
+                    <li>Documentation</li>
+                    <li></li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Les frameworks actuels</h3>
+                <h4>Spring, Struts, Play!, ...</h4>
+                <ul>
+                    <li>Des fichiers devenus trop verbeux</li>
+                    <li>Une architecture contraignante et fixée par le framework</li>
+                    <li>Une forte dépendance</li>
+                    <li>Des excès d'annotations qui polluent le code Java</li>
+                </ul>
+                <ul>
+                    <li>Plugins</li>
+                    <li>Présentation des chemins accessibles sur le site</li>
+                    <li>Gestion de paramètres</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h4>Conclusion : pas de pleine satisfaction !</h4>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h1>Présentation générale</h1>
+                <h2>Philosophie du projet</h2>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h3>Approche outils</h3>
+                <ul>
+                    <li>Fait une tâche unique et bien</li>
+                    <li>Maitrise du framework</li>
+                    <li>Calqué sur les besoins</li>
+                    <li></li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h4>Fondement sur les concepts de simplicité et de standard</h4>
+                <ul>
+                    <li>Repose sur l'API Servlet 3 (standard Java EE)</li>
+                    <li>Libre choix des outils pour les développeurs</li>
+                    <li>Rester simple (KISS)</li>
+                </ul>
+                
+                <h4>Assimilation des bonnes idées des frameworks existants</h4>
+                <ul>
+                    <li>Permettre une vision globale des chemins de votre application web</li>
+                    <li>Inciter à la réutilisation de morceaux fonctionnels</li>
+                    <li>Gérer les paramètres (conversion implicite en objets Java)</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h4>Compatible sur différents serveurs d'application</h4>
+                <ul>
+                    <li>Tomcat</li>
+                    <li>Jetty</li>
+                    <li>Glassfish</li>
+                </ul>
+                <h4>Licence libre (LGPL)</h4>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>Philosophie du projet</h3>
+                <h4>Les extras, développez rapidement :</h4>
+                <p>Ajouts à WebMotion, ne font pas partie de la version de base</p>
+                <ul>
+                    <li>Décoration de page (SiteMesh)</li>
+                    <li>Accès à la base de données (Hibernate)</li>
+                    <li>Injection dépendance (Spring)</li>
+                    <li>Sécurité (Shiro)</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h1>Présentation fonctionnelle</h1>
+                <h2>Démo</h2>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h1>Conclusion</h1>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article class='fill'>
+                <h3>
+                    Le futur ...
+                </h3>
+                <p>
+                    <img src="http://farm5.staticflickr.com/4023/4535162582_56065b0ceb_o.jpg">
+                </p>
+                <div class='source white'>
+                    Martin Gommel - CC BY-NC-SA 2.0
+                </div>
+            </article>
+
+            <article>
+                <h3>L'avenir</h3>
+                <h4>Ajouter des nouvelles fonctionnalités</h4>
+                <ul>
+                </ul>
+                <h4>Être mieux référencé</h4>
+                <ul>
+                    <li>Projets libres</li>
+                    <li>Projets professionnels</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+
+            <article class='fill'>
+                <h3>À vous de construire l'avenir de WebMotion !</h3>
+                <p>
+                    <img src="http://farm3.staticflickr.com/2161/2486479402_a6390ea1e0_b.jpg"/>
+                </p>
+                <div class='source black'>
+                    Davide Del Monte - CC BY-NC-SA 2.0
+                </div>
+            </article>
+
+            <article>
+                <h3>Rejoignez-nous !</h3>
+                <h4>Environnement</h4>
+                <ul>
+                    <li><a href="http://svn.debux.org">SVN</a> pour le gestion des sources (GIT en réflexion)</li>
+                    <li><a href="http://projects.debux.org/projects/webmotion">Redmine</a> pour la forge</li>
+                    <li><a href="http://lists.debux.org/mailman/listinfo/webmotion">Maillists</a> pour le suivi</li>
+                </ul>
+                <h4>Technologies</h4>
+                <ul>
+                    <li>Java/JEE</li>
+                    <li>Maven</li>
+                    <li>etc.</li>
+                </ul>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h3>En savoir plus</h3>
+                <p>
+                    <img class="centered" src="http://chart.apis.google.com/chart?cht=qr&chs=450x450&chl=http%3A//www.webmotion-framework.org&chld=H|0" />
+                </p>
+                <p style="text-align: center;">
+                    <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+                </p>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+
+            <article class="fill">
+                <h3>Questions</h3>
+                <p>
+                    <img src="http://farm8.staticflickr.com/7063/6877620005_9b3bd49590_b.jpg"/>
+                </p>
+                <div class='source black' style="left:550px;top: 644px;font-size: 24px;line-height: 26px;padding-right: 0px">
+                    julien.ruchaud@webmotion-framework.org
+                </div>
+                <div class='source black'>
+                    [F]oxymoron - CC BY 2.0
+                </div>
+            </article>
+
+        </section>
+    </body>
+</html>
