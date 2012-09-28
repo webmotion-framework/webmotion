@@ -114,11 +114,11 @@
             </article>
 
             <article>
-                <h3>Attente d'un framework web</h3>
+                <h3>Attentes d'un framework web</h3>
                 <ul>
                     <li>Gére la liaison entre le client et le serveur</li>
                     <li>Abstraction des problèmes liés aux serveurs d'application</li>
-                    <li>Garantie une liberté sur les outils de développement/li>
+                    <li>Garantie une liberté sur les outils de développement</li>
                     <li>Coût d'entrée faible</li>
                 </ul>
                 <div class="footer">
@@ -137,7 +137,6 @@
                 <ul>
                     <li>Reste un standard connu</li>
                     <li>Documentation</li>
-                    <li></li>
                 </ul>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -145,8 +144,35 @@
             </article>
             
             <article>
+                <h3>Standard API Servlet</h3>
+                <p>16 lignes de code XML pour définir deux chemins dans l'application&hellip;</p>
+                <section>
+                    <pre class="code">
+&lt;servlet&gt;
+    &lt;servlet-name&gt;AlbumsServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.debux.sample.AlbumsServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet&gt;
+    &lt;servlet-name&gt;PhotosServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.debux.sample.PhotosServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;AlbumsServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/album/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;PhotosServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/album/photos/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</pre>
+                </section>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
                 <h3>Les frameworks actuels</h3>
-                <h4>Spring, Struts, Play!, ...</h4>
+                <h4>Spring MVC, Struts, Play!, ...</h4>
                 <ul>
                     <li>Des fichiers devenus trop verbeux</li>
                     <li>Une architecture contraignante et fixée par le framework</li>
@@ -164,7 +190,40 @@
             </article>
             
             <article>
-                <h4>Conclusion : pas de pleine satisfaction !</h4>
+                <h3>
+                    Comparaison entre un service Java et un service web avec JAX-RS
+                </h3>
+                <section>
+                    <pre class="code">
+public class Album {
+    public Album get(String id) {/* */}
+    public List&lt;Photos&gt; getPhotos(String id, int limit) {/* */}
+}</pre>
+                </section>
+                <section>
+                    <pre class="code">
+@Path("album")
+public class Album {
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Album get(@PathParam("id") String id) {/* */}
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/{id}/photos")
+    public List&lt;Photos&gt; getPhotos(@PathParam("id") String id, 
+        @QueryParam("limit") int limit) {/* */}
+}</pre>
+                </section>
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
+                </div>
+            </article>
+            
+            <article>
+                <h1>Conclusion</h1>
+                <h2>Pas de pleine satisfaction !</h2>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
@@ -180,12 +239,18 @@
             
             <article>
                 <h3>Philosophie du projet</h3>
-                <h3>Approche outils</h3>
+                <h4>Approche outils</h4>
                 <ul>
                     <li>Fait une tâche unique et bien</li>
                     <li>Maitrise du framework</li>
                     <li>Calqué sur les besoins</li>
-                    <li></li>
+                </ul>
+                <h4>Principes</h4>
+                <ul>
+                    <li>Concepts de simplicité et de standard</li>
+                    <li>Assimilation des bonnes idées des frameworks existants</li>
+                    <li>Compatible sur différents serveurs d'application</li>
+                    <li>Licence libre (LGPL)</li>
                 </ul>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -193,42 +258,8 @@
             </article>
             
             <article>
-                <h3>Philosophie du projet</h3>
-                <h4>Fondement sur les concepts de simplicité et de standard</h4>
-                <ul>
-                    <li>Repose sur l'API Servlet 3 (standard Java EE)</li>
-                    <li>Libre choix des outils pour les développeurs</li>
-                    <li>Rester simple (KISS)</li>
-                </ul>
-                
-                <h4>Assimilation des bonnes idées des frameworks existants</h4>
-                <ul>
-                    <li>Permettre une vision globale des chemins de votre application web</li>
-                    <li>Inciter à la réutilisation de morceaux fonctionnels</li>
-                    <li>Gérer les paramètres (conversion implicite en objets Java)</li>
-                </ul>
-                <div class="footer">
-                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
-                </div>
-            </article>
-
-            <article>
-                <h3>Philosophie du projet</h3>
-                <h4>Compatible sur différents serveurs d'application</h4>
-                <ul>
-                    <li>Tomcat</li>
-                    <li>Jetty</li>
-                    <li>Glassfish</li>
-                </ul>
-                <h4>Licence libre (LGPL)</h4>
-                <div class="footer">
-                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
-                </div>
-            </article>
-            
-            <article>
-                <h3>Philosophie du projet</h3>
-                <h4>Les extras, développez rapidement :</h4>
+                <h3>Extras</h3>
+                <h4>Développez rapidement</h4>
                 <p>Ajouts à WebMotion, ne font pas partie de la version de base</p>
                 <ul>
                     <li>Décoration de page (SiteMesh)</li>
@@ -250,21 +281,9 @@
             </article>
             
             <article>
-                <h1>Conclusion</h1>
+                <h1>Pour finir</h1>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
-                </div>
-            </article>
-            
-            <article class='fill'>
-                <h3>
-                    Le futur ...
-                </h3>
-                <p>
-                    <img src="http://farm5.staticflickr.com/4023/4535162582_56065b0ceb_o.jpg">
-                </p>
-                <div class='source white'>
-                    Martin Gommel - CC BY-NC-SA 2.0
                 </div>
             </article>
 
@@ -272,6 +291,8 @@
                 <h3>L'avenir</h3>
                 <h4>Ajouter des nouvelles fonctionnalités</h4>
                 <ul>
+                    <li>Extras</li>
+                    <li></li>
                 </ul>
                 <h4>Être mieux référencé</h4>
                 <ul>
@@ -280,16 +301,6 @@
                 </ul>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
-                </div>
-            </article>
-
-            <article class='fill'>
-                <h3>À vous de construire l'avenir de WebMotion !</h3>
-                <p>
-                    <img src="http://farm3.staticflickr.com/2161/2486479402_a6390ea1e0_b.jpg"/>
-                </p>
-                <div class='source black'>
-                    Davide Del Monte - CC BY-NC-SA 2.0
                 </div>
             </article>
 
@@ -324,15 +335,10 @@
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
             </article>
-
+            
             <article class="fill">
-                <h3>Questions</h3>
-                <p>
-                    <img src="http://farm8.staticflickr.com/7063/6877620005_9b3bd49590_b.jpg"/>
-                </p>
-                <div class='source black' style="left:550px;top: 644px;font-size: 24px;line-height: 26px;padding-right: 0px">
-                    julien.ruchaud@webmotion-framework.org
-                </div>
+                <h1>Questions</h1>
+                <h2>julien.ruchaud@webmotion-framework.org</h2>
                 <div class='source black'>
                     [F]oxymoron - CC BY 2.0
                 </div>
