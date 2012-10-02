@@ -90,7 +90,6 @@
                 <ul>
                     <li>Les origines</li>
                     <li>Philosophie du projet</li>
-                    <li>Environnement technique</li>
                 </ul>
                 <h4>
                     Présentation fonctionnelle
@@ -248,6 +247,11 @@ public class Album {
                 <h4>Principes</h4>
                 <ul>
                     <li>Concepts de simplicité et de standard</li>
+                    <!-- 
+                        Repose sur l'API Servlet 3 (standard Java EE)
+                        Libre choix des outils pour les développeurs
+                        Rester simple 
+                    -->
                     <li>Assimilation des bonnes idées des frameworks existants</li>
                     <li>Compatible sur différents serveurs d'application</li>
                     <li>Licence libre (LGPL)</li>
@@ -262,10 +266,10 @@ public class Album {
                 <h4>Développez rapidement</h4>
                 <p>Ajouts à WebMotion, ne font pas partie de la version de base</p>
                 <ul>
-                    <li>Décoration de page (SiteMesh)</li>
-                    <li>Accès à la base de données (Hibernate)</li>
-                    <li>Injection dépendance (Spring)</li>
-                    <li>Sécurité (Shiro)</li>
+                    <li>SiteMesh : Décoration de page</li>
+                    <li>Hibernate : Accès à la base de données</li>
+                    <li>Spring : Injection dépendance</li>
+                    <li>Shiro : Sécurité</li>
                 </ul>
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
@@ -275,6 +279,64 @@ public class Album {
             <article>
                 <h1>Présentation fonctionnelle</h1>
                 <h2>Démo</h2>
+                <!--
+                    Création du projet avec l'archetype maven
+                        Utilisation du pugin netbeans
+                        Compatible avec d'autre outils ant, eclispe
+                
+                    Lancement de l'appication sur tomcat 7
+                
+                    Présentation du fichier de mapping
+                        Centralisation
+                        Syntaxe simple et lisible
+                        Plusieurs catégories
+                
+                    Présentation des premiers éléments
+                        Config
+                        Action
+                
+                    Présentation d'un controlleur
+                        Héritage
+                        Méthode public
+                        Retourne le rendu à l'utilisateur
+                        Utilitaires : flashmessage, gestionnaire de cookie, session cliente
+                
+                    Gestion des paramètres
+                        Récupération Convertion Validation Injection
+                        Sans rien définir
+                        Paramètre de la request
+                        Paramètre dans le path de l'url
+                        Paramètre par défaut
+                        Exemple d'un objet
+                
+                    Test de l'ordonancement du mapping
+                
+                    Présentation des rendus
+                        Content, Stream, download
+                        HTML, JSP, GSP, Scalate, ...
+                        JSON, XML
+                        Redirections
+                        WebSocket
+                        Propre rendu
+                        Reprise de l'exemple avec un model
+                
+                    Gestion des erreurs
+                        Code 404
+                        Gestion des exceptions
+                
+                    Filtre
+                        Comme pour les filtres servlet
+                
+                    Extensions
+                        Utilisation d'un fichier mapping
+                        Structuration
+                        Réutilisation
+                        Modularité
+                
+                    Properties
+                
+                    Retrouver l'ensemble des exemples dans le Showcase
+                -->
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
@@ -339,8 +401,8 @@ public class Album {
             <article class="fill">
                 <h1>Questions</h1>
                 <h2>julien.ruchaud@webmotion-framework.org</h2>
-                <div class='source black'>
-                    [F]oxymoron - CC BY 2.0
+                <div class="footer">
+                    <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
             </article>
 
