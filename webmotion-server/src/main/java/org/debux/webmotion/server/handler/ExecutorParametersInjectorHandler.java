@@ -270,7 +270,7 @@ public class ExecutorParametersInjectorHandler implements WebMotionHandler {
                     ErrorData errorData = context.getErrorData();
                     Throwable cause = errorData.getCause();
         
-                    if (cause != null && cause.getClass().isAssignableFrom(type)) {
+                    if (cause != null && type.isInstance(cause)) {
                         return cause;
                     }
                     return null;

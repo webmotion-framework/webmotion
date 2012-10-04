@@ -93,7 +93,7 @@ public class ErrorFinderHandler implements WebMotionHandler {
                         Class<?> errorClass = Class.forName(error);
 
                         Throwable throwableFound = getException(errorClass, exception);
-                        if(throwableFound != null) {
+                        if (throwableFound != null) {
                             errorData.setCause(throwableFound);
                             call.setRule(errorRule);
                             break;

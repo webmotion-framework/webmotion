@@ -116,9 +116,11 @@ public class Call {
      */
     public Call() {
         this.extractParameters = new LinkedHashMap<String, Object>();
-        this.parameterTree = new ParameterTree();
         this.filterRules = new LinkedList<FilterRule>();
         this.filters = new LinkedList<Executor>();
+        
+        this.parameterTree = new ParameterTree();
+        this.parameterTree.setTree(new LinkedHashMap<String, ParameterTree>());
     }
     
     /**

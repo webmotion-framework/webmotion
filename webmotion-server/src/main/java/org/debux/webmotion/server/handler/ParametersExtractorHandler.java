@@ -128,7 +128,7 @@ public class ParametersExtractorHandler implements WebMotionHandler {
         }
         
         // Transform dot by map
-        Map<String, ParameterTree> tree = new LinkedHashMap<String, ParameterTree>();
+        Map<String, ParameterTree> tree = parameterTree.getTree();
         for (Map.Entry<String, Object> entry : tmp.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -159,7 +159,5 @@ public class ParametersExtractorHandler implements WebMotionHandler {
                 }
             }
         }
-        
-        parameterTree.setTree(tree);
     }
 }
