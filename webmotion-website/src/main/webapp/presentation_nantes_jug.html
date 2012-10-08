@@ -190,7 +190,7 @@
             
             <article>
                 <h3>
-                    Comparaison entre un service Java et un service web avec JAX-RS
+                    Comparaison entre un service Java et une action Spring MVC
                 </h3>
                 <section>
                     <pre class="code">
@@ -201,18 +201,19 @@ public class Album {
                 </section>
                 <section>
                     <pre class="code">
-@Path("album")
+@Service
+@RequestMapping("album")
 public class Album {
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{id}")
-    public Album get(@PathParam("id") String id) {/* */}
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Album get(
+        @PathVariable(value = "id", required = true)  String id) {/* */}
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/{id}/photos")
-    public List&lt;Photos&gt; getPhotos(@PathParam("id") String id, 
-        @QueryParam("limit") int limit) {/* */}
+    @ResponseBody
+    @RequestMapping(value = "/{id}/photos", method = RequestMethod.GET)
+    public List&lt;Photos&gt; getPhotos(
+        @PathVariable(value = "id", required = true) String id, 
+        @RequestParam("limit") int limit) {/* */}
 }</pre>
                 </section>
                 <div class="footer">
@@ -348,7 +349,8 @@ public class Album {
             </article>
             
             <article>
-                <h1>Et après ?</h1>
+                <h1>Pour conclure</h1>
+                <!--<h2>...</h2>-->
                 <div class="footer">
                     <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">CC BY-SA 2.0</a>
                 </div>
@@ -357,6 +359,7 @@ public class Album {
             <article>
                 <h3>L'avenir</h3>
                 <h4>Ajouter des nouvelles fonctionnalités</h4>
+                <!-- Version 2.3 - 2.4 -->
                 <ul>
                     <li>Ajout d'extras</li>
                     <li>Application de référence</li>
