@@ -124,8 +124,13 @@ $ mvn archetype:generate \
 </div>
 
 <p>
-    Rajouter les dépendances dans le classpath au niveau des propriétées du projet en utilisant Add external jar :
-    <br /><code>Clic droit sur le projet → properties → section "Java Build Path" → sous-section "Librairies" → appuyer sur "Add external jar" → sélectionner le jar de WebMotion plus les dépendances dans la version full</code>
+    Commencer par copier le jar de WebMotion et les dépendances de la version full 
+    dans le répertoire <code>/WebContent/WEB-INF/lib</code>. 
+    Puis rajouter les dépendances dans le classpath au niveau des propriétées du 
+    projet : <code>Clic droit sur le projet 
+    → menu "Properties" → section "Java Build Path" 
+    → sous-section "Librairies" → appuyer sur "Add JARs..." 
+    → sélectionner les jars de WebMotion du répertoire "/WebContent/WEB-INF/lib".</code>
 </p>
 <div style="text-align: center; margin: 0px 0px 20px 20px;">
     <a class="thumbnail" style="width:500px; display:inline-block;">
