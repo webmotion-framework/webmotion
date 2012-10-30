@@ -510,6 +510,160 @@ public class RenderAccept extends Render {
 }
 </pre>
 
+
+<h2 class="page-header" id="websocket">WebSocket</h2>
+<p>
+    WebSocket is a communication protocol between the client and the server.
+    It enables a permanent connection to make push/pull (bidirectional communication).
+    To establish the connection, the client sends a <code>GET</code> request with specific headers.
+</p>
+
+<p>
+    Prerequisites:
+</p>
+<ul>
+    <li>for Tomcat: you need the 7.0.29 version or more</li>
+    <li>for Jetty: you need the dependency to jetty-websocket</li>
+    <li>
+        for GlassFish: you need to activate the support with the following command
+        <code>asadmin set configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.websockets-support-enabled=true</code>
+    </li>
+</ul>
+
+<p>
+    To intercept the WebSockect call in WebMotion, you need to add a mapping rule
+    on the <code>GET</code> method.
+</p>
+<p>
+    <span class="label label-info">Example</span> Interception of a WebSocket request:
+</p>
+<pre>
+GET           /echo/ws                    Echo.createSocket
+</pre>
+
+<p>
+    The function must return a WebSockect type render. There is a simple implementation
+    to send and receive messages in your WebSocket.
+</p>
+<pre class="prettyprint">
+public class Echo extends WebMotionController {
+
+    public Render createSocket() {
+        WebMotionWebSocket socket = new EchoWebSocket();
+        return new RenderWebSocket(socket);
+    }
+
+    public class EchoWebSocket extends WebMotionWebSocket {
+
+        @Override
+        public void receiveTextMessage(String message) {
+            socket.sendTextMessage(message);
+        }
+    }
+}
+</pre>
+
+<p>
+    There is an implementation with the support of JSON messages.
+    You need to send a message with a JSON object with the name of the method
+    and the parameters to execute this method in the WebSocket.
+</p>
+<p>
+    After the execution of this method, a message with a JSON object is returned.
+    It contains the name of the executed method and the method return.
+</p>
+<p>
+    <span class="label label-info">Example</span> Creation of a message in JavaScript:
+</p>
+<pre class="prettyprint">
+var connection = new WebSocket(url);
+
+connection.onopen = function () {
+    var event = {
+        method : "echo",
+        params : {
+            value : "test"
+        }
+    }
+    connection.send(JSON.stringify(event));
+};
+
+connection.onmessage = function (e) {
+    var message = JSON.parse(e.data);
+    console.log(message.method);
+    console.log(message.result);
+};
+</pre>
+
+<p>
+    With the following WebSocket:
+</p>
+<pre class="prettyprint">
+public class EchoWebSocket extends WebMotionWebSocketJson {
+    public String echo(String value) {
+        return value;
+    }
+}
+</pre>
+
+<p>
+    To retain the common parameters between WebSockets, you can use the context of the server.
+    For example, you can broadcast all the WebSockets:
+</p>
+<pre class="prettyprint">
+public class EchoWebSocket extends WebMotionWebSocket {
+
+    @Override
+    public void onOpen() {
+        // Store all connections
+        ServerContext serverContext = getServerContext();
+        List&lt;WebMotionWebSocket&gt; connections = (List&lt;WebMotionWebSocket&gt;) serverContext.getAttribute("connections");
+        if (connections == null) {
+            connections = new ArrayList&lt;WebMotionWebSocket>();
+            serverContext.setAttribute("connections", connections);
+        }
+        connections.add(this);
+    }
+
+    @Override
+    public void receiveTextMessage(String message) {
+        // Broadcast the message
+        ServerContext serverContext = getServerContext();
+        List&lt;WebMotionWebSocket&gt; connections = (List&lt;WebMotionWebSocket&gt;) serverContext.getAttribute("connections");
+        for (WebMotionWebSocket socket : connections) {
+            socket.sendTextMessage(message);
+        }
+    }
+}
+</pre>
+
+<p>
+    Of course, you can parameterize your method and so your WebSocket.
+</p>
+<pre class="prettyprint">
+public class Echo extends WebMotionController {
+
+    public Render createSocket(String who) {
+        WebMotionWebSocket socket = new EchoWebSocket(who);
+        return new RenderWebSocket(socket);
+    }
+
+    public class EchoWebSocket extends WebMotionWebSocket {
+
+        protected String who;
+
+        public EchoWebSocket(String who) {
+            this.who = who;
+        }
+
+        @Override
+        public void receiveTextMessage(String message) {
+            socket.sendTextMessage(who + " = " + message);
+        }
+    }
+}
+</pre>
+
 <h2 class="page-header" id="context">Web context</h2>
 <p>
     All the controllers of the application can access the web context of the application,
