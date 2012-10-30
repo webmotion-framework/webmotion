@@ -52,7 +52,7 @@
 </pre>
 
 <p>
-    To use all the extras, you need to define the following listenners in your mapping file:
+    To use all the extras, you need to define the following listeners in your mapping file:
 </p>
 <pre>
 [config]
@@ -75,6 +75,29 @@ $ mvn archetype:generate \
     -Dversion=1.0-SNAPSHOT \
     -DusesExtras=Y
 </pre>
+
+<p>
+    An extra is comparable to a plugin system. You can realize your own extras.
+    Generally, an extra gathers in a listener:
+</p>
+<ul>
+    <li>the global controllers</li>
+    <li>the converters</li>
+    <li>the modifications of the mapping file (e.g. the replacement of the MainHandler)</li>
+</ul>
+
+<p>
+    As for Webmotion, the extra part can rely on a web fragment, which includes all the web elements, i.e.:
+</p>
+<ul>
+    <li>the filters</li>
+    <li>the listeners</li>
+    <li>the servlets</li>
+</ul>
+
+<p>
+    To know more, please refer to the <a href="advanced">Advanced</a> section.
+</p>
 
 <h2 class="page-header" id="spring">Spring</h2>
 <p>
@@ -731,6 +754,406 @@ public Render findAll(GenericDAO dao, String title) {
 public Render action(EntityTransaction transaction, EntityManager manager) {
     ...
 }
+</pre>
+
+<h2 class="page-header" id="shiro">Apache Shiro</h2>
+<p>
+    WebMotion offers through <a href="http://shiro.apache.org/">Apache Shiro</a>
+    the securisation of your website.
+    Apache Shiro enables you to manage the authentications and authorizations of your users.
+    The integration enables you to easily add in your mapping file
+    the filters to set up the securisation of your urls.
+</p>
+
+<p>
+    To use only Shiro in your project, you can modify the <code>[config]</code>
+    section of your mapping file as follows:
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.shiro.ShiroListener
+</pre>
+
+<p>
+    With the following maven dependency:
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-shiro&lt;/artifactId&gt;
+    &lt;version&gt;2.3&lt;/version&gt; &lt;-- Check the last available version --&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    By default, the extra offers you a simple configuration from a property file.
+    It must be in the classpath of your project and its name must be <code>shiro.properties</code>.
+</p>
+
+<pre class="prettyprint">
+user.root = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, administrator
+role.administrator = "adminPermission"
+</pre>
+
+<p>
+    The lines sarting with <code>user.</code> define the users whose user name is after the dot.
+    After the equals sign is the password hashed in sha256 followed by the roles of the user.
+    The lines starting with <code>role.</code> define the roles whose key is after the dot.
+    After the equals sign is the set of permissions attributed to this role.
+    Please refer to the
+    <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/text/PropertiesRealm.html">javadoc</a>
+    to know more.
+</p>
+
+<p>
+    To generate the password in sha256, you can use the following java code:
+</p>
+<pre class="prettyprint">
+String hashedPassword = new Sha256Hash("password").toHex();
+System.out.println(hashedPassword);
+</pre>
+
+<h3>Use</h3>
+
+<h4>Authentication</h4>
+
+<h5>Login</h5>
+<p>
+    To detect if the user is not connected, you need to use the <code>Shiro.isAuthenticated</code> filter,
+    which cause a <code>401</code> error if the user is not authentified
+    and redirects him to the login page.
+</p>
+<pre>
+[filters]
+*           /auth/*                            Shiro.isAuthenticated
+
+[errors]
+code:401                                       view:login.jsp
+</pre>
+
+<p>
+    Here is an example of a login form:
+</p>
+<pre class="prettyprint">
+&lt;form&gt;
+    &lt;div&gt;
+        Username : &lt;input type="text" name="username"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Password : &lt;input type="password" name="password"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Remember me : &lt;input type="checkbox" name="rememberMe" value="true"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;input type="submit" value="login"/&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    You can define an redirection action after a successful authentication:
+</p>
+<pre>
+[actions]
+GET        /login                               Shiro.login     redirect=/menu
+</pre>
+
+<p>
+    If no post-authentication redirection is defined, the user will be automatically
+    redirected to the last displayed page.
+</p>
+
+<p>
+    The <code>rememberMe</code> parameter is used to automatically retain the last
+    connected user.
+</p>
+
+<p>
+    A <code>AuthenticationException</code> exception is thrown if an error occurs
+    during authentication. So you can display the login page with an error message.
+</p>
+<pre>
+[errors]
+org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
+</pre>
+
+<h5>Disconnection</h5>
+<p>
+    To manage the disconnection, you need to add an action in your mapping file
+    by defining the redirection after the disconnection:
+</p>
+<pre>
+[actions]
+GET        /logout                             Shiro.logout                redirect=/menu
+</pre>
+
+<h5>AJAX</h5>
+<p>
+    You can use the <code>login</code> and <code>logout</code> actions without redirection
+    for an <code>AJAX</code> use:
+</p>
+
+<pre>
+[actions]
+GET        /login                              Shiro.login
+GET        /logout                             Shiro.logout
+</pre>
+
+<h4>Authorization</h4>
+
+<h5>Roles</h5>
+<p>
+    To check a user role, you need to add the <code>Shiro.hasRole</code> filter:
+</p>
+<pre>
+*           /user/*                      Shiro.hasRole           role=user
+</pre>
+
+<p>
+    You can check several roles:
+</p>
+<pre>
+*           /tester/*                      Shiro.hasRole          role=user,role=tester
+</pre>
+
+<h5>Permissions</h5>
+<p>
+    To check a permission, you need to add the <code>Shiro.isPermitted</code> filter:
+</p>
+<pre>
+*           /guest/*                      Shiro.isPermitted       permission=access
+</pre>
+
+<p>
+    You can check several permissions
+</p>
+<pre>
+*           /tester/*                      Shiro.isPermitted      permission=access,permission=tester
+</pre>
+
+<h5>Forbidden access</h5>
+<p>
+    If the user is not authorized to access a URL, an HTTP error with the <code>403</code> code
+    is returned to the client. To manage this case in your app, you can add a mapping rule as follows:
+</p>
+<pre>
+[errors]
+code:403                                            view:forbidden.jsp
+</pre>
+
+<h4>Advanced</h4>
+<h5>TagLib</h5>
+<p>
+    Shiro offers a set of taglibs with twhich WebMotion is compatible.
+    You can refer to the Apache Shiro
+    <a href="http://shiro.apache.org/web.html#Web-taglibrary">documentation</a>
+    to know more.
+</p>
+<pre class="prettyprint">
+&lt;%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %&gt;
+&lt;shiro:user&gt;
+    &lt;a href="logout"&gt;Logout&lt;/a&gt;
+&lt;/shiro:user&gt;
+</pre>
+
+<h5>Configuration</h5>
+<p>
+    You can customize the whole SecurityManager by redifining the listener.
+    You have access to:
+</p>
+<ul>
+    <li>the realm, which enables to redefine the storage of the users and permissions</li>
+    <li>the matcher, which enables to define how the password are stored</li>
+    <li>the session, which enables to define the storage of the session</li>
+</ul>
+
+<pre class="prettyprint">
+public class MyShiroListener extends ShiroListener {
+
+    @Override
+    protected Realm getRealm() {
+        // ...
+    }
+
+    @Override
+    protected CredentialsMatcher getMatcher() {
+        // ...
+    }
+
+    @Override
+    protected SessionManager getSessionManager() {
+        // ...
+    }
+}
+</pre>
+<p>
+    With the following mapping file:
+</p>
+<pre>
+[config]
+server.listener.class=org.debux.webmotion.exemple.MyShiroListener
+</pre>
+
+<h2 class="page-header" id="templates">Integration of page templates</h2>
+<p>
+    WebMotion directly integrates the JSPs as page templates. To be able to support
+    other wiews, you need to configurate your <code>web.xml</code> file and declare
+    a servlet for the rendering. For most of the page templates, one is provided by the library.
+    You can find an example of the configurations on the SVN at the following URL:
+    <a href="http://svn.debux.org/webmotion-ext/webmotion-pages/">http://svn.debux.org/webmotion-ext/webmotion-pages/</a>.
+</p>
+
+<h3>Configuration for Groovy</h3>
+
+<p>
+    Here is the necessary configuration to use Groovy pages in WebMotion.
+    To know more, please refer to the <a href="http://groovy.codehaus.org/">Groovy</a> website.
+</p>
+<p>
+    Add the dependencay to groovy-servlet:
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+    &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Add the following lines in the <code>web.xml</code> file of your app:
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.TemplateServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.gsp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.GroovyServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.groovy&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Example of a Groovy page:
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;% 3.times { %&gt;
+            Hello World!
+        &lt;% } %&gt;
+        &lt;br&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h3>Configuration for Scalate</h3>
+<p>
+    Here is the necessary configuration to use Scala pages in WebMotion.
+    To know more, please refer to the <a href="http://scalate.fusesource.org/">Scalate</a> website.
+</p>
+<p>
+    Add the dependency to scalate-core:
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId>org.fusesource.scalate&lt;/groupId&gt;
+    &lt;artifactId>scalate-core&lt;/artifactId&gt;
+    &lt;version>1.5.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Add the following lines in the <code>web.xml</code> file of your app:
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.fusesource.scalate.servlet.TemplateEngineServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.ssp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Example of a Scala page:
+</p>
+<pre class="prettyprint">
+&lt;%
+  var foo = "hello"
+  foo += " there"
+  foo += " you!"
+%&gt;
+&lt;p>${foo}&lt;/p&gt;
+</pre>
+
+<h3>Configuration for ZK</h3>
+<p>
+    Here is the necessary configuration to use ZK pages in WebMotion.
+    To know more, please refer to the <a href="http://www.zkoss.org/">ZK</a> website.
+</p>
+<p>
+    Add the necessary dependencies:
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkbind&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zul&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkplus&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zhtml&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Add the following lines in the <code>web.xml</code> file of your app:
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;wm.exclude.paths&lt;/param-name&gt;
+        &lt;param-value&gt;/zkau&lt;/param-value&gt;
+    &lt;/context-param&gt;
+&lt;/web-app&gt;
+</pre>
+<p>
+    Example of a zul page:
+</p>
+<pre class="prettyprint">
+&lt;zk&gt;
+    &lt;window title="New page title" border="normal"&gt;
+        New content here !
+    &lt;/window&gt;
+&lt;/zk&gt;
 </pre>
 
 <div class="well" style="text-align: center;">

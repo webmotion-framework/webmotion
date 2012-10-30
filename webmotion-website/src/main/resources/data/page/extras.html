@@ -52,7 +52,7 @@
 </pre>
 
 <p>
-    Pour utiliser l'ensemble des extras, il vous suffit de définir les listenners suivant 
+    Pour utiliser l'ensemble des extras, il vous suffit de définir les listeners suivant 
     dans votre fichier de mapping :
 </p>
 <pre>
@@ -93,7 +93,7 @@ $ mvn archetype:generate \
 </p>
 <ul>
     <li>les filtres</li>
-    <li>les listenners</li>
+    <li>les listeners</li>
     <li>les servlets</li>
 </ul>
 
@@ -784,7 +784,7 @@ System.out.println(hashedPassword);
 <h5>Login</h5>
 <p>
     Pour détecter si l'utilisateur n'est pas connecté il faut utiliser le filtre <code>Shiro.isAuthenticated</code>,
-    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le rediriger vers la page de connexion.
+    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le redirige vers la page de connexion.
 </p>
 <pre>
 [filters]
@@ -815,7 +815,7 @@ code:401                                       view:login.jsp
 </pre>
 
 <p>
-    Il est possible de définir une action de redirection après une authentification réussite:
+    Il est possible de définir une action de redirection après une authentification réussie:
 </p>
 <pre>
 [actions]
@@ -832,7 +832,7 @@ GET        /login                               Shiro.login     redirect=/menu
 </p>
 
 <p>
-    Une exception <code>AuthenticationException</code> est levée si une erreur survient lors de l'authentification 
+    Une exception <code>AuthenticationException</code> est levée si une erreur survient lors de l'authentification.
     Ainsi vous pouvez rafficher la page de login en précisant un message d'erreur.
 </p>
 <pre>
@@ -908,7 +908,7 @@ code:403                                            view:forbidden.jsp
 <h4>Avancé</h4>
 <h5>TagLib</h5>
 <p>
-    Shiro propose un ensemble de taglib, WebMotion est compatible avec. Vous pouvez vous reporter à la 
+    Shiro propose un ensemble de taglib avec lesquels WebMotion est compatible. Vous pouvez vous reporter à la
     <a href="http://shiro.apache.org/web.html#Web-taglibrary">documentation</a> 
     Apache Shiro pour plus de renseignements.
 </p>
@@ -962,8 +962,8 @@ server.listener.class=org.debux.webmotion.exemple.MyShiroListener
     WebMotion intégre directement comme template de page les JSP. Pour pouvoir 
     supporter d'autres vues il vous faut configurer votre fichier <code>web.xml</code>, 
     et déclarer une servlet pour faire réaliser le rendu. Pour la plus part des templates 
-    de pages, il en existe une fournit par la libairie. Vous pouvez retrouver un exemple des 
-    configurations suivant sur le SVN à l'adresse suivante 
+    de pages, il en existe une fournie par la libairie. Vous pouvez retrouver un exemple des
+    configurations sur le SVN à l'adresse suivante 
     <a href="http://svn.debux.org/webmotion-ext/webmotion-pages/">http://svn.debux.org/webmotion-ext/webmotion-pages/</a>.
 </p>
 
