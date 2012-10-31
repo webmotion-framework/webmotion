@@ -2,7 +2,7 @@
 package.views=WEB-INF/${package}
 package.base=${package}
 #if ($usesExtras == 'y' || $usesExtras == 'Y')
-server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener,org.debux.webmotion.shiro.ShiroListener
 #end
 
 [actions]
