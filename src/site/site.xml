@@ -58,11 +58,11 @@
         </menu>
 
         <menu name="Extras">
-            <item name="All" href="../webmotion-extra-all/project-summary.html" />
-            <item name="Spring" href="../webmotion-extra-spring/project-summary.html" />
-            <item name="SiteMesh" href="../webmotion-extra-sitemesh/project-summary.html" />
-            <item name="Hibernate" href="../webmotion-extra-jpa/project-summary.html" />
-            <item name="Shiro" href="../webmotion-extra-shiro/project-summary.html" />
+            <item name="All" href="/webmotion-extra-all/project-summary.html" />
+            <item name="Spring" href="/webmotion-extra-spring/project-summary.html" />
+            <item name="SiteMesh" href="/webmotion-extra-sitemesh/project-summary.html" />
+            <item name="Hibernate" href="/webmotion-extra-jpa/project-summary.html" />
+            <item name="Shiro" href="/webmotion-extra-shiro/project-summary.html" />
         </menu>
 
         <menu ref="reports"/>
