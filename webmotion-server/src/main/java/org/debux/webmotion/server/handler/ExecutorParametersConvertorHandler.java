@@ -129,7 +129,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
 
             if (!protectedParameters.contains(name)) {
                 ParameterTree nextTree = tree.get(name);
-                if (nextTree == null && !WebMotionUtils.isPrimitiveType(type) 
+                if (nextTree == null
                         && !Collection.class.isAssignableFrom(type)
                         && !Map.class.isAssignableFrom(type)
                         && !UploadFile.class.isAssignableFrom(type)
