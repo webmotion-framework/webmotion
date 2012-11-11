@@ -52,6 +52,11 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
+    <!-- Force jsessionid into cookie -->
+    <session-config>         
+        <tracking-mode>COOKIE</tracking-mode>     
+    </session-config>
+    
     <!-- Exception -->
     <error-page>
         <exception-type>java.lang.Exception</exception-type>
