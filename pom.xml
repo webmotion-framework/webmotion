@@ -630,6 +630,13 @@
                             <contextPath>/${project.build.finalName}</contextPath>
                         </webApp>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.eclipse.jetty</groupId>
+                            <artifactId>jetty-websocket</artifactId>
+                            <version>${jetty.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 
                 <plugin>
