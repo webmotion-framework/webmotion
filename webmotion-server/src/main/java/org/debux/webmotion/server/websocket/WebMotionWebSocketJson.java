@@ -106,50 +106,61 @@ public class WebMotionWebSocketJson extends WebMotionWebSocket {
             Class<?>[] parameterTypes = method.getParameterTypes();
             Type[] genericParameterTypes = method.getGenericParameterTypes();
             
-            JsonObject values = object.get("params").getAsJsonObject();
-            List<Object> convertedParameters = new ArrayList<Object>();
+            JsonElement params = object.get("params");
+            JsonObject values = null;
+            if (params != null) {
+                values = params.getAsJsonObject();
+            }
             
+            List<Object> convertedParameters = new ArrayList<Object>();
             for (int position = 0; position < parameterNames.length; position ++) {
                 String name = parameterNames[position];
                 Class<?> type = parameterTypes[position];
                 Type genericType = genericParameterTypes[position];
                 
-                String value = values.get(name).getAsString();
-                if (value == null) {
+                if (values == null) {
                     convertedParameters.add(null);
                     
-                } else if (Collection.class.isAssignableFrom(type)) {
-                    Collection converted;
-                    if (type.isInterface()) {
-                        if (List.class.isAssignableFrom(type)) {
-                            converted = new ArrayList();
+                } else {
+                    JsonElement value = values.get(name);
+                    if (value == null) {
+                        convertedParameters.add(null);
+                        
+                    } else {
+                        if (Collection.class.isAssignableFrom(type)) {
+                            Collection converted;
+                            if (type.isInterface()) {
+                                if (List.class.isAssignableFrom(type)) {
+                                    converted = new ArrayList();
 
-                        } else if (Set.class.isAssignableFrom(type)) {
-                            converted = new HashSet();
+                                } else if (Set.class.isAssignableFrom(type)) {
+                                    converted = new HashSet();
 
-                        } else if (SortedSet.class.isAssignableFrom(type)) {
-                            converted = new TreeSet();
+                                } else if (SortedSet.class.isAssignableFrom(type)) {
+                                    converted = new TreeSet();
+
+                                } else {
+                                    converted = new ArrayList();
+                                }
+                            } else {
+                                converted = (Collection) type.newInstance();
+                            }
+
+                            Class convertType = String.class;
+                            if (genericType != null && genericType instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) genericType;
+                                convertType = (Class) parameterizedType.getActualTypeArguments()[0];
+                            }
+
+                            Collection collection = getValues(value, convertType);
+                            converted.addAll(collection);
+                            convertedParameters.add(converted);
 
                         } else {
-                            converted = new ArrayList();
+                            Object converted = getValue(value, type);
+                            convertedParameters.add(converted);
                         }
-                    } else {
-                        converted = (Collection) type.newInstance();
                     }
-                    
-                    Class convertType = String.class;
-                    if (genericType != null && genericType instanceof ParameterizedType) {
-                        ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                        convertType = (Class) parameterizedType.getActualTypeArguments()[0];
-                    }
-                    
-                    Collection collection = getValues(value, convertType);
-                    collection.addAll(converted);
-                    convertedParameters.add(converted);
-                    
-                } else {
-                    Object converted = getValue(value, type);
-                    convertedParameters.add(converted);
                 }
             }
             
@@ -174,12 +185,12 @@ public class WebMotionWebSocketJson extends WebMotionWebSocket {
         super.sendTextMessage(gson.toJson(result));
     }
 
-    public <T> T getValue(String value, Class<T> clazz) {
+    public <T> T getValue(JsonElement value, Class<T> clazz) {
         T fromJson = gson.fromJson(value, clazz);
         return fromJson;
     }
 
-    public <T> Collection<T> getValues(String value, Class<T> clazz) {
+    public <T> Collection<T> getValues(JsonElement value, Class<T> clazz) {
         Class arrayClass = Array.newInstance(clazz, 0).getClass();
         T[] fromJson = (T[]) gson.fromJson(value, arrayClass);
         if (fromJson != null) {
