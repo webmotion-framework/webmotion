@@ -34,7 +34,7 @@
     <url>www.webmotion-framework.org</url>
 
     <parent>
-        <groupId>org.debux</groupId>
+        <groupId>org.debux.webmotion</groupId>
         <artifactId>webmotion-project</artifactId>
         <version>2.4-SNAPSHOT</version>
     </parent>
