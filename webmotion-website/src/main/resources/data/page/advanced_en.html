@@ -235,7 +235,7 @@ public class Listener implements WebMotionServerListener {
     public void onStart(Mapping mapping, ServerContext context) {
         context.addInjector(new Injector() {
             @Override
-            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+            public Object getValue(Mapping mapping, Call call, Class&lt;?&gt; type, Type generic) {
                 if (AClass.class.isAssignableFrom(type)) {
                     return new AClass();
                 }
