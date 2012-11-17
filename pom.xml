@@ -36,7 +36,7 @@
     </parent>
   
     <packaging>pom</packaging>
-    <version>2.3.2-SNAPSHOT</version>
+    <version>2.3.2</version>
     <name>WebMotion project</name>
     <url>www.webmotion-framework.org</url>
       
@@ -120,9 +120,9 @@
     </contributors>
     
     <scm>
-        <url>http://projects.debux.org/projects/webmotion</url>
-        <connection>scm:svn:http://svn.debux.org/webmotion</connection>
-        <developerConnection>scm:svn:https://svn.debux.org/webmotion/trunk</developerConnection>
+        <url>http://projects.debux.org/projects/webmotion/tags/webmotion-project-2.3.2</url>
+        <connection>scm:svn:http://svn.debux.org/webmotion/tags/webmotion-project-2.3.2</connection>
+        <developerConnection>scm:svn:https://svn.debux.org/webmotion/tags/webmotion-project-2.3.2</developerConnection>
     </scm>
     
     <issueManagement>
@@ -162,8 +162,8 @@
         </mailingList>
     </mailingLists>
     
-    <repositories></repositories>
-    <pluginRepositories></pluginRepositories>
+    <repositories />
+    <pluginRepositories />
   
     <properties>
         <!-- Config general -->
