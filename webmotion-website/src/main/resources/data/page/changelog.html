@@ -47,6 +47,7 @@
     <strong>Major changes:</strong>
 </p>
 <ul>
+    <li>Synchronisation avec le repo maven central</li>
     <li>Une ressource est détecté static si le fichier exiiste</li>
     <li>Simplification de la configuration des extras</li>
     <li>Renommage de CookieManger en CookieManager</li>
@@ -66,6 +67,10 @@
     <li><a href="/issues/265">Bug #265</a>: Désactivation des ressources static casse le rendu des vues</li>
     <li><a href="/issues/268">Bug #268</a>: Le projet webmotion-test ne build pas sous Windows</li>
     <li><a href="/issues/280">Bug #280</a>: ExecutorParametersInjectorHandler contient plusieurs fois le même injecteur</li>
+    <li><a href="/issues/293">Bug #293</a>: Une erreur 404 est levée quand il y a le ;jsessionid dans l'url</li>
+    <li><a href="/issues/294">Bug #294</a>: Erreur dans WebMotionWebSocketJson quand on passe un string avec des espaces</li>
+    <li><a href="/issues/295">Bug #295</a>: NullPointerException dans WebMotionWebSocketJson quand params est null</li>
+    <li><a href="/issues/296">Bug #296</a>: Seulement des string non null sont convertible  dans WebMotionWebSocketJson</li>
     <li><a href="/issues/121">Feature #121</a>: Creation d'un extra avec Apache Shiro pour gérer la sécurité</li>
     <li><a href="/issues/124">Feature #124</a>: Plugin pour NetBeans</li>
     <li><a href="/issues/235">Feature #235</a>: Support des Websockets</li>
@@ -79,7 +84,10 @@
     <li><a href="/issues/279">Feature #279</a>: Protection des paramètres injectés</li>
     <li><a href="/issues/281">Feature #281</a>: Création d'un module pour chaque extra</li>
     <li><a href="/issues/283">Feature #283</a>: Amélioration des listeners du serveur pour ajouter le mapping en paramètre</li>
+    <li><a href="/issues/297">Feature #297</a>: Synchronisation des artifacts WebMotion dans le repo maven central</li>
 </ul>
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/">Site &raquo;</a></p>
 
 <h2 class="page-header" id="2_2">Version 2.2</h2>
 <p>
@@ -172,8 +180,6 @@
     <li><a href="http://projects.debux.org/issues/202">Feature #202</a>: Amélioration de jsp:include dans une extension</li>
     <li><a href="http://projects.debux.org/issues/205">Feature #205</a>: Utiliser des urls absolues dans les extensions</li>
 </ul>
-
-<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-2.1/">Site &raquo;</a></p>
 
 <h2 class="page-header" id="2_0">Version 2.0</h2>
 <p>
