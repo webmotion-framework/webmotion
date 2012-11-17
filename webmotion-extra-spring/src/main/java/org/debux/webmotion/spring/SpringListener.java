@@ -43,7 +43,7 @@ public class SpringListener implements WebMotionServerListener {
     @Override
     public void onStart(Mapping mapping, ServerContext context) {
         Config config = mapping.getConfig();
-        config.setMainHandler("org.debux.webmotion.spring.SpringMainHandler");
+        config.setMainHandler(SpringMainHandler.class.getName());
     }
 
     @Override
