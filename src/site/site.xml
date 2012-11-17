@@ -44,7 +44,6 @@
         </links>
         
         <menu name="Info">
-            <item name="Repository" href="http://debux.org/maven/" />
             <item name="Redmine" href="http://projects.debux.org/projects/webmotion" />
             <item name="Site" href="http://www.webmotion-framework.org" />
         </menu>
