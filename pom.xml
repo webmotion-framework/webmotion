@@ -130,6 +130,13 @@
         <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
   
+    <distributionManagement>
+        <site>
+            <id>website</id>
+            <url>scp://maven@debux.org:2222/var/lib/redmine/public/project-site/webmotion/</url>
+        </site>
+    </distributionManagement>
+  
     <mailingLists>
         <mailingList>
             <name>webmotion</name>
@@ -490,6 +497,14 @@
     </dependencyManagement>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.0</version>
+            </extension>
+        </extensions>
+        
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
