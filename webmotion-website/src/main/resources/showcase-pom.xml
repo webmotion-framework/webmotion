@@ -32,20 +32,10 @@
   <name>webmotion-sample Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
-  <!-- Définition du repository contenant WebMotion -->
-  <repositories>
-    <repository>
-      <id>debux-repository</id>
-      <name>Debux repository for Maven (contains WebMotion projects)</name>
-      <url>http://debux.org/maven/repo/</url>
-    </repository>
-  </repositories>
-
-  <dependencies>
     <dependency>
-      <groupId>org.debux</groupId>
+      <groupId>org.debux.webmotion</groupId>
       <artifactId>webmotion</artifactId>
-      <version>2.0</version> <!-- Pensez à vérifier quelle est la dernière version disponible -->
+      <version>2.3.2</version>
     </dependency>
   </dependencies>
   
