@@ -29,8 +29,14 @@
     <groupId>org.debux.webmotion</groupId>
     <artifactId>webmotion-project</artifactId>
   
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+  
     <packaging>pom</packaging>
-    <version>2.4-SNAPSHOT</version>
+    <version>2.3.2-SNAPSHOT</version>
     <name>WebMotion project</name>
     <url>www.webmotion-framework.org</url>
       
@@ -123,21 +129,6 @@
         <system>redmine</system>
         <url>http://projects.debux.org/projects/webmotion/issues</url>
     </issueManagement>
-    
-    <distributionManagement>
-        <repository>
-            <id>debux-repo</id>
-            <url>scp://maven@debux.org:2222/var/www/maven/repo</url>
-        </repository>
-        <snapshotRepository>
-            <id>debux-snapshot</id>
-            <url>scp://maven@debux.org:2222/var/www/maven/snapshot</url>
-        </snapshotRepository>
-        <site>
-            <id>website</id>
-            <url>scp://maven@debux.org:2222/var/lib/redmine/public/project-site/webmotion/</url>
-        </site>
-    </distributionManagement>
   
     <mailingLists>
         <mailingList>
@@ -499,14 +490,6 @@
     </dependencyManagement>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>2.0</version>
-            </extension>
-        </extensions>
-        
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -671,6 +654,33 @@
     </build>
     
     <profiles>
+        <profile>
+            <id>gpg</id>
+            <activation>
+                <property>
+                    <name>gpg.keyname</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
         <profile>
             <id>analyze-dependencies</id>
             <activation>
