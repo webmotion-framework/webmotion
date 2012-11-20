@@ -351,7 +351,7 @@ ${file.content}</pre>
         
         <hr/>
         <footer style="text-align: center">
-            <p>Powered by WikiMotion and WebMotion - version 2.3.2 - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a></p>
+            <p>Powered by WikiMotion and WebMotion - version 2.3.3 - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a></p>
         </footer>
 
         <!-- Piwik -->
