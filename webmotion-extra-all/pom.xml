@@ -31,6 +31,7 @@
 
     <packaging>pom</packaging>
     <name>WebMotion extra all</name>
+    <description>WebMotion is Java web framework based on the Java EE6 standard</description>
     <url>www.webmotion-framework.org</url>
 
     <parent>
