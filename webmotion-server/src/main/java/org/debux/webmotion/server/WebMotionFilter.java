@@ -48,9 +48,19 @@ public class WebMotionFilter extends WebMotionController {
      * Call this method to continue the current execution.
      */
     public void doProcess() {
-        Call call = contextable.getCall();
-        WebMotionHandler handler = contextable.getHandler();
         Mapping mapping = contextable.getMapping();
+        Call call = contextable.getCall();
+        doProcess(mapping, call);
+    }
+    
+    /**
+     * Call this method to continue the current execution to passing a wrapper 
+     * on mapping and call.
+     * @param mapping wrapper on mapping
+     * @param call wrapper on call
+     */
+    public void doProcess(Mapping mapping, Call call) {
+        WebMotionHandler handler = contextable.getHandler();
         handler.handle(mapping, call);
     }
     
