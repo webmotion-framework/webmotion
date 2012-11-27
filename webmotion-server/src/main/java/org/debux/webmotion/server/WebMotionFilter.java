@@ -55,7 +55,8 @@ public class WebMotionFilter extends WebMotionController {
     
     /**
      * Call this method to continue the current execution to passing a wrapper 
-     * on mapping and call.
+     * on mapping and call. You can use basic wrapper classes @see MappingWrapper 
+     * and @see CallWrapper.
      * @param mapping wrapper on mapping
      * @param call wrapper on call
      */
