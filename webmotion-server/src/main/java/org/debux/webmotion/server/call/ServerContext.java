@@ -98,7 +98,7 @@ public class ServerContext {
     protected String secret;
     
     /** Main mapping file name to parse */
-    protected String mappingFileName = "/mapping";
+    protected String[] mappingFileName = {"/mapping"};
     
     /** Absolute path on webapp */
     protected String webappPath;
@@ -107,7 +107,7 @@ public class ServerContext {
     protected List<WebMotionServerListener> listeners;
     
     /** Current exclude paths */
-    protected String[] excludePaths;
+    protected String[] excludePaths = {};
     
     /**
      * Initialize the context.
@@ -138,7 +138,7 @@ public class ServerContext {
                 
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
-        mapping = parser.parse(mappingFileName);
+        mapping = parser.parse(mappingFileName[0]);
         
         // Fire onStart
         listeners = new ArrayList<WebMotionServerListener>();
@@ -443,7 +443,7 @@ public class ServerContext {
     /**
      * @return the mapping file name use to read the mapping/
      */
-    public String getMappingFileName() {
+    public String[] getMappingFileName() {
         return mappingFileName;
     }
 
@@ -452,7 +452,7 @@ public class ServerContext {
      * 
      * @param mappingFileName 
      */
-    public void setMappingFileName(String mappingFileName) {
+    public void setMappingFileName(String[] mappingFileName) {
         this.mappingFileName = mappingFileName;
     }
 

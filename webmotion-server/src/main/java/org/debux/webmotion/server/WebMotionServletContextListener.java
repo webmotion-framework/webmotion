@@ -59,15 +59,13 @@ public class WebMotionServletContextListener implements ServletContextListener {
         // Get file name mapping in context param
         String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileNameParam != null && !mappingFileNameParam.isEmpty()) {
-            serverContext.setMappingFileName(mappingFileNameParam);
+            serverContext.setMappingFileName(mappingFileNameParam.split(","));
         }
         
         // Get exclude path in context param
         String excludePathsParam = servletContext.getInitParameter(PARAM_EXCLUDE_PATHS);
         if (excludePathsParam != null && !excludePathsParam.isEmpty()) {
             serverContext.setExcludePaths(excludePathsParam.split(","));
-        } else {
-             serverContext.setExcludePaths(new String[]{});
         }
         
         createWebSockets(servletContext);
