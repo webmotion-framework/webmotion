@@ -1,0 +1,645 @@
+
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!--<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
+
+        <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+        <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js" type="text/javascript"></script>
+
+    </head>
+    <body onload="prettyPrint()">-->
+
+<div id="article">
+
+<h1>WebSocket avec WebMotion et AngularJS</h1>
+
+<script type="text/javascript" src="../js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="begin">Présentation</h2>
+<p>
+    L'article vous présente une des nouveautés apparue dans WebMotion qui est la
+    gestion des websockets et le framework AngularJS.
+</p>
+<p>
+    Tout d'abord un peu de théorie pour vous présenter comment l'exemple va
+    fonctionner. L'idée est de créer un dashboard avec des post-it qui peuvent
+    passer d'un statut à l'autre (todo, in progress et done). Le dashboard
+    devra être partagé et se rafraîchir de façon automatique sur les différents
+    clients. Une démo est disponible à l'adresse suivante 
+    <a href="http://www.webmotion-framework.org/dashboard/">http://www.webmotion-framework.org/dashboard/</a>.
+</p>
+
+<p>
+    Pour rappel WebMotion est un framework Java web. Il utilise un fichier de 
+    mapping pour décrire la liaison entre le serveur et le client. Il est basé 
+    sur l'API JEE avec Servlet 3.
+</p>
+
+<p>
+    AngularJS est un framework Javascript MVC. Il permet d'ajouter des
+    directives dans votre document HTML pour rendre vos pages dynamiques. Une
+    des fonctionnalités est la mise à jour automatique entre votre contrôleur 
+    et votre page HTML.
+</p>
+
+<p>
+    Pour plus de renseignement vous pouvez consulter respectivement les sites 
+    internet <a href="http://www.webmotion-framework.org/">http://www.webmotion-framework.org/</a>
+    et <a href="http://angularjs.org/">http://angularjs.org/</a>.
+</p>
+
+<h2 class="page-header" id="create">Création du projet</h2>
+
+<p>
+    Maven est utilisé comme gestionnaire de build pour l'exemple. WebMotion 
+    propose un archetype maven pour initialiser un projet. Pour l'utiliser il 
+    vous suffit de taper la commande suivante :
+</p>
+<pre class="prettyprint">
+$ mvn archetype:generate \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.3.3 \
+    -DgroupId=org.debux.webmotion \
+    -DartifactId=dashboard \
+    -Dpackage=org.debux.webmotion.dashboard \
+    -Dversion=1.0-SNAPSHOT \
+    -DusesExtras=N
+</pre>
+
+<p>
+    Coté AngularJS, il suffit d'inclure le script dans vos pages et déclarer 
+    une application. L'exemple est composé d'une seule page.
+</p>
+
+<pre class="prettyprint">
+&lt;html ng-app="DashboardApp"&gt;
+    &lt;head&gt;
+        &lt;script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 class="page-header" id="model">Partie modèle</h2>
+<p>
+    Au niveau des données le serveur conservera l'ensemble des tâches (matérialisées par des post-it) dans une
+    liste en mémoire.
+</p>
+
+<pre class="prettyprint">
+public class Task {
+    protected String id;
+    protected String name;
+    protected String status;
+
+    public Task(String name) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.status = "todoTasks";
+    }
+}
+</pre>
+
+<p>
+    La partie serveur retournera au client les tâches sous forme de trois listes
+    une pour chaque statut.
+</p>
+<pre class="prettyprint">
+public class SortedTasks {
+    List&lt;Task&gt; todoTasks = new ArrayList&lt;Task&gt;();
+    List&lt;Task&gt; progressTasks = new ArrayList&lt;Task&gt;();
+    List&lt;Task&gt; doneTasks = new ArrayList&lt;Task&gt;();
+}
+
+public static SortedTasks getSortedTasks(List&lt;Task&gt; tasks) {
+    SortedTasks sortedTasks = new SortedTasks();
+
+    for (Task task : tasks) {
+        String status = task.getStatus();
+
+        if ("todoTasks".equals(status)) {
+            sortedTasks.todoTasks.add(task);
+
+        } else if ("progressTasks".equals(status)) {
+            sortedTasks.progressTasks.add(task);
+
+        } else if ("doneTasks".equals(status)) {
+            sortedTasks.doneTasks.add(task);
+        }
+    }
+    return sortedTasks;
+}
+</pre>
+
+<p>
+    La dernière étape consiste à initialiser votre modèle par un listener au 
+    démarrage du serveur.
+</p>
+<pre class="prettyprint">
+public class StartupListenner implements WebMotionServerListener {
+
+    public void onStart(Mapping mapping, ServerContext serverContext) {
+        List&lt;Task&gt; tasks = Arrays.asList(
+            new Task("Task 0"),
+            new Task("Task 1"),
+            new Task("Task 10"),
+            new Task("Task 11")
+        );
+        serverContext.setAttribute("tasks", new ArrayList&lt;Task&gt;(tasks));
+    }
+
+    public void onStop(ServerContext serverContext) { // do nothing }
+
+}
+</pre>
+
+<p>
+    Il faut penser à ajouter la déclaration du listener dans le fichier de
+    mapping de WebMotion. Le fichier se trouve à la racine des ressources de 
+    votre projet. Il contient un ensemble de sections. La section
+    "[config]" vous permet de configurer le serveur WebMotion.
+</p>
+<pre class="prettyprint">
+[config]
+server.listener.class=org.debux.webmotion.dashboard.StartupListenner
+</pre>
+
+<h2 class="page-header" id="view">Partie vue</h2>
+
+<p>
+    L'application est constituée d'une seule page index.html. Elle gère
+    l'affichage des tâches du dashboard. Un contrôleur sur le body est
+    ajouté pour pouvoir manipuler le DOM en fonction du modèle par AngularJS :
+</p>
+<pre class="prettyprint">
+&lt;body ng-controller="MainCtrl"&gt;...&lt;/body&gt;
+</pre>
+
+<p>
+    Au niveau du javascript, le contrôleur correspond juste à une fonction. 
+    C'est le contrôleur qui reçoit l'ensemble des évènements et manipule le
+    modèle.
+</p>
+<pre class="prettyprint">
+function MainCtrl($scope) {
+}
+</pre>
+
+<p>
+    La page va être composée de deux parties. La première est un formulaire de
+    création d'une nouvelle tâche avec un input texte avec l'appel vers la 
+    fonction addTask du contrôleur à la soumission du formulaire :
+</p>
+<pre class="prettyprint">
+&lt;form ng-submit="addTask()"&gt;
+    &lt;input type="text" ng-model="taskName" size="30" required placeholder="add new task here"&gt;
+    &lt;input class="btn-primary" type="submit" value="add"&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    La deuxième partie concerne l'affichage des tâches suivant les trois
+    statuts. Le modèle est récupéré depuis le contrôleur et est parcouru avec la
+    directive "ng-repeat" pour créer un element div pour chaque tâche. En cas de
+    suppression ou de déplacement de tâche une méthode est appelée sur le contrôleur.
+</p>
+<pre class="prettyprint">
+&lt;div class="row"&gt;
+    &lt;div class="span4" drop-event="updateTask($element, 'todoTasks')"&gt;
+        &lt;h1&gt;Todo&lt;/h1&gt;
+        &lt;div id="{{task.id}}" drag-event ng-repeat="task in tasks.todoTasks" class="task"&gt;
+            &lt;button class="close" ng-click="delTask(task)"&gt;&times;&lt;/button&gt;
+            {{task.name}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="span4" drop-event="updateTask($element, 'progressTasks')"&gt;
+        &lt;h1&gt;In progress&lt;/h1&gt;
+        &lt;div id="{{task.id}}" drag-event ng-repeat="task in tasks.progressTasks" class="task"&gt;
+            &lt;button class="close" ng-click="delTask(task)"&gt;&times;&lt;/button&gt;
+            {{task.name}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="span4" drop-event="updateTask($element, 'doneTasks')"&gt;
+        &lt;h1&gt;Done&lt;/h1&gt;
+        &lt;div id="{{task.id}}" drag-event ng-repeat="task in tasks.doneTasks" class="task"&gt;
+            &lt;button class="close" ng-click="delTask(task)"&gt;&times;&lt;/button&gt;
+            {{task.name}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>
+    Une directive AngularJS permet de rajouter un comportement au DOM. Les
+    directives drag-event et drop-event ne sont pas des directives proposées
+    par AngularJS. Elles permettent de gérer facilement le drag n'drop en HTML
+    5 en ajoutant des événements nécessaires sur les éléments et des callback 
+    sur le contrôleur courant.
+</p>
+<pre class="prettyprint">
+angular.module('components', [])
+    .directive('dragEvent', ['$parse', function($parse) {
+        return function(scope, element, attrs) {
+            element.bind("dragstart", function (evt) {
+                var id = element.attr("id");
+                evt.dataTransfer.setData("drag-id", id);
+
+                var fn = $parse(attrs.dragEvent);
+                fn(scope, {$element : element});
+            });
+            element.attr("draggable", true);
+        }
+    }])
+    .directive('dropEvent', ['$parse', function($parse) {
+        return function(scope, element, attrs) {
+            element.bind("dragover dragenter", function (evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+
+                return false;
+            });
+
+            element.bind("drop", function (evt) {
+                var id = evt.dataTransfer.getData("drag-id");
+                var elementTransfer = angular.element(document.getElementById(id));
+                element.append(elementTransfer);
+
+                evt.stopPropagation();
+                evt.preventDefault();
+
+                var fn = $parse(attrs.dropEvent);
+                fn(scope, {$element : elementTransfer, $to : element});
+            });
+        }
+    }]);
+
+angular.module('DashboardApp', ['components']);
+</pre>
+
+<p>
+    Il reste à ajouter le style sur les tâches avec l'aide du bootstrap twitter :
+</p>
+<pre class="prettyprint">
+&lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
+&lt;style&gt;
+    .task {
+        width: 110px;
+        height: 100px;
+        float: left;
+        background: #ffff66;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 3px;
+    }
+&lt;/style&gt;
+</pre>
+
+<p>
+    La dernière étape pour l'affichage de la page est la définition dans la 
+    section "action" de WebMotion de la page. Une action dans le fichier de 
+    mapping est composé de la méthode HTTP, du path et de l'action à réaliser. 
+    Dans la régle suivante, l'action consiste à revoyer la page index.html à 
+    l'utilisateur.
+</p>
+<pre class="prettyprint">
+[actions]
+GET       /                           view:index.html
+</pre>
+
+<h2 class="page-header" id="controller">Partie contrôleur</h2>
+
+<p>
+Pour gérer les websockets au niveau serveur, nous allons utiliser l'envoi de 
+message en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
+client une méthode de votre websocket. L'objet JSON est composé du
+nom de la méthode et des paramètres à appeler.
+</p>
+
+<p>
+    Pour l'utiliser, il faut créer, comme pour une action classique dans
+    WebMotion, un contrôleur qui retourne un rendu au client sur l'appel d'une
+    méthode. Le rendu vous permet de retourner des pages, des données, des 
+    redirections, ... au client. Dans notre cas ce rendu est du type WebMotionWebSocket <span style="color:red;">(bizarre le nom, on le retrouve pas dans le code, plutot RenderWebSocket ?)<span>.
+</p>
+<pre class="prettyprint">
+public class TasksManager extends WebMotionController {
+
+    private static final Logger log = LoggerFactory.getLogger(TasksManager.class);
+
+    public Render createWebsocket() {
+        TasksManagerWebSocket socket = new TasksManagerWebSocket();
+        return new RenderWebSocket(socket);
+    }
+
+    public class TasksManagerWebSocket extends WebMotionWebSocketJson {
+    }
+}
+</pre>
+
+<p>
+    Ne pas oublier de déclarer le mapping. L'action est déclaré par le nom de 
+    classe et la méthode à appeler :
+</p>
+<pre class="prettyprint">
+[actions]
+GET       /tasksManager               TasksManager.createWebsocket
+</pre>
+
+<p>
+    Par défaut le retour de la méthode est passé qu'à la connexion appelante
+    sous la forme d'un objet JSON. Dans notre cas nous souhaitons broadcaster 
+    l'ensemble des connexions pour prévenir de la modification. Pour cela il 
+    faut retenir l'ensemble des connexions dans le contexte et redéfinir la 
+    méthode pour l'envoi du résultat ainsi :
+</p>
+<pre class="prettyprint">
+@Override
+public void onOpen() {
+    // Store all connections
+    ServerContext serverContext = getServerContext();
+    List&lt;TasksManagerWebSocket&gt; connections = (List&lt;TasksManagerWebSocket&gt;) serverContext.getAttribute("connections");
+    if (connections == null) {
+        connections = new ArrayList&lt;TasksManagerWebSocket&gt;();
+        serverContext.setAttribute("connections", connections);
+    }
+    connections.add(this);
+}
+
+@Override
+public void onClose() {
+    ServerContext serverContext = getServerContext();
+    List&lt;TasksManagerWebSocket&gt; connections = (List&lt;TasksManagerWebSocket&gt;) serverContext.getAttribute("connections");
+    connections.remove(this);
+}
+
+@Override
+public void sendObjectMessage(String methodName, Object message) {
+    ServerContext serverContext = getServerContext();
+    List&lt;TasksManagerWebSocket&gt; connections = (List&lt;TasksManagerWebSocket&gt;) serverContext.getAttribute("connections");
+    for (TasksManagerWebSocket socket : connections) {
+        socket.superSendObjectMessage(methodName, message);
+    }
+}
+
+public void superSendObjectMessage(String methodName, Object message) {
+    super.sendObjectMessage(methodName, message);
+}
+</pre>
+
+<p>
+    Maintenant nous pouvons ajouter l'ensemble des méthodes pour gérer les 
+    tâches. Chacune des méthodes retournent l'ensemble des tâches à chaque
+    client pour qu'il puisse rafraîchir son dashboard :
+</p>
+<pre class="prettyprint">
+public SortedTasks getTasks() {
+    ServerContext serverContext = getServerContext();
+    List&lt;Task&gt; tasks = (List&lt;Task&gt;) serverContext.getAttribute("tasks");
+    SortedTasks sortedTasks = Task.getSortedTasks(tasks);
+    return sortedTasks;
+}
+
+public SortedTasks addTask(String name) {
+    ServerContext serverContext = getServerContext();
+
+    Task task = new Task(name);
+    List&lt;Task&gt; tasks = (List&lt;Task&gt;) serverContext.getAttribute("tasks");
+    tasks.add(task);
+
+    return getTasks();
+}
+
+public SortedTasks updateTask(final String id, String newStatus) {
+    ServerContext serverContext = getServerContext();
+
+    List&lt;Task&gt; tasks = (List&lt;Task&gt;) serverContext.getAttribute("tasks");
+    Task task = (Task) CollectionUtils.find(tasks, new Predicate() {
+        public boolean evaluate(Object object) {
+            Task other = (Task) object;
+            return other.getId().equals(id);
+        }
+    });
+
+    task.setStatus(newStatus);
+    tasks.remove(task);
+    tasks.add(task);
+
+    return getTasks();
+}
+
+public SortedTasks delTask(final String id) {
+    ServerContext serverContext = getServerContext();
+
+    List&lt;Task&gt; tasks = (List&lt;Task&gt;) serverContext.getAttribute("tasks");
+    CollectionUtils.filter(tasks, new Predicate() {
+        public boolean evaluate(Object object) {
+            Task other = (Task) object;
+            return !other.getId().equals(id);
+        }
+    });
+
+    return getTasks();
+}
+</pre>
+
+<p>
+    Une factory permet de créer un utilitaire pour passer les appels vers la 
+    websocket. Pour intégrer les websockets dans AngularJS, vous pouvez utiliser
+    une factory générique :
+</p>
+<pre class="prettyprint">
+angular.module('components', [])
+    .factory('WebSocket', function() {
+        return {
+            connect : function(url) {
+                var self = this;
+                this.connection = new WebSocket(url);
+
+                this.connection.onopen = function() {
+                    if (this.onopen) {
+                        self.onopen();
+                    }
+                }
+                this.connection.onclose = function() {
+                    if (this.onclose) {
+                        self.onclose();
+                    }
+                }
+                this.connection.onerror = function (error) {
+                    if (this.onerror) {
+                        self.onerror(error);
+                    }
+                }
+                this.connection.onmessage = function(event) {
+                    if (this.onmessage) {
+                        self.onmessage(event);
+                    }
+                }
+            },
+
+            send : function(message) {
+                this.connection.send(message);
+            },
+
+            close : function() {
+                this.connection.onclose = function () {};
+                this.connection.close()
+            }
+        }
+    });
+</pre>
+
+<p>
+    Soit vous pouvez utiliser une factory spécialisée pour vos appels.
+    Une méthode dans la factory est créée avec l'objet JSON à renvoyer vers le 
+    serveur pour chaque appel, et un callback à la réception du message permet 
+    de rafraîchir les données coté client.
+</p>
+<pre class="prettyprint">
+angular.module('components', [])
+    .factory('TasksManager', function() {
+        var url = "ws://localhost:8080/Dashboard/tasksManager";
+        return {
+            init : function() {
+                var self = this;
+                this.connection = new WebSocket(url);
+
+                this.connection.onopen = function() {
+                    console.log("connected");
+                    self.getTasks();
+                }
+                this.connection.onclose = function() {
+                    console.log("onclose");
+                }
+                this.connection.onerror = function (error) {
+                    console.log(error);
+                }
+                this.connection.onmessage = function(event) {
+                    console.log("refresh");
+                    var data = angular.fromJson(event.data);
+                    self.refresh(data.result);
+                }
+            },
+
+            getTasks : function() {
+                this.sendMessage({
+                    method : "getTasks",
+                    params : {}
+                });
+            },
+
+            addTask : function(name) {
+                this.sendMessage({
+                    method : "addTask",
+                    params : {
+                        name : "\"" + name + "\""
+                    }
+                });
+            },
+
+            updateTask : function(id, status) {
+                this.sendMessage({
+                    method : "updateTask",
+                    params : {
+                        id : id,
+                        newStatus : status
+                    }
+                });
+            },
+
+            delTask : function(id) {
+                this.sendMessage({
+                    method : "delTask",
+                    params : {
+                        id : id
+                    }
+                });
+            },
+
+            sendMessage : function(event) {
+                this.connection.send(JSON.stringify(event));
+            }
+        }
+    });
+</pre>
+
+<p>
+    Il suffit d'injecter la factory dans le contrôleur et brancher les 
+    différents événements venant de la vue.
+</p>
+<pre class="prettyprint">
+function MainCtrl($scope, TasksManager) {
+
+    $scope.addTask = function() {
+        TasksManager.addTask($scope.taskName);
+        $scope.taskName = "";
+    }
+
+    $scope.updateTask = function(element, status) {
+        var id = element.attr("id");
+        TasksManager.updateTask(id, status);
+    }
+
+    $scope.delTask = function(task) {
+        TasksManager.delTask(task.id);
+    }
+
+    TasksManager.refresh = function(tasks) {
+        $scope.tasks = tasks;
+        $scope.$digest();
+    }
+
+    TasksManager.init();
+}
+</pre>
+
+<h2 class="page-header" id="run">Lancer l'application</h2>
+
+<p>
+    Pour pouvez maintenant lancer l'application depuis Jetty, en tapant la ligne
+    de commande suivante :
+</p>
+<pre class="prettyprint">
+$ mvn jetty:run
+</pre>
+
+<p>
+    Vous pouvez consulter le résultat dans votre navigateur préféré à l'adresse 
+    suivante <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
+</p>
+
+<p>
+    Vous pouvez retrouver l'ensemble du code source sur le svn à l'adresse 
+    suivante <a href="http://svn.debux.org/webmotion-ext/dashboard/">http://svn.debux.org/webmotion-ext/dashboard/</a>.
+</p>
+
+</div>
+    
+<!--    </body>
+</html>-->
