@@ -43,20 +43,18 @@
 
 <h2 class="page-header" id="begin">Présentation</h2>
 <p>
-    L'article vous présente une des nouveautés apparue dans WebMotion qui est la
-    gestion des websockets et le framework AngularJS.
+    L'article vous présente une des nouveautés apparue dans WebMotion, la
+    gestion des websockets, et le framework AngularJS.
 </p>
 <p>
     Tout d'abord un peu de théorie pour vous présenter comment l'exemple va
-    fonctionner. L'idée est de créer un dashboard avec des post-it qui peuvent
+    fonctionner. L'idée est de créer un dashboard avec des post-it correspondant aux tâches qui peuvent
     passer d'un statut à l'autre (todo, in progress et done). Le dashboard
-    devra être partagé et se rafraîchir de façon automatique sur les différents
-    clients. Une démo est disponible à l'adresse suivante 
-    <a href="http://www.webmotion-framework.org/dashboard/">http://www.webmotion-framework.org/dashboard/</a>.
+    devra être partagé entre différents utilisateurs et se rafraîchir de façon automatique. 
 </p>
 
 <p>
-    Pour rappel WebMotion est un framework Java web. Il utilise un fichier de 
+    Pour rappel, WebMotion est un framework Java web. Il utilise un fichier de 
     mapping pour décrire la liaison entre le serveur et le client. Il est basé 
     sur l'API JEE avec Servlet 3.
 </p>
@@ -74,11 +72,18 @@
     et <a href="http://angularjs.org/">http://angularjs.org/</a>.
 </p>
 
+<p>
+    Une démo est disponible ici : 
+    <a href="http://www.webmotion-framework.org/dashboard/">http://www.webmotion-framework.org/dashboard/</a>.
+    et l'ensemble du code source est à l'adresse 
+    suivante <a href="http://svn.debux.org/webmotion-ext/dashboard/">http://svn.debux.org/webmotion-ext/dashboard/</a>.
+</p>
+
 <h2 class="page-header" id="create">Création du projet</h2>
 
 <p>
     Maven est utilisé comme gestionnaire de build pour l'exemple. WebMotion 
-    propose un archetype maven pour initialiser un projet. Pour l'utiliser il 
+    propose un archetype pour initialiser un projet. Pour l'utiliser il 
     vous suffit de taper la commande suivante :
 </p>
 <pre class="prettyprint">
@@ -95,7 +100,7 @@ $ mvn archetype:generate \
 
 <p>
     Coté AngularJS, il suffit d'inclure le script dans vos pages et déclarer 
-    une application. L'exemple est composé d'une seule page.
+    une application. Notre exemple est composé d'une seule page.
 </p>
 
 <pre class="prettyprint">
@@ -108,7 +113,7 @@ $ mvn archetype:generate \
 
 <h2 class="page-header" id="model">Partie modèle</h2>
 <p>
-    Au niveau des données le serveur conservera l'ensemble des tâches (matérialisées par des post-it) dans une
+    Au niveau des données, le serveur conservera l'ensemble des tâches dans une
     liste en mémoire.
 </p>
 
@@ -127,7 +132,7 @@ public class Task {
 </pre>
 
 <p>
-    La partie serveur retournera au client les tâches sous forme de trois listes
+    La partie serveur retournera au navigateur les tâches sous forme de trois listes,
     une pour chaque statut.
 </p>
 <pre class="prettyprint">
@@ -158,7 +163,7 @@ public static SortedTasks getSortedTasks(List&lt;Task&gt; tasks) {
 </pre>
 
 <p>
-    La dernière étape consiste à initialiser votre modèle par un listener au 
+    La dernière étape consiste à initialiser le modèle par un listener au 
     démarrage du serveur.
 </p>
 <pre class="prettyprint">
@@ -202,7 +207,7 @@ server.listener.class=org.debux.webmotion.dashboard.StartupListenner
 </pre>
 
 <p>
-    Au niveau du javascript, le contrôleur correspond juste à une fonction. 
+    Au niveau du javascript, le contrôleur correspond à une fonction. 
     C'est le contrôleur qui reçoit l'ensemble des évènements et manipule le
     modèle.
 </p>
@@ -213,8 +218,8 @@ function MainCtrl($scope) {
 
 <p>
     La page va être composée de deux parties. La première est un formulaire de
-    création d'une nouvelle tâche avec un input texte avec l'appel vers la 
-    fonction addTask du contrôleur à la soumission du formulaire :
+    création d'une nouvelle tâche avec un champ texte. Un appel vers la 
+    fonction addTask du contrôleur est effectué à la soumission du formulaire :
 </p>
 <pre class="prettyprint">
 &lt;form ng-submit="addTask()"&gt;
@@ -227,7 +232,8 @@ function MainCtrl($scope) {
     La deuxième partie concerne l'affichage des tâches suivant les trois
     statuts. Le modèle est récupéré depuis le contrôleur et est parcouru avec la
     directive "ng-repeat" pour créer un element div pour chaque tâche. En cas de
-    suppression ou de déplacement de tâche une méthode est appelée sur le contrôleur.
+    suppression ou de déplacement de tâche une méthode est appelée sur le contrôleur,
+    respectivement delTask et updateTask.
 </p>
 <pre class="prettyprint">
 &lt;div class="row"&gt;
@@ -257,8 +263,8 @@ function MainCtrl($scope) {
 
 <p>
     Une directive AngularJS permet de rajouter un comportement au DOM. Les
-    directives drag-event et drop-event ne sont pas des directives proposées
-    par AngularJS. Elles permettent de gérer facilement le drag n'drop en HTML
+    directives drag-event et drop-event sont des directives spécifiques au projet. 
+    Elles permettent de gérer facilement le drag n'drop en HTML
     5 en ajoutant des événements nécessaires sur les éléments et des callback 
     sur le contrôleur courant.
 </p>
@@ -308,6 +314,9 @@ angular.module('DashboardApp', ['components']);
 <pre class="prettyprint">
 &lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
 &lt;style&gt;
+    html, body, .row, .span4 {
+        height: 100%;
+    }
     .task {
         width: 110px;
         height: 100px;
@@ -321,9 +330,9 @@ angular.module('DashboardApp', ['components']);
 </pre>
 
 <p>
-    La dernière étape pour l'affichage de la page est la définition dans la 
-    section "action" de WebMotion de la page. Une action dans le fichier de 
-    mapping est composé de la méthode HTTP, du path et de l'action à réaliser. 
+    Pour finir, l'url pour accéder à la page est ajoutée dans la 
+    section "action" de WebMotion. Une action dans le fichier de 
+    mapping est composée de la méthode HTTP, du path et de l'action à réaliser. 
     Dans la régle suivante, l'action consiste à revoyer la page index.html à 
     l'utilisateur.
 </p>
@@ -336,7 +345,7 @@ GET       /                           view:index.html
 
 <p>
 Pour gérer les websockets au niveau serveur, nous allons utiliser l'envoi de 
-message en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
+messages en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
 client une méthode de votre websocket. L'objet JSON est composé du
 nom de la méthode et des paramètres à appeler.
 </p>
@@ -345,7 +354,7 @@ nom de la méthode et des paramètres à appeler.
     Pour l'utiliser, il faut créer, comme pour une action classique dans
     WebMotion, un contrôleur qui retourne un rendu au client sur l'appel d'une
     méthode. Le rendu vous permet de retourner des pages, des données, des 
-    redirections, ... au client. Dans notre cas ce rendu est du type WebMotionWebSocket <span style="color:red;">(bizarre le nom, on le retrouve pas dans le code, plutot RenderWebSocket ?)<span>.
+    redirections, ... au navigateur. Dans notre cas ce rendu est du type RenderWebSocket.
 </p>
 <pre class="prettyprint">
 public class TasksManager extends WebMotionController {
@@ -363,7 +372,7 @@ public class TasksManager extends WebMotionController {
 </pre>
 
 <p>
-    Ne pas oublier de déclarer le mapping. L'action est déclaré par le nom de 
+    Ne pas oublier de déclarer le mapping. L'action est déclarée par le nom de 
     classe et la méthode à appeler :
 </p>
 <pre class="prettyprint">
@@ -372,11 +381,11 @@ GET       /tasksManager               TasksManager.createWebsocket
 </pre>
 
 <p>
-    Par défaut le retour de la méthode est passé qu'à la connexion appelante
+    Par défaut, le retour de la méthode (de la socket) n'est passée qu'à la connexion appelante
     sous la forme d'un objet JSON. Dans notre cas nous souhaitons broadcaster 
     l'ensemble des connexions pour prévenir de la modification. Pour cela il 
     faut retenir l'ensemble des connexions dans le contexte et redéfinir la 
-    méthode pour l'envoi du résultat ainsi :
+    méthode pour l'envoi du résultat comme suit :
 </p>
 <pre class="prettyprint">
 @Override
@@ -413,9 +422,9 @@ public void superSendObjectMessage(String methodName, Object message) {
 </pre>
 
 <p>
-    Maintenant nous pouvons ajouter l'ensemble des méthodes pour gérer les 
-    tâches. Chacune des méthodes retournent l'ensemble des tâches à chaque
-    client pour qu'il puisse rafraîchir son dashboard :
+    Ensuite, on ajoute l'ensemble des méthodes pour gérer les 
+    tâches dans la socket. Chacune des méthodes retourne l'ensemble des tâches à chaque
+    utilisateur afin de rafraîchir son dashboard :
 </p>
 <pre class="prettyprint">
 public SortedTasks getTasks() {
@@ -516,9 +525,9 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Soit vous pouvez utiliser une factory spécialisée pour vos appels.
+    Sinon vous pouvez utiliser une factory spécialisée pour vos appels.
     Une méthode dans la factory est créée avec l'objet JSON à renvoyer vers le 
-    serveur pour chaque appel, et un callback à la réception du message permet 
+    serveur pour chaque appel. Unn callback à la réception du message permet 
     de rafraîchir les données coté client.
 </p>
 <pre class="prettyprint">
@@ -558,7 +567,7 @@ angular.module('components', [])
                 this.sendMessage({
                     method : "addTask",
                     params : {
-                        name : "\"" + name + "\""
+                        name : name
                     }
                 });
             },
@@ -590,7 +599,7 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Il suffit d'injecter la factory dans le contrôleur et brancher les 
+    Enfin, il suffit d'injecter la factory dans le contrôleur et brancher les 
     différents événements venant de la vue.
 </p>
 <pre class="prettyprint">
@@ -628,15 +637,12 @@ function MainCtrl($scope, TasksManager) {
 <pre class="prettyprint">
 $ mvn jetty:run
 </pre>
-
 <p>
-    Vous pouvez consulter le résultat dans votre navigateur préféré à l'adresse 
-    suivante <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
+    Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.
 </p>
-
 <p>
-    Vous pouvez retrouver l'ensemble du code source sur le svn à l'adresse 
-    suivante <a href="http://svn.debux.org/webmotion-ext/dashboard/">http://svn.debux.org/webmotion-ext/dashboard/</a>.
+    Vous pouvez consulter le résultat dans vos navigateurs préférés pour constater l'effet du rafraichissement
+    en saisissant l'adresse suivante <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
 </p>
 
 </div>
