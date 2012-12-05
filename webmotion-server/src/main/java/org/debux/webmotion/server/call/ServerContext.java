@@ -138,7 +138,7 @@ public class ServerContext {
                 
         // Read the mapping in the current project
         MappingParser parser = getMappingParser();
-        mapping = parser.parse(mappingFileName[0]);
+        mapping = parser.parse(mappingFileName);
         
         // Fire onStart
         listeners = new ArrayList<WebMotionServerListener>();

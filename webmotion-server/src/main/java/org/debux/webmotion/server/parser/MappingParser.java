@@ -701,10 +701,25 @@ public class MappingParser {
     }
 
     /**
-     * @return true if the file exists otherwise false
+     * Parse the first mapping file found.
+     * @param fileNames file names
+     * @param defaultConfig default config
+     * @return the representation of the file
      */
-    public boolean exists(String fileName) {
-        return getClass().getClassLoader().getResource(fileName) != null;
+    public Mapping parse(String[] fileNames) {
+        Mapping mapping = null;
+        for (String fileName : fileNames) {
+            URL url = getClass().getClassLoader().getResource(fileName);
+            if (url != null) {
+               parse(url); 
+            }
+        }
+        
+        if (mapping == null) {
+            throw new WebMotionException("No mapping found for " + Arrays.toString(fileNames));
+        }
+        
+        return mapping;
     }
     
     /**
@@ -715,9 +730,14 @@ public class MappingParser {
      */
     public Mapping parse(String fileName) {
         URL url = getClass().getClassLoader().getResource(fileName);
+        
+        if (url == null) {
+            throw new WebMotionException("No mapping found for " + fileName);
+        }
+                
         return parse(url);
     }
-    
+        
     /**
      * Parse a mapping file on url
      * @param url mapping file to parse
