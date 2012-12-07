@@ -711,7 +711,8 @@ public class MappingParser {
         for (String fileName : fileNames) {
             URL url = getClass().getClassLoader().getResource(fileName);
             if (url != null) {
-               parse(url); 
+               mapping = parse(url); 
+               break;
             }
         }
         
