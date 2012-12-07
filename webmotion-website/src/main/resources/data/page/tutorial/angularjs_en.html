@@ -414,17 +414,26 @@ GET       /                           view:index.html
 <h2 class="page-header" id="controller">Controller part</h2>
 
 <p>
-Pour gérer les websockets au niveau serveur, nous allons utiliser l'envoi de 
-messages en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
-client une méthode de votre websocket. L'objet JSON est composé du
-nom de la méthode et des paramètres à appeler.
+    To manage the websocket in the server, we use the send of JSON message in 
+    WebMotion. This protocole allow to call easly from the client a method in 
+    the websocket. The JSON object contains the method name and the parameters.
+    
+<!--    Pour gérer les websockets au niveau serveur, nous allons utiliser l'envoi de 
+    messages en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
+    client une méthode de votre websocket. L'objet JSON est composé du
+    nom de la méthode et des paramètres à appeler.-->
 </p>
 
 <p>
-    Pour l'utiliser, il faut créer, comme pour une action classique dans
+    To use it, you must create, like for classical action in WebMotion, a controller 
+    that return the render to the client on method call. The render you allow to 
+    return pages, data, redirections, ... to navigator. In this cas the render is type 
+    of RenderWebSocket.
+    
+<!--    Pour l'utiliser, il faut créer, comme pour une action classique dans
     WebMotion, un contrôleur qui retourne un rendu au client sur l'appel d'une
     méthode. Le rendu vous permet de retourner des pages, des données, des 
-    redirections, ... au navigateur. Dans notre cas ce rendu est du type RenderWebSocket.
+    redirections, ... au navigateur. Dans notre cas ce rendu est du type RenderWebSocket.-->
 </p>
 <pre class="prettyprint">
 public class TasksManager extends WebMotionController {
@@ -442,8 +451,11 @@ public class TasksManager extends WebMotionController {
 </pre>
 
 <p>
-    Ne pas oublier de déclarer le mapping. L'action est déclarée par le nom de 
-    classe et la méthode à appeler :
+    Don't forget todeclare the mapping. The action is declared with the classe name
+    and the method to call :
+    
+<!--    Ne pas oublier de déclarer le mapping. L'action est déclarée par le nom de 
+    classe et la méthode à appeler :-->
 </p>
 <pre class="prettyprint">
 [actions]
@@ -451,6 +463,9 @@ GET       /tasksManager               TasksManager.createWebsocket
 </pre>
 
 <p>
+    By default, the method return (by the socket) didn't passed only to the caller 
+    connection by sending JSON object.
+    
     Par défaut, le retour de la méthode (de la socket) n'est passée qu'à la connexion appelante
     sous la forme d'un objet JSON. Dans notre cas nous souhaitons broadcaster 
     l'ensemble des connexions pour prévenir de la modification. Pour cela il 
