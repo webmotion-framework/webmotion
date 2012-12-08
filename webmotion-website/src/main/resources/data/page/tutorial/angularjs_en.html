@@ -451,7 +451,7 @@ public class TasksManager extends WebMotionController {
 </pre>
 
 <p>
-    Don't forget todeclare the mapping. The action is declared with the classe name
+    Don't forget to declare the mapping. The action is declared with the classe name
     and the method to call :
     
 <!--    Ne pas oublier de déclarer le mapping. L'action est déclarée par le nom de 
@@ -463,14 +463,17 @@ GET       /tasksManager               TasksManager.createWebsocket
 </pre>
 
 <p>
-    By default, the method return (by the socket) didn't passed only to the caller 
-    connection by sending JSON object.
+    By default, the method return (by the socket) is passed only to the caller 
+    connection which sent the JSON object. In this exemple, we would to broadcast 
+    all the connections to inform the modification. To do that, you must retain 
+    all the connection in the context and redefine the method which send the 
+    result thus :
     
-    Par défaut, le retour de la méthode (de la socket) n'est passée qu'à la connexion appelante
+<!--    Par défaut, le retour de la méthode (de la socket) n'est passée qu'à la connexion appelante
     sous la forme d'un objet JSON. Dans notre cas nous souhaitons broadcaster 
     l'ensemble des connexions pour prévenir de la modification. Pour cela il 
     faut retenir l'ensemble des connexions dans le contexte et redéfinir la 
-    méthode pour l'envoi du résultat comme suit :
+    méthode pour l'envoi du résultat comme suit :-->
 </p>
 <pre class="prettyprint">
 @Override
@@ -507,9 +510,12 @@ public void superSendObjectMessage(String methodName, Object message) {
 </pre>
 
 <p>
-    Ensuite, on ajoute l'ensemble des méthodes pour gérer les 
+    Next, we add the methodes to manage the tasks in the socket. Each methods 
+    return all the tasks to all user to refresh the dashboard :
+    
+<!--    Ensuite, on ajoute l'ensemble des méthodes pour gérer les 
     tâches dans la socket. Chacune des méthodes retourne l'ensemble des tâches à chaque
-    utilisateur afin de rafraîchir son dashboard :
+    utilisateur afin de rafraîchir son dashboard :-->
 </p>
 <pre class="prettyprint">
 public SortedTasks getTasks() {
@@ -563,9 +569,12 @@ public SortedTasks delTask(final String id) {
 </pre>
 
 <p>
-    Une factory permet de créer un utilitaire pour passer les appels vers la 
+    The factory can to create a utility to pass the call to the websocket. 
+    To manage the websockets in AngularJS, you cas use a generic factory :
+    
+<!--    Une factory permet de créer un utilitaire pour passer les appels vers la 
     websocket. Pour intégrer les websockets dans AngularJS, vous pouvez utiliser
-    une factory générique :
+    une factory générique :-->
 </p>
 <pre class="prettyprint">
 angular.module('components', [])
@@ -610,10 +619,15 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Sinon vous pouvez utiliser une factory spécialisée pour vos appels.
+    Else you can use a specific factory for your call. The method in the 
+    factory is created with the JSON object to return to the server for each call.
+    A callback on the receipt of the message allows to refresh the data on side 
+    the client.
+    
+<!--    Sinon vous pouvez utiliser une factory spécialisée pour vos appels.
     Une méthode dans la factory est créée avec l'objet JSON à renvoyer vers le 
     serveur pour chaque appel. Unn callback à la réception du message permet 
-    de rafraîchir les données coté client.
+    de rafraîchir les données coté client.-->
 </p>
 <pre class="prettyprint">
 angular.module('components', [])
@@ -684,8 +698,11 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Enfin, il suffit d'injecter la factory dans le contrôleur et brancher les 
-    différents événements venant de la vue.
+    Finally, simply inject the factory in the controller and plug the evenements 
+    from the view.
+    
+<!--    Enfin, il suffit d'injecter la factory dans le contrôleur et brancher les 
+    différents événements venant de la vue.-->
 </p>
 <pre class="prettyprint">
 function MainCtrl($scope, TasksManager) {
@@ -713,21 +730,29 @@ function MainCtrl($scope, TasksManager) {
 }
 </pre>
 
-<h2 class="page-header" id="run">Lancer l'application</h2>
+<h2 class="page-header" id="run">Run the application</h2>
 
 <p>
-    Pour pouvez maintenant lancer l'application depuis Jetty, en tapant la ligne
-    de commande suivante :
+    You can now run the application with Jetty, by tapping the following command
+    line :
+    
+<!--    Vous pouvez maintenant lancer l'application depuis Jetty, en tapant la ligne
+    de commande suivante :-->
 </p>
 <pre class="prettyprint">
 $ mvn jetty:run
 </pre>
 <p>
-    Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.
+    It is possible to deploy the application in dedicated server Jetty, Tomcat or Glassfish.
+    
+    <!--Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.-->
 </p>
 <p>
-    Vous pouvez consulter le résultat dans vos navigateurs préférés pour constater l'effet du rafraichissement
-    en saisissant l'adresse suivante <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
+    You can visualize the result in yours favorites navigators to contact the 
+    refresh effect to enter the following address <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
+    
+<!--    Vous pouvez consulter le résultat dans vos navigateurs préférés pour constater l'effet du rafraichissement
+    en saisissant l'adresse suivante <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.-->
 </p>
 
 </div>
