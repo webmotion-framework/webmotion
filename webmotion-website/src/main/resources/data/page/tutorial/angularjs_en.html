@@ -41,24 +41,20 @@
 <script type="text/javascript" src="../js/generated_toc.js"></script>
 <div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
 
-<h2 class="page-header" id="begin">Presentation</h2>
+<h2 class="page-header" id="begin">Introduction</h2>
 <p>
-    The article you presents a new feature in WebMotion, the websocket managing, 
-    and the AngularJS framework.
+    This article describes a new feature in WebMotion: the WebSockets management. We will use the AngularJS Javascript framework for the client side.
     
-<!--    L'article vous présente une des nouveautés apparue dans WebMotion, la
-    gestion des websockets, et le framework AngularJS.-->
+<!-- Cet article vous présente une des nouveautés apparue dans WebMotion : la
+    gestion des WebSockets. Nous utiliserons le framework Javascript AngularJS pour la partie cliente. -->
 </p>
 <p>
-    First a little of theori for you present how the example work. The idea is to 
-    create a dashboard with post-it representing a task which can pass from a 
-    status to the other (todo, in progress et done). The dashboard will be 
-    shared between several users and refreshed automatically.
+    To illustrate this feature, we will create a dashboard managing tasks with their states (todo, in progress or done).
+    This dashboard should be shared between several users and refreshs itself automatically.
     
-<!--    Tout d'abord un peu de théorie pour vous présenter comment l'exemple va
-    fonctionner. L'idée est de créer un dashboard avec des post-it correspondant aux tâches qui peuvent
-    passer d'un statut à l'autre (todo, in progress et done). Le dashboard
-    devra être partagé entre différents utilisateurs et se rafraîchir de façon automatique. -->
+<!-- Pour illustrer cette fonctionnalité, nous allons créer un tableau de boord qui sera chargé de gérer des tâches, avec leur états respectifs 
+    (todo : à faire, in progress : cours et done : terminée). Ce tableau de bord devra être partagé entre plusieurs utilisateurs 
+    et se rafraîchir en temps réel pour tous les utilisateurs. -->
 </p>
 
 <p>
@@ -66,38 +62,39 @@
     describe the link between the server and the client. It is based on the JEE 
     API with Servlet 3.
     
-<!--    Pour rappel, WebMotion est un framework Java web. Il utilise un fichier de 
-    mapping pour décrire la liaison entre le serveur et le client. Il est basé 
-    sur l'API JEE avec Servlet 3.-->
+<!-- Pour rappel, WebMotion est un framework Java web. Il utilise un fichier de 
+    mapping pour décrire la liaison entre le serveur et le client. Pour être précis, ce fichier définit le comportement
+    que doit avoir l'application web en fonction des URI appelées. Il se veut proche du standard Java EE, 
+    en reposant sur son API et plus précisément sur l'API Servlet 3. -->
 </p>
 
 <p>
-    AngularJS is a MVC Javascript framework. It allow to add directives in your 
-    HTML document to render your pages dynamic. One of the features, 
-    it is updating automatically the model between your controler and your HTML page.
+    AngularJS is a MVC Javascript framework. It allows to add directives in your 
+    HTML document to get your pages dynamic. One of the features is that
+    it updates automatically the model between your controler and your HTML page.
     
-<!--    AngularJS est un framework Javascript MVC. Il permet d'ajouter des
+<!-- AngularJS est un framework Javascript MVC. Il permet d'ajouter des
     directives dans votre document HTML pour rendre vos pages dynamiques. Une
-    des fonctionnalités est la mise à jour automatique entre votre contrôleur 
+    des fonctionnalités est la mise-à-jour automatique de votre modèle entre votre contrôleur 
     et votre page HTML.-->
 </p>
 
 <p>
-    For more details, you can visit the websites <a href="http://www.webmotion-framework.org/">http://www.webmotion-framework.org/</a>
-    and <a href="http://angularjs.org/">http://angularjs.org/</a>.
+    For more details, you can visit the websites <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+    and <a href="http://angularjs.org">http://angularjs.org</a>.
     
-<!--    Pour plus de renseignement vous pouvez consulter respectivement les sites 
-    internet <a href="http://www.webmotion-framework.org/">http://www.webmotion-framework.org/</a>
-    et <a href="http://angularjs.org/">http://angularjs.org/</a>.-->
+<!--    Pour plus de renseignements, vous pouvez consulter respectivement les sites 
+    internet <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+    et <a href="http://angularjs.org">http://angularjs.org</a>.-->
 </p>
 
 <p>
-    An demo is available here :
+    A demo of the final dashboard sample is available here :
     <a href="http://www.webmotion-framework.org/dashboard/">http://www.webmotion-framework.org/dashboard/</a>.
-    and the sources code is available to the follow address :
+    and the source code is available to the follow address :
     <a href="http://svn.debux.org/webmotion-ext/dashboard/">http://svn.debux.org/webmotion-ext/dashboard/</a>.
     
-<!--    Une démo est disponible ici : 
+<!-- Une démo du tableau de bord final est disponible ici : 
     <a href="http://www.webmotion-framework.org/dashboard/">http://www.webmotion-framework.org/dashboard/</a>.
     et l'ensemble du code source est à l'adresse 
     suivante <a href="http://svn.debux.org/webmotion-ext/dashboard/">http://svn.debux.org/webmotion-ext/dashboard/</a>.-->
@@ -106,12 +103,12 @@
 <h2 class="page-header" id="create">Create the project</h2>
 
 <p>
-    Maven is used as buid manager for the example. WebMotion offer an archetype 
-    to initial the project. To use it, you just tap the following command :
+    Maven is used as buid manager for the example. WebMotion offers an archetype 
+    to initial the project. To use it, you just have to enter the following command :
     
-<!--    Maven est utilisé comme gestionnaire de build pour l'exemple. WebMotion 
-    propose un archetype pour initialiser un projet. Pour l'utiliser il 
-    vous suffit de taper la commande suivante :-->
+<!-- Maven est utilisé comme gestionnaire de construction de projet pour l'exemple. WebMotion 
+    propose notamment un archetype pour initialiser un projet. Pour l'utiliser il 
+    vous suffit de saisir la commande suivante :-->
 </p>
 <pre class="prettyprint">
 $ mvn archetype:generate \
@@ -126,7 +123,7 @@ $ mvn archetype:generate \
 </pre>
 
 <p>
-    For side AngularJS, you just to include the script in your pages and declare 
+    For AngularJS side, you just have to include the script in your pages and declare 
     an application. The example is composed with one page.
     
 <!--    Coté AngularJS, il suffit d'inclure le script dans vos pages et déclarer 
@@ -143,10 +140,9 @@ $ mvn archetype:generate \
 
 <h2 class="page-header" id="model">Model part</h2>
 <p>
-    On the data, the server will store the tasks in memory list.
+    Concerning the data (the tasks and their states) save, the server will store them in memory list.
     
-<!--    Au niveau des données, le serveur conservera l'ensemble des tâches dans une
-    liste en mémoire.-->
+<!-- Concernant la sauvegarde des données (les tâches et leurs états), le serveur conservera l'ensemble des tâches dans une liste en mémoire.-->
 </p>
 
 <pre class="prettyprint">
@@ -164,10 +160,10 @@ public class Task {
 </pre>
 
 <p>
-    The server part will return to the navigator the tasks as three lists, one 
+    The server will return to the navigator the tasks as three lists, one 
     for each status.
     
-<!--    La partie serveur retournera au navigateur les tâches sous forme de trois listes,
+<!-- Le serveur retournera au navigateur les tâches sous forme de trois listes,
     une pour chaque statut.-->
 </p>
 <pre class="prettyprint">
@@ -198,9 +194,9 @@ public static SortedTasks getSortedTasks(List&lt;Task&gt; tasks) {
 </pre>
 
 <p>
-    The last state is to initialize the model by a listener call at server startup.
+    The last step is to initialize the model by a listener call at server startup.
     
-<!--    La dernière étape consiste à initialiser le modèle par un listener au 
+<!-- La dernière étape consiste à créer un modèle par défaut par un listener au 
     démarrage du serveur.-->
 </p>
 <pre class="prettyprint">
@@ -222,15 +218,13 @@ public class StartupListenner implements WebMotionServerListener {
 </pre>
 
 <p>
-    We must think to adding the declaration of listener in the WebMotion mapping 
-    file. The file found at the root resource of your project. The file contains 
-    a set of sections. The section "[config]" you allow to configure the 
-    WebMotion server.
+    To enable this listener, we have to not forget the listener declaration in the WebMotion mapping file.
+    This file is in the <code>src/main/resources</code> folder.
+    The file is structured by some sections. The section "[config]" allows you to configure your WebMotion application.
     
-<!--    Il faut penser à ajouter la déclaration du listener dans le fichier de
-    mapping de WebMotion. Le fichier se trouve à la racine des ressources de 
-    votre projet. Il contient un ensemble de sections. La section
-    "[config]" vous permet de configurer le serveur WebMotion.-->
+<!-- Pour activer le listener, il ne faut pas oublier de le déclarer dans le fichier de mapping de WebMotion.
+    Ce fichier se trouve dans le dossier <code>src/main/resources</code>. Ce fichier est structuré en différentes sections, 
+    dont la section "[config]" qui vous permet de configurer votre application. -->
 </p>
 <pre class="prettyprint">
 [config]
@@ -240,23 +234,21 @@ server.listener.class=org.debux.webmotion.dashboard.StartupListenner
 <h2 class="page-header" id="view">View part</h2>
 
 <p>
-    The application is made a one page. It manage the display of the task in 
-    dashboard. A controller on the body is added to manipulate the DOM according 
-    to model with AngularJS.
+    The current application will be a single page web application. This page will displays the created tasks in the dashboard.
+    An AngularJS controller is linked to the HTML body to manipulate the DOM corresponding with the model thanks to AngularJS.
     
-<!--    L'application est constituée d'une seule page index.html. Elle gère
-    l'affichage des tâches du dashboard. Un contrôleur sur le body est
-    ajouté pour pouvoir manipuler le DOM en fonction du modèle par AngularJS :-->
+<!-- L'application sera constituée d'une seule page HTML. Cette page affichera les différentes tâches dans le tableau de bord.
+    Nous lions un contrôleur AngularJS à la balise body de la page HTML pour qu'AngularJS puisse manipuler le DOM selon l'état du modèle. -->
 </p>
 <pre class="prettyprint">
 &lt;body ng-controller="MainCtrl"&gt;...&lt;/body&gt;
 </pre>
 
 <p>
-    For the javascript, the controller is a function. It is the controller 
+    Concerning Javascript part, the controller is a function. It is the controller 
     which receive the events et manipulate the model.
     
-<!--    Au niveau du javascript, le contrôleur correspond à une fonction. 
+<!-- Au niveau du javascript, le contrôleur correspond à une fonction. 
     C'est le contrôleur qui reçoit l'ensemble des évènements et manipule le
     modèle.-->
 </p>
@@ -266,13 +258,12 @@ function MainCtrl($scope) {
 </pre>
 
 <p>
-    The page is composed with two parts. The first part is a form to create a 
-    new task with an input text. A call to the addTask function is done on the 
-    form submit :
+    The page will be divided in two areas. The first one will be the creation form, with an input field.
+    The <code>addTask</code> function will be called while the creation form is submitted.
     
-<!--    La page va être composée de deux parties. La première est un formulaire de
-    création d'une nouvelle tâche avec un champ texte. Un appel vers la 
-    fonction addTask du contrôleur est effectué à la soumission du formulaire :-->
+<!-- La page va être composée de deux parties. La première contient un formulaire de
+    création d'une nouvelle tâche avec un champ texte. 
+    La fonction <code>addTask</code> sera appelée automatiquement lors de la soumission du formation de création.-->
 </p>
 <pre class="prettyprint">
 &lt;form ng-submit="addTask()"&gt;
@@ -282,14 +273,14 @@ function MainCtrl($scope) {
 </pre>
 
 <p>
-    The second part concerns the task displaying by the three status. The model is
-    got from the controller and is covered with the "ng-repeat" directive to create 
-    a div element for each task. In the case of deleting or moving a task, a method 
+    The second area displays all the created tasks, sorted by their status. The model is
+    got from the controller and is browsed with the "ng-repeat" directive to create 
+    a div tag for each task. In the case of deleting or moving a task, a method 
     is called on the controller, i.e. delTask and updateTask.
     
 <!--    La deuxième partie concerne l'affichage des tâches suivant les trois
     statuts. Le modèle est récupéré depuis le contrôleur et est parcouru avec la
-    directive "ng-repeat" pour créer un element div pour chaque tâche. En cas de
+    directive "ng-repeat" pour créer une balise div pour chaque tâche. En cas de
     suppression ou de déplacement de tâche une méthode est appelée sur le contrôleur,
     respectivement delTask et updateTask.-->
 </p>
@@ -320,15 +311,15 @@ function MainCtrl($scope) {
 </pre>
 
 <p>
-    The directive in AngularJS allows to add a behaviour on the DOM. The directives 
-    drag-event and drop-event are specefics directives for the project. It allow 
-    to manage easily the drag n'drop to HTML5, adding the necessary events on 
+    A AngularJS directive allows to add a behaviour on the DOM. The directives 
+    drag-event and drop-event are specefics directives for the project. It allows 
+    to handle easily the HTML5 drag n'drop, adding the necessary events on 
     the elements and the callback on the current controller.
     
-<!--    Une directive AngularJS permet de rajouter un comportement au DOM. Les
+<!-- Une directive AngularJS permet de rajouter un comportement au DOM. Les
     directives drag-event et drop-event sont des directives spécifiques au projet. 
-    Elles permettent de gérer facilement le drag n'drop en HTML
-    5 en ajoutant des événements nécessaires sur les éléments et des callback 
+    Elles permettent de gérer facilement le drag n'drop HTML5 en ajoutant 
+    des événements nécessaires sur les éléments et des callback 
     sur le contrôleur courant.-->
 </p>
 <pre class="prettyprint">
@@ -372,7 +363,7 @@ angular.module('DashboardApp', ['components']);
 </pre>
 
 <p>
-    It remains to add the style on the tasks with the help of twitter boostrap :
+    It remains to add the style on the tasks thanks to Twitter Boostrap :
     
     <!--Il reste à ajouter le style sur les tâches avec l'aide du bootstrap twitter :-->
 </p>
@@ -395,12 +386,12 @@ angular.module('DashboardApp', ['components']);
 </pre>
 
 <p>
-    For the end, the url to access the page, is addes in the section "action" 
+    Endly, the URL to access the page, is added in the section "action" 
     in WebMotion. An action in the mapping file is composed by the HTTP method, 
-    the path and the action to realise. In the next rule, the action is to return 
+    the path and the action to execute. In the following rule, the action is to return 
     the index.html page to the user.
     
-<!--    Pour finir, l'url pour accéder à la page est ajoutée dans la 
+<!--    Pour finir, l'URL pour accéder à la page est ajoutée dans la 
     section "action" de WebMotion. Une action dans le fichier de 
     mapping est composée de la méthode HTTP, du path et de l'action à réaliser. 
     Dans la régle suivante, l'action consiste à revoyer la page index.html à 
@@ -414,9 +405,9 @@ GET       /                           view:index.html
 <h2 class="page-header" id="controller">Controller part</h2>
 
 <p>
-    To manage the websocket in the server, we use the send of JSON message in 
-    WebMotion. This protocole allow to call easly from the client a method in 
-    the websocket. The JSON object contains the method name and the parameters.
+    To manage the WebSocket in the server, we use JSON message send feature provided by 
+    WebMotion. This protocol allows to call easly from the client a method in 
+    the WebSocket. The JSON object contains the method name and the parameters.
     
 <!--    Pour gérer les websockets au niveau serveur, nous allons utiliser l'envoi de 
     messages en JSON que propose WebMotion. Ce protocole permet d'appeler facilement depuis un
@@ -425,14 +416,14 @@ GET       /                           view:index.html
 </p>
 
 <p>
-    To use it, you must create, like for classical action in WebMotion, a controller 
-    that return the render to the client on method call. The render you allow to 
+    To use it, you must create, like a classical action in WebMotion, a controller 
+    which returns the render to the client on method call. The renderer allows you to 
     return pages, data, redirections, ... to navigator. In this cas the render is type 
     of RenderWebSocket.
     
 <!--    Pour l'utiliser, il faut créer, comme pour une action classique dans
     WebMotion, un contrôleur qui retourne un rendu au client sur l'appel d'une
-    méthode. Le rendu vous permet de retourner des pages, des données, des 
+    méthode. Le moteur de rendu vous permet de retourner des pages, des données, des 
     redirections, ... au navigateur. Dans notre cas ce rendu est du type RenderWebSocket.-->
 </p>
 <pre class="prettyprint">
@@ -465,8 +456,8 @@ GET       /tasksManager               TasksManager.createWebsocket
 <p>
     By default, the method return (by the socket) is passed only to the caller 
     connection which sent the JSON object. In this exemple, we would to broadcast 
-    all the connections to inform the modification. To do that, you must retain 
-    all the connection in the context and redefine the method which send the 
+    all the connections to inform the modification. To do that, you must store
+    all the connections in the context and redefine the method which send the 
     result thus :
     
 <!--    Par défaut, le retour de la méthode (de la socket) n'est passée qu'à la connexion appelante
@@ -510,12 +501,12 @@ public void superSendObjectMessage(String methodName, Object message) {
 </pre>
 
 <p>
-    Next, we add the methodes to manage the tasks in the socket. Each methods 
+    Then, we add the methods that manage the tasks in the socket. Each method 
     return all the tasks to all user to refresh the dashboard :
     
 <!--    Ensuite, on ajoute l'ensemble des méthodes pour gérer les 
     tâches dans la socket. Chacune des méthodes retourne l'ensemble des tâches à chaque
-    utilisateur afin de rafraîchir son dashboard :-->
+    utilisateur afin de rafraîchir son tableau de bord :-->
 </p>
 <pre class="prettyprint">
 public SortedTasks getTasks() {
@@ -569,8 +560,8 @@ public SortedTasks delTask(final String id) {
 </pre>
 
 <p>
-    The factory can to create a utility to pass the call to the websocket. 
-    To manage the websockets in AngularJS, you cas use a generic factory :
+    The factory helps to create a utility to pass the call to the websocket. 
+    To manage the websockets in AngularJS, you can use a generic factory :
     
 <!--    Une factory permet de créer un utilitaire pour passer les appels vers la 
     websocket. Pour intégrer les websockets dans AngularJS, vous pouvez utiliser
@@ -619,7 +610,7 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Else you can use a specific factory for your call. The method in the 
+    Otherwise, you can use a specific factory for your call. The method in the 
     factory is created with the JSON object to return to the server for each call.
     A callback on the receipt of the message allows to refresh the data on side 
     the client.
@@ -698,7 +689,7 @@ angular.module('components', [])
 </pre>
 
 <p>
-    Finally, simply inject the factory in the controller and plug the evenements 
+    Finally, simply inject the factory in the controller and plug the events
     from the view.
     
 <!--    Enfin, il suffit d'injecter la factory dans le contrôleur et brancher les 
@@ -733,10 +724,10 @@ function MainCtrl($scope, TasksManager) {
 <h2 class="page-header" id="run">Run the application</h2>
 
 <p>
-    You can now run the application with Jetty, by tapping the following command
+    You can now run the application with Jetty entering the following command
     line :
     
-<!--    Vous pouvez maintenant lancer l'application depuis Jetty, en tapant la ligne
+<!--    Vous pouvez maintenant lancer l'application depuis Jetty, en saisissant la ligne
     de commande suivante :-->
 </p>
 <pre class="prettyprint">
@@ -748,7 +739,7 @@ $ mvn jetty:run
     <!--Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.-->
 </p>
 <p>
-    You can visualize the result in yours favorites navigators to contact the 
+    You can visualize the result in your favorites navigators to contact the 
     refresh effect to enter the following address <a href="http://localhost:8080/Dashboard/">http://localhost:8080/Dashboard/</a>.
     
 <!--    Vous pouvez consulter le résultat dans vos navigateurs préférés pour constater l'effet du rafraichissement
