@@ -192,23 +192,35 @@ public class WebMotionUtils {
             singletons = new HashMap<Class<? extends T>, T>();
         }
         
-        public T getInstance(String clazzName) {
+        public T get(Class<? extends T> clazz) {
+            T instance = singletons.get(clazz);
+            return instance;
+        }
+        
+        public T get(String clazzName) {
             try {
-                Class<T>  clazz = (Class<T>) Class.forName(clazzName);
-                return getInstance(clazz);
+                Class<T> clazz = (Class<T>) Class.forName(clazzName);
+                return get(clazz);
                 
             } catch (ClassNotFoundException cnfe) {
                 throw new WebMotionException("Error during create handler factory " + clazzName, cnfe);
             }
         }
                 
-        public T getInstance(Class<? extends T> clazz) {
+        public T createInstance(String clazzName) {
             try {
-                T instance = singletons.get(clazz);
-                if(instance == null) {
-                    instance = clazz.newInstance();
-                    singletons.put(clazz, instance);
-                }
+                Class<T> clazz = (Class<T>) Class.forName(clazzName);
+                return createInstance(clazz);
+                
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create handler factory " + clazzName, cnfe);
+            }
+        }
+        
+        public T createInstance(Class<? extends T> clazz) {
+            try {
+                T instance = clazz.newInstance();
+                singletons.put(clazz, instance);
                 return instance;
                 
             } catch (IllegalAccessException iae) {
@@ -217,6 +229,24 @@ public class WebMotionUtils {
             } catch (InstantiationException ie) {
                 throw new WebMotionException("Error during create handler factory " + clazz, ie);
             }
+        }
+
+        public T getInstance(String clazzName) {
+            try {
+                Class<T> clazz = (Class<T>) Class.forName(clazzName);
+                return getInstance(clazz);
+                
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create handler factory " + clazzName, cnfe);
+            }
+        }
+                
+        public T getInstance(Class<? extends T> clazz) {
+            T instance = get(clazz);
+            if (instance == null) {
+                instance = createInstance(clazz);
+            }
+            return instance;
         }
     }
 
