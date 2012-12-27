@@ -38,9 +38,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionUtils;
-import org.debux.webmotion.server.call.ServerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,14 +48,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ActionFinderHandler implements WebMotionHandler {
+public class ActionFinderHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ActionFinderHandler.class);
-
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // do nothing
-    }
 
     @Override
     public void handle(Mapping mapping, Call call) {

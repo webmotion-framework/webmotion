@@ -32,8 +32,8 @@ import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ActionMethodFinderHandler implements WebMotionHandler {
+public class ActionMethodFinderHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ActionMethodFinderHandler.class);
 
@@ -57,7 +57,7 @@ public class ActionMethodFinderHandler implements WebMotionHandler {
     protected Map<String, Class<? extends WebMotionController>> globalControllers;
     
     @Override
-    public void init(Mapping mapping, ServerContext context) {
+    public void handlerCreated(Mapping mapping, ServerContext context) {
         globalControllers = context.getGlobalControllers();
     }
 

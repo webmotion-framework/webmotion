@@ -47,9 +47,9 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.UploadFile;
@@ -89,7 +89,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ExecutorParametersConvertorHandler implements WebMotionHandler {
+public class ExecutorParametersConvertorHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersConvertorHandler.class);
 
@@ -98,7 +98,7 @@ public class ExecutorParametersConvertorHandler implements WebMotionHandler {
     protected PropertyUtilsBean propertyUtils;
     
     @Override
-    public void init(Mapping mapping, ServerContext context) {
+    public void handlerCreated(Mapping mapping, ServerContext context) {
         beanUtil = context.getBeanUtil();
         converter = context.getConverter();
         propertyUtils = beanUtil.getPropertyUtils();

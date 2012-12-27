@@ -86,15 +86,20 @@ public class WebMotionMainHandler implements WebMotionHandler {
     protected List<WebMotionHandler> executorHandlers;
 
     @Override
-    public void init(Mapping mapping, ServerContext context) {
+    public void handlerCreated(Mapping mapping, ServerContext context) {
         factory = context.getHandlers();
         handlerStats = context.getHandlerStats();
-        
-        if (actionHandlers == null && errorHandlers == null && executorHandlers == null) {
-            initHandlers(mapping, context);
-        }
-        
+    }
+
+    @Override
+    public void handlerInitialized(Mapping mapping, ServerContext context) {
+        initHandlers(mapping, context);
         initExtensions(mapping, context);
+    }
+
+    @Override
+    public void handlerDestroyed(Mapping mapping, ServerContext context) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
@@ -118,8 +123,8 @@ public class WebMotionMainHandler implements WebMotionHandler {
         List<WebMotionHandler> handlers = new ArrayList<WebMotionHandler>(classes.size());
 
         for (Class<? extends WebMotionHandler> clazz : classes) {
-            WebMotionHandler handler = getHandler(clazz);
-            handler.init(mapping, context);
+            WebMotionHandler handler = getHandler(mapping, context, clazz);
+            handler.handlerInitialized(mapping, context);
             handlers.add(handler);
         }
         
@@ -129,8 +134,12 @@ public class WebMotionMainHandler implements WebMotionHandler {
     /**
      * Use to create handlers other WebMotionHandlerFactory
      */
-    public WebMotionHandler getHandler(Class<? extends WebMotionHandler> clazz) {
-        WebMotionHandler handler = factory.getInstance(clazz);
+    public WebMotionHandler getHandler(Mapping mapping, ServerContext context, Class<? extends WebMotionHandler> clazz) {
+        WebMotionHandler handler = factory.get(clazz);
+        if (handler == null) {
+            handler = factory.createInstance(clazz);
+            handler.handlerCreated(mapping, context);
+        }
         return handler;
     }
     
@@ -144,8 +153,12 @@ public class WebMotionMainHandler implements WebMotionHandler {
             Config extensionConfig = extensionMapping.getConfig();
             String className = extensionConfig.getMainHandler();
             
-            WebMotionHandler mainHandler = factory.getInstance(className);
-            mainHandler.init(extensionMapping, context);
+            WebMotionHandler mainHandler = factory.get(className);
+            if (mainHandler == null) {
+                mainHandler = factory.createInstance(className);
+                mainHandler.handlerCreated(extensionMapping, context);
+            }
+            mainHandler.handlerInitialized(extensionMapping, context);
         }
     }
     
@@ -240,8 +253,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
      * @return list of {@see WebMotionHandler} that will be processed for action handling
      */
     public List<Class<? extends WebMotionHandler>> getActionHandlers() {
-        return Arrays.asList(
-                    ParametersMultipartHandler.class,
+        return WebMotionUtils.asList(ParametersMultipartHandler.class,
                     ActionFinderHandler.class,
                     FilterFinderHandler.class,
                     ParametersExtractorHandler.class,
@@ -256,7 +268,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
      * @return list of {@see WebMotionHandler} that will be processed for error handling
      */
     public List<Class<? extends WebMotionHandler>> getErrorHandlers() {
-        return Arrays.asList(
+        return WebMotionUtils.asList(
                     ParametersMultipartHandler.class,
                     ErrorFinderHandler.class,
                     ActionExecuteRenderHandler.class,
@@ -269,7 +281,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
      * @return list of {@see WebMotionHandler} that will be processed for executor
      */
     public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
-        return Arrays.asList(
+        return WebMotionUtils.asList(
                     ExecutorInstanceCreatorHandler.class,
                     ExecutorParametersInjectorHandler.class,
                     ExecutorParametersConvertorHandler.class,

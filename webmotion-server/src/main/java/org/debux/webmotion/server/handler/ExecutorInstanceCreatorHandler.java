@@ -27,13 +27,13 @@ package org.debux.webmotion.server.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.Scope;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.slf4j.Logger;
@@ -46,14 +46,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ExecutorInstanceCreatorHandler implements WebMotionHandler {
+public class ExecutorInstanceCreatorHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorInstanceCreatorHandler.class);
-
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // Do nothing
-    }
 
     @Override
     public void handle(Mapping mapping, Call call) {

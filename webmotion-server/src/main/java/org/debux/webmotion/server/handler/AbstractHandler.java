@@ -22,50 +22,37 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server;
+package org.debux.webmotion.server.handler;
 
+import org.debux.webmotion.server.*;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * The handler answers a basic task. It stores computed information in call 
- * object. The mapping is read only.
+ * Implements an abstract class only handle is necessary to redefine.
+ * Most of the case in handlerInitialized method is nothing is do.
  * 
  * @author jruchaud
  */
-public interface WebMotionHandler {
+public abstract class AbstractHandler implements WebMotionHandler {
 
-    /**
-     * Call when the handler is created.
-     * 
-     * @param mapping mapping
-     * @param context context
-     */
-    void handlerCreated(Mapping mapping, ServerContext context);
+    @Override
+    public void handlerCreated(Mapping mapping, ServerContext context) {
+        // Do nothing
+    }
     
-    /**
-     * Call when the handler is initialized.
-     * 
-     * @param mapping mapping
-     * @param context context
-     */
-    void handlerInitialized(Mapping mapping, ServerContext context);
+    @Override
+    public void handlerInitialized(Mapping mapping, ServerContext context) {
+        // Do nothing
+    }
     
-    /**
-     * Call when the handler is destroyed.
-     * 
-     * @param mapping mapping
-     * @param context context
-     */
-    void handlerDestroyed(Mapping mapping, ServerContext context);
+    @Override
+    public void handlerDestroyed(Mapping mapping, ServerContext context) {
+        // Do nothing
+    }
     
-    /**
-     * Call each request.
-     * 
-     * @param mapping mapping
-     * @param call call
-     */
-    void handle(Mapping mapping, Call call);
+    @Override
+    public abstract void handle(Mapping mapping, Call call);
 
 }

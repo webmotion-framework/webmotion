@@ -33,8 +33,8 @@ import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.mapping.ErrorRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import java.util.List;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Rule;
 import org.slf4j.Logger;
@@ -46,14 +46,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ErrorFinderHandler implements WebMotionHandler {
+public class ErrorFinderHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ErrorFinderHandler.class);
-
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // do nothing
-    }
 
     @Override
     public void handle(Mapping mapping, Call call) {

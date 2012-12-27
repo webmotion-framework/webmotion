@@ -47,10 +47,9 @@ import javax.validation.Validation;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.method.MethodValidator;
@@ -83,7 +82,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ExecutorParametersValidatorHandler implements WebMotionHandler {
+public class ExecutorParametersValidatorHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorParametersValidatorHandler.class);
 
@@ -102,11 +101,6 @@ public class ExecutorParametersValidatorHandler implements WebMotionHandler {
         }
     }
     
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // do nothing
-    }
-
     @Override
     public void handle(Mapping mapping, Call call) {
         if (methodValidator == null) {

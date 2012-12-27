@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionMainHandler;
+import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler;
 import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
@@ -46,7 +47,7 @@ public class SpringMainHandler extends WebMotionMainHandler {
 
     @Override
     public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
-        return Arrays.asList(
+        return WebMotionUtils.asList(
                     SpringInstanceCreatorHandler.class,
                     ExecutorParametersConvertorHandler.class,
                     ExecutorParametersInjectorHandler.class,

@@ -184,7 +184,8 @@ public class ServerContext {
         }
         
         // Init handlers
-        mainHandler.init(mapping, this);
+        mainHandler.handlerCreated(mapping, this);
+        mainHandler.handlerInitialized(mapping, this);
     }
     
     /**

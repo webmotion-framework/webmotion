@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ExecutorMethodInvokerHandler implements WebMotionHandler {
+public class ExecutorMethodInvokerHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutorMethodInvokerHandler.class);
 
@@ -84,11 +84,6 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         this(new WebMotionContextable(), Executors.newFixedThreadPool(100));
     }
 
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // do nothing
-    }
-    
     public void setThreadPool(ExecutorService threadPool) {
         this.threadPool = threadPool;
     }
@@ -196,7 +191,17 @@ public class ExecutorMethodInvokerHandler implements WebMotionHandler {
         }
         
         @Override
-        public void init(Mapping mapping, ServerContext context) {
+        public void handlerCreated(Mapping mapping, ServerContext context) {
+            throw new UnsupportedOperationException("Not call.");
+        }
+        
+        @Override
+        public void handlerInitialized(Mapping mapping, ServerContext context) {
+            throw new UnsupportedOperationException("Not call.");
+        }
+
+        @Override
+        public void handlerDestroyed(Mapping mapping, ServerContext context) {
             throw new UnsupportedOperationException("Not call.");
         }
 

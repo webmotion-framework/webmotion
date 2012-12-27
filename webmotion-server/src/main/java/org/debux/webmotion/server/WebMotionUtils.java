@@ -36,12 +36,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Call.ParameterTree;
-import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.reflections.Reflections;
@@ -417,5 +415,18 @@ public class WebMotionUtils {
         };
         Collection<String> resources = Collections2.filter(mmap.values(), predicate);
         return resources;
+    }
+    
+    /**
+     * Warning the method is without type.
+     * @param elements elements to add in list
+     * @return an list of the elements with the good type
+     */
+    public static <T> List<T> asList(Object ... elements) {
+        List<T> result = new ArrayList<T>(elements.length);
+        for (Object element : elements) {
+            result.add((T) element);
+        }
+        return result;
     }
 }

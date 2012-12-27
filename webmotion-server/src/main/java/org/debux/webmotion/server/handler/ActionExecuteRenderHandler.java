@@ -32,7 +32,6 @@ import java.util.Map;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionUtils;
 import org.debux.webmotion.server.call.Call.ParameterTree;
-import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.render.RenderForward;
@@ -47,14 +46,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author julien
  */
-public class ActionExecuteRenderHandler implements WebMotionHandler {
+public class ActionExecuteRenderHandler extends AbstractHandler implements WebMotionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ActionExecuteRenderHandler.class);
-
-    @Override
-    public void init(Mapping mapping, ServerContext context) {
-        // do nothing
-    }
 
     @Override
     public void handle(Mapping mapping, Call call) {
