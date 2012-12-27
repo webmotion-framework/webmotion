@@ -179,7 +179,10 @@ public class ServerContext {
         
         // Read secret otherwise generate it
         secret = config.getSecret();
-        if (secret == null || secret.length() < Config.SERVER_SECRET_MIN_SIZE) {
+        if (secret == null) {
+            secret = WebMotionUtils.generateSecret();
+        } else if (secret.length() < Config.SERVER_SECRET_MIN_SIZE) {
+            log.warn("The secret key is too short, it is generated");
             secret = WebMotionUtils.generateSecret();
         }
         
