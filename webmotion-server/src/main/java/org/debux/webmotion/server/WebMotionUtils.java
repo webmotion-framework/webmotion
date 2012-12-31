@@ -205,6 +205,20 @@ public class WebMotionUtils {
             }
         }
                 
+        public T remove(Class<? extends T> clazz) {
+            return singletons.remove(clazz);
+        }
+        
+        public T remove(String clazzName) {
+            try {
+                Class<T> clazz = (Class<T>) Class.forName(clazzName);
+                return singletons.remove(clazz);
+                
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create handler factory " + clazzName, cnfe);
+            }
+        }
+        
         public T createInstance(String clazzName) {
             try {
                 Class<T> clazz = (Class<T>) Class.forName(clazzName);

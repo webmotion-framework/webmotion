@@ -97,11 +97,6 @@ public class WebMotionMainHandler implements WebMotionHandler {
         initExtensions(mapping, context);
     }
 
-    @Override
-    public void handlerDestroyed(Mapping mapping, ServerContext context) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     /**
      * Init all handlers to process the request
      */
@@ -162,6 +157,33 @@ public class WebMotionMainHandler implements WebMotionHandler {
         }
     }
     
+    @Override
+    public void handlerDestroyed(Mapping mapping, ServerContext context) {
+        for (WebMotionHandler handler : actionHandlers) {
+            handler.handlerDestroyed(mapping, context);
+        }
+        for (WebMotionHandler handler : errorHandlers) {
+            handler.handlerDestroyed(mapping, context);
+        }
+        for (WebMotionHandler handler : executorHandlers) {
+            handler.handlerDestroyed(mapping, context);
+        }
+        
+        List<Mapping> extensionsRules = mapping.getExtensionsRules();
+        for (Mapping extensionMapping : extensionsRules) {
+            
+            Config extensionConfig = extensionMapping.getConfig();
+            String className = extensionConfig.getMainHandler();
+            
+            WebMotionHandler mainHandler = factory.get(className);
+            if (mainHandler != null) {
+                mainHandler.handlerInitialized(extensionMapping, context);
+            }
+        }
+        
+        factory.remove(getClass());
+    }
+
     @Override
     public void handle(Mapping mapping, Call call) {
         long start = System.currentTimeMillis();

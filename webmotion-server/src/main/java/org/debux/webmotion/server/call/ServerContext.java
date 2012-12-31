@@ -157,6 +157,8 @@ public class ServerContext {
      * Destroy the context.
      */
     public void contextDestroyed() {
+        mainHandler.handlerDestroyed(mapping, this);
+    
         // Fire onStop
         for (WebMotionServerListener listener : listeners) {
             listener.onStop(this);

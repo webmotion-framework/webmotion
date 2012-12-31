@@ -45,7 +45,7 @@ public interface WebMotionHandler {
     void handlerCreated(Mapping mapping, ServerContext context);
     
     /**
-     * Call when the handler is initialized.
+     * Call when the MainHandler is created or initialized.
      * 
      * @param mapping mapping
      * @param context context
