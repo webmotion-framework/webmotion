@@ -168,15 +168,30 @@ server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
 </ul>
 
 <p>
-    Chaque handler doit implémenter deux méthodes : <code>init</code> appelée
-    au moment de l'initialisation de la servlet et <code>handle</code> pour le traitement de la
-    requête.
+    Chaque handler doit implémenter quatre méthodes : 
 </p>
+<ul>
+    <li><code>handlerCreated</code> appelée au moment de la création de l'handler</li>
+    <li><code>handlerInitialized</code> appelée au moment de l'initialisation de chaque MainHandler</li>
+    <li><code>handlerDestroyed</code> appelée au moment de la destruction de l'handler</li>
+    <li><code>handle</code> appelée pour le traitement de la requête</li>
+</ul>
+
 <pre class="prettyprint">
 public class MyHandler implements WebMotionHandler {
 
     @Override
-    public void init(InitContext context) {
+    public void handlerCreated(Mapping mapping, ServerContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handlerInitialized(Mapping mapping, ServerContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handlerDestroyed(Mapping mapping, ServerContext context) {
         // Do process
     }
 
