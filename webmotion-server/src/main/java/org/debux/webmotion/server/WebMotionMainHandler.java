@@ -26,7 +26,6 @@ package org.debux.webmotion.server;
 
 import org.debux.webmotion.server.call.ServerContext;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
@@ -50,6 +49,7 @@ import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Rule;
 import org.debux.webmotion.server.mbean.HandlerStats;
+import org.debux.webmotion.server.tools.OrderedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -274,41 +274,41 @@ public class WebMotionMainHandler implements WebMotionHandler {
     /**
      * @return list of {@see WebMotionHandler} that will be processed for action handling
      */
-    public List<Class<? extends WebMotionHandler>> getActionHandlers() {
-        return WebMotionUtils.asList(ParametersMultipartHandler.class,
-                    ActionFinderHandler.class,
-                    FilterFinderHandler.class,
-                    ParametersExtractorHandler.class,
-                    ActionExecuteRenderHandler.class,
-                    ActionMethodFinderHandler.class,
-                    FilterMethodFinderHandler.class,
-                    ExecutorMethodInvokerHandler.class
-                );
+    public OrderedList<Class<? extends WebMotionHandler>> getActionHandlers() {
+        return OrderedList.asList(ParametersMultipartHandler.class,
+            ActionFinderHandler.class,
+            FilterFinderHandler.class,
+            ParametersExtractorHandler.class,
+            ActionExecuteRenderHandler.class,
+            ActionMethodFinderHandler.class,
+            FilterMethodFinderHandler.class,
+            ExecutorMethodInvokerHandler.class
+        );
     }
     
     /**
      * @return list of {@see WebMotionHandler} that will be processed for error handling
      */
-    public List<Class<? extends WebMotionHandler>> getErrorHandlers() {
-        return WebMotionUtils.asList(
-                    ParametersMultipartHandler.class,
-                    ErrorFinderHandler.class,
-                    ActionExecuteRenderHandler.class,
-                    ErrorMethodFinderHandler.class,
-                    ExecutorMethodInvokerHandler.class
-                );
+    public OrderedList<Class<? extends WebMotionHandler>> getErrorHandlers() {
+        return OrderedList.asList(
+            ParametersMultipartHandler.class,
+            ErrorFinderHandler.class,
+            ActionExecuteRenderHandler.class,
+            ErrorMethodFinderHandler.class,
+            ExecutorMethodInvokerHandler.class
+        );
     }
     
     /**
      * @return list of {@see WebMotionHandler} that will be processed for executor
      */
-    public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
-        return WebMotionUtils.asList(
-                    ExecutorInstanceCreatorHandler.class,
-                    ExecutorParametersInjectorHandler.class,
-                    ExecutorParametersConvertorHandler.class,
-                    ExecutorParametersValidatorHandler.class
-                );
+    public OrderedList<Class<? extends WebMotionHandler>> getExecutorHandlers() {
+        return OrderedList.asList(
+            ExecutorInstanceCreatorHandler.class,
+            ExecutorParametersInjectorHandler.class,
+            ExecutorParametersConvertorHandler.class,
+            ExecutorParametersValidatorHandler.class
+        );
     }
     
 }

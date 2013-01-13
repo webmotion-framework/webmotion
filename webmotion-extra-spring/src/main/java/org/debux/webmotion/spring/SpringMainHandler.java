@@ -24,14 +24,10 @@
  */
 package org.debux.webmotion.spring;
 
-import java.util.Arrays;
-import java.util.List;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionMainHandler;
-import org.debux.webmotion.server.WebMotionUtils;
-import org.debux.webmotion.server.handler.ExecutorParametersConvertorHandler;
-import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler;
-import org.debux.webmotion.server.handler.ExecutorParametersValidatorHandler;
+import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
+import org.debux.webmotion.server.tools.OrderedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +42,10 @@ public class SpringMainHandler extends WebMotionMainHandler {
     private static final Logger log = LoggerFactory.getLogger(SpringMainHandler.class);
 
     @Override
-    public List<Class<? extends WebMotionHandler>> getExecutorHandlers() {
-        return WebMotionUtils.asList(
-                    SpringInstanceCreatorHandler.class,
-                    ExecutorParametersConvertorHandler.class,
-                    ExecutorParametersInjectorHandler.class,
-                    ExecutorParametersValidatorHandler.class
-                );
+    public OrderedList<Class<? extends WebMotionHandler>> getExecutorHandlers() {
+        OrderedList<Class<? extends WebMotionHandler>> result = super.getExecutorHandlers();
+        result.replace(ExecutorInstanceCreatorHandler.class, SpringInstanceCreatorHandler.class);
+        return result;
     }
     
 }
