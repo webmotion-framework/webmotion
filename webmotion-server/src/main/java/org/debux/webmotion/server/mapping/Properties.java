@@ -32,7 +32,8 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.DataConfiguration;
 import org.apache.commons.configuration.MapConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +88,7 @@ public class Properties extends DataConfiguration {
 
             try {
                 // Search in system configuration path
-                String systemConfigurationPath = WebMotionUtils.getSystemConfigurationPath();
+                String systemConfigurationPath = ReflectionUtils.getSystemConfigurationPath();
                 String fileNameSystem = systemConfigurationPath + File.separator + fileName;
                 File fileSystem = new File(fileNameSystem);
                 if (fileSystem.exists() && fileSystem.canRead()) {
@@ -95,7 +96,7 @@ public class Properties extends DataConfiguration {
                 }
 
                 // Search in user configuration path
-                String userConfigurationPath = WebMotionUtils.getUserConfigurationPath();
+                String userConfigurationPath = ReflectionUtils.getUserConfigurationPath();
                 String fileNameUser = userConfigurationPath + File.separator + fileName;
                 File fileUser = new File(fileNameUser);
                 if (fileUser.exists() && fileUser.canRead()) {

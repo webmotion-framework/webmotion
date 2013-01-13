@@ -34,7 +34,7 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Config.Scope;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.call.ServerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

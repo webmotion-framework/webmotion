@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.call;
 
+import org.debux.webmotion.server.tools.ReflectionUtilsTest;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.*;
 import org.debux.webmotion.server.call.CookieManager.SecureValue;
@@ -39,9 +41,9 @@ import org.testng.annotations.Test;
  */
 public class SecureValueTest {
    
-    private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ReflectionUtilsTest.class);
 
-    public static String secret = WebMotionUtils.generateSecret();
+    public static String secret = HttpUtils.generateSecret();
     
     @Test
     public void testHashSha1() {

@@ -22,10 +22,9 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server;
+package org.debux.webmotion.server.tools;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.*;
 import org.debux.webmotion.server.call.Call;
@@ -42,75 +41,25 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class WebMotionUtilsTest {
+public class HttpUtilsTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
-    
-    protected Mapping mapping;
-    
-    @BeforeMethod
-    public void createMapping() {
-        mapping = new Mapping();
-        
-        Config config = mapping.getConfig();
-        config.setJavacDebug(true);
-    }
-    
-    @Test
-    public void testGetParameterNames() throws NoSuchMethodException {
-        Method method = WebMotionUtils.class.getMethod("getParameterNames", Mapping.class, Method.class);
-        String[] parameterNames = WebMotionUtils.getParameterNames(mapping, method);
-        
-        AssertJUnit.assertEquals(2, parameterNames.length);
-        AssertJUnit.assertEquals("mapping", parameterNames[0]);
-        AssertJUnit.assertEquals("method", parameterNames[1]);
-    }
-    
-    @Test
-    public void testGetMethod() {
-        Method method = WebMotionUtils.getMethod(WebMotionUtils.class, "getMethod");
-        AssertJUnit.assertNotNull(method);
-    }
-    
-    @Test
-    public void testGetMethodNotFound() {
-        Method method = WebMotionUtils.getMethod(WebMotionUtils.class, "notFound");
-        AssertJUnit.assertNull(method);
-    }
-
-    @Test
-    public void testCapitalizeClass() {
-        String result = WebMotionUtils.capitalizeClass("org.webmotion.myclass");
-        AssertJUnit.assertEquals("org.webmotion.Myclass", result);
-    }
-    
-    @Test
-    public void testUnCapitalizeClass() {
-        String result = WebMotionUtils.unCapitalizeClass("org.webmotion.Myclass");
-        AssertJUnit.assertEquals("org.webmotion.myclass", result);
-    }
+    private static final Logger log = LoggerFactory.getLogger(HttpUtilsTest.class);
     
     @Test
     public void testSplitPath() {
-        List<String> result = WebMotionUtils.splitPath("/");
+        List<String> result = HttpUtils.splitPath("/");
         AssertJUnit.assertEquals(1, result.size());
         
-        result = WebMotionUtils.splitPath("/deploy/test/run");
+        result = HttpUtils.splitPath("/deploy/test/run");
         AssertJUnit.assertEquals(6, result.size());
         
-        result = WebMotionUtils.splitPath("/deploy/test/run/");
+        result = HttpUtils.splitPath("/deploy/test/run/");
         AssertJUnit.assertEquals(7, result.size());
-    }
-    
-    @Test
-    public void testGetResourcesDirectory() throws IOException, URISyntaxException {
-        Collection<String> resources = WebMotionUtils.getResources("mapping/.*");
-        AssertJUnit.assertFalse(resources.isEmpty());
     }
 
     @Test
     public void testGenerateSecret() throws IOException, URISyntaxException {
-        String generateSecret = WebMotionUtils.generateSecret();
+        String generateSecret = HttpUtils.generateSecret();
         AssertJUnit.assertNotNull(generateSecret);
         AssertJUnit.assertFalse(generateSecret.isEmpty());
     }
@@ -134,12 +83,6 @@ public class WebMotionUtilsTest {
     }
     
     @Test
-    public void testIsPrimitive() {
-        AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.TYPE));
-        AssertJUnit.assertTrue(WebMotionUtils.isPrimitiveType(Boolean.class));
-    }
-    
-    @Test
     public void testreplaceDynamicName() {
         Map<String, Call.ParameterTree> tree = new LinkedHashMap<String, Call.ParameterTree>();
         
@@ -150,7 +93,7 @@ public class WebMotionUtilsTest {
         Call.ParameterTree parameterTree = new Call.ParameterTree();
         parameterTree.setTree(tree);
         
-        String result = WebMotionUtils.replaceDynamicName("{test}", parameterTree);
+        String result = HttpUtils.replaceDynamicName("{test}", parameterTree);
         AssertJUnit.assertEquals("value", result);
     }
 

@@ -24,6 +24,8 @@
  */
 package org.debux.webmotion.server.call;
 
+import org.debux.webmotion.server.tools.ReflectionUtilsTest;
+import org.debux.webmotion.server.tools.HttpUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +47,7 @@ import org.testng.annotations.Test;
  */
 public class CookieManagerTest {
    
-    private static final Logger log = LoggerFactory.getLogger(WebMotionUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ReflectionUtilsTest.class);
 
     protected CookieManager manager;
     protected CookieManager securedManager;
@@ -116,7 +118,7 @@ public class CookieManagerTest {
                 return new ServerContext() {
                     @Override
                     public String getSecret() {
-                        return WebMotionUtils.generateSecret();
+                        return HttpUtils.generateSecret();
                     }
                 };
             }

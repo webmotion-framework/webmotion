@@ -24,13 +24,14 @@
  */
 package org.debux.webmotion.server.call;
 
+import org.debux.webmotion.server.tools.HttpUtils;
 import java.util.*;
 import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.debux.webmotion.server.*;
-import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.mbean.HandlerStats;
@@ -182,10 +183,10 @@ public class ServerContext {
         // Read secret otherwise generate it
         secret = config.getSecret();
         if (secret == null) {
-            secret = WebMotionUtils.generateSecret();
+            secret = HttpUtils.generateSecret();
         } else if (secret.length() < Config.SERVER_SECRET_MIN_SIZE) {
             log.warn("The secret key is too short, it is generated");
-            secret = WebMotionUtils.generateSecret();
+            secret = HttpUtils.generateSecret();
         }
         
         // Init handlers

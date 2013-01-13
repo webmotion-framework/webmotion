@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import org.debux.webmotion.server.WebMotionUtils.LruCache;
+import org.debux.webmotion.server.tools.LruCache;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;

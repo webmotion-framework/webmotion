@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Action;
@@ -174,7 +174,7 @@ public class ActionFinderHandlerTest {
             String baseUrl = StringUtils.substringBefore(fragment, "?");
             if(!baseUrl.isEmpty()) {
 
-                List<String> splitBaseUrl = WebMotionUtils.splitPath(baseUrl);
+                List<String> splitBaseUrl = HttpUtils.splitPath(baseUrl);
                 log.debug("splitBaseUrl = " + splitBaseUrl);
 
                 for(String item : splitBaseUrl) {

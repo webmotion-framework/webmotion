@@ -34,10 +34,11 @@ import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,8 +73,8 @@ public class ActionMethodFinderHandler extends AbstractHandler implements WebMot
             Action action = rule.getAction();
 
             String className = action.getClassName();
-            className = WebMotionUtils.replaceDynamicName(className, parameterTree);
-            className = WebMotionUtils.capitalizeClass(className);
+            className = HttpUtils.replaceDynamicName(className, parameterTree);
+            className = ReflectionUtils.capitalizeClass(className);
 
             Config config = mapping.getConfig();
             String packageName = config.getPackageActions();
@@ -92,8 +93,8 @@ public class ActionMethodFinderHandler extends AbstractHandler implements WebMot
                 }
 
                 String methodName = action.getMethodName();
-                methodName = WebMotionUtils.replaceDynamicName(methodName, parameterTree);
-                Method method = WebMotionUtils.getMethod(clazz, methodName);
+                methodName = HttpUtils.replaceDynamicName(methodName, parameterTree);
+                Method method = ReflectionUtils.getMethod(clazz, methodName);
                 if (method == null) {
                     throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);
                 }

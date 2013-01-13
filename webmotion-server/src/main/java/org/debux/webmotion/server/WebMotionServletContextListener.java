@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.tools.HttpUtils;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -78,13 +79,13 @@ public class WebMotionServletContextListener implements ServletContextListener {
     public void createWebSockets(ServletContext servletContext) {
         try {
             String wrapperClassName = null;
-            if (WebMotionUtils.isTomcatContainer(servletContext)) {
+            if (HttpUtils.isTomcatContainer(servletContext)) {
                 wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketTomcatWrapper";
 
-            } else if (WebMotionUtils.isGlassfishContainer(servletContext)) {
+            } else if (HttpUtils.isGlassfishContainer(servletContext)) {
                 wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketGlassfishWrapper";
 
-            } else if (WebMotionUtils.isJettyContainer(servletContext)) {
+            } else if (HttpUtils.isJettyContainer(servletContext)) {
                 wrapperClassName = "org.debux.webmotion.server.websocket.wrapper.WebSocketJettyWrapper";
 
             } else {

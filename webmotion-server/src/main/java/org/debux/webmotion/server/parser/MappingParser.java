@@ -32,10 +32,11 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.apache.commons.io.IOUtils;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.mapping.Properties;
 import org.debux.webmotion.server.mapping.Properties.PropertiesItem;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.buffers.InputBuffer;
@@ -638,7 +639,7 @@ public class MappingParser {
                     String path = (String) stack.removeLast();
                     List<Mapping> extensionsRules = mapping.getExtensionsRules();
 
-                    Collection<String> resources = WebMotionUtils.getResources(value);
+                    Collection<String> resources = ReflectionUtils.getResources(value);
                     if (resources.isEmpty()) {
                         Mapping extensionMapping = new Mapping();
                         extensionMapping.setName(value);

@@ -33,7 +33,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.ClientSession;
@@ -45,6 +45,7 @@ import org.debux.webmotion.server.call.HttpContext.ErrorData;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Properties;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         Executor executor = call.getCurrent();
         
         Method executorMethod = executor.getMethod();
-        String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
+        String[] parameterNames = ReflectionUtils.getParameterNames(mapping, executorMethod);
         Class<?>[] parameterTypes = executorMethod.getParameterTypes();
         Type[] genericParameterTypes = executorMethod.getGenericParameterTypes();
         

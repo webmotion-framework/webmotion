@@ -24,10 +24,11 @@
  */
 package org.debux.webmotion.server;
 
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import java.util.ArrayList;
 import java.util.List;
-import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.HttpContext.ErrorData;
@@ -217,7 +218,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
             String path = extensionMapping.getExtensionPath();
             log.debug("path = " + path);
             if ("/".equals(path) 
-                    || WebMotionUtils.find("^" + path + "(/|$)", url)) {
+                    || HttpUtils.find("^" + path + "(/|$)", url)) {
 
                 context.addExtensionPath(path);
 

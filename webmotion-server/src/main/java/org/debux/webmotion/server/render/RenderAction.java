@@ -31,12 +31,13 @@ import javax.servlet.ServletException;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionUtils;
-import org.debux.webmotion.server.WebMotionUtils.SingletonFactory;
+import org.debux.webmotion.server.tools.HttpUtils;
+import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.handler.ExecutorInstanceCreatorHandler;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 
 /**
  * Render use to call an action and return the result.
@@ -78,7 +79,7 @@ public class RenderAction extends Render {
             SingletonFactory<WebMotionController> factory = ExecutorInstanceCreatorHandler.getControllerFactory(mapping, call);
             WebMotionController instance = factory.getInstance(fullQualifiedName);
             // Invoke method
-            Method method = WebMotionUtils.getMethod(instance.getClass(), methodName);
+            Method method = ReflectionUtils.getMethod(instance.getClass(), methodName);
             if (method == null) {
                 throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, call.getRule());
             }

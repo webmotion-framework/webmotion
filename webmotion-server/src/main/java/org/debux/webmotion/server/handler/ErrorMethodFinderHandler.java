@@ -30,7 +30,7 @@ import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;
@@ -38,6 +38,7 @@ import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +83,7 @@ public class ErrorMethodFinderHandler extends AbstractHandler implements WebMoti
                 }
 
                 String methodName = action.getMethodName();
-                Method method = WebMotionUtils.getMethod(clazz, methodName);
+                Method method = ReflectionUtils.getMethod(clazz, methodName);
                 if (method == null) {
                     throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);
                 }

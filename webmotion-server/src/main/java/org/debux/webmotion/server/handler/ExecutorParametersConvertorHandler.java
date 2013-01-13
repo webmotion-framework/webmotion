@@ -47,12 +47,13 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.UploadFile;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +110,7 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
         Executor executor = call.getCurrent();
         
         Method executorMethod = executor.getMethod();
-        String[] parameterNames = WebMotionUtils.getParameterNames(mapping, executorMethod);
+        String[] parameterNames = ReflectionUtils.getParameterNames(mapping, executorMethod);
 
         // Sort parameters and convert
         Call.ParameterTree parameterTree = call.getParameterTree();

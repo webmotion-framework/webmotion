@@ -42,9 +42,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 
 /**
  * Class to manage JSON as message in the websocket. For example the JSON object :
@@ -97,12 +98,12 @@ public class WebMotionWebSocketJson extends WebMotionWebSocket {
             JsonObject object = element.getAsJsonObject();
             
             String methodName = object.get("method").getAsString();
-            Method method = WebMotionUtils.getMethod(getClass(), methodName);
+            Method method = ReflectionUtils.getMethod(getClass(), methodName);
             
             ServerContext serverContext = getServerContext();
             Mapping mapping = serverContext.getMapping();
             
-            String[] parameterNames = WebMotionUtils.getParameterNames(mapping, method);
+            String[] parameterNames = ReflectionUtils.getParameterNames(mapping, method);
             Class<?>[] parameterTypes = method.getParameterTypes();
             Type[] genericParameterTypes = method.getGenericParameterTypes();
             

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
@@ -40,6 +40,7 @@ import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.mapping.*;
 import org.debux.webmotion.server.parser.MappingVisit.Visitor;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 
 /**
  * Uses to check the mapping file after the initialization of the server. 
@@ -375,7 +376,7 @@ public class MappingChecker {
      * @param methodName method name to check
      */
     protected void checkMethodName(Rule rule, Class<?> clazz, String methodName) {
-        Method method = WebMotionUtils.getMethod(clazz, methodName);
+        Method method = ReflectionUtils.getMethod(clazz, methodName);
         if (method == null) {
             addWarning(rule, "Invalid method name " + methodName + " for class name " + clazz.getSimpleName());
         } else {

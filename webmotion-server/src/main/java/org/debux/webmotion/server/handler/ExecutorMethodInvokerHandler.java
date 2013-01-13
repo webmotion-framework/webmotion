@@ -49,7 +49,7 @@ import org.debux.webmotion.server.WebMotionContextable;
 import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.FileProgressListener;
@@ -121,7 +121,7 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
         } else {
             // Only the first request is execute at async mode
             AsyncContext asyncContext;
-            if (WebMotionUtils.isTomcatContainer(servletContext)) {
+            if (HttpUtils.isTomcatContainer(servletContext)) {
                 request.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
                 // Tomcat patch : force the dispatcher type
                 asyncContext = request.startAsync(new HttpServletRequestWrapper(request) {

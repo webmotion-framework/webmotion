@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
         if (url != null) {
             
             log.debug("url = " + url);
-            List<String> path = WebMotionUtils.splitPath(url);
+            List<String> path = HttpUtils.splitPath(url);
             log.debug("path = " + path);
             Map<String, Object> parameters = call.getExtractParameters();
             String method = context.getMethod();

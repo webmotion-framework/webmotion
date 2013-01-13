@@ -30,7 +30,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.Action;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.render.Render;
 import org.debux.webmotion.server.mapping.Rule;
@@ -60,7 +60,7 @@ public class ActionExecuteRenderHandler extends AbstractHandler implements WebMo
             
             if (action.isView()) {
                 String pageName = action.getFullName();
-                pageName = WebMotionUtils.replaceDynamicName(pageName, parameterTree);
+                pageName = HttpUtils.replaceDynamicName(pageName, parameterTree);
 
                 Map<String, Object> model = null;
                 if (!parameterTree.isEmpty()) {
@@ -72,14 +72,14 @@ public class ActionExecuteRenderHandler extends AbstractHandler implements WebMo
 
             } else if (action.isRedirect()) {
                 String url = action.getFullName();
-                url = WebMotionUtils.replaceDynamicName(url, parameterTree);
+                url = HttpUtils.replaceDynamicName(url, parameterTree);
 
                 Render render = new RenderRedirect(url, null);
                 call.setRender(render);
                 
             } else if (action.isForward()) {
                 String url = action.getFullName();
-                url = WebMotionUtils.replaceDynamicName(url, parameterTree);
+                url = HttpUtils.replaceDynamicName(url, parameterTree);
 
                 Map<String, Object> model = null;
                 if (!parameterTree.isEmpty()) {

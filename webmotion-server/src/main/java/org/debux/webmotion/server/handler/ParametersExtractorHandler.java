@@ -35,7 +35,7 @@ import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.WebMotionUtils;
+import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.call.Call.ParameterTree;
 import org.debux.webmotion.server.call.HttpContext;
 import org.slf4j.Logger;
@@ -81,7 +81,7 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
         // Retrieve the good name for parameters give in mapping
         HttpContext context = call.getContext();
         String url = context.getUrl();
-        List<String> path = WebMotionUtils.splitPath(url);
+        List<String> path = HttpUtils.splitPath(url);
         
         List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
         int position = 0;
