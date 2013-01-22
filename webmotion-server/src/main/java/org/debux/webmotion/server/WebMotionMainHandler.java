@@ -178,7 +178,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
             
             WebMotionHandler mainHandler = factory.get(className);
             if (mainHandler != null) {
-                mainHandler.handlerInitialized(extensionMapping, context);
+                mainHandler.handlerDestroyed(extensionMapping, context);
             }
         }
         
@@ -225,7 +225,7 @@ public class WebMotionMainHandler implements WebMotionHandler {
                 Config newConfig = extensionMapping.getConfig();
                 String className = newConfig.getMainHandler();
 
-                WebMotionHandler mainHandler = factory.getInstance(className);
+                WebMotionHandler mainHandler = factory.get(className);
                 mainHandler.handle(extensionMapping, call);
 
                 context.removeExtensionPath(path);
