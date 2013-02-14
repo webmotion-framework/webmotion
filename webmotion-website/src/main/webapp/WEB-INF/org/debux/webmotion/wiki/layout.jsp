@@ -76,6 +76,13 @@
                 <c:set var="documentation_active" value="active"/>
             </c:if>
 
+            <c:url value="/tutorial/index" var="tutorial_url"/>
+            <c:if test="${layout_url == '/tutorial/index'
+                            || layout_url == '/tutorial/angularjs'
+                            || layout_url == '/tutorial/uploadmotion'}" >
+                <c:set var="tutorial_active" value="active"/>
+            </c:if>
+                
             <c:url value="/showcase" var="showcase_url"/>
             <c:if test="${layout_url == '/showcase'}" >
                 <c:set var="showcase_active" value="active"/>
@@ -97,6 +104,9 @@
                 
                 $('#documentation').addClass("${documentation_active}");
                 $("#documentation>a").attr("href", "${documentation_url}")
+                
+                $('#tutorial').addClass("${tutorial_active}");
+                $("#tutorial>a").attr("href", "${tutorial_url}")
                 
                 $('#showcase').addClass("${showcase_active}");
                 $("#showcase>a").attr("href", "${showcase_url}")

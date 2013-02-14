@@ -1,0 +1,237 @@
+
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!--<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
+
+        <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+        <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js" type="text/javascript"></script>
+
+    </head>
+    <body onload="prettyPrint()">-->
+
+<div id="article">
+
+<h1>File upload</h1>
+
+<script type="text/javascript" src="../js/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="begin">Présentation</h2>
+<p>
+    Ce tutoriel vous présente comment fonctionne l'upload de fichier avec WebMotion et JQuery.
+    Vous pouvez trouver la manière old school dans la partie démonstration du site.
+    Ici nous allons utiliser les nouveautés HTML5 concernant les XHR.
+</p>
+<p>
+    Pour illustrer cette fonctionnalité, nous allons créer un formulaire pour envoyer
+    un fichier sur le serveur et présenter le fichier à l'utilisateur.
+</p>
+
+<p>
+    Pour rappel, WebMotion est un framework Java web. Il utilise un fichier de 
+    mapping pour décrire la liaison entre le serveur et le client. Pour être précis, ce fichier définit le comportement
+    que doit avoir l'application web en fonction des URI appelées. Il se veut proche du standard Java EE, 
+    en reposant sur son API et plus précisément sur l'API Servlet 3. 
+</p>
+
+<p>
+    JQuery est une librairie javascript. Il vous permet de manipuler plus simplement 
+    les éléments du DOM en proposant de nombreux utilitaires.
+</p>
+
+<p>
+    Pour plus de renseignements, vous pouvez consulter respectivement les sites 
+    internet <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+    et <a href="http://jquery.com/">http://jquery.com/</a>.
+</p>
+
+<p>
+    Une démo du formulaire est disponible ici : 
+    <a href="http://www.webmotion-framework.org/upload/">http://www.webmotion-framework.org/upload/</a>.
+    et l'ensemble du code source est à l'adresse 
+    suivante <a href="http://svn.debux.org/webmotion-ext/UploadMotion/">http://svn.debux.org/webmotion-ext/UploadMotion/</a>.
+</p>
+
+<h2 class="page-header" id="create">Création du projet</h2>
+
+<p>
+    Maven est utilisé comme gestionnaire de construction de projet pour l'exemple. WebMotion 
+    propose notamment un archetype pour initialiser un projet. Pour l'utiliser il 
+    vous suffit de saisir la commande suivante :
+</p>
+<pre class="prettyprint">
+$ mvn archetype:generate \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.3.3 \
+    -DgroupId=org.debux.webmotion \
+    -DartifactId=uploadmotion \
+    -Dpackage=org.debux.webmotion.uploadmotion \
+    -Dversion=1.0-SNAPSHOT \
+    -DusesExtras=N
+</pre>
+
+<p>
+    Coté Jquery, il suffit d'inclure le script dans vos pages. Notre exemple est composé d'une seule page.
+</p>
+
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 class="page-header" id="controller">Partie contrôleur</h2>
+<p>
+    La partie contrôleur est simple. Elle est composé de deux services un pour télécharger 
+    le fichier et un autre pour récupérer le fichier.
+</p>
+
+<p>
+    Pour créer un service sur WebMotion, il faut commencer par créer un controleur ainsi :
+</p>
+
+<pre class="prettyprint">
+public class MainController extends WebMotionController {
+    // Add services here
+}
+</pre>
+
+<p>
+    La prochaine étape constiste à créer les méthodes correspondant à vos services.
+    Le service d'upload prend en paramètre directement le File en entrée.
+</p>
+<pre class="prettyprint">
+public Render upload(Properties conf, File file) throws IOException {
+    String folderName = conf.getString("folder");
+
+    String token = UUID.randomUUID().toString();
+    String fileName = folderName + File.separator + token;
+
+    FileInputStream inputStream = new FileInputStream(file);
+    FileOutputStream outputStream = new FileOutputStream(fileName);
+
+    IOUtils.copy(inputStream, outputStream);
+
+    inputStream.close();
+    outputStream.close();
+
+    return renderJSON("token", token);
+}
+</pre>
+
+<p>
+    Pour le service de download, le nom est passé sous forme de token renvoyer par le service
+    d'upload.
+</p>
+<pre class="prettyprint">
+public Render download(Properties conf, String token) throws IOException {
+    String folderName = conf.getString("folder");
+    String fileName = folderName + File.separator + token;
+    FileInputStream inputStream = new FileInputStream(fileName);
+
+    MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+    String mimeType = mimeTypesMap.getContentType(fileName);
+    return renderStream(inputStream, mimeType);
+}
+</pre>
+
+<p>
+    Vous pouvez constater que les services prennent aussi en paramètre un object Properties qui
+    représente la configuration de votre application. Ces propriétés peuvent être défini directement
+    dans le fichier de mapping. Le fichier de mapping est le fichier de configuration de WebMotion 
+    qui vous permet entre autre de mettre en relation votre url et votre methode java.
+</p>
+
+<p>
+    Nous allons retrouver le répertoire où télécharger le fichier sous la forme de clé valeur :
+</p>
+<pre>
+[properties]
+folder=/tmp
+</pre>
+
+<p>
+    Pour terminer la partie contrôleur, il vous reste à mettre en relation vos services selon une url.
+    Une action dans le fichier de mapping est composée de la méthode HTTP, du path et de l'action à réaliser. 
+    Dans la régle suivante, l'action consiste à apeller une méthode java.
+</p>
+<pre>
+[actions]
+POST         /upload                MainController.upload
+GET          /download              MainController.download
+</pre>
+
+<h2 class="page-header" id="view">Partie vue</h2>
+
+<p>
+    L'application sera constituée d'une seule page HTML. Cette page affichera l
+</p>
+<pre class="prettyprint">
+</pre>
+
+<p>
+    Il reste à ajouter le style avec l'aide du bootstrap twitter :
+</p>
+<pre class="prettyprint">
+&lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
+</pre>
+
+<p>
+    Pour finir, l'URL pour accéder à la page est ajoutée dans la 
+    section "action" de WebMotion. Dans la régle suivante, l'action consiste à revoyer la page index.html à 
+    l'utilisateur.
+</p>
+<pre class="prettyprint">
+[actions]
+GET       /                           view:index.html
+</pre>
+
+<h2 class="page-header" id="run">Lancer l'application</h2>
+
+<p>
+    Vous pouvez maintenant lancer l'application depuis Jetty, en saisissant la ligne
+    de commande suivante :
+</p>
+<pre class="prettyprint">
+$ mvn jetty:run
+</pre>
+<p>
+    Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.
+</p>
+<p>
+    Vous pouvez consulter le résultat dans votre navigateur en saisissant l'adresse 
+    suivante <a href="http://localhost:8080/UploadMotion/">http://localhost:8080/UploadMotion/</a>.
+</p>
+
+</div>
+    
+<!--    </body>
+</html>-->
