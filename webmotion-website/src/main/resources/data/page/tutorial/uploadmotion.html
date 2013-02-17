@@ -49,7 +49,7 @@
 </p>
 <p>
     Pour illustrer cette fonctionnalité, nous allons créer un formulaire pour envoyer
-    un fichier sur le serveur et présenter le fichier à l'utilisateur.
+    un fichier sur le serveur puis présenter le fichier à l'utilisateur.
 </p>
 
 <p>
@@ -126,7 +126,8 @@ public class MainController extends WebMotionController {
 
 <p>
     La prochaine étape constiste à créer les méthodes correspondant à vos services.
-    Le service d'upload prend en paramètre directement le File en entrée.
+    Le service d'upload prend en paramètre directement le File en entrée. Vous n'avez 
+    rien d'autre à faire pour récupérer un fichier avec WebMotion.
 </p>
 <pre class="prettyprint">
 public Render upload(Properties conf, File file) throws IOException {
@@ -148,8 +149,8 @@ public Render upload(Properties conf, File file) throws IOException {
 </pre>
 
 <p>
-    Pour le service de download, le nom est passé sous forme de token renvoyer par le service
-    d'upload.
+    Pour le service de download, le nom du fichier est passé sous forme de token
+    renvoyer par le service d'upload.
 </p>
 <pre class="prettyprint">
 public Render download(Properties conf, String token) throws IOException {
@@ -171,7 +172,8 @@ public Render download(Properties conf, String token) throws IOException {
 </p>
 
 <p>
-    Nous allons retrouver le répertoire où télécharger le fichier sous la forme de clé valeur :
+    Nous allons retrouver dans le fichier de mapping le répertoire où télécharger 
+    le fichier sous la forme de clé valeur :
 </p>
 <pre>
 [properties]
@@ -190,18 +192,115 @@ GET          /download              MainController.download
 </pre>
 
 <h2 class="page-header" id="view">Partie vue</h2>
-
 <p>
-    L'application sera constituée d'une seule page HTML. Cette page affichera l
-</p>
-<pre class="prettyprint">
-</pre>
-
-<p>
-    Il reste à ajouter le style avec l'aide du bootstrap twitter :
+    L'application sera constituée d'une seule page HTML. Nous utilisons le style
+    du bootstrap twitter :
 </p>
 <pre class="prettyprint">
 &lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
+</pre>
+
+<p>
+    La page affichera un formulaire avec un input de type <code>file</code> pour envoyer
+    le fichier sur le serveur.
+</p>
+<pre class="prettyprint">
+&lt;form&gt;
+    &lt;input id="file" type="file" name="file"&gt;&lt;input id="send" value="Upload" type="button"/&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    Une zone est défini pour suivre la progression du téléchargement du fichier.
+    Pour faire évoluer la progression, il vous suffit de modifier la taille.
+</p>
+<pre class="prettyprint">
+&lt;div class="progress"&gt;
+    &lt;div id="progress" class="bar" style="width: 0%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>
+    Les éléments suivants vous permet d'afficher le fichier et de le partager sous la forme d'un lien.
+</p>
+<pre class="prettyprint">
+&lt;p style="text-align: center"&gt;
+    &lt;a href="#" class="thumbnail" style="display:inline-block;"&gt;
+        &lt;img id="preview" style="max-height: 500px" src="" alt=""&gt;
+    &lt;/a&gt;
+&lt;/p&gt;
+
+&lt;div class="well well-small"&gt;
+    &lt;label class="" style="line-height: 30px; vertical-align: middle;"&gt;Share :
+        &lt;input id="share" type="text" class="pull-right span11" value="" /&gt;
+    &lt;/label>
+&lt;/div>
+</pre>
+
+<p>
+    Coté JQuey, il vous faut créer la réquête XHR avec un listenner sur l'upload. 
+    JQuery ne permet pas d'y accéder directement, il faut passer dans ce cas par un provider de requête.
+</p>
+<pre class="prettyprint">
+$(function() {
+    $("#send").click(function () {
+        var xhr = jQuery.ajaxSettings.xhr();
+        if (xhr.upload) {
+            xhr.upload.addEventListener('progress', function (e) {
+                $("#progress").css("width", (e.loaded / e.total * 100) + "%");
+                console.log((e.loaded / e.total * 100));
+            }, false);
+        }   
+        var provider = function () {
+            return xhr;
+        };  
+
+        var form = new FormData();
+        form.append('file', $("#file")[0].files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/UploadMotion/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: provider,
+            data: form,
+
+            success: function (data) {
+                console.log("success: " + data.token);
+                $("#progress").css("width", "100%");
+                $("#progress").addClass("bar-success");
+
+                $("#preview").attr("src", "http://localhost:8080/UploadMotion/download?token=" + data.token);
+                $("#share").val("http://localhost:8080/UploadMotion?token=" + data.token);
+            },
+
+            error: function () {
+                console.log("error:");
+                $("#progress").css("width", "100%");
+                $("#progress").addClass("bar-danger");
+            }
+        }); 
+    });
+});
+</pre>
+
+<p>
+    En cas de changement de fichier vous pouvez réinitialiser la progress barre 
+    et la preview.
+</p>
+<pre class="prettyprint">
+$(function() {
+    $("#file").change(function() {
+        $("#progress").css("width", "0%");
+        $("#progress").removeClass("bar-success");
+        $("#progress").removeClass("bar-danger");
+
+        $("#preview").attr("src", "");
+        $("#share").val("");
+    });
+});
 </pre>
 
 <p>
