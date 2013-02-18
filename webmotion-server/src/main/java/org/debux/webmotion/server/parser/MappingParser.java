@@ -732,10 +732,12 @@ public class MappingParser {
      */
     public Mapping parse(String fileName) {
         URL url = getClass().getClassLoader().getResource(fileName);
-        
         if (url == null) {
-            throw new WebMotionException("No mapping found for " + fileName);
-        }
+            url = getClass().getResource(fileName);
+            if (url == null) {
+                throw new WebMotionException("No mapping found for " + fileName);
+            }
+        }        
                 
         return parse(url);
     }
