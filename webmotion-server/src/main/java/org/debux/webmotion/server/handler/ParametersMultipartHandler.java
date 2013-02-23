@@ -64,7 +64,7 @@ public class ParametersMultipartHandler extends AbstractHandler implements WebMo
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
-            FileItemFactory fileItemFactory = new DiskFileItemFactory();
+            FileItemFactory fileItemFactory = new DiskFileItemFactory(0, null);
             ServletFileUpload upload = new ServletFileUpload(fileItemFactory);
 
             HttpSession session = request.getSession();
