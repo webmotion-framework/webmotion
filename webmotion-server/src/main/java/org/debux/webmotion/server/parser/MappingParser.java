@@ -710,7 +710,7 @@ public class MappingParser {
     public Mapping parse(String[] fileNames) {
         Mapping mapping = null;
         for (String fileName : fileNames) {
-            URL url = getClass().getClassLoader().getResource(fileName);
+            URL url = getMappingUrl(fileName);
             if (url != null) {
                mapping = parse(url); 
                break;
@@ -731,6 +731,16 @@ public class MappingParser {
      * @return the representation of the file
      */
     public Mapping parse(String fileName) {
+        URL url = getMappingUrl(fileName);
+        return parse(url);
+    }
+    
+    /**
+     * Search mapping file in class loader.
+     * @param fileName file name
+     * @return url of the mapping file
+     */
+    protected URL getMappingUrl(String fileName) {
         URL url = getClass().getClassLoader().getResource(fileName);
         if (url == null) {
             url = getClass().getResource(fileName);
@@ -738,8 +748,8 @@ public class MappingParser {
                 throw new WebMotionException("No mapping found for " + fileName);
             }
         }        
-                
-        return parse(url);
+
+        return url;
     }
         
     /**
