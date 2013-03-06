@@ -31,7 +31,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationConverter;
 import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.mapping.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +79,7 @@ public abstract class Transactional extends WebMotionFilter {
      * @throws Exception catch execption to rollback the transaction
      */
     public void tx(HttpServletRequest request, String persistenceUnitName,
-            String packageEntityName, String entityName) throws Exception {
+            Properties properties, String packageEntityName, String entityName) throws Exception {
         
         // Create factory
         if (persistenceUnitName == null || persistenceUnitName.isEmpty()) {
@@ -84,7 +87,10 @@ public abstract class Transactional extends WebMotionFilter {
         }
         EntityManagerFactory factory = factories.get(persistenceUnitName);
         if (factory == null) {
-            factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+            Configuration subset = properties.subset(persistenceUnitName);
+            java.util.Properties additionalProperties  = ConfigurationConverter.getProperties(subset);
+        
+            factory = Persistence.createEntityManagerFactory(persistenceUnitName, additionalProperties);
             factories.put(persistenceUnitName, factory);
         }
         

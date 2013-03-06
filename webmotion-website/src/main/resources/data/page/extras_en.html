@@ -756,6 +756,41 @@ public Render action(EntityTransaction transaction, EntityManager manager) {
 }
 </pre>
 
+<strong>Configuration dans le mapping</strong>
+<p>
+    You can define in the mapping file, all properties of the 
+    <code>persitence.xml</code> file. For that, you have to create a <code>[properties]</code>
+    section with as key the persitence-unit name and the propertie name separated
+    by a point.
+</p>
+
+<p>
+    Example of persitence.xml file:
+</p>
+<pre class="prettyprint">
+&lt;persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+    version="1.0"&gt;
+    &lt;persistence-unit name="dataBaseName" transaction-type="RESOURCE_LOCAL"&gt;
+        &lt;provider&gt;org.hibernate.ejb.HibernatePersistence&lt;/provider&gt;
+    &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
+</pre>
+
+<p>
+    With the mapping file associated:
+</p>
+<pre>
+[properties]
+dataBaseName.hibernate.dialect=org.hibernate.dialect.H2Dialect
+dataBaseName.hibernate.hbm2ddl.auto=update
+dataBaseName.hibernate.connection.driver_class=org.h2.Driver
+dataBaseName.hibernate.connection.url=jdbc:h2:mem:dataBaseName;DB_CLOSE_DELAY=-1
+dataBaseName.hibernate.show_sql=false
+dataBaseName.current_session_context_class=thread
+</pre>
+
 <h2 class="page-header" id="shiro">Apache Shiro</h2>
 <p>
     WebMotion offers through <a href="http://shiro.apache.org/">Apache Shiro</a>
