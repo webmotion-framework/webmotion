@@ -47,11 +47,29 @@ public class FilterMappingIT extends AbstractIT {
         HttpGet request = new HttpGet(url);
         
         String result = execute(request);
-        AssertJUnit.assertTrue(result, result.contains("value = 42" + SystemUtils.LINE_SEPARATOR + 
+        AssertJUnit.assertTrue(result, result.contains(
+                "value = 42" + SystemUtils.LINE_SEPARATOR + 
                 "Before filter" + SystemUtils.LINE_SEPARATOR + 
                 "Action log" + SystemUtils.LINE_SEPARATOR + 
                 "Action render\n" + 
                 "After filter"));
+    }
+    
+    @Test
+    public void doChain() throws IOException {
+        String url = getAbsoluteUrl("chain/log?value=42");
+        HttpGet request = new HttpGet(url);
+        
+        String result = execute(request);
+        AssertJUnit.assertTrue(result, result.contains(
+                "Pass value = 42" + SystemUtils.LINE_SEPARATOR + 
+                "Before pass" + SystemUtils.LINE_SEPARATOR + 
+                "Chain value = 42" + SystemUtils.LINE_SEPARATOR + 
+                "Before chain" + SystemUtils.LINE_SEPARATOR + 
+                "Action log" + SystemUtils.LINE_SEPARATOR + 
+                "Action render" + SystemUtils.LINE_SEPARATOR + 
+                "After chain" + SystemUtils.LINE_SEPARATOR + 
+                "After pass"));
     }
     
     @Test

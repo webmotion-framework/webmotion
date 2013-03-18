@@ -24,10 +24,18 @@
  */
 package org.debux.webmotion.server;
 
+import java.lang.reflect.Method;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
+import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.call.ServerContext;
+import org.debux.webmotion.server.handler.ExecutorMethodInvokerHandler.RunnableHandler;
+import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.mapping.Rule;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 
 /**
  * This classe is an action exectuted before and/or after the main action. If
@@ -63,6 +71,57 @@ public class WebMotionFilter extends WebMotionController {
     public void doProcess(Mapping mapping, Call call) {
         WebMotionHandler handler = contextable.getHandler();
         handler.handle(mapping, call);
+    }
+    
+    /**
+     * Chain on filter. The filter is passed with the class name and the method 
+     * name separated by point. The doChain method replace the doProcess method 
+     * in this case.
+     * @param filter the filter to call
+     */
+    public void doChain(String filter) {
+        Mapping mapping = contextable.getMapping();
+        Call call = contextable.getCall();
+        Rule currentRule = call.getCurrentRule();
+        
+        HttpContext context = call.getContext();
+        ServerContext serverContext = context.getServerContext();
+        Map<String, Class<? extends WebMotionController>> globalControllers = serverContext.getGlobalControllers();
+        
+        String className = StringUtils.substringBeforeLast(filter, ".");
+        String methodName = StringUtils.substringAfterLast(filter, ".");
+        
+        Config config = mapping.getConfig();
+        String packageName = config.getPackageActions();
+        String fullQualifiedName = null;
+        if (packageName == null || packageName.isEmpty()) {
+            fullQualifiedName = className;
+        } else {
+            fullQualifiedName = packageName + "." + className;
+        }
+        
+        try {
+            Class<? extends WebMotionController> clazz = globalControllers.get(className);
+            if (clazz == null) {
+                clazz = (Class<WebMotionController>) Class.forName(fullQualifiedName);
+            }
+
+            Method method = ReflectionUtils.getMethod(clazz, methodName);
+            if (method == null) {
+                throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, currentRule);
+            }
+
+            Executor executor = new Executor();
+            executor.setClazz(clazz);
+            executor.setMethod(method);
+            executor.setRule(currentRule);
+            
+            RunnableHandler handler = (RunnableHandler) contextable.getHandler();
+            handler.chainFilter(executor);
+            
+        } catch (ClassNotFoundException clnfe) {
+            throw new WebMotionException("Class not found with name " + fullQualifiedName, clnfe, currentRule);
+        }
     }
     
     /**

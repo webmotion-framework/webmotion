@@ -28,12 +28,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.mapping.Config;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -62,24 +59,6 @@ public class HttpUtilsTest {
         String generateSecret = HttpUtils.generateSecret();
         AssertJUnit.assertNotNull(generateSecret);
         AssertJUnit.assertFalse(generateSecret.isEmpty());
-    }
-    
-    @Test
-    public void testSplit() {
-        String[] result = "test".split(",");
-        AssertJUnit.assertEquals(1, result.length);
-        
-        result = "test,".split(",");
-        AssertJUnit.assertEquals(1, result.length);
-        
-        result = "test,test".split(",");
-        AssertJUnit.assertEquals(2, result.length);
-        
-        result = ",".split(",");
-        AssertJUnit.assertEquals(0, result.length);
-        
-        result = "".split(",");
-        AssertJUnit.assertEquals(1, result.length);
     }
     
     @Test

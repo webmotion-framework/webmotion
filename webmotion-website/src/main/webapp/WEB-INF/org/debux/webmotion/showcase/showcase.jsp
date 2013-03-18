@@ -186,7 +186,7 @@
                                         <li><a id="helloParameters" href="./helloParameters">Parameters</a></li>
                                         <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                         <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
-                                        <li><a id="login" href="./login">Object parameters</a> <span class="label label-info">New</span></li>
+                                        <li><a id="login" href="./login">Object parameters</a></li>
                                         <li class="space"><a id="select" href="./select">Parameters static</a></li>
                                         
                                         <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
@@ -204,6 +204,7 @@
                                 <li><strong>Filter</strong>
                                     <ul>
                                         <li><a id="filter" href="./filter">Do process</a></li>
+                                        <li><a id="chain" href="./chain">Do chain</a> <span class="label label-info">New</span></li>
                                         <li><a id="condition" href="./condition">Render</a></li>
                                         <li><a id="decorator" href="./decorator">Default parameters</a></li>
                                     </ul>
@@ -256,8 +257,8 @@
                                 </li>
                                 <li><strong>Websocket</strong>
                                     <ul>
-                                        <li><a id="ws_text" href="./ws_text">Text</a> <span class="label label-info">New</span></li>
-                                        <li><a id="ws_json" href="./ws_json">JSON</a> <span class="label label-info">New</span></li>
+                                        <li><a id="ws_text" href="./ws_text">Text</a></li>
+                                        <li><a id="ws_json" href="./ws_json">JSON</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -291,7 +292,7 @@
                                         <li><a id="spring" href="./spring">Spring</a></li>
                                         <li><a id="sitemesh" href="./sitemesh">SiteMesh</a></li>
                                         <li><a id="jpa" href="./jpa">Hibernate/JPA</a></li>
-                                        <li><a id="shiro" href="./shiro">Shiro</a> <span class="label label-info">New</span></li>
+                                        <li><a id="shiro" href="./shiro">Shiro</a></li>
                                     </ul>
                                 </li>
                             </ul>

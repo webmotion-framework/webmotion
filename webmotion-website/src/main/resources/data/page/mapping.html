@@ -970,6 +970,29 @@ public class Filters extends WebMotionFilter {
 }
 </pre>
 
+<p>
+    Vous avez aussi la possibilité d'enchaîner les exécutions des filtres. Pour ce faire, il faut utiliser la méthode <code>doChain</code>.
+    Elle prend en paramètre le nom de classe et le nom de la méthode séparés par un point.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Chaîne le filtre sur un autre :
+</p>
+<pre class="prettyprint">
+public class Filters extends WebMotionFilter {
+    public Render pass() {
+        // Before filter
+        doChain("Filters.chain");
+        // After filter
+    }
+
+    public Render chain() {
+        // Before filter
+        doProcess();
+        // After filter
+    }
+}
+</pre>
+
 <h3>Valeurs par défaut des paramètres</h3>
 <p>
     Il est possible de passer des paramètres aux méthodes Java sans qu'ils n'existent dans l'URL. 

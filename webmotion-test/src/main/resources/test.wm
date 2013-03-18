@@ -47,6 +47,7 @@ number = 10
 *           /other/*                                    Condition.check
 *           /contact/*                                  Decorator.decorate      slot=contact
 *           /company/*                                  Decorator.decorate      slot=company
+*           /chain/*                                    Chain.pass
 
 [errors]
 javax.validation.ConstraintViolationException           ErrorConstraint.display
@@ -153,3 +154,4 @@ GET         /echoChat/index                             view:echoChat.jsp
 GET         /echoChat/ws                                EchoChat.createSocket
 GET         /ping/index                                 view:ping.jsp
 GET         /ping/ws                                    Ping.createSocket
+*           /chain/log                                  Log.info

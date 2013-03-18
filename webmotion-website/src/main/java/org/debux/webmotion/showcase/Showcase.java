@@ -45,8 +45,8 @@ public class Showcase extends WebMotionController {
     protected static final int INDEX_PROPERTIES = 6;
     protected static final int INDEX_EXTENSIONS = 11;
     protected static final int INDEX_FILTERS = 21;
-    protected static final int INDEX_ERRORS = 27;
-    protected static final int INDEX_ACTIONS = 35;
+    protected static final int INDEX_ERRORS = 28;
+    protected static final int INDEX_ACTIONS = 36;
     
     protected static final String SECTION_PROPERTIES = "properties";
     protected static final String SECTION_ACTIONS = "actions";
@@ -1111,5 +1111,20 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
-
+    
+    public Render chain() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/chain/log?value=42"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, true, true, false) 
+                        .addContent(getMapping(SECTION_FILTERS, INDEX_FILTERS + 5, 1))
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 97, 1)),
+                    getJavaContent("Chain.java"),
+                    getJavaContent("Log.java")
+                )
+        );
+    }
 }

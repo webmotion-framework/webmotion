@@ -949,6 +949,29 @@ public class Filters extends WebMotionFilter {
 }
 </pre>
 
+<p>
+    You can chain the execution of filters. For that, you have to use the <code>doChain</code> method. 
+    It takes as parameters the class name et the method name separated by a point.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Chain a filter on another one:
+</p>
+<pre class="prettyprint">
+public class Filters extends WebMotionFilter {
+    public Render pass() {
+        // Before filter
+        doChain("Filters.chain");
+        // After filter
+    }
+
+    public Render chain() {
+        // Before filter
+        doProcess();
+        // After filter
+    }
+}
+</pre>
+
 <h3>Default values of the parameters</h3>
 <p>
     You can pass parameters to the Java methods without these parameters exist in the URL.

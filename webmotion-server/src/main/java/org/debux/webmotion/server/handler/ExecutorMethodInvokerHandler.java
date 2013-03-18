@@ -26,7 +26,6 @@ package org.debux.webmotion.server.handler;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +38,7 @@ import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -177,7 +177,7 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
         protected Call call;
         
         /** Current filters executed. */
-        protected Iterator<Executor> filtersIterator;
+        protected ListIterator<Executor> filtersIterator;
 
         /** Mark if the render is executed */
         protected boolean executed;
@@ -186,7 +186,7 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
             this.mapping = mapping;
             this.call = call;
             
-            this.filtersIterator = call.getFilters().iterator();
+            this.filtersIterator = call.getFilters().listIterator();
             this.executed = false;
         }
         
@@ -349,6 +349,16 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
                             ex, executor.getRule());
                 }
             }
+        }
+
+        /**
+         * Insert a filter dynamic from a another filer
+         * @param executor pass the 
+         */
+        public void chainFilter(Executor executor) {
+            filtersIterator.add(executor);
+            filtersIterator.previous();
+            this.handle(mapping, call);
         }
         
         /**

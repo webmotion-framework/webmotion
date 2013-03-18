@@ -91,3 +91,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /shiro                                      Showcase.shiro
 *           /ws_text                                    Showcase.wsText
 *           /ws_json                                    Showcase.wsJSON
+*           /chain                                      Showcase.chain
