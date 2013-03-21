@@ -25,8 +25,9 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -42,11 +43,12 @@ public class FilterMappingIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(FilterMappingIT.class);
     
     @Test
-    public void doProcess() throws IOException {
-        String url = getAbsoluteUrl("path/log?value=42");
-        HttpGet request = new HttpGet(url);
+    public void doProcess() throws IOException, URISyntaxException {
+        Request request = createRequest("/path/log")
+                .addParameter("value", "42")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains(
                 "value = 42" + SystemUtils.LINE_SEPARATOR + 
                 "Before filter" + SystemUtils.LINE_SEPARATOR + 
@@ -56,11 +58,12 @@ public class FilterMappingIT extends AbstractIT {
     }
     
     @Test
-    public void doChain() throws IOException {
-        String url = getAbsoluteUrl("chain/log?value=42");
-        HttpGet request = new HttpGet(url);
+    public void doChain() throws IOException, URISyntaxException {
+        Request request = createRequest("/chain/log")
+                .addParameter("value", "42")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains(
                 "Pass value = 42" + SystemUtils.LINE_SEPARATOR + 
                 "Before pass" + SystemUtils.LINE_SEPARATOR + 
@@ -73,38 +76,40 @@ public class FilterMappingIT extends AbstractIT {
     }
     
     @Test
-    public void render() throws IOException {
-        String url = getAbsoluteUrl("other/repeat?number=6");
-        HttpGet request = new HttpGet(url);
+    public void render() throws IOException, URISyntaxException {
+        Request request = createRequest("/other/repeat")
+                .addParameter("number", "6")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("run : 0\nrun : 1\nrun : 2\nrun : 3\nrun : 4\nrun : 5"));
     }
     
     @Test
-    public void renderInvalid() throws IOException {
-        String url = getAbsoluteUrl("other/repeat?number=3");
-        HttpGet request = new HttpGet(url);
+    public void renderInvalid() throws IOException, URISyntaxException {
+        Request request = createRequest("/other/repeat")
+                .addParameter("number", "3")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Invalid number 3"));
     }
     
     @Test
-    public void defaultParametersContact() throws IOException {
-        String url = getAbsoluteUrl("contact/view");
-        HttpGet request = new HttpGet(url);
+    public void defaultParametersContact() throws IOException, URISyntaxException {
+        Request request = createRequest("/contact/view")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("With slot contact"));
     }
     
     @Test
-    public void defaultParametersCompany() throws IOException {
-        String url = getAbsoluteUrl("company/view");
-        HttpGet request = new HttpGet(url);
+    public void defaultParametersCompany() throws IOException, URISyntaxException {
+        Request request = createRequest("/company/view")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("With slot company"));
     }
     

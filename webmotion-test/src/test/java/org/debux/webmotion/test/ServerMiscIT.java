@@ -25,7 +25,8 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -41,38 +42,39 @@ public class ServerMiscIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(ServerMiscIT.class);
     
     @Test
-    public void serverListenner() throws IOException {
-        String url = getAbsoluteUrl("context");
-        HttpGet request = new HttpGet(url);
+    public void serverListenner() throws IOException, URISyntaxException {
+        Request request = createRequest("/context")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("key = value"));
     }
     
     @Test
-    public void globalListenner() throws IOException {
-        String url = getAbsoluteUrl("global/hello");
-        HttpGet request = new HttpGet(url);
+    public void globalListenner() throws IOException, URISyntaxException {
+        Request request = createRequest("/global/hello")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello from logger !"));
     }
         
     @Test
-    public void injectorListenner() throws IOException {
-        String url = getAbsoluteUrl("config");
-        HttpGet request = new HttpGet(url);
+    public void injectorListenner() throws IOException, URISyntaxException {
+        Request request = createRequest("/config")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("A value from the config object"));
     }
         
     @Test
-    public void converterListenner() throws IOException {
-        String url = getAbsoluteUrl("jsonelement?element=%7Btest=%22value%22%7D");
-        HttpGet request = new HttpGet(url);
+    public void converterListenner() throws IOException, URISyntaxException {
+        Request request = createRequest("/jsonelement")
+                .addParameter("element", "{test=\"value\"}")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("value"));
     }
 

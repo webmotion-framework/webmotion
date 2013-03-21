@@ -25,31 +25,39 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.debux.webmotion.unittest.RequestBuilder;
+import org.debux.webmotion.unittest.StringResponseHandler;
 
 /**
+ * Define the basic information to create et execute a request for all tests.
+ * 
  * @author julien
  */
 public class AbstractIT {
-
-    public String getAbsoluteUrl(String url) {
-        return "http://localhost:8090/webmotion-test/test/" + url;
-//        return "http://localhost:8080/webmotion-test/test/" + url;
-//        return "http://localhost:8080/webmotion-website/test/" + url;
+    
+    public RequestBuilder createRequest(String url) {
+        RequestBuilder builder = (RequestBuilder) new RequestBuilder()
+                .setScheme("http")
+                .setHost("localhost")
+                .setPort(8090)
+//                .setPort(8080)
+//                .setPort(9080)
+                .setPath("/webmotion-test/test" + url);
+//                .setPath("/webmotion-website/test" + url);
+        return builder;
     }
     
-    public String execute(HttpUriRequest request) throws IOException {
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response = client.execute(request);
-        HttpEntity entity = response.getEntity();
-        InputStream content = entity.getContent();
-        String value = IOUtils.toString(content);
-        return value;
+    /**
+     * Guarantee separation between each test because multiple tests are in same
+     * time.
+     */
+    public String executeRequest(Request request) throws IOException {
+        return Executor.newInstance(new DefaultHttpClient())
+                .execute(request)
+                .handleResponse(new StringResponseHandler());
     }
+    
 }

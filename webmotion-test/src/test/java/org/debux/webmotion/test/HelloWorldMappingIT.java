@@ -25,7 +25,8 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -41,11 +42,11 @@ public class HelloWorldMappingIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(HelloWorldMappingIT.class);
     
     @Test
-    public void hello() throws IOException {
-        String url = getAbsoluteUrl("hello");
-        HttpGet request = new HttpGet(url);
+    public void hello() throws IOException, URISyntaxException {
+        Request request = createRequest("/hello")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     

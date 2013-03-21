@@ -25,7 +25,8 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -41,20 +42,20 @@ public class ExtensionMappingIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(ExtensionMappingIT.class);
     
     @Test
-    public void action() throws IOException {
-        String url = getAbsoluteUrl("blog/index");
-        HttpGet request = new HttpGet(url);
+    public void action() throws IOException, URISyntaxException {
+        Request request = createRequest("/blog/index")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("It is the blog in extension !"));
     }
     
     @Test
-    public void stats() throws IOException {
-        String url = getAbsoluteUrl("stats");
-        HttpGet request = new HttpGet(url);
+    public void stats() throws IOException, URISyntaxException {
+        Request request = createRequest("/stats")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("count = "));
     }
 

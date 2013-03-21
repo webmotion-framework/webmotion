@@ -25,8 +25,8 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -42,327 +42,346 @@ public class ActionMappingIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(ActionMappingIT.class);
     
     @Test
-    public void action() throws IOException {
-        String url = getAbsoluteUrl("act");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void action() throws IOException, URISyntaxException {
+        Request request = createRequest("/act")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute action"));
     }
     
     @Test
-    public void simulate() throws IOException {
-        String url = getAbsoluteUrl("simulate");
-        HttpPost request = new HttpPost(url);
-        request.setHeader("X-HTTP-Method-Override", "DELETE");
-        
-        String result = execute(request);
+    public void simulate() throws IOException, URISyntaxException {
+        Request request = createRequest("/simulate")
+                .Post()
+                .addHeader("X-HTTP-Method-Override", "DELETE");
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute action"));
     }
     
     @Test
-    public void view() throws IOException {
-        String url = getAbsoluteUrl("view");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void view() throws IOException, URISyntaxException {
+        Request request = createRequest("/view")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
-    public void url() throws IOException {
-        String url = getAbsoluteUrl("url");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void url() throws IOException, URISyntaxException {
+        Request request = createRequest("/url")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("WebMotion"));
     }
     
     @Test
-    public void redirectRelativeUrl() throws IOException {
-        String url = getAbsoluteUrl("redirect/relative");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void redirectRelativeUrl() throws IOException, URISyntaxException {
+        Request request = createRequest("/redirect/relative")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
-    public void redirectAbsoluteUrl() throws IOException {
-        String url = getAbsoluteUrl("redirect/absolute");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void redirectAbsoluteUrl() throws IOException, URISyntaxException {
+        Request request = createRequest("/redirect/absolute")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
-    public void forwardRelativeUrl() throws IOException {
-        String url = getAbsoluteUrl("forward");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void forwardRelativeUrl() throws IOException, URISyntaxException {
+        Request request = createRequest("/forward")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
-    public void forwardAbsoluteUrl() throws IOException {
-        String url = getAbsoluteUrl("forward/absolute");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void forwardAbsoluteUrl() throws IOException, URISyntaxException {
+        Request request = createRequest("/forward/absolute")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello world !"));
     }
     
     @Test
-    public void dynamicForward() throws IOException {
-        String url = getAbsoluteUrl("forward/dynamic/get");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicForward() throws IOException, URISyntaxException {
+        Request request = createRequest("/forward/dynamic/get")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute get action"));
     }
     
     @Test
-    public void helloParametersYou() throws IOException {
-        String url = getAbsoluteUrl("helloParameters?who=you");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void helloParametersYou() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloParameters")
+                .addParameter("who", "you")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello you !"));
     }
     
     @Test
-    public void helloParametersMe() throws IOException {
-        String url = getAbsoluteUrl("helloParameters?who=me");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void helloParametersMe() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloParameters")
+                .addParameter("who", "me")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello me !"));
     }
     
     @Test
-    public void helloDefaultParameters() throws IOException {
-        String url = getAbsoluteUrl("helloDefaultParameters");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void helloDefaultParameters() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloDefaultParameters")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello default !"));
     }
     
     @Test
-    public void helloDefaultParametersOther() throws IOException {
-        String url = getAbsoluteUrl("helloDefaultParameters?who=other");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void helloDefaultParametersOther() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloDefaultParameters")
+                .addParameter("who", "other")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello other !"));
     }
     
     @Test
-    public void patternOnlyA() throws IOException {
-        String url = getAbsoluteUrl("pattern/aaaa?value=aaaa");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void patternOnlyA() throws IOException, URISyntaxException {
+        Request request = createRequest("/pattern/aaaa")
+                .addParameter("value", "aaaa")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("The who aaaa and value aaaa contains only letter a"));
     }
     
     @Test
-    public void patternNotOnlyAPath() throws IOException {
-        String url = getAbsoluteUrl("pattern/baaa?value=aaaaa");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void patternNotOnlyAPath() throws IOException, URISyntaxException {
+        Request request = createRequest("/pattern/baaa")
+                .addParameter("value", "aaaaa")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("The who baaa and value aaaaa NOT contains only letter a"));
     }
     
     @Test
-    public void patternNotOnlyAParam() throws IOException {
-        String url = getAbsoluteUrl("pattern/aaaa?value=baaaa");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void patternNotOnlyAParam() throws IOException, URISyntaxException {
+        Request request = createRequest("/pattern/aaaa")
+                .addParameter("value", "baaaa")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("The who aaaa and value baaaa NOT contains only letter a"));
     }
     
     @Test
-    public void loginParameterNamed() throws IOException {
-        String url = getAbsoluteUrl("login?user.name=john&user.passwd=azerty");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void loginParameterNamed() throws IOException, URISyntaxException {
+        Request request = createRequest("/login")
+                .addParameter("user.name", "john")
+                .addParameter("user.passwd", "azerty")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
-    public void loginParameterRenamed() throws IOException {
-        String url = getAbsoluteUrl("login?username=john&userpasswd=azerty");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void loginParameterRenamed() throws IOException, URISyntaxException {
+        Request request = createRequest("/login")
+                .addParameter("username", "john")
+                .addParameter("userpasswd", "azerty")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
-    public void loginParameterExtended() throws IOException {
-        String url = getAbsoluteUrl("auth?name=john&passwd=azerty");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void loginParameterExtended() throws IOException, URISyntaxException {
+        Request request = createRequest("/auth")
+                .addParameter("name", "john")
+                .addParameter("passwd", "azerty")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
-    public void login() throws IOException {
-        String url = getAbsoluteUrl("login?name=john&passwd=azerty");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void login() throws IOException, URISyntaxException {
+        Request request = createRequest("/login")
+                .addParameter("name", "john")
+                .addParameter("passwd", "azerty")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Login with user name : john and passwd azerty"));
     }
     
     @Test
-    public void selectStatic() throws IOException {
-        String url = getAbsoluteUrl("select?param=value");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void selectStatic() throws IOException, URISyntaxException {
+        Request request = createRequest("/select")
+                .addParameter("param", "value")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Select with parameter !"));
     }
     
     @Test
-    public void select() throws IOException {
-        String url = getAbsoluteUrl("select");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void select() throws IOException, URISyntaxException {
+        Request request = createRequest("/select")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Select without parameter !"));
     }
     
     @Test
-    public void dynamicActionGet() throws IOException {
-        String url = getAbsoluteUrl("dynamic/get");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicActionGet() throws IOException, URISyntaxException {
+        Request request = createRequest("/dynamic/get")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute get action"));
     }
     
     @Test
-    public void dynamicActionSet() throws IOException {
-        String url = getAbsoluteUrl("dynamic/set");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicActionSet() throws IOException, URISyntaxException {
+        Request request = createRequest("/dynamic/set")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute set action"));
     }
     
     @Test
-    public void dynamicViewReadme() throws IOException {
-        String url = getAbsoluteUrl("text?file=readme");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicViewReadme() throws IOException, URISyntaxException {
+        Request request = createRequest("/text")
+                .addParameter("file", "readme")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("It is the readme"));
     }
     
     @Test
-    public void dynamicViewChangelog() throws IOException {
-        String url = getAbsoluteUrl("text?file=changelog");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicViewChangelog() throws IOException, URISyntaxException {
+        Request request = createRequest("/text")
+                .addParameter("file", "changelog")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("It is the changelog"));
     }
     
     @Test
-    public void dynamicViewJohn() throws IOException {
-        String url = getAbsoluteUrl("helloView?name=John");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicViewJohn() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloView")
+                .addParameter("name", "John")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello John !"));
     }
     
     @Test
-    public void dynamicViewJack() throws IOException {
-        String url = getAbsoluteUrl("helloView?name=Jack");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicViewJack() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloView")
+                .addParameter("name", "Jack")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello Jack !"));
     }
     
     @Test
-    public void dynamicUrlTutu() throws IOException {
-        String url = getAbsoluteUrl("wikipedia/tutu");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicUrlTutu() throws IOException, URISyntaxException {
+        Request request = createRequest("/wikipedia/tutu")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Tutu"));
     }
     
     @Test
-    public void dynamicUrlTata() throws IOException {
-        String url = getAbsoluteUrl("wikipedia/tata");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void dynamicUrlTata() throws IOException, URISyntaxException {
+        Request request = createRequest("/wikipedia/tata")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Tata"));
     }
     
     @Test
-    public void methodGet() throws IOException {
-        String url = getAbsoluteUrl("person");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void methodGet() throws IOException, URISyntaxException {
+        Request request = createRequest("/person")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Return the person"));
     }
     
     @Test
-    public void methodPost() throws IOException {
-        String url = getAbsoluteUrl("person");
-        HttpPost request = new HttpPost(url);
-        
-        String result = execute(request);
+    public void methodPost() throws IOException, URISyntaxException {
+        Request request = createRequest("/person")
+                .Post();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Save the person"));
     }
     
     @Test
-    public void multiMethodGet() throws IOException {
-        String url = getAbsoluteUrl("video");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void multiMethodGet() throws IOException, URISyntaxException {
+        Request request = createRequest("/video")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Get the media"));
     }
     
     @Test
-    public void multiMethodPost() throws IOException {
-        String url = getAbsoluteUrl("video");
-        HttpPost request = new HttpPost(url);
-        
-        String result = execute(request);
+    public void multiMethodPost() throws IOException, URISyntaxException {
+        Request request = createRequest("/video")
+                .Post();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Get the media"));
     }
     
     @Test
-    public void staticResourceText() throws IOException {
-        String url = getAbsoluteUrl("readme");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void staticResourceText() throws IOException, URISyntaxException {
+        Request request = createRequest("/readme")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Dummy readme"));
     }
     
     @Test
-    public void staticResourceImg() throws IOException {
-        String url = getAbsoluteUrl("img");
-        HttpGet request = new HttpGet(url);
-        
-        String result = execute(request);
+    public void staticResourceImg() throws IOException, URISyntaxException {
+        Request request = createRequest("/img")
+                .Get();
+                
+        String result = executeRequest(request);
         AssertJUnit.assertFalse(result, result.isEmpty());
     }
     

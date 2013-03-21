@@ -25,7 +25,8 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -41,40 +42,40 @@ public class DataRenderIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(DataRenderIT.class);
     
     @Test
-    public void xml() throws IOException {
-        String url = getAbsoluteUrl("xml");
-        HttpGet request = new HttpGet(url);
+    public void xml() throws IOException, URISyntaxException {
+        Request request = createRequest("/xml")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("John"));
         AssertJUnit.assertTrue(result, result.contains("azerty"));
         AssertJUnit.assertTrue(result, result.contains("77"));
     }
     
     @Test
-    public void json() throws IOException {
-        String url = getAbsoluteUrl("json");
-        HttpGet request = new HttpGet(url);
+    public void json() throws IOException, URISyntaxException {
+        Request request = createRequest("/json")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("{\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77}"));
     }
     
     @Test
-    public void jsonp() throws IOException {
-        String url = getAbsoluteUrl("jsonp");
-        HttpGet request = new HttpGet(url);
+    public void jsonp() throws IOException, URISyntaxException {
+        Request request = createRequest("/jsonp")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("test({\"name\":\"John\",\"passwd\":\"azerty\",\"age\":77});"));
     }
     
     @Test
-    public void stringTemplate() throws IOException {
-        String url = getAbsoluteUrl("template");
-        HttpGet request = new HttpGet(url);
+    public void stringTemplate() throws IOException, URISyntaxException {
+        Request request = createRequest("/template")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("bla bla bla ..."));
     }
     

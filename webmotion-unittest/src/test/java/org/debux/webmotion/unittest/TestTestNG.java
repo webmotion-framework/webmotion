@@ -1,11 +1,10 @@
 /*
  * #%L
- * Webmotion in action
- * 
- * $Id$
- * $HeadURL$
+ * WebMotion unit test
+ * $Id:$
+ * $HeadURL:$
  * %%
- * Copyright (C) 2011 Debux
+ * Copyright (C) 2011 - 2013 Debux
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -22,32 +21,21 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.test;
+package org.debux.webmotion.unittest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import org.apache.http.client.fluent.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
-/**
- * Test on mapping section properties.
- * 
- * @author julien
- */
-public class PropertiesMappingIT extends AbstractIT {
+public class TestTestNG extends WebMotionTestNG {
 
-    private static final Logger log = LoggerFactory.getLogger(PropertiesMappingIT.class);
-    
+    @Override
+    protected String getContextPath() {
+        return "src/main/test/resources/webapp";
+    }
+
     @Test
-    public void echo() throws IOException, URISyntaxException {
-        Request request = createRequest("/echo")
-                .Get();
-        
-        String result = executeRequest(request);
-        AssertJUnit.assertTrue(result, result.contains("Hello World by properties !"));
+    public void emptyTest() throws IOException, URISyntaxException {
     }
     
 }

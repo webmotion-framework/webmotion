@@ -25,8 +25,9 @@
 package org.debux.webmotion.test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -42,79 +43,87 @@ public class ExtrasMiscIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(ExtrasMiscIT.class);
     
     @Test
-    public void spring() throws IOException {
-        String url = getAbsoluteUrl("spring");
-        HttpGet request = new HttpGet(url);
+    public void spring() throws IOException, URISyntaxException {
+        Request request = createRequest("/spring")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello Spring !"));
     }
     
     @Test
-    public void sitemesh() throws IOException {
-        String url = getAbsoluteUrl("sitemesh/content");
-        HttpGet request = new HttpGet(url);
+    public void sitemesh() throws IOException, URISyntaxException {
+        Request request = createRequest("/sitemesh/content")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("SiteMesh example site"));
     }
     
     @Test
-    public void noteCreate() throws IOException {
-        String url = getAbsoluteUrl("note/create?content=test");
-        HttpGet request = new HttpGet(url);
+    public void noteCreate() throws IOException, URISyntaxException {
+        Request request = createRequest("/note/create")
+                .addParameter("content", "test")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("test"));
         
         String id = StringUtils.substringBetween(result, "?id=", "\"");
-        url = getAbsoluteUrl("note/incLike?id=" + id);
-        request = new HttpGet(url);
-     
-        result = execute(request);
+        request = createRequest("/note/incLike")
+                .addParameter("id", id)
+                .Get();
+        
+        result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("<td>1</td>"));
         
-        url = getAbsoluteUrl("note/delete?id=" + id);
-        request = new HttpGet(url);
-     
-        result = execute(request);
+        request = createRequest("/note/delete")
+                .addParameter("id", id)
+                .Get();
+        
+        result = executeRequest(request);
         AssertJUnit.assertFalse(result, result.contains(id));
     }
     
     @Test
-    public void shiroLogin() throws IOException {
-        String url = getAbsoluteUrl("auth/admin/index");
-        HttpGet request = new HttpGet(url);
+    public void shiroLogin() throws IOException, URISyntaxException {
+        Request request = createRequest("/auth/admin/index")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Login"));
     }
     
     @Test
-    public void shiroError() throws IOException {
-        String url = getAbsoluteUrl("auth/admin/index?username=aa&password=aa");
-        HttpGet request = new HttpGet(url);
-     
-        String result = execute(request);
+    public void shiroError() throws IOException, URISyntaxException {
+        Request request = createRequest("/auth/admin/index")
+                .addParameter("username", "aa")
+                .addParameter("password", "aa")
+                .Get();
+        
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("The username or password is incorrect !"));
     }
     
-    
     @Test
-    public void shiroForbidden() throws IOException {
-        String url = getAbsoluteUrl("auth/admin/index?username=guest&password=guest");
-        HttpGet request = new HttpGet(url);
-     
-        String result = execute(request);
+    public void shiroForbidden() throws IOException, URISyntaxException {
+        Request request = createRequest("/auth/admin/index")
+                .addParameter("username", "guest")
+                .addParameter("password", "guest")
+                .Get();
+        
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Access denied"));
     }
     
     @Test
-    public void shiroAuthorized() throws IOException {
-        String url = getAbsoluteUrl("auth/guest/index?username=guest&password=guest");
-        HttpGet request = new HttpGet(url);
-     
-        String result = execute(request);
+    public void shiroAuthorized() throws IOException, URISyntaxException {
+        Request request = createRequest("/auth/guest/index")
+                .addParameter("username", "guest")
+                .addParameter("password", "guest")
+                .Get();
+        
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Guest page"));
     }
 

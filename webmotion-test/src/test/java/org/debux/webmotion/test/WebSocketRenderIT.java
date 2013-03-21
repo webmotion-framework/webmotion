@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.test;
 
+import org.debux.webmotion.unittest.RequestBuilder;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketTextListener;
@@ -43,15 +44,17 @@ public class WebSocketRenderIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(WebSocketRenderIT.class);
 
     @Override
-    public String getAbsoluteUrl(String url) {
-        return super.getAbsoluteUrl(url).replaceFirst("http", "ws");
+    public RequestBuilder createRequest(String url) {
+        return super.createRequest(url).setScheme("ws");
     }
     
     @Test
     public void basic() throws Exception {
-        AsyncHttpClient client = new AsyncHttpClient();
+        String url = createRequest("/echoChat/ws")
+                .toString();
 
-        WebSocket websocket = client.prepareGet(getAbsoluteUrl("echoChat/ws"))
+        AsyncHttpClient client = new AsyncHttpClient();
+        WebSocket websocket = client.prepareGet(url)
             .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
             new WebSocketTextListener() {
                 @Override
@@ -82,9 +85,12 @@ public class WebSocketRenderIT extends AbstractIT {
 
     @Test
     public void json() throws Exception {
-        AsyncHttpClient client = new AsyncHttpClient();
+        String url = createRequest("/ping/ws")
+                .addParameter("who", "test")
+                .toString();
 
-        WebSocket websocket = client.prepareGet(getAbsoluteUrl("ping/ws?who=test"))
+        AsyncHttpClient client = new AsyncHttpClient();
+        WebSocket websocket = client.prepareGet(url)
             .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
             new WebSocketTextListener() {
                 @Override

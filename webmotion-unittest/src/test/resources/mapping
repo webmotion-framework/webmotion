@@ -1,0 +1,2 @@
+[actions]
+GET         /                                view:index.html

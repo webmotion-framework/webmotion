@@ -24,8 +24,10 @@
  */
 package org.debux.webmotion.test;
 
+import org.debux.webmotion.unittest.StringResponseHandler;
 import java.io.IOException;
-import org.apache.http.client.methods.HttpGet;
+import java.net.URISyntaxException;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -41,38 +43,38 @@ public class ErrorMappingIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(ErrorMappingIT.class);
     
     @Test
-    public void codeHttp() throws IOException {
-        String url = getAbsoluteUrl("parse");
-        HttpGet request = new HttpGet(url);
+    public void codeHttp() throws IOException, URISyntaxException {
+        Request request = createRequest("/parse")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Error server with code 500"));
     }
     
     @Test
-    public void exception() throws IOException {
-        String url = getAbsoluteUrl("service");
-        HttpGet request = new HttpGet(url);
+    public void exception() throws IOException, URISyntaxException {
+        Request request = createRequest("/service")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Error during the call"));
     }
     
     @Test
-    public void all() throws IOException {
-        String url = getAbsoluteUrl("notfound");
-        HttpGet request = new HttpGet(url);
+    public void all() throws IOException, URISyntaxException {
+        Request request = createRequest("/notfound")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Error server with code 404"));
     }
     
     @Test
-    public void view() throws IOException {
-        String url = getAbsoluteUrl("npe");
-        HttpGet request = new HttpGet(url);
+    public void view() throws IOException, URISyntaxException {
+        Request request = createRequest("/npe")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Error on the server"));
     }
     

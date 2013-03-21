@@ -24,10 +24,14 @@
  */
 package org.debux.webmotion.test;
 
+import org.debux.webmotion.unittest.StringResponseHandler;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -48,27 +52,27 @@ public class BasicRenderIT extends AbstractIT {
     private static final Logger log = LoggerFactory.getLogger(BasicRenderIT.class);
     
     @Test
-    public void view() throws IOException {
-        String url = getAbsoluteUrl("index");
-        HttpGet request = new HttpGet(url);
+    public void view() throws IOException, URISyntaxException {
+        Request request = createRequest("/index")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Lorem ipsum"));
     }
     
     @Test
-    public void model() throws IOException {
-        String url = getAbsoluteUrl("helloModel");
-        HttpGet request = new HttpGet(url);
+    public void model() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloModel")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello WebMotion !"));
     }
     
     @Test
-    public void url() throws IOException {
-        String url = getAbsoluteUrl("save");
-        HttpGet request = new HttpGet(url);
+    public void url() throws IOException, URISyntaxException {
+        URI uri = createRequest("/save").build();
+        HttpGet request = new HttpGet(uri);
         
         HttpParams params = new BasicHttpParams();
         HttpClientParams.setRedirecting(params, false);
@@ -84,87 +88,84 @@ public class BasicRenderIT extends AbstractIT {
     }
     
     @Test
-    public void action() throws IOException {
-        String url = getAbsoluteUrl("first");
-        HttpGet request = new HttpGet(url);
+    public void action() throws IOException, URISyntaxException {
+        Request request = createRequest("/first")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Next action with value"));
         AssertJUnit.assertTrue(result, result.contains("test"));
     }
     
     @Test
-    public void actionForward() throws IOException {
-        String url = getAbsoluteUrl("internal");
-        HttpGet request = new HttpGet(url);
+    public void actionForward() throws IOException, URISyntaxException {
+        Request request = createRequest("/internal")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Execute internal"));
     }
     
     @Test
-    public void absoluteRedirect() throws IOException {
-        String url = getAbsoluteUrl("redirect");
-        HttpGet request = new HttpGet(url);
+    public void absoluteRedirect() throws IOException, URISyntaxException {
+        Request request = createRequest("/redirect")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Hello internal !"));
     }
     
     @Test
-    public void content() throws IOException {
-        String url = getAbsoluteUrl("content");
-        HttpGet request = new HttpGet(url);
+    public void content() throws IOException, URISyntaxException {
+        Request request = createRequest("/content")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Content"));
     }
     
     @Test
-    public void stream() throws IOException {
-        String url = getAbsoluteUrl("stream");
-        HttpGet request = new HttpGet(url);
+    public void stream() throws IOException, URISyntaxException {
+        Request request = createRequest("/stream")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
     @Test
-    public void download() throws IOException {
-        String url = getAbsoluteUrl("application/download");
-        HttpGet request = new HttpGet(url);
+    public void download() throws IOException, URISyntaxException {
+        Request request = createRequest("/application/download")
+                .Get();
         
-        String result = execute(request);
+        String result = executeRequest(request);
         AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
     @Test
-    public void reload() throws IOException {
-        String url = getAbsoluteUrl("reload");
-        HttpGet request = new HttpGet(url);
-        String result = execute(request);
+    public void reload() throws IOException, URISyntaxException {
+        Request request = createRequest("/reload")
+                .Get();
+        
+        String result = executeRequest(request);
         AssertJUnit.assertTrue(result, result.contains("Error server with code 500"));
     }
     
     @Test
-    public void error() throws IOException {
-        String url = getAbsoluteUrl("forbidden");
-        HttpGet request = new HttpGet(url);
+    public void error() throws IOException, URISyntaxException {
+        int statusCode = createRequest("/forbidden")
+                .Get()
+                .execute().returnResponse().getStatusLine().getStatusCode();
         
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response = client.execute(request);
-        int statusCode = response.getStatusLine().getStatusCode();
         AssertJUnit.assertEquals(HttpServletResponse.SC_FORBIDDEN, statusCode);
     }
     
     @Test
-    public void status() throws IOException {
-        String url = getAbsoluteUrl("nocontent");
-        HttpGet request = new HttpGet(url);
+    public void status() throws IOException, URISyntaxException {
+        int statusCode = createRequest("/nocontent")
+                .Get()
+                .execute().returnResponse().getStatusLine().getStatusCode();
         
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response = client.execute(request);
-        int statusCode = response.getStatusLine().getStatusCode();
         AssertJUnit.assertEquals(HttpServletResponse.SC_NO_CONTENT, statusCode);
     }
     
