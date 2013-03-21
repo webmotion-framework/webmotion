@@ -395,7 +395,7 @@ public class HttpContext {
         }
         
         // Delete jsessionid
-        url = url.replaceFirst(";jsessionid=(\\w)*($|\\?|#)", "");
+        url = url.replaceFirst(";(jsessionid|JSESSIONID)=[\\w-]*($|\\?|#)", "");
         
         // Delete context path
         String contextPath = request.getContextPath();
