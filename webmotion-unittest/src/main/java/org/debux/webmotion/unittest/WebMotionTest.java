@@ -23,16 +23,30 @@
  */
 package org.debux.webmotion.unittest;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import static org.debux.webmotion.unittest.WebMotionJUnit.isStarted;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-public class WebMotionTest {
+/**
+ * Abstract class uses to start/stop Jetty serveur.
+ * 
+ * @author julien
+ */
+public abstract class WebMotionTest {
 
+    static AtomicBoolean isStarted = new AtomicBoolean(false);
+    
     protected Server server;
 
-    protected void startWebapp() throws Exception {
+    /**
+     * Start Jetty serveur.
+     * 
+     * @throws Exception 
+     */
+    protected void startServer() throws Exception {
         server = new Server();
         
         int port = getPort();
@@ -51,20 +65,88 @@ public class WebMotionTest {
         server.start();
     }
 
-    protected void stopWebapp() throws Exception {
+    /**
+     * Stop Jetty server.
+     * 
+     * @throws Exception 
+     */
+    protected void stopServer() throws Exception {
         server.stop();
     }
     
+    /**
+     * Start the serveur and stop this when the thread is shutdown.
+     * 
+     * @throws Exception 
+     */
+    public void runServer() throws Exception {
+        boolean value = isStarted.getAndSet(true);
+        if (!value) {
+            startServer();
+            
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        stopServer();
+                        
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                        
+                    } finally {
+                        isStarted.set(false);
+                    }
+                }
+            });
+        }
+    }
+    
+    /**
+     * @return port
+     */
     protected int getPort() {
         return 9999;
     }
     
+    /**
+     * @return context path
+     */
     protected String getContextPath() {
         return "/";
     }
     
+    /**
+     * @return resources war location
+     */
     protected String getWar() {
         return "src/main/webapp";
+    }
+    
+    /**
+     * Create a request for fluent API from httpcomponent.
+     * @param url
+     * @return 
+     */
+    public RequestBuilder createRequest(String url) {
+        String contextPath = getContextPath();
+        
+        String path;
+        if (contextPath.endsWith("/") && url.startsWith("/")) {
+            path = getContextPath() + url.substring(1);
+            
+        } else if (contextPath.endsWith("/") ^ url.startsWith("/")) {
+            path = getContextPath() + url;
+            
+        } else {
+            path = getContextPath() + "/" + url;
+        }
+        
+        RequestBuilder builder = (RequestBuilder) new RequestBuilder()
+                .setScheme("http")
+                .setHost("localhost")
+                .setPort(getPort())
+                .setPath(path);
+        return builder;
     }
     
 }

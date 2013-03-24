@@ -23,19 +23,18 @@
  */
 package org.debux.webmotion.unittest;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 
+/**
+ * Start Jetty server during JUnit.
+ * 
+ * @author julien
+ */
 public class WebMotionJUnit extends WebMotionTest {
-
-    @BeforeClass
-    protected void setUp() throws Exception {
-        startWebapp();
-    }
     
-    @AfterClass
-    protected void tearDown() throws Exception {
-        stopWebapp();
+    @Before
+    public void launchServer() throws Exception {
+        runServer();
     }
     
 }

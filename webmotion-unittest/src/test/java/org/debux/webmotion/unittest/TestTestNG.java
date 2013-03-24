@@ -25,17 +25,27 @@ package org.debux.webmotion.unittest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
+/**
+ * Verify you can launch a request for TestNG test.
+ * 
+ * @author julien
+ */
 public class TestTestNG extends WebMotionTestNG {
 
     @Override
-    protected String getContextPath() {
-        return "src/main/test/resources/webapp";
+    protected String getWar() {
+        return "src/test/resources/webapp";
     }
 
     @Test
-    public void emptyTest() throws IOException, URISyntaxException {
+    public void testRequest() throws IOException, URISyntaxException {
+        String result = createRequest("/").Get()
+                .execute().returnContent().asString();
+        
+        AssertJUnit.assertTrue(result.contains("Index"));
     }
     
 }

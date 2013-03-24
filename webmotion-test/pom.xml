@@ -49,12 +49,6 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webmotion-unittest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>webmotion-extra-jpa</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -165,6 +159,13 @@
         </dependency>
         
         <!-- Test -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webmotion-unittest</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>

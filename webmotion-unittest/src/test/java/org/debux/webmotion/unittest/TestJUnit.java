@@ -23,15 +23,33 @@
  */
 package org.debux.webmotion.unittest;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/**
+ * Verify you can launch a request for JUnit test.
+ * 
+ * @author julien
+ */
 @RunWith(JUnit4.class)
 public class TestJUnit extends WebMotionJUnit {
     
+    @Override
+    protected String getWar() {
+        return "src/test/resources/webapp";
+    }
+
     @Test
-    public void emptyTest() {
+    public void testRequest() throws IOException, URISyntaxException {
+        String result = createRequest("/").Get()
+                .execute().returnContent().asString();
+        
+        assertTrue(result.contains("Index"));
     }
     
 }

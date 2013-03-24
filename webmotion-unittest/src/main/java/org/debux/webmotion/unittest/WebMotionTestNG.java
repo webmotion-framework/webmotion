@@ -23,19 +23,18 @@
  */
 package org.debux.webmotion.unittest;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
+/**
+ * Start Jetty server during TestNG.
+ * 
+ * @author julien
+ */
 public class WebMotionTestNG extends WebMotionTest {
 
-    @BeforeClass
-    protected void setUp() throws Exception {
-        startWebapp();
-    }
-    
-    @AfterClass
-    protected void tearDown() throws Exception {
-        stopWebapp();
+    @BeforeMethod
+    protected void launchServer() throws Exception {
+        startServer();
     }
     
 }
