@@ -50,6 +50,7 @@
         
         <menu name="Projects">
             <item name="Server" href="/webmotion/project-summary.html" />
+            <item name="Test unit" href="/webmotion-testunit/project-summary.html" />
             <item name="Test" href="/webmotion-test/project-summary.html" />
             <item name="Archetype" href="/webmotion-archetype/project-summary.html" />
             <item name="WikiMotion" href="/wikimotion/project-summary.html" />
