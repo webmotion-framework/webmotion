@@ -1121,6 +1121,134 @@ public Render progress(FileProgressListener listener) {
 }
 </pre>
 
+<h2 class="page-header" id="tu">Tests unitaires</h2>
+<p>
+    Vous pouvez effectuer des tests unitaires pour vérifier le bon fonctionnement 
+    de vos actions. Pour cela il faut rajouter la dépendance suivantes en scope 
+    <code>test</code> dans votre projet :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-unittest&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Pour faire fonctionner les tests, WebMotion utilise le serveur d'application <a href="http://www.eclipse.org/jetty/">Jetty</a>. 
+    Le serveur est démarré au début des tests. Les tests unitaires sont compatible 
+    <a href="http://junit.org/">JUnit</a> et <a href="http://testng.org">TestNG</a>.
+</p>
+
+<h3 id="junit">JUnit</h3>
+<p>
+    Pour écrire les tests en <a href="http://junit.org/">JUnit</a>, il vous faut ajouter la dépendance sur la libraire JUnit.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.11&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ensuite il faut hériter de la classe WebMotionJUnit :
+</p>
+<pre class="prettyprint">
+@RunWith(JUnit4.class)
+public class Example extends WebMotionJUnit {
+    
+    @Test
+    public void testRequest() {
+        // write the test
+    }
+    
+}
+</pre>
+
+<h3 id="testng">TestNG</h3>
+<p>
+    Pour écrire les tests en <a href="http://testng.org">TestNG</a>, il vous faut ajouter la dépendance sur la libraire TestNG.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.testng&lt;/groupId&gt;
+    &lt;artifactId&gt;testng&lt;/artifactId&gt;
+    &lt;version&gt;6.8&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ensuite il faut hériter de la classe WebMotionTestNG :
+</p>
+<pre class="prettyprint">
+public class Example extends WebMotionTestNG {
+
+    @Test
+    public void testRequest() {
+        // write the test
+    }
+    
+}
+</pre>
+
+<h3 id="hc">Apache HttpComponents</h3>
+<p>
+    Pour écrire le test en soit, vous pouvez utiliser un client HTTP au choix.
+    WebMotion préconise l'utilisation <a href="http://hc.apache.org/">HttpComponents</a> d'Apache. Le framework fourni 
+    des utilitaire pour faciliter l'utilisation, c'est à dire sur la création de 
+    l'url et la création de la requête. Vous avez une méthode <code>createRequest</code> 
+    qui vous permet de créer une requête sans contexte.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Exemple de création d'une requête GET :
+</p>
+<pre class="prettyprint">
+String result = createRequest("/index")
+        .addParameter("query", "test")
+        .Get()
+        .execute()
+        .returnContent().asString();
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Exemple de création d'une requête POST :
+</p>
+<pre class="prettyprint">
+String result = createRequest("/index")
+        .Post()
+        .bodyForm(
+            Form.form()
+                .add("username", "vip")
+                .add("password", "secret")
+                .build()
+        )
+        .execute()
+        .returnContent().asString();
+</pre>
+
+<h3 id="config">Configuration</h3>
+<p>
+    Vous pouvez configurer différents éléments en redéfinnissant les méthodes de 
+    la classe abstraite. Attention vous ne pouvez pas avoir des configurations 
+    différentes dans les mêmes tests.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Exemple de changement du port :
+</p>
+<pre class="prettyprint">
+@Override
+protected int getPort() {
+    return 8080;
+}
+</pre>
+
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
     <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
