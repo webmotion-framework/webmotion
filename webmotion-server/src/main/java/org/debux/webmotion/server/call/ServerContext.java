@@ -38,6 +38,7 @@ import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
 import org.debux.webmotion.server.parser.MappingChecker;
+import org.debux.webmotion.server.parser.DefaultMappingParser;
 import org.debux.webmotion.server.parser.MappingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +100,10 @@ public class ServerContext {
     protected String secret;
     
     /** Main mapping file name to parse */
-    protected String[] mappingFileName = {"/mapping"};
+    protected String[] mappingFileNames = {"/mapping"};
+    
+    /** Parsers for mapping file */
+    protected String[] mappingParsers = {DefaultMappingParser.class.getName()};
     
     /** Absolute path on webapp */
     protected String webappPath;
@@ -138,8 +142,17 @@ public class ServerContext {
         this.webappPath = servletContext.getRealPath("/");
                 
         // Read the mapping in the current project
-        MappingParser parser = getMappingParser();
-        mapping = parser.parse(mappingFileName);
+        MappingParser[] parsers = getMappingParsers();
+        for (MappingParser parser : parsers) {
+            mapping = parser.parse(mappingFileNames);
+            if (mapping != null) {
+                break;
+            }
+        }
+        if (mapping == null) {
+            throw new WebMotionException("No mapping found for " + Arrays.toString(mappingFileNames) 
+                    + " in " + Arrays.toString(mappingParsers));
+        }
         
         // Fire onStart
         listeners = new ArrayList<WebMotionServerListener>();
@@ -242,10 +255,35 @@ public class ServerContext {
     }
     
     /**
-     * @return the instance of mapping parser
+     * @return the instance of mapping parsers
      */
-    protected MappingParser getMappingParser() {
-        return new MappingParser();
+    protected MappingParser[] getMappingParsers() {
+        MappingParser[] parsers = new MappingParser[mappingParsers.length];
+        
+        int index = 0;
+        for (String className : mappingParsers) {
+            try {
+                Class<MappingParser> parserClasse = (Class<MappingParser>) Class.forName(className);
+                MappingParser parser = parserClasse.newInstance();
+                parsers[index ++] = parser;
+
+            } catch (IllegalAccessException iae) {
+                throw new WebMotionException("Error during create server listener " + className, iae);
+            } catch (InstantiationException ie) {
+                throw new WebMotionException("Error during create server listener " + className, ie);
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create server listener " + className, cnfe);
+            }
+        }
+        return parsers;
+    }
+
+    /**
+     * Set the parsers for the mapping file.
+     * @param parsers classe names
+     */
+    public void setMappingParsers(String[] parsers) {
+        this.mappingParsers = parsers;
     }
         
     /**
@@ -450,17 +488,17 @@ public class ServerContext {
     /**
      * @return the mapping file name use to read the mapping/
      */
-    public String[] getMappingFileName() {
-        return mappingFileName;
+    public String[] getMappingFileNames() {
+        return mappingFileNames;
     }
 
     /**
      * Set the mapping file name use to read the mapping.
      * 
-     * @param mappingFileName 
+     * @param mappingFileNames 
      */
-    public void setMappingFileName(String[] mappingFileName) {
-        this.mappingFileName = mappingFileName;
+    public void setMappingFileNames(String[] mappingFileNames) {
+        this.mappingFileNames = mappingFileNames;
     }
 
     /**

@@ -39,7 +39,7 @@ import org.parboiled.annotations.SuppressSubnodes;
  * @author julien
  */
 @BuildParseTree
-public class ParboiledMappingParser extends BaseParser {
+public class ParboiledGrammar extends BaseParser {
     
     protected Mapping mapping;
     
@@ -144,7 +144,8 @@ public class ParboiledMappingParser extends BaseParser {
                 "server.controller.scope",
                 "server.listener.class",
                 "server.main.handler.class",
-                "server.secret");
+                "server.secret",
+                "default.render");
     }
     
     @SuppressSubnodes

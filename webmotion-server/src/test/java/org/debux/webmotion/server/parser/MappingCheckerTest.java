@@ -203,10 +203,10 @@ public class MappingCheckerTest {
     
     @Test
     public void testCheckMapping() {
-        ClassLoader classLoader = MappingParserTest.class.getClassLoader();
+        ClassLoader classLoader = DefaultMappingParserTest.class.getClassLoader();
         URL resource = classLoader.getResource("mapping/webmotion-test.mapping");
         
-        MappingParser parser = new MappingParser();
+        DefaultMappingParser parser = new DefaultMappingParser();
         Mapping mapping = parser.parse(resource);
         
         ServerContext context = new ServerContext();

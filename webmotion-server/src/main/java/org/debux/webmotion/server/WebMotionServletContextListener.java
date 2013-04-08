@@ -48,6 +48,9 @@ public class WebMotionServletContextListener implements ServletContextListener {
     /** Filter parameter to configure mapping file name by default is mapping */
     protected final static String PARAM_MAPPING_FILE_NAME = "wm.mapping.file.name";
             
+    /** Filter parameter to configure parsers for mapping file name by default is only @DefaultMappingParser */
+    protected final static String PARAM_MAPPING_PARSERS = "wm.mapping.parsers";
+            
     /** Filter parameter to configure excludes path for WebMotion. The value is separated by comma */
     protected final static String PARAM_EXCLUDE_PATHS = "wm.exclude.paths";
             
@@ -60,7 +63,13 @@ public class WebMotionServletContextListener implements ServletContextListener {
         // Get file name mapping in context param
         String mappingFileNameParam = servletContext.getInitParameter(PARAM_MAPPING_FILE_NAME);
         if (mappingFileNameParam != null && !mappingFileNameParam.isEmpty()) {
-            serverContext.setMappingFileName(mappingFileNameParam.split(","));
+            serverContext.setMappingFileNames(mappingFileNameParam.split(","));
+        }
+        
+        // Get file name mapping in context param
+        String parsersNameParam = servletContext.getInitParameter(PARAM_MAPPING_PARSERS);
+        if (parsersNameParam != null && !parsersNameParam.isEmpty()) {
+            serverContext.setMappingParsers(parsersNameParam.split(","));
         }
         
         // Get exclude path in context param

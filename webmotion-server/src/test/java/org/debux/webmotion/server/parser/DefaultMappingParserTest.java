@@ -36,9 +36,9 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class MappingParserTest {
+public class DefaultMappingParserTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MappingParserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultMappingParserTest.class);
 
     @Factory
     public Object[] testFactory() {
@@ -51,16 +51,16 @@ public class MappingParserTest {
     public class RunGrammar {
         
         protected String fileName;
-        protected MappingParser parser;
+        protected DefaultMappingParser parser;
 
         public RunGrammar(String fileName) {
             this.fileName = fileName;
-            this.parser = new MappingParser();
+            this.parser = new DefaultMappingParser();
         }
         
         @Test
         public void testParser() throws IOException {
-            ClassLoader classLoader = MappingParserTest.class.getClassLoader();
+            ClassLoader classLoader = DefaultMappingParserTest.class.getClassLoader();
             URL resource = classLoader.getResource(fileName);
             parser.parse(resource);
         }

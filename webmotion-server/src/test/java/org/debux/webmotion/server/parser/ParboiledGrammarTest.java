@@ -46,9 +46,9 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class ParboiledParserTest {
+public class ParboiledGrammarTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ParboiledParserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ParboiledGrammarTest.class);
 
     @Factory
     public Object[] testFactory() {
@@ -62,7 +62,7 @@ public class ParboiledParserTest {
     public void testError() throws IOException {
         String content = "[actions]\nGET test=value";
 
-        ParboiledMappingParser parser = Parboiled.createParser(ParboiledMappingParser.class);
+        ParboiledGrammar parser = Parboiled.createParser(ParboiledGrammar.class);
         ReportingParseRunner runner = new ReportingParseRunner(parser.mapping());
         ParsingResult<?> result = runner.run(content);
 
@@ -81,11 +81,11 @@ public class ParboiledParserTest {
         
         @Test
         public void testParser() throws IOException {
-            ClassLoader classLoader = ParboiledParserTest.class.getClassLoader();
+            ClassLoader classLoader = ParboiledGrammarTest.class.getClassLoader();
             InputStream input = classLoader.getResourceAsStream(fileName);
             String content = IOUtils.toString(input);
             
-            ParboiledMappingParser parser = Parboiled.createParser(ParboiledMappingParser.class);
+            ParboiledGrammar parser = Parboiled.createParser(ParboiledGrammar.class);
             ReportingParseRunner runner = new ReportingParseRunner(parser.mapping());
             ParsingResult<?> result = runner.run(content);
             
