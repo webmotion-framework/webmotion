@@ -25,6 +25,7 @@
 package org.debux.webmotion.server.handler;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -251,8 +252,9 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
                 Object[] toArray = parameters.values().toArray();
 
                 Method actionMethod = executor.getMethod();
-                Render render = (Render) actionMethod.invoke(instance, toArray);
-
+                Object returnMethod = actionMethod.invoke(instance, toArray);
+                Render render = processRender(mapping, returnMethod);
+                
                 // Check if is the last executor is finished to remove the thread local
                 List<Executor> filters = call.getFilters();
                 if (filters.isEmpty()) {
@@ -412,6 +414,40 @@ public class ExecutorMethodInvokerHandler extends AbstractHandler implements Web
             for (WebMotionHandler handler : executorHandlers) {
                 handler.handle(mapping, call);
             }
+        }
+
+        /**
+         * Return the render if the returnMethod is a render otherwise return an
+         * instance of defaut render else null.
+         * 
+         * @param mapping current mapping
+         * @param returnMethod object return by controller's method
+         * @return render
+         */
+        protected Render processRender(Mapping mapping, Object returnMethod) {
+            Config config = mapping.getConfig();
+            String defaultRender = config.getDefaultRender();
+            
+            if (returnMethod instanceof Render) {
+                return (Render) returnMethod;
+
+            } else if (defaultRender != null && !"".equals(defaultRender)) {
+                try {
+                    Class<?> clazz = Class.forName(defaultRender);
+                    Constructor constructor = clazz.getConstructors()[0];
+                    Render render = (Render) constructor.newInstance(returnMethod);
+                    return render;
+
+                } catch (Exception ex) {
+                    Executor executor = call.getCurrent();
+                    throw new WebMotionException("Error during create render " + defaultRender
+                        + " for " + executor.getClazz().getName() 
+                        + " on method " + executor.getMethod().getName(),
+                        ex, executor.getRule());
+                }
+            }
+            
+            return null;
         }
     }
 }

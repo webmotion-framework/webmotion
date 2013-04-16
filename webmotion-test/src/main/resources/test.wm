@@ -26,6 +26,7 @@
 package.views=WEB-INF/org.debux.webmotion.test
 package.base=org.debux.webmotion.test
 server.listener.class=org.debux.webmotion.test.Listener
+default.render=org.debux.webmotion.server.render.DefaultRender
 
 [conf.properties]
 text = Hello World by properties !
@@ -155,3 +156,4 @@ GET         /echoChat/ws                                EchoChat.createSocket
 GET         /ping/index                                 view:ping.jsp
 GET         /ping/ws                                    Ping.createSocket
 *           /chain/log                                  Log.info
+GET         /api                                        Api.get

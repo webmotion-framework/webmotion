@@ -42,11 +42,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Showcase extends WebMotionController {
 
-    protected static final int INDEX_PROPERTIES = 6;
-    protected static final int INDEX_EXTENSIONS = 11;
-    protected static final int INDEX_FILTERS = 21;
-    protected static final int INDEX_ERRORS = 28;
-    protected static final int INDEX_ACTIONS = 36;
+    protected static final int INDEX_PROPERTIES = 7;
+    protected static final int INDEX_EXTENSIONS = 12;
+    protected static final int INDEX_FILTERS = 22;
+    protected static final int INDEX_ERRORS = 29;
+    protected static final int INDEX_ACTIONS = 37;
     
     protected static final String SECTION_PROPERTIES = "properties";
     protected static final String SECTION_ACTIONS = "actions";

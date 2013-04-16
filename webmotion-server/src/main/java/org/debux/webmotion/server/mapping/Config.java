@@ -62,6 +62,7 @@ public class Config {
     public static String SERVER_LISTENER_CLASS = "server.listener.class";
     public static String SERVER_MAIN_HANDLER_CLASS = "server.main.handler.class";
     public static String SERVER_SECRET = "server.secret";
+    public static String DEFAULT_RENDER = "default.render";
     
     /** The package name where the view is searched */
     protected String packageViews = "";
@@ -102,6 +103,9 @@ public class Config {
     /** Secret use to manage secure on server */
     protected String secret;
     
+    /** Default render use when an object is return in method */
+    protected String defaultRender;
+    
     /** Default contructor. */
     public Config() {
     }
@@ -141,6 +145,8 @@ public class Config {
                 throw new WebMotionException("Secret is too short, the value must contain more 31 characters.");
             }
             setSecret(value);
+        } else if (DEFAULT_RENDER.equals(name)) {
+            setDefaultRender(value);
         }
     }
     
@@ -256,6 +262,14 @@ public class Config {
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public String getDefaultRender() {
+        return defaultRender;
+    }
+
+    public void setDefaultRender(String defaultRender) {
+        this.defaultRender = defaultRender;
     }
     
 }
