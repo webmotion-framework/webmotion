@@ -122,9 +122,9 @@
     </contributors>
     
     <scm>
-        <url>http://projects.debux.org/projects/webmotion</url>
-        <connection>scm:svn:http://svn.debux.org/webmotion</connection>
-        <developerConnection>scm:svn:https://svn.debux.org/webmotion/trunk</developerConnection>
+        <connection>scm:git:git@gitorious.org:webmotion/webmotion.git</connection>
+        <developerConnection>scm:git:git@gitorious.org:webmotion/webmotion.git</developerConnection>
+        <url>git@gitorious.org:webmotion/webmotion.git</url>
     </scm>
     
     <issueManagement>
