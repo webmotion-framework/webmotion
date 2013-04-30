@@ -1200,11 +1200,10 @@ public class Example extends WebMotionTestNG {
 
 <h3 id="hc">Apache HttpComponents</h3>
 <p>
-    Pour écrire le test en soit, vous pouvez utiliser un client HTTP au choix.
-    WebMotion préconise l'utilisation <a href="http://hc.apache.org/">HttpComponents</a> d'Apache. Le framework fourni 
-    des utilitaire pour faciliter l'utilisation, c'est à dire sur la création de 
-    l'url et la création de la requête. Vous avez une méthode <code>createRequest</code> 
-    qui vous permet de créer une requête sans contexte.
+    Pour écrire le contenu du test, vous pouvez utiliser un client HTTP au choix.
+    WebMotion préconise l'utilisation <a href="http://hc.apache.org/">HttpComponents</a> d'Apache.
+    WebMotion vous guide dans l'utilisation de la librairie d'Apache en vous proposant des 
+    utilitaires pour la création de l'url et la création de la requête. 
 </p>
 <p>
     <span class="label label-info">Exemple</span> Exemple de création d'une requête GET :
@@ -1237,7 +1236,7 @@ String result = createRequest("/index")
 <p>
     Vous pouvez configurer différents éléments en redéfinnissant les méthodes de 
     la classe abstraite. Attention vous ne pouvez pas avoir des configurations 
-    différentes dans les mêmes tests.
+    différentes dans le même jeu de tests.
 </p>
 <p>
     <span class="label label-info">Exemple</span> Exemple de changement du port :
