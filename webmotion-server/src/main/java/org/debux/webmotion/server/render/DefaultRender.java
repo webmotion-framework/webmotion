@@ -34,7 +34,7 @@ import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * Render use to define a default render fro the method in controller which return 
+ * Render use to define a default render for the method in controller which return 
  * an object either a render object. The DefautRender get a model to use the object 
  * returned by the method to make the render. By defaut return the result to json object.
  * 
