@@ -48,7 +48,7 @@ public class InjectorListener implements WebMotionServerListener {
         // Declare injector
         context.addInjector(new Injector() {
             @Override
-            public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+            public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                 if (Config.class.isAssignableFrom(type)) {
                     ServerContext serverContext = call.getContext().getServerContext();
                     Object config = serverContext.getAttribute("config");

@@ -71,7 +71,7 @@ public class JpaListener implements WebMotionServerListener {
      */
     public static class EntityTransactionManager implements Injector {
         @Override
-        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+        public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
             if (EntityTransaction.class.isAssignableFrom(type)) {
                 HttpContext httpContext = call.getContext();
                 HttpServletRequest request = httpContext.getRequest();
@@ -86,7 +86,7 @@ public class JpaListener implements WebMotionServerListener {
      */
     public static class EntityManagerInjector implements Injector {
         @Override
-        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+        public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
             if (EntityManager.class.isAssignableFrom(type)) {
                 HttpContext httpContext = call.getContext();
                 HttpServletRequest request = httpContext.getRequest();
@@ -101,7 +101,7 @@ public class JpaListener implements WebMotionServerListener {
      */
     public static class GenericDaoInjector implements Injector {
         @Override
-        public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+        public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
             if (GenericDAO.class.isAssignableFrom(type)) {
                 HttpContext httpContext = call.getContext();
                 HttpServletRequest request = httpContext.getRequest();

@@ -105,7 +105,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
             parameters.put(name, null);
             
             for (Injector injector : injectors) {
-                Object inject = injector.getValue(mapping, call, type, generic);
+                Object inject = injector.getValue(mapping, call, name, type, generic);
 
                 if (inject != null) {
                     log.debug("Inject " + name + " for type " + type + " the value " + inject);
@@ -132,7 +132,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
          * @param generic of type
          * @return value
          */
-        Object getValue(Mapping mapping, Call call, Class<?> type, Type generic);
+        Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (Mapping.class.isAssignableFrom(type)) {
                         return mapping;
                     }
@@ -152,7 +152,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (Config.class.isAssignableFrom(type)) {
                         return mapping.getConfig();
                     }
@@ -162,7 +162,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (Properties.class.isAssignableFrom(type)) {
                         return call.getContext().getServerContext().getMapping().getProperties();
                     }
@@ -172,7 +172,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (Call.class.isAssignableFrom(type)) {
                         return call;
                     }
@@ -182,7 +182,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (HttpContext.class.isAssignableFrom(type)) {
                         return call.getContext();
                     }
@@ -192,7 +192,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (HttpSession.class.isAssignableFrom(type)) {
                         return call.getContext().getSession();
                     }
@@ -202,7 +202,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (ClientSession.class.isAssignableFrom(type)) {
                         return call.getContext().getClientSession();
                     }
@@ -212,7 +212,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (ServletRequest.class.isAssignableFrom(type)) {
                         return call.getContext().getRequest();
                     }
@@ -222,7 +222,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (ServletResponse.class.isAssignableFrom(type)) {
                         return call.getContext().getResponse();
                     }
@@ -232,7 +232,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (ServerContext.class.isAssignableFrom(type)) {
                         return call.getContext().getServerContext();
                     }
@@ -242,7 +242,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (ServletContext.class.isAssignableFrom(type)) {
                         return call.getContext().getServletContext();
                     }
@@ -252,7 +252,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (HttpContext.ErrorData.class.isAssignableFrom(type)) {
                         return call.getContext().getErrorData();
                     }
@@ -262,7 +262,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     HttpContext context = call.getContext();
                     ErrorData errorData = context.getErrorData();
                     Throwable cause = errorData.getCause();
@@ -276,7 +276,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (FileProgressListener.class.isAssignableFrom(type)) {
                         return call.getContext().getSession().getAttribute(FileProgressListener.SESSION_ATTRIBUTE_NAME);
                     }
@@ -286,7 +286,7 @@ public class ExecutorParametersInjectorHandler extends AbstractHandler implement
         context.addInjector(
             new  Injector() {
                 @Override
-                public Object getValue(Mapping mapping, Call call, Class<?> type, Type generic) {
+                public Object getValue(Mapping mapping, Call call, String name, Class<?> type, Type generic) {
                     if (CookieManager.class.isAssignableFrom(type)) {
                         return call.getContext().getCookieManager();
                     }
