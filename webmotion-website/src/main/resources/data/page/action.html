@@ -514,6 +514,57 @@ public class RenderAccept extends Render {
 }
 </pre>
 
+<h3>Rendu par défaut</h3>
+<p>
+    Dans WebMotion, le retour d'une action doit être un objet de type Render. Mais 
+    il est possible de retourner directement un objet si vous avez défini un <code>default.render</code> 
+    dans votre fichier de mapping. La classe doit éteindre la class <code>DefaultRender</code>, 
+    elle vous permet de base de retourner vos objet sous forme de flux JSON.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Permet de retourner un flux XML par défaut :
+</p>
+<pre class="prettyprint">
+public class XMLDefaultRender extends DefaultRender {
+    
+    @Override
+    public void create(Mapping mapping, Call call) throws IOException, ServletException {
+        HttpContext context = call.getContext();
+        HttpServletResponse response = context.getResponse();
+
+        response.setContentType("paplication/xml");
+        
+        XStream xstream = new XStream();
+        String xml = xstream.toXML(model);
+        PrintWriter out = context.getOut();
+        out.print(xml);
+    }
+}
+</pre>
+
+<p>
+    Avec comme action :
+</p>
+<pre class="prettyprint">
+public class Service extends WebMotionController {
+    public Object test() {
+        return new Object();
+    }
+}
+</pre>
+
+<p>
+    Avec comme mapping :
+</p>
+<pre class="prettyprint">
+[config]
+default.render=org.debux.webmotion.test.XMLDefaultRender
+
+[actions]
+GET           /test               Service.test
+</pre>
+
 <h2 class="page-header" id="websocket">WebSocket</h2>
 <p>
     WebSocket est un protocole de communication entre le client et le serveur. Il permet 

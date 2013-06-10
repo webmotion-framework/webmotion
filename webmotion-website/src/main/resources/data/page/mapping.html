@@ -103,6 +103,7 @@
     <li>package.filters</li>
     <li>package.errors</li>
     <li>javac.debug</li>
+    <li>render.default</li>
     <li>server.async</li>
     <li>server.encoding</li>
     <li>server.error.page</li>
@@ -222,6 +223,22 @@ package.errors=errors
 <p>
     <span class="label">Default</span> Par défaut, la valeur javac.debug est <code>true</code>.
 </p>
+
+<h3>render.default</h3>
+<p>
+    La propriété <strong>render.default</strong> permet de définir le render si sur le retour
+    d'une action n'est pas du type Render. Les valeurs possibles sont le noms complet de la classe.
+    Pour plus de renseignements, veuillez vous reporter à la section <a href="action#render">Action - Render</a>.
+</p>
+<p>
+    <span class="label">Default</span> Par défaut, il n'y pas de valeur.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> WebMotion fourni un render par défaut pour retourner un flux JSON :
+</p>
+<pre class="prettyprint">
+default.render=org.debux.webmotion.server.render.DefaultRender
+</pre>
 
 <h3>server.async</h3>
 <p>
