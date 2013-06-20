@@ -294,7 +294,7 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
                 if (writeable) {
                     one = true;
                     
-                    Field field = FieldUtils.getField(type, attributName);
+                    Field field = FieldUtils.getField(type, attributName, true);
                     Class<?> attributeType = field.getType();
 
                     genericType = field.getGenericType();
