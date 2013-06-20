@@ -44,6 +44,7 @@ import java.util.TreeSet;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.mapping.Mapping;
@@ -293,7 +294,7 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
                 if (writeable) {
                     one = true;
                     
-                    Field field = type.getDeclaredField(attributName);
+                    Field field = FieldUtils.getField(type, attributName);
                     Class<?> attributeType = field.getType();
 
                     genericType = field.getGenericType();
