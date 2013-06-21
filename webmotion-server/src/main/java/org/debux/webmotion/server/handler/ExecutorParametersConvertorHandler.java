@@ -167,9 +167,22 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
         
         Map<String, ParameterTree> tree = parameterTree.getTree();
         Object value = parameterTree.getValue();
-        
+
+        // Manage enums
+        if (type.isEnum()) {
+            Object sConstant = ((Object[]) value)[0];
+            if (sConstant != null) {
+                Object[] constants = type.getEnumConstants();
+                for (Object constant : constants) {
+                    if (constant.toString().equals(sConstant)) {
+                        result = constant;
+                        break;
+                    }
+                }
+            }
+
         // Manage collection
-        if (Collection.class.isAssignableFrom(type)) {
+        } else if (Collection.class.isAssignableFrom(type)) {
 
             Collection instance;
             if (type.isInterface()) {
