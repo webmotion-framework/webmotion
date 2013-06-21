@@ -60,14 +60,18 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
         ActionRule actionRule = getActionRule(mapping, call);
 
         if (actionRule != null) {
+            // if the request is an options request, then return 200 with the accepted methods for the url
             HttpContext context = call.getContext();
             String method = context.getMethod();
-            // if the request is an options request, then return 200 with the accepted methods for the url
             if (HttpContext.METHOD_OPTIONS.equals(method)) {
-                call.setRender(new RenderStatus(HttpServletResponse.SC_OK));
                 String acceptedMethods = StringUtils.join(actionRule.getMethods(), ',');
-                context.getResponse().addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
+                HttpServletResponse response = context.getResponse();
+                response.addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
+                
+                RenderStatus renderStatus = new RenderStatus(HttpServletResponse.SC_OK);
+                call.setRender(renderStatus);
             }
+            
             // even for the options, set the rule to go through the filters
             call.setRule(actionRule);
 
@@ -91,15 +95,16 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             List<String> path = HttpUtils.splitPath(url);
             log.debug("path = " + path);
             Map<String, Object> parameters = call.getExtractParameters();
+            
             String method = context.getMethod();
+            boolean isOptions = HttpContext.METHOD_OPTIONS.equals(method);
+            if (isOptions) {
+                method = context.getHeader(HttpContext.HEADER_ACCESS_CONTROL_REQUEST_METHOD);
+            }
 
             List<ActionRule> actionRules = mapping.getActionRules();
             for (ActionRule actionRule : actionRules) {
 
-                boolean isOptions = HttpContext.METHOD_OPTIONS.equals(method);
-                if (isOptions) {
-                    method = context.getHeader(HttpContext.HEADER_ACCESS_CONTROL_REQUEST_METHOD);
-                }
                 if(checkMethod(actionRule, method) 
                         && checkUrl(actionRule, path)
                         && (isOptions || checkArguments(actionRule, parameters))) {
