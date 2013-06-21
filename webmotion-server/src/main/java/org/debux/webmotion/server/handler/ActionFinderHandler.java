@@ -27,6 +27,8 @@ package org.debux.webmotion.server.handler;
 import java.io.File;
 import java.util.Arrays;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
@@ -38,6 +40,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletResponse;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.render.RenderStatus;
 import org.debux.webmotion.server.tools.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +55,22 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
 
     private static final Logger log = LoggerFactory.getLogger(ActionFinderHandler.class);
 
+    public static final String OPTIONS = "OPTIONS";
+
     @Override
     public void handle(Mapping mapping, Call call) {
         ActionRule actionRule = getActionRule(mapping, call);
+
         if (actionRule != null) {
+            HttpContext context = call.getContext();
+            String method = context.getMethod();
+            if (OPTIONS.equals(method)) {
+                call.setRender(new RenderStatus(200));
+                String acceptedMethods = StringUtils.join(actionRule.getMethods(), ',');
+                context.getResponse().addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
+            }
             call.setRule(actionRule);
+
         } else {
             String extensionPath = mapping.getExtensionPath();
             if (extensionPath == null) {
@@ -82,8 +96,13 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             List<ActionRule> actionRules = mapping.getActionRules();
             for (ActionRule actionRule : actionRules) {
 
+                boolean isOptions = OPTIONS.equals(method);
+                if (isOptions) {
+                    method = context.getHeader(HttpContext.HEADER_ACCESS_CONTROL_REQUEST_METHOD);
+                }
                 if(checkMethod(actionRule, method) 
-                        && checkUrl(actionRule, path, parameters)) {
+                        && checkUrl(actionRule, path)
+                        && (isOptions || checkArguments(actionRule, parameters))) {
                     return actionRule;
                 }
             }
@@ -100,7 +119,8 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
     }
     
     // Check url
-    protected boolean checkUrl(ActionRule actionRule, List<String> path, Map<String, Object> parameters) {
+    protected boolean checkUrl(ActionRule actionRule,
+                               List<String> path) {
         int position;
         
         // Test url
@@ -130,11 +150,20 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             }
         }
 
-        // Test parameters
+        return true;
+    }
+
+    //Check arguments
+    protected boolean checkArguments(ActionRule actionRule,
+                                     Map<String, Object> parameters) {
+
+        List<FragmentUrl> ruleUrl = actionRule.getRuleUrl();
+        FragmentUrl[] expressions = ruleUrl.toArray(new FragmentUrl[0]);
+
         List<FragmentUrl> ruleParameters = actionRule.getRuleParameters();
         expressions = ruleParameters.toArray(new FragmentUrl[0]);
 
-        for (position = 0; position < expressions.length; position ++) {
+        for (int position = 0; position < expressions.length; position ++) {
             FragmentUrl expression = expressions[position];
 
             log.debug("param " + expression.getParam());
@@ -144,7 +173,7 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             if(!(parameterValue instanceof File)) {
                 values = (String[]) parameterValue;
             }
-            
+
             boolean matchValues = matchValues(expression, values);
             log.debug("Param " + param + " for value " + Arrays.toString(values) + " match ? " + matchValues);
             if(!matchValues) {

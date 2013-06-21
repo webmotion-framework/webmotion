@@ -65,6 +65,10 @@ public class HttpContext {
     public static final String HEADER_ETAG = "ETag";
     public static final String HEADER_IF_MODIFIED_SINCE = "If-Modified-Since";
     public static final String HEADER_USER_AGENT = "User-Agent";
+    public static final String HEADER_ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
     
     public static final String ATTRIBUTE_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
     public static final String ATTRIBUTE_ERROR_MESSAGE = "javax.servlet.error.message";
