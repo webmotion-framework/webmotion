@@ -62,11 +62,14 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
         if (actionRule != null) {
             HttpContext context = call.getContext();
             String method = context.getMethod();
+            // if the request is an options request, then return 200 with the accepted methods for the url
             if (HttpContext.METHOD_OPTIONS.equals(method)) {
                 call.setRender(new RenderStatus(HttpServletResponse.SC_OK));
                 String acceptedMethods = StringUtils.join(actionRule.getMethods(), ',');
                 context.getResponse().addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
             }
+            // even for the options, set the rule to go through the filters
+            call.setRule(actionRule);
 
         } else {
             String extensionPath = mapping.getExtensionPath();
