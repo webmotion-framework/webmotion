@@ -24,39 +24,25 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.io.File;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.Executor;
-import org.debux.webmotion.server.mapping.Mapping;
-import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.Call.ParameterTree;
+import org.debux.webmotion.server.call.Executor;
 import org.debux.webmotion.server.call.ServerContext;
 import org.debux.webmotion.server.call.UploadFile;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * Store in the call object, all parameters converted depending action method 
@@ -172,13 +158,7 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
         if (type.isEnum()) {
             Object sConstant = ((Object[]) value)[0];
             if (sConstant != null) {
-                Object[] constants = type.getEnumConstants();
-                for (Object constant : constants) {
-                    if (constant.toString().equals(sConstant)) {
-                        result = constant;
-                        break;
-                    }
-                }
+                result = Enum.valueOf((Class<? extends Enum>)type, sConstant.toString());
             }
 
         // Manage collection
