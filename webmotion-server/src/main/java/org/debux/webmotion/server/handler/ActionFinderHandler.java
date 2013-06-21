@@ -24,26 +24,26 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.RenderError;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import javax.servlet.http.HttpServletResponse;
-import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.render.RenderStatus;
 import org.debux.webmotion.server.tools.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Search in mapping the action matched at the url. In mapping file, the first 
@@ -55,8 +55,6 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
 
     private static final Logger log = LoggerFactory.getLogger(ActionFinderHandler.class);
 
-    public static final String OPTIONS = "OPTIONS";
-
     @Override
     public void handle(Mapping mapping, Call call) {
         ActionRule actionRule = getActionRule(mapping, call);
@@ -64,12 +62,11 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
         if (actionRule != null) {
             HttpContext context = call.getContext();
             String method = context.getMethod();
-            if (OPTIONS.equals(method)) {
-                call.setRender(new RenderStatus(200));
+            if (HttpContext.METHOD_OPTIONS.equals(method)) {
+                call.setRender(new RenderStatus(HttpServletResponse.SC_OK));
                 String acceptedMethods = StringUtils.join(actionRule.getMethods(), ',');
                 context.getResponse().addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
             }
-            call.setRule(actionRule);
 
         } else {
             String extensionPath = mapping.getExtensionPath();
@@ -96,7 +93,7 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             List<ActionRule> actionRules = mapping.getActionRules();
             for (ActionRule actionRule : actionRules) {
 
-                boolean isOptions = OPTIONS.equals(method);
+                boolean isOptions = HttpContext.METHOD_OPTIONS.equals(method);
                 if (isOptions) {
                     method = context.getHeader(HttpContext.HEADER_ACCESS_CONTROL_REQUEST_METHOD);
                 }

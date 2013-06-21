@@ -92,6 +92,14 @@ public class HttpContext {
     public static final String ATTRIBUTE_ERROR_DATA = "errorData";
     public static final String ATTRIBUTE_FLASH_MESSAGES = "flashMessages";
     public static final String ATTRIBUTE_EXTENSION_PATH = "extensionPath";
+
+    public static final String METHOD_DELETE = "DELETE";
+    public static final String METHOD_HEAD = "HEAD";
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_OPTIONS = "OPTIONS";
+    public static final String METHOD_POST = "POST";
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_TRACE = "TRACE";
     
     /** Current HTTP request. */
     protected HttpServletRequest request;
