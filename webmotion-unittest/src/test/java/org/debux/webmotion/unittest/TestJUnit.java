@@ -38,15 +38,15 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class TestJUnit extends WebMotionJUnit {
-    
+
     @Override
-    protected String getWar() {
+    protected String getWebappLocation() {
         return "src/test/resources/webapp";
     }
-
+    
     @Test
     public void testRequest() throws IOException, URISyntaxException {
-        String result = createRequest("/").Get()
+        String result = createRequest("/test").Get()
                 .execute().returnContent().asString();
         
         assertTrue(result.contains("Index"));

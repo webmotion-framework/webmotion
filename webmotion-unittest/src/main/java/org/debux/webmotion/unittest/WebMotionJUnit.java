@@ -26,7 +26,7 @@ package org.debux.webmotion.unittest;
 import org.junit.Before;
 
 /**
- * Start Jetty server during JUnit.
+ * Start Tomcat server during JUnit.
  * 
  * @author julien
  */

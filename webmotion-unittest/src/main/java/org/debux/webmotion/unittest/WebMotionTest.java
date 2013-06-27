@@ -23,15 +23,16 @@
  */
 package org.debux.webmotion.unittest;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.loader.WebappLoader;
+import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import static org.debux.webmotion.unittest.WebMotionJUnit.isStarted;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * Abstract class uses to start/stop Jetty serveur.
+ * Abstract class uses to start/stop Tomcat server.
  * 
  * @author julien
  */
@@ -39,34 +40,43 @@ public abstract class WebMotionTest {
 
     static AtomicBoolean isStarted = new AtomicBoolean(false);
     
-    protected Server server;
+    protected Tomcat server;
 
     /**
-     * Start Jetty serveur.
+     * Start Tomcat server.
      * 
      * @throws Exception 
      */
     protected void startServer() throws Exception {
-        server = new Server();
         
-        int port = getPort();
-        String contextPath = getContextPath();
-        String war = getWar();
+        // create server
+        server = new Tomcat();
+        server.setPort(getPort());
+        
+        // Create webapp loader with jar in classpath as repository
+        WebappLoader loader = new WebappLoader(this.getClass().getClassLoader());
+        String classpaths = System.getProperty("java.class.path");
+        String[] classpath = classpaths.split(":");
+        for (String path : classpath) {
+            loader.addRepository(new File(path).toURI().toURL().toString());
+        }
+        
+        // Create a new webbapp
+        StandardContext rootContext = (StandardContext) server.addWebapp(getContextPath(), new File(getWebappLocation()).getAbsolutePath());
+        rootContext.setLoader(loader);
+        rootContext.setReloadable(true);
+        rootContext.setUnpackWAR(false);
+        ((StandardJarScanner) rootContext.getJarScanner()).setScanAllDirectories(true);
 
-        Connector connector = new SelectChannelConnector();
-        connector.setPort(port);
-        server.addConnector(connector);
-
-        WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath(contextPath);
-        webAppContext.setWar(war);
-        server.setHandler(webAppContext);
-
+        // Enabled JNDI
+        server.enableNaming();
+        
+        // Start server for the theard
         server.start();
     }
-
+    
     /**
-     * Stop Jetty server.
+     * Stop Tomcat server.
      * 
      * @throws Exception 
      */
@@ -116,9 +126,9 @@ public abstract class WebMotionTest {
     }
     
     /**
-     * @return resources war location
+     * @return webapp location
      */
-    protected String getWar() {
+    protected String getWebappLocation() {
         return "src/main/webapp";
     }
     

@@ -1189,9 +1189,15 @@ public Render progress(FileProgressListener listener) {
 </pre>
 
 <p>
-    Pour faire fonctionner les tests, WebMotion utilise le serveur d'application <a href="http://www.eclipse.org/jetty/">Jetty</a>. 
+    Pour faire fonctionner les tests, WebMotion utilise le serveur d'application <a href="http://tomcat.apache.org/">Tomcat</a>. 
     Le serveur est démarré au début des tests. Les tests unitaires sont compatible 
     <a href="http://junit.org/">JUnit</a> et <a href="http://testng.org">TestNG</a>.
+</p>
+
+<p>
+    <span class="label label-info">Note</span> Si vous avez l'erreur suivante 
+    <code>java.lang.ClassNotFoundException: com.sun.faces.config.ConfigureListener</code>,
+    il faut penser à enveler la dépendance vers <code>javaee-api</code> du scope compile.
 </p>
 
 <h3 id="junit">JUnit</h3>

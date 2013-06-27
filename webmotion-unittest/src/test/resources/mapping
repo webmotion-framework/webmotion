@@ -1,2 +1,2 @@
 [actions]
-GET         /                                view:index.html
+GET         /test                                view:index.html

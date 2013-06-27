@@ -36,13 +36,13 @@ import org.testng.annotations.Test;
 public class TestTestNG extends WebMotionTestNG {
 
     @Override
-    protected String getWar() {
+    protected String getWebappLocation() {
         return "src/test/resources/webapp";
     }
-
+    
     @Test
     public void testRequest() throws IOException, URISyntaxException {
-        String result = createRequest("/").Get()
+        String result = createRequest("/test").Get()
                 .execute().returnContent().asString();
         
         AssertJUnit.assertTrue(result.contains("Index"));

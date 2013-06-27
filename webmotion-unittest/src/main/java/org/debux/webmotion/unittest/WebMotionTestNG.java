@@ -26,7 +26,7 @@ package org.debux.webmotion.unittest;
 import org.testng.annotations.BeforeMethod;
 
 /**
- * Start Jetty server during TestNG.
+ * Start Tomcat server during TestNG.
  * 
  * @author julien
  */
