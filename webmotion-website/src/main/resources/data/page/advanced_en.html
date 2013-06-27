@@ -248,7 +248,7 @@ public class Listener implements WebMotionServerListener {
 
 <h3 id="injector">Injector</h3>
 <p>
-    Some method parameters are directly injected according to their type,
+    Some method parameters are directly injected according to their type or the parameter name,
     the <code>ExecutorParametersInjectorHandler</code> handleris in charge of this task.
     You can add your own parameter injection. To do so, you need to implement
     the <code>ExecutorParametersInjectorHandler.Injector</code> interface.
@@ -260,7 +260,7 @@ public class Listener implements WebMotionServerListener {
     public void onStart(Mapping mapping, ServerContext context) {
         context.addInjector(new Injector() {
             @Override
-            public Object getValue(Mapping mapping, Call call, Class&lt;?&gt; type, Type generic) {
+            public Object getValue(Mapping mapping, Call call, String name, Class&lt;?&gt; type, Type generic) {
                 if (AClass.class.isAssignableFrom(type)) {
                     return new AClass();
                 }
