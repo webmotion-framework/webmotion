@@ -92,8 +92,9 @@ TODO Write a better sample with a mapping file, a frontend snippet code
 &lt;/context-param&gt;
 </pre>
 
+<h2 class="page-header" id="params">Paramètres système</h2>
 <p>
-    Vous pouvez aussi modifier le nom du fichier de mapping chargé en positonnant
+    Vous pouvez modifier le nom du fichier de mapping chargé en positonnant
     le paramètre <code>wm.mapping.file.name</code> dans le web.xml ainsi :
 </p>
 
@@ -108,6 +109,36 @@ TODO Write a better sample with a mapping file, a frontend snippet code
     Vous pouvez préciser plusieurrs noms de fichier de mapping, en les séparant avec 
     des virgules. Seul le premier fichier existant dans la liste est utilisé.
 </p>
+
+<p>
+    Le parser du fichier de mapping est aussi configurable depuis le web.xml avec 
+    le paramètre <code>wm.mapping.parsers</code>. Vous pouvez précisez plusieurs implantations 
+    de parser séparées par des virgules. Si un parser n'est pas capable de traiter 
+    le fichier, il doit retouner <code>null</code> comme valeur de mapping pour passer la main
+    au prochain parser.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Ajout d'un parser :
+</p>
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.parsers&lt;/param-name&gt;
+    &lt;param-value&gt;org.debux.webmotion.test.SkipMappingParser,org.debux.webmotion.server.parser.DefaultMappingParser&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span> Implantation d'un parser :
+</p>
+<pre class="prettyprint">
+public class SkipMappingParser extends MappingParser {
+    @Override
+    protected Mapping parse(URL url) {
+        return null;
+    }
+}
+</pre>
 
 <h2 class="page-header" id="handler">Comprendre le fonctionnement de WebMotion</h2>
 <p>
