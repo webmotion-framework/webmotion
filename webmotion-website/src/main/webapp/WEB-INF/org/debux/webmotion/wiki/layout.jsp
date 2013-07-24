@@ -79,7 +79,8 @@
             <c:url value="/tutorial/index" var="tutorial_url"/>
             <c:if test="${layout_url == '/tutorial/index'
                             || layout_url == '/tutorial/angularjs'
-                            || layout_url == '/tutorial/uploadmotion'}" >
+                            || layout_url == '/tutorial/uploadmotion'
+                            || layout_url == '/tutorial/pollmotion'}" >
                 <c:set var="tutorial_active" value="active"/>
             </c:if>
                 
