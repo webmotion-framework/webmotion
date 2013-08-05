@@ -1127,4 +1127,21 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
+    
+    public Render api() throws IOException {
+        String section = "[config]\n";
+        section += "package.base=org.debux.webmotion.showcase\n";
+        section += "default.render=org.debux.webmotion.server.render.DefaultRender\n";
+        
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/api"
+                ),
+                "files", Arrays.asList(
+                    new FileContent("/src/main/resources/mapping", section + "\n")
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 98, 1)),
+                    getJavaContent("Api.java")
+                )
+        );
+    }
 }

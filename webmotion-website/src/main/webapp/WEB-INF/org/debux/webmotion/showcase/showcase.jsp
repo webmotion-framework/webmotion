@@ -99,6 +99,7 @@
         <script type="text/javascript">
             <c:url value="/main" var="main_url"/>
             <c:url value="/documentation" var="documentation_url"/>
+            <c:url value="/tutorial/index" var="tutorial_url"/>
             <c:url value="/showcase" var="showcase_url"/>
             <c:url value="/download" var="download_url"/>
             <c:url value="/contacts" var="contacts_url"/>
@@ -108,6 +109,7 @@
                 
                 $("#main>a").attr("href", "${main_url}");
                 $("#documentation>a").attr("href", "${documentation_url}");
+                $("#tutorial>a").attr("href", "${tutorial_url}");
                 $("#showcase>a").attr("href", "${showcase_url}");
                 $("#download>a").attr("href", "${download_url}");
                 $("#contacts>a").attr("href", "${contacts_url}");
@@ -249,6 +251,7 @@
                                 </li>
                                 <li><strong>Data</strong>
                                     <ul>
+                                        <li><a id="api" href="./api">Default render</a> <span class="label label-info">New</span></li>
                                         <li><a id="xml" href="./xml">XML</a></li>
                                         <li><a id="json" href="./json">JSON</a></li>
                                         <li><a id="jsonp" href="./jsonp">JSONP</a></li>

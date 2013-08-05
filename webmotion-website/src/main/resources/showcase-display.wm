@@ -92,3 +92,4 @@ package.views=WEB-INF/org.debux.webmotion.showcase
 *           /ws_text                                    Showcase.wsText
 *           /ws_json                                    Showcase.wsJSON
 *           /chain                                      Showcase.chain
+*           /api                                        Showcase.api
