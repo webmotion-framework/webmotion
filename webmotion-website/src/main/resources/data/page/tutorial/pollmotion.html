@@ -45,14 +45,14 @@
 <p>
     Ce tutoriel vous présente la création d'une application classique avec une 
     base de données. Nous allons focuser notre attention sur différents points 
-    techniques pour vous présenter des patterns à utiliser pour vos futur 
-    application.
+    techniques pour vous présenter des patterns à utiliser pour vos futures 
+    applications.
 </p>
 <p>
     Pour illustrer cette fonctionnalité, nous allons créer un système de sondage,
-    où un utilisateur crée une question avec des choix, et partage l'url à un 
-    groupe de personnes qui eux peuvent voter. Nous allons nous focusser sur les 
-    points clés de l'application.
+    où un utilisateur crer une question avec des choix, et partage l'url du vote 
+    à un groupe de personnes. Nous allons nous focusser sur les points clés de 
+    l'application.
 </p>
 
 <p>
@@ -105,7 +105,7 @@ GET          /*                            SiteMesh.decorate       layout=layout
     Pour la gestion de la base de données, nous allons utiliser l'extra JPA 
     proposé par WebMotion. Pour simplifier son utilisation et avoir une approche 
     REST, nous allons séparer les urls en deux domaines un pour le sondage (/poll) 
-    et l'autre pour les vote (/vote).
+    et l'autre pour les votes (/vote).
 </p>
 <pre class="prettyprint">
 [config]
@@ -149,6 +149,10 @@ pollmotionDB.current_session_context_class=thread
     <li>Injecter une partie service</li>
     <li>Créer un API REST</li>
 </ul>
+
+<p>
+    Nous allons détailler les différentes approches dans les prochaines sections.
+</p>
 
 <h3>Partie web avec les services</h3>
 <p>
@@ -374,7 +378,7 @@ default.render=org.debux.webmotion.server.render.DefaultRender
 <p>
     Une des difficultés est de tester facilement votre application, il existe des 
     solution autour de maven avec des testes d'intégration. Il existe un moyen simple
-    directement dans des testes unitaires de tester l'application.
+    directement dans des testes unitaires.
 </p>
 
 <p>
@@ -397,7 +401,7 @@ public class TestMainController extends WebMotionTestNG {
 
 <h2>Lancer l'application</h2>
 
-Vous pouvez maintenant lancer l'application depuis Jetty, en saisissant la ligne de commande suivante :
+Vous pouvez lancer l'application depuis Jetty, en saisissant la ligne de commande suivante :
 
 $ mvn jetty:run
 
