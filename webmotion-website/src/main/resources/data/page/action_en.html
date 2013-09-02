@@ -1119,8 +1119,135 @@ public Render progress(FileProgressListener listener) {
 
 <h2 class="page-header" id="tu">Tests units</h2>
 <p>
-    
+    You can do a tests units to check the running of the actions. For that, you 
+    have to add the following dependency to <code>test</code> scope in your project :
 </p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-unittest&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    To run the tests, WebMotion uses the <a href="http://tomcat.apache.org/">Tomcat</a> 
+    application web server. The tests units are compatible with <a href="http://junit.org/">JUnit</a> 
+    and <a href="http://testng.org">TestNG</a>.
+</p>
+
+<p>
+    <span class="label label-info">Note</span> 
+    If you have the following error
+    <code>java.lang.ClassNotFoundException: com.sun.faces.config.ConfigureListener</code>,
+    you have to delete the dependency from <code>javaee-api</code> from compile scope.
+</p>
+
+<h3 id="junit">JUnit</h3>
+<p>
+    To write the tests with <a href="http://junit.org/">JUnit</a>, you have to add the dependency to JUnit library.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.11&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    
+    Then you have to inherit from WebMotionJUnit class :
+</p>
+<pre class="prettyprint">
+@RunWith(JUnit4.class)
+public class Example extends WebMotionJUnit {
+    
+    @Test
+    public void testRequest() {
+        // write the test
+    }
+    
+}
+</pre>
+
+<h3 id="testng">TestNG</h3>
+<p>
+    To write the tests with <a href="http://testng.org">TestNG</a>, you have to add the dependency to TestNG library.
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.testng&lt;/groupId&gt;
+    &lt;artifactId&gt;testng&lt;/artifactId&gt;
+    &lt;version&gt;6.8&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Then you have to inherit from WebMotionTestNG class :
+</p>
+<pre class="prettyprint">
+public class Example extends WebMotionTestNG {
+
+    @Test
+    public void testRequest() {
+        // write the test
+    }
+    
+}
+</pre>
+
+<h3 id="hc">Apache HttpComponents</h3>
+<p>
+    To write the test, you can use all client HTTP. WebMotion recommends the 
+    <a href="http://hc.apache.org/">HttpComponents</a> library provided by Apache.
+    WebMotion helps you with this library to give you an utility to create a request easily.    
+</p>
+<p>
+    <span class="label label-info">Example</span> Example of creating a GET request:
+</p>
+<pre class="prettyprint">
+String result = createRequest("/index")
+        .addParameter("query", "test")
+        .Get()
+        .execute()
+        .returnContent().asString();
+</pre>
+
+<p>
+    <span class="label label-info">Exemple</span>Example of creating a POST request:
+</p>
+<pre class="prettyprint">
+String result = createRequest("/index")
+        .Post()
+        .bodyForm(
+            Form.form()
+                .add("username", "vip")
+                .add("password", "secret")
+                .build()
+        )
+        .execute()
+        .returnContent().asString();
+</pre>
+
+<h3 id="config">Configuration</h3>
+<p>
+    You can configure the differents elements with override the methods in abstract class.
+    Be carefull you cannot have different configuration in the same tests suite.
+</p>
+<p>
+    <span class="label label-info">Example</span> Example of changing port:
+</p>
+<pre class="prettyprint">
+@Override
+protected int getPort() {
+    return 8080;
+}
+</pre>
 
 <div class="well" style="text-align: center;">
     <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
