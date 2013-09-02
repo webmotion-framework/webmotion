@@ -517,13 +517,13 @@ public class RenderAccept extends Render {
 <h3>Rendu par défaut</h3>
 <p>
     Dans WebMotion, le retour d'une action doit être un objet de type Render. Mais 
-    il est possible de retourner directement un objet si vous avez défini un <code>default.render</code> 
+    il est possible de retourner directement un objet si vous avez défini la propriété <code>default.render</code> 
     dans votre fichier de mapping. La classe doit éteindre la class <code>DefaultRender</code>, 
     elle vous permet de base de retourner vos objet sous forme de flux JSON.
 </p>
 
 <p>
-    <span class="label label-info">Exemple</span> Permet de retourner un flux XML par défaut :
+    <span class="label label-info">Exemple</span> Permet de retourner un flux XML :
 </p>
 <pre class="prettyprint">
 public class XMLDefaultRender extends DefaultRender {

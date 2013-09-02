@@ -511,7 +511,54 @@ public class RenderAccept extends Render {
 
 <h3>Default render</h3>
 <p>
+    In WebMotion, the return type of an action is an object of Render type. But
+    it able to return an object if you define a <code>default.render</code> property in
+    your mapping file. For the implementation the class needs to extend the <code>DefaultRender</code> class,
+    by default this class returns the objects to JSON.
 </p>
+
+<p>
+    <span class="label label-info">Example</span> Return the objects to XML format:
+</p>
+<pre class="prettyprint">
+public class XMLDefaultRender extends DefaultRender {
+    
+    @Override
+    public void create(Mapping mapping, Call call) throws IOException, ServletException {
+        HttpContext context = call.getContext();
+        HttpServletResponse response = context.getResponse();
+
+        response.setContentType("paplication/xml");
+        
+        XStream xstream = new XStream();
+        String xml = xstream.toXML(model);
+        PrintWriter out = context.getOut();
+        out.print(xml);
+    }
+}
+</pre>
+
+<p>
+    As action :
+</p>
+<pre class="prettyprint">
+public class Service extends WebMotionController {
+    public Object test() {
+        return new Object();
+    }
+}
+</pre>
+
+<p>
+    And as mapping :
+</p>
+<pre class="prettyprint">
+[config]
+default.render=org.debux.webmotion.test.XMLDefaultRender
+
+[actions]
+GET           /test               Service.test
+</pre>
 
 <h2 class="page-header" id="websocket">WebSocket</h2>
 <p>
