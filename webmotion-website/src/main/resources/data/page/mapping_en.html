@@ -218,8 +218,19 @@ package.errors=errors
 
 <h3>render.default</h3>
 <p>
-    
+    The <strong>render.default</strong> property enables to define the render if the return
+    type of an action isn't a Render type. The available values are the full qualified class name.
+    For more information, please refer to the <a href="action#render">Action - Render</a> section.
 </p>
+<p>
+    <span class="label">Default</span> By default, no value specified.
+</p>
+<p>
+    <span class="label label-info">Example</span> WebMotion gives you a default render to return the object to JSON :
+</p>
+<pre class="prettyprint">
+default.render=org.debux.webmotion.server.render.DefaultRender
+</pre>
 
 <h3>server.async</h3>
 <p>
@@ -960,7 +971,7 @@ public class Filters extends WebMotionFilter {
     It takes as parameters the class name et the method name separated by a point.
 </p>
 <p>
-    <span class="label label-info">Exemple</span> Chain a filter on another one:
+    <span class="label label-info">Example</span> Chain a filter on another one:
 </p>
 <pre class="prettyprint">
 public class Filters extends WebMotionFilter {
