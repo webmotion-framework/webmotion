@@ -111,6 +111,35 @@ TODO Write a better sample with a mapping file, a frontend snippet code
     first existing file in the list is used.
 </p>
 
+<p>
+    The file parser is configurable from the web.xml with the parameter <code>wm.mapping.parsers</code>.
+    You can specify multiple parser implementation separated with commas. If one 
+    parser cannot process the file, it have to return <code>null</code> as value 
+    of the mapping in order to follow the process to the next parser.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Add a parser :
+</p>
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.parsers&lt;/param-name&gt;
+    &lt;param-value&gt;org.debux.webmotion.test.SkipMappingParser,org.debux.webmotion.server.parser.DefaultMappingParser&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Parser implementation :
+</p>
+<pre class="prettyprint">
+public class SkipMappingParser extends MappingParser {
+    @Override
+    protected Mapping parse(URL url) {
+        return null;
+    }
+}
+</pre>
+
 <h2 class="page-header" id="handler">How does WebMotion work?</h2>
 <p>
     The treatment of the request goes through different handlers to achieve the request of the web client.
