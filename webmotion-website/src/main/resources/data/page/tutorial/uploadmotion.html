@@ -1,4 +1,3 @@
-
 <!--
   #%L
   Webmotion website
@@ -110,12 +109,12 @@ $ mvn archetype:generate \
 
 <h2 class="page-header" id="controller">Partie contrôleur</h2>
 <p>
-    La partie contrôleur est simple. Elle est composé de deux services un pour télécharger 
+    La partie contrôleur est simple. Elle est composée de deux services un pour télécharger 
     le fichier et un autre pour récupérer le fichier.
 </p>
 
 <p>
-    Pour créer un service sur WebMotion, il faut commencer par créer un controleur ainsi :
+    Pour créer un service sur WebMotion, il faut commencer par créer un contrôleur ainsi :
 </p>
 
 <pre class="prettyprint">
@@ -125,8 +124,8 @@ public class MainController extends WebMotionController {
 </pre>
 
 <p>
-    La prochaine étape constiste à créer les méthodes correspondant à vos services.
-    Le service d'upload prend en paramètre directement le File en entrée. Vous n'avez 
+    La prochaine étape consiste à créer les méthodes correspondant à vos services.
+    Le service d'upload prend en paramètre directement le fichier de type File en entrée. Vous n'avez 
     rien d'autre à faire pour récupérer un fichier avec WebMotion.
 </p>
 <pre class="prettyprint">
@@ -165,8 +164,8 @@ public Render download(Properties conf, String token) throws IOException {
 </pre>
 
 <p>
-    Vous pouvez constater que les services prennent aussi en paramètre un object Properties qui
-    représente la configuration de votre application. Ces propriétés peuvent être défini directement
+    Vous pouvez constater que les services prennent aussi en paramètre un objet Properties qui
+    représente la configuration de votre application. Ces propriétés peuvent être définies directement
     dans le fichier de mapping. Le fichier de mapping est le fichier de configuration de WebMotion 
     qui vous permet entre autre de mettre en relation votre url et votre methode java.
 </p>
@@ -183,7 +182,7 @@ folder=/tmp
 <p>
     Pour terminer la partie contrôleur, il vous reste à mettre en relation vos services selon une url.
     Une action dans le fichier de mapping est composée de la méthode HTTP, du path et de l'action à réaliser. 
-    Dans la régle suivante, l'action consiste à apeller une méthode java.
+    Dans la régle suivante, l'action consiste à appeller une méthode java.
 </p>
 <pre>
 [actions]
@@ -211,8 +210,8 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Une zone est défini pour suivre la progression du téléchargement du fichier.
-    Pour faire évoluer la progression, il vous suffit de modifier la taille.
+    Une zone est définie pour suivre la progression du téléchargement du fichier.
+    Pour faire évoluer la progression, il vous suffit de modifier sa taille.
 </p>
 <pre class="prettyprint">
 &lt;div class="progress"&gt;
@@ -221,7 +220,7 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Les éléments suivants vous permet d'afficher le fichier et de le partager sous la forme d'un lien.
+    Les éléments suivants vous permettent d'afficher le fichier et de le partager sous la forme d'un lien.
 </p>
 <pre class="prettyprint">
 &lt;p style="text-align: center"&gt;
@@ -238,7 +237,7 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Coté JQuey, il vous faut créer la réquête XHR avec un listenner sur l'upload. 
+    Coté JQuery, il vous faut créer la réquête XHR avec un listener sur l'upload. 
     JQuery ne permet pas d'y accéder directement, il faut passer dans ce cas par un provider de requête.
 </p>
 <pre class="prettyprint">
@@ -287,7 +286,7 @@ $(function() {
 </pre>
 
 <p>
-    En cas de changement de fichier vous pouvez réinitialiser la progress barre 
+    En cas de changement de fichier vous pouvez réinitialiser la progress bar
     et la preview.
 </p>
 <pre class="prettyprint">
@@ -304,7 +303,7 @@ $(function() {
 </pre>
 
 <p>
-    Pour finir, l'URL pour accéder à la page est ajoutée dans la 
+    Pour finir, l'url pour accéder à la page est ajoutée dans la 
     section "action" de WebMotion. Dans la régle suivante, l'action consiste à revoyer la page index.html à 
     l'utilisateur.
 </p>
@@ -327,10 +326,11 @@ $ mvn jetty:run
 </p>
 <p>
     Vous pouvez consulter le résultat dans votre navigateur en saisissant l'adresse 
-    suivante <a href="http://localhost:8080/UploadMotion/">http://localhost:8080/UploadMotion/</a>.
+    suivante <a href="http://localhost:8080/UploadMotion/">http://localhost:8080/uploadmotion/</a>.
 </p>
 
 </div>
     
 <!--    </body>
 </html>-->
+

@@ -1,4 +1,3 @@
-
 <!--
   #%L
   Webmotion website
@@ -44,15 +43,14 @@
 <h2 class="page-header" id="begin">Présentation</h2>
 <p>
     Ce tutoriel vous présente la création d'une application classique avec une 
-    base de données. Nous allons focuser notre attention sur différents points 
+    base de données. Nous allons focaliser notre attention sur différents points 
     techniques pour vous présenter des patterns à utiliser pour vos futures 
     applications.
 </p>
 <p>
     Pour illustrer cette fonctionnalité, nous allons créer un système de sondage,
-    où un utilisateur crer une question avec des choix, et partage l'url du vote 
-    à un groupe de personnes. Nous allons nous focusser sur les points clés de 
-    l'application.
+    où un utilisateur créé une question avec des choix, et partage l'url du vote 
+    à un groupe de personnes. 
 </p>
 
 <p>
@@ -63,7 +61,7 @@
 </p>
 
 <p>
-    JQuery est une librairie javascript. Il vous permet de manipuler plus simplement 
+    JQuery est une librairie javascript. Elle vous permet de manipuler plus simplement 
     les éléments du DOM en proposant de nombreux utilitaires.
 </p>
 
@@ -86,7 +84,7 @@
     ça peut être un élément graphique comme un menu mais ça peut aussi être 
     les inclusions des fichiers javascript et CSS.
     WebMotion avec l'extra Sitemesh vous propose une gestion des layouts. 
-    Dans notre cas, nous allons besoin d'un seul layout.
+    Dans notre cas, nous avons besoin d'un seul layout.
 </p>
 
 <p>
@@ -104,7 +102,7 @@ GET          /*                            SiteMesh.decorate       layout=layout
 <p>
     Pour la gestion de la base de données, nous allons utiliser l'extra JPA 
     proposé par WebMotion. Pour simplifier son utilisation et avoir une approche 
-    REST, nous allons séparer les urls en deux domaines un pour le sondage (/poll) 
+    REST, nous allons séparer les urls en deux domaines : un pour le sondage (/poll) 
     et l'autre pour les votes (/vote).
 </p>
 <pre class="prettyprint">
@@ -119,8 +117,8 @@ server.listener.class=org.debux.webmotion.jpa.JpaListener
 </pre>
 
 <p>
-    La configuration de la base de donnée est un élément sensible à configurer, 
-    il est délicat de laisser les mots de passe dans le fichier persitence.xml.
+    La configuration de la base de données est un élément sensible à configurer, 
+    il est délicat de laisser les mots de passe dans le fichier persistence.xml.
     WebMotion propose d'écrire les propriétés de configuration de la section 
     [properties] qui permet une externalisation dans un fichier sur le système.
 </p>
@@ -157,8 +155,8 @@ pollmotionDB.current_session_context_class=thread
 <h3>Partie web avec les services</h3>
 <p>
     Dans ce cas le contrôleur est utilisé comme service et permet de les exposer.
-    Cela permet de développer des applications rapidement sans devoir faire une 
-    architecture complexe. Cette solution est très utilile pour du prototypage par exemple.
+    Cela permet de développer des applications rapidement sans avoir à faire une 
+    architecture complexe. Cette solution est très utile pour du prototypage par exemple.
     Pollmotion est développé sur ce mode.
 </p>
 
@@ -205,15 +203,15 @@ pollmotionDB.current_session_context_class=thread
     <li>Le retour vers la page</li>
 </ol>
 <p>
-    La première étape peut être considérer comme un service métier pouvant être 
-    utilisable à plusieurs endroit dans votre application.
+    La première étape peut être considérée comme un service métier pouvant être 
+    utilisable à plusieurs endroits dans votre application.
 </p>
 
 <h3>Injecter une partie service</h3>
 
 <p>
     L'idée est de centraliser le métier dans des classes externes pour être 
-    réutilisé dans le contrôleur. Une des solutions est d'utiliser les injectors 
+    réutilisé dans le contrôleur. Une des solutions est d'utiliser les injecteurs 
     de WebMotion pour récupérer une instance du service métier en paramètre ou en 
     variable de classe.
 </p>
@@ -301,14 +299,14 @@ public class Listener implements WebMotionServerListener {
 
 <p>
     Par l'utilisation de l'injecteur, nous séparons les besoins et permettons la
-    réutilisation du code métiers.
+    réutilisation du code métier.
 </p>
 
 <h3>Créer un API REST</h3>
 <p>
-    Une autre possibilité est d'utiliser une proche REST au niveau du contrôler. 
+    Une autre possibilité est d'utiliser une approche REST au niveau du contrôleur. 
     Cela necéssite la création d'une application «Single page» en javascript. Il 
-    est fortement conseiller d'utiliser un framework JS prèvu à cette effet comme AngularJS.
+    est fortement conseillé d'utiliser un framework JS prèvu à cet effet comme AngularJS.
     Pour masquer le render utilisé, nous utilisons un default render.
 </p>
 
@@ -354,7 +352,7 @@ default.render=org.debux.webmotion.server.render.DefaultRender
 <p>
     Un pattern connu pour les sites est le pattern «POST and GET». Le principe est qu'
     après une action de modification, il faut rédiriger l'utilisateur sur une page d'affichage 
-    pour empêcher l'utilisateur de refaire l'action de modification en rafraîchissement son 
+    pour empêcher l'utilisateur de refaire l'action de modification en rafraîchissant son 
     navigateur.
 </p>
 
@@ -376,9 +374,8 @@ default.render=org.debux.webmotion.server.render.DefaultRender
 
 <h2 class="page-header" id="tu">Tests</h2>
 <p>
-    Une des difficultés est de tester facilement votre application, il existe des 
-    solution autour de maven avec des testes d'intégration. Il existe un moyen simple
-    directement dans des testes unitaires.
+    Une des difficultés est de tester facilement votre application. Il existe des 
+    solutions dans maven avec des tests d'intégration. WebMotion vous propose de réaliser directement vos tests sous forme de tests unitaires.
 </p>
 
 <p>
@@ -400,16 +397,20 @@ public class TestMainController extends WebMotionTestNG {
 </pre>
 
 <h2>Lancer l'application</h2>
-
-Vous pouvez lancer l'application depuis Jetty, en saisissant la ligne de commande suivante :
-
+<p>
+    Vous pouvez lancer l'application depuis Jetty, en saisissant la ligne de commande suivante :
+</p>
+<pre class="prettyprint">
 $ mvn jetty:run
-
+</pre>
+<p>
 Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.
-
+</p>
+<p>
 Vous pouvez consulter le résultat dans votre navigateur en saisissant l'adresse suivante http://localhost:8080/pollmotion/. 
-
+</p>
 </div>
     
 <!--    </body>
 </html>-->
+
