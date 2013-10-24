@@ -72,12 +72,11 @@
     <a href="https://gitorious.org/webmotion/webmotion-examples/trees/master/uploadmotion">https://gitorious.org/webmotion/webmotion-examples/trees/master/uploadmotion</a>.
 </p>
 
-<h2 class="page-header" id="create">Création du projet</h2>
+<h2 class="page-header" id="create">Create the project</h2>
 
 <p>
-    Maven est utilisé comme gestionnaire de construction de projet pour l'exemple. WebMotion 
-    propose notamment un archetype pour initialiser un projet. Pour l'utiliser il 
-    vous suffit de saisir la commande suivante :
+    Maven is used as buid manager for the example. WebMotion offers an archetype 
+    to initial the project. To use it, you just have to enter the following command :
 </p>
 <pre class="prettyprint">
 $ mvn archetype:generate \
@@ -92,7 +91,8 @@ $ mvn archetype:generate \
 </pre>
 
 <p>
-    Coté Jquery, il suffit d'inclure le script dans vos pages. Notre exemple est composé d'une seule page.
+    For Jquery side, you just have to include the script in your pages. The example 
+    is composed with one page.
 </p>
 
 <pre class="prettyprint">
@@ -103,14 +103,14 @@ $ mvn archetype:generate \
 &lt;/html&gt;
 </pre>
 
-<h2 class="page-header" id="controller">Partie contrôleur</h2>
+<h2 class="page-header" id="controller">Controller part</h2>
 <p>
-    La partie contrôleur est simple. Elle est composée de deux services un pour télécharger 
-    le fichier et un autre pour récupérer le fichier.
+    The controller part is simple. It is composed by two services, one for the file download
+    and the other one to get the file.
 </p>
 
 <p>
-    Pour créer un service sur WebMotion, il faut commencer par créer un contrôleur ainsi :
+    To create a service with WebMotion, you have to begin by create a controller as :
 </p>
 
 <pre class="prettyprint">
@@ -120,9 +120,9 @@ public class MainController extends WebMotionController {
 </pre>
 
 <p>
-    La prochaine étape consiste à créer les méthodes correspondant à vos services.
-    Le service d'upload prend en paramètre directement le fichier de type File en entrée. Vous n'avez 
-    rien d'autre à faire pour récupérer un fichier avec WebMotion.
+    The next step is to create the methods for the services. The upload service
+    takes as parameter directly the file with File type. You have nothing else to get
+    a file with WebMotion.
 </p>
 <pre class="prettyprint">
 public Render upload(Properties conf, File file) throws IOException {
@@ -144,8 +144,8 @@ public Render upload(Properties conf, File file) throws IOException {
 </pre>
 
 <p>
-    Pour le service de download, le nom du fichier est passé sous forme de token
-    renvoyer par le service d'upload.
+    For the download service, the file name is passed as a token returned by 
+    the upload service.
 </p>
 <pre class="prettyprint">
 public Render download(Properties conf, String token) throws IOException {
@@ -160,15 +160,14 @@ public Render download(Properties conf, String token) throws IOException {
 </pre>
 
 <p>
-    Vous pouvez constater que les services prennent aussi en paramètre un objet Properties qui
-    représente la configuration de votre application. Ces propriétés peuvent être définies directement
-    dans le fichier de mapping. Le fichier de mapping est le fichier de configuration de WebMotion 
-    qui vous permet entre autre de mettre en relation votre url et votre methode java.
+    You can see that the services also get a Properties object parameter which 
+    represent the configuration of the application. Their properties can be 
+    defined directly in the mapping file. The mapping file is the configuration file
+    of WebMotion where you can connect your url and your java method.
 </p>
 
 <p>
-    Nous allons retrouver dans le fichier de mapping le répertoire où télécharger 
-    le fichier sous la forme de clé valeur :
+    In the mapping file you find the folder where the file is downloaded as key/value. :
 </p>
 <pre>
 [properties]
@@ -176,9 +175,9 @@ folder=/tmp
 </pre>
 
 <p>
-    Pour terminer la partie contrôleur, il vous reste à mettre en relation vos services selon une url.
-    Une action dans le fichier de mapping est composée de la méthode HTTP, du path et de l'action à réaliser. 
-    Dans la régle suivante, l'action consiste à appeller une méthode java.
+    Endly the controller part, it stay to connect the services with an url.
+    An action in the mapping file is composed with HTTP method, the path and the action to attain.
+    In the follow rule, the action consits to call a java method.
 </p>
 <pre>
 [actions]
@@ -186,18 +185,16 @@ POST         /upload                MainController.upload
 GET          /download              MainController.download
 </pre>
 
-<h2 class="page-header" id="view">Partie vue</h2>
+<h2 class="page-header" id="view">View part</h2>
 <p>
-    L'application sera constituée d'une seule page HTML. Nous utilisons le style
-    du bootstrap twitter :
+    The application consists with a single HTML page. We use the bootstrap twitter style:
 </p>
 <pre class="prettyprint">
 &lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
 </pre>
 
 <p>
-    La page affichera un formulaire avec un input de type <code>file</code> pour envoyer
-    le fichier sur le serveur.
+    The page displays a fom with a <code>file</code> input to send the file on the server.
 </p>
 <pre class="prettyprint">
 &lt;form&gt;
@@ -206,8 +203,8 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Une zone est définie pour suivre la progression du téléchargement du fichier.
-    Pour faire évoluer la progression, il vous suffit de modifier sa taille.
+    A zone is defined to follow the progression of the file download. To change the progression
+    simply change its size.
 </p>
 <pre class="prettyprint">
 &lt;div class="progress"&gt;
@@ -216,7 +213,7 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Les éléments suivants vous permettent d'afficher le fichier et de le partager sous la forme d'un lien.
+    With the following elements, you can see the content file and share its as a link.
 </p>
 <pre class="prettyprint">
 &lt;p style="text-align: center"&gt;
@@ -233,8 +230,8 @@ GET          /download              MainController.download
 </pre>
 
 <p>
-    Coté JQuery, il vous faut créer la réquête XHR avec un listener sur l'upload. 
-    JQuery ne permet pas d'y accéder directement, il faut passer dans ce cas par un provider de requête.
+    In JQuery side, you have to create the XHR request with a upload listener.
+    With Jquery you cannot use it directly, you have to pass by a request provider.
 </p>
 <pre class="prettyprint">
 $(function() {
@@ -282,8 +279,7 @@ $(function() {
 </pre>
 
 <p>
-    En cas de changement de fichier vous pouvez réinitialiser la progress bar
-    et la preview.
+    When the file changes, you can reinitialize the progress bar and the preview.
 </p>
 <pre class="prettyprint">
 $(function() {
@@ -299,30 +295,29 @@ $(function() {
 </pre>
 
 <p>
-    Pour finir, l'url pour accéder à la page est ajoutée dans la 
-    section "action" de WebMotion. Dans la régle suivante, l'action consiste à revoyer la page index.html à 
-    l'utilisateur.
+    Finally, the url to access to the page is added in "action" section for WebMotion.
+    In the following rule, the action consits to return the index.html page for the user.
 </p>
 <pre class="prettyprint">
 [actions]
 GET       /                           view:index.html
 </pre>
 
-<h2 class="page-header" id="run">Lancer l'application</h2>
+<h2 class="page-header" id="run">Run the application</h2>
 
 <p>
-    Vous pouvez maintenant lancer l'application depuis Jetty, en saisissant la ligne
-    de commande suivante :
+    You can now run the application with Jetty entering the following command
+    line :
 </p>
 <pre class="prettyprint">
 $ mvn jetty:run
 </pre>
 <p>
-    Il est bien sûr possible de déployer l'application sur un Jetty, Tomcat ou Glassfish dédié.
+    It is possible to deploy the application in dedicated server Jetty, Tomcat or Glassfish.
 </p>
 <p>
-    Vous pouvez consulter le résultat dans votre navigateur en saisissant l'adresse 
-    suivante <a href="http://localhost:8080/UploadMotion/">http://localhost:8080/uploadmotion/</a>.
+   You can visualize the result in your navigator with the following 
+   address <a href="http://localhost:8080/UploadMotion/">http://localhost:8080/uploadmotion/</a>.
 </p>
 
 </div>
