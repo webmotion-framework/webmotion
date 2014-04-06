@@ -42,9 +42,48 @@
     <li>l'ancienne version du site web avec la documentation</li>
 </ul>
 
+<h2 class="page-header" id="2_4">Version 2.4</h2>
+<p>
+    <strong>Modifications majeurs :</strong>
+</p>
+<ul>
+    <li>Déplacement des sources vers Gitorious</li>
+    <li>Tutoriels</li>
+    <li>Gestion des tests unitaires</li>
+    <li>Rendu par défaut</li>
+    <li>Amélioration du pramètrage WebMotion</li>
+    <li>Convertions des énumérations</li>
+</ul>
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul>
+    <li><a href="http://projects.debux.org/issues/313">Bug #313</a>: Mapping non trouvé avec le plugin Tomcat</li>
+    <li><a href="http://projects.debux.org/issues/314">Bug #314</a>: Le fichier passé en paramètre est null si la taille est inférieur à 1OKB</li>
+    <li><a href="http://projects.debux.org/issues/320">Bug #320</a>: Changer la regexp pour le jsessionid pour gérer les majuscules et les lettres</li>
+    <li><a href="http://projects.debux.org/issues/327">Bug #327</a>: Erreur de conversion d'un attribut d'une superclass</li>
+    <li><a href="http://projects.debux.org/issues/229">Feature #229</a>: Exemples</li>
+    <li><a href="http://projects.debux.org/issues/284">Feature #284</a>: Modification partiel de MainHandler</li>
+    <li><a href="http://projects.debux.org/issues/286">Feature #286</a>: Ajout d'un nouveau language pour écrire le fichier de mapping</li>
+    <li><a href="http://projects.debux.org/issues/288">Feature #288</a>: Revoir les phases des handlers</li>
+    <li><a href="http://projects.debux.org/issues/290">Feature #290</a>: Ajouter doProcess avec le mapping et le call en paramètre dans les filtres</li>
+    <li><a href="http://projects.debux.org/issues/292">Feature #292</a>: Tests unitaires</li>
+    <li><a href="http://projects.debux.org/issues/300">Feature #300</a>: Ajouter des noms de fichiers multiple par le paramètre wm.mapping.file.name</li>
+    <li><a href="http://projects.debux.org/issues/301">Feature #301</a>: Ajouter un warning si la clé secrète est trop courte</li>
+    <li><a href="http://projects.debux.org/issues/317">Feature #317</a>: Configuration JPA dans le fichier de mapping</li>
+    <li><a href="http://projects.debux.org/issues/318">Feature #318</a>: DoChain dans le FilterController</li>
+    <li><a href="http://projects.debux.org/issues/319">Feature #319</a>: Rendu par défaut</li>
+    <li><a href="http://projects.debux.org/issues/321">Feature #321</a>: Déplacement des sources sur Gitorious</li>
+    <li><a href="http://projects.debux.org/issues/326">Feature #326</a>: Amélioration de l'API des injector (récupération du nom du paramètre)</li>
+    <li><a href="http://projects.debux.org/issues/328">Feature #328</a>: Gestion de l'OPTION en HTTP</li>
+    <li><a href="http://projects.debux.org/issues/329">Feature #329</a>: Ajout d'un converteur pour les énumérations</li>
+</ul>
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/">Site &raquo;</a></p>
+
 <h2 class="page-header" id="2_3_3">Version 2.3.3</h2>
 <p>
-    <strong>Major changes:</strong>
+    <strong>Modifications majeurs :</strong>
 </p>
 <ul>
     <li>Synchronisation avec le repo maven central</li>
@@ -61,33 +100,33 @@
     <strong>Tickets:</strong>
 </p>
 <ul>
-    <li><a href="/issues/258">Bug #258</a>: La methode &quot;Context.getParameter&quot; est vide si la requête est en multipart</li>
-    <li><a href="/issues/259">Bug #259</a>: persistence.xml manque dans le showcase</li>
-    <li><a href="/issues/262">Bug #262</a>: Faute dans le nom de classe pour le manager de cookie</li>
-    <li><a href="/issues/265">Bug #265</a>: Désactivation des ressources static casse le rendu des vues</li>
-    <li><a href="/issues/268">Bug #268</a>: Le projet webmotion-test ne build pas sous Windows</li>
-    <li><a href="/issues/280">Bug #280</a>: ExecutorParametersInjectorHandler contient plusieurs fois le même injecteur</li>
-    <li><a href="/issues/293">Bug #293</a>: Une erreur 404 est levée quand il y a le ;jsessionid dans l'url</li>
-    <li><a href="/issues/294">Bug #294</a>: Erreur dans WebMotionWebSocketJson quand on passe un string avec des espaces</li>
-    <li><a href="/issues/295">Bug #295</a>: NullPointerException dans WebMotionWebSocketJson quand params est null</li>
-    <li><a href="/issues/296">Bug #296</a>: Seulement des string non null sont convertible  dans WebMotionWebSocketJson</li>
-    <li><a href="/issues/121">Feature #121</a>: Creation d'un extra avec Apache Shiro pour gérer la sécurité</li>
-    <li><a href="/issues/124">Feature #124</a>: Plugin pour NetBeans</li>
-    <li><a href="/issues/235">Feature #235</a>: Support des Websockets</li>
-    <li><a href="/issues/252">Feature #252</a>: Revue des logs</li>
-    <li><a href="/issues/253">Feature #253</a>: Multiple listeners du serveur</li>
-    <li><a href="/issues/261">Feature #261</a>: Vérification des actions java</li>
-    <li><a href="/issues/266">Feature #266</a>: [mapping] Un paramètre dynamique peut être placé qu'entre des slash</li>
-    <li><a href="/issues/267">Feature #267</a>: Amélioration du filtre pour rajouter facilement d'autre type de vues</li>
-    <li><a href="/issues/274">Feature #274</a>: Simplification des patterns pour les fichiers d'extensions</li>
-    <li><a href="/issues/277">Feature #277</a>: Amélioration des la conversion des objets</li>
-    <li><a href="/issues/279">Feature #279</a>: Protection des paramètres injectés</li>
-    <li><a href="/issues/281">Feature #281</a>: Création d'un module pour chaque extra</li>
-    <li><a href="/issues/283">Feature #283</a>: Amélioration des listeners du serveur pour ajouter le mapping en paramètre</li>
-    <li><a href="/issues/297">Feature #297</a>: Synchronisation des artifacts WebMotion dans le repo maven central</li>
+    <li><a href="http://projects.debux.org/issues/258">Bug #258</a>: La methode &quot;Context.getParameter&quot; est vide si la requête est en multipart</li>
+    <li><a href="http://projects.debux.org/issues/259">Bug #259</a>: persistence.xml manque dans le showcase</li>
+    <li><a href="http://projects.debux.org/issues/262">Bug #262</a>: Faute dans le nom de classe pour le manager de cookie</li>
+    <li><a href="http://projects.debux.org/issues/265">Bug #265</a>: Désactivation des ressources static casse le rendu des vues</li>
+    <li><a href="http://projects.debux.org/issues/268">Bug #268</a>: Le projet webmotion-test ne build pas sous Windows</li>
+    <li><a href="http://projects.debux.org/issues/280">Bug #280</a>: ExecutorParametersInjectorHandler contient plusieurs fois le même injecteur</li>
+    <li><a href="http://projects.debux.org/issues/293">Bug #293</a>: Une erreur 404 est levée quand il y a le ;jsessionid dans l'url</li>
+    <li><a href="http://projects.debux.org/issues/294">Bug #294</a>: Erreur dans WebMotionWebSocketJson quand on passe un string avec des espaces</li>
+    <li><a href="http://projects.debux.org/issues/295">Bug #295</a>: NullPointerException dans WebMotionWebSocketJson quand params est null</li>
+    <li><a href="http://projects.debux.org/issues/296">Bug #296</a>: Seulement des string non null sont convertible  dans WebMotionWebSocketJson</li>
+    <li><a href="http://projects.debux.org/issues/121">Feature #121</a>: Creation d'un extra avec Apache Shiro pour gérer la sécurité</li>
+    <li><a href="http://projects.debux.org/issues/124">Feature #124</a>: Plugin pour NetBeans</li>
+    <li><a href="http://projects.debux.org/issues/235">Feature #235</a>: Support des Websockets</li>
+    <li><a href="http://projects.debux.org/issues/252">Feature #252</a>: Revue des logs</li>
+    <li><a href="http://projects.debux.org/issues/253">Feature #253</a>: Multiple listeners du serveur</li>
+    <li><a href="http://projects.debux.org/issues/261">Feature #261</a>: Vérification des actions java</li>
+    <li><a href="http://projects.debux.org/issues/266">Feature #266</a>: [mapping] Un paramètre dynamique peut être placé qu'entre des slash</li>
+    <li><a href="http://projects.debux.org/issues/267">Feature #267</a>: Amélioration du filtre pour rajouter facilement d'autre type de vues</li>
+    <li><a href="http://projects.debux.org/issues/274">Feature #274</a>: Simplification des patterns pour les fichiers d'extensions</li>
+    <li><a href="http://projects.debux.org/issues/277">Feature #277</a>: Amélioration des la conversion des objets</li>
+    <li><a href="http://projects.debux.org/issues/279">Feature #279</a>: Protection des paramètres injectés</li>
+    <li><a href="http://projects.debux.org/issues/281">Feature #281</a>: Création d'un module pour chaque extra</li>
+    <li><a href="http://projects.debux.org/issues/283">Feature #283</a>: Amélioration des listeners du serveur pour ajouter le mapping en paramètre</li>
+    <li><a href="http://projects.debux.org/issues/297">Feature #297</a>: Synchronisation des artifacts WebMotion dans le repo maven central</li>
 </ul>
 
-<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/">Site &raquo;</a></p>
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-2.3/">Site &raquo;</a></p>
 
 <h2 class="page-header" id="2_2">Version 2.2</h2>
 <p>
@@ -105,31 +144,31 @@
     <strong>Tickets :</strong>
 </p>
 <ul>
-    <li><a href="/issues/217">Bug #217</a>: Le nom de la classe est invalide quand le paquetage du filtre est vide</li>
-    <li><a href="/issues/220">Bug #220</a>: Problème d'ordonnancement des handlers de type Executor </li>
-    <li><a href="/issues/247">Bug #247</a>: Les patterns dans les paramètres ne fonctionne pas</li>
-    <li><a href="/issues/248">Bug #248</a>: Impossible de mettre des accolades dans les patterns dans le mapping</li>
-    <li><a href="/issues/255">Bug #255</a>: Le site web de WebMotion ne s'affiche pas correctement sous IE 9</li>
-    <li><a href="/issues/114">Feature #114</a>: Supprimer (ou pouvoir le faire) l'auto-détection d'un type de ressource (statique, dynamique)</li>
-    <li><a href="/issues/119">Feature #119</a>: Extension CRUD avec hibernate</li>
-    <li><a href="/issues/120">Feature #120</a>: Extension de layout avec SiteMesh</li>
-    <li><a href="/issues/128">Feature #128</a>: Extraire du showcase des tests d'intégration</li>
-    <li><a href="/issues/179">Feature #179</a>: Changer la version de commons-lang</li>
-    <li><a href="/issues/185">Feature #185</a>: Session porté par le navigateur</li>
-    <li><a href="/issues/186">Feature #186</a>: Simuler des requêtes de type PUT/DELETE avec un header</li>
-    <li><a href="/issues/206">Feature #206</a>: Ajouter dans le mapping un mot clé pour le RenderForward</li>
-    <li><a href="/issues/209">Feature #209</a>: Ajouter des méthodes pour la gestion des cookies</li>
-    <li><a href="/issues/211">Feature #211</a>: Fusion les extensions Spring, JPA et SiteMesh</li>
-    <li><a href="/issues/214">Feature #214</a>: Documentation sur la partie extras</li>
-    <li><a href="/issues/215">Feature #215</a>: Améliorer l'archetype pour inclure la partie extras</li>
-    <li><a href="/issues/216">Feature #216</a>: Changement du nom du fichier de mapping chargé</li>
-    <li><a href="/issues/218">Feature #218</a>: Simplification de la configuration des convertisseurs et des injecteurs</li>
-    <li><a href="/issues/219">Feature #219</a>: Création de contrôleur disponible dans l'ensemble de mapping</li>
-    <li><a href="/issues/221">Feature #221</a>: Pouvoir mettre des attributs sur le RenderForward</li>
-    <li><a href="/issues/236">Feature #236</a>: RenderError juste avec le code d'erreur</li>
-    <li><a href="/issues/237">Feature #237</a>: Ajouter une section pour la configuration des applications</li>
-    <li><a href="/issues/238">Feature #238</a>: Ajouter un render success ou failure</li>
-    <li><a href="/issues/251">Feature #251</a>: Remplacer le parser ANTLR par Parboiled</li>
+    <li><a href="http://projects.debux.org/issues/217">Bug #217</a>: Le nom de la classe est invalide quand le paquetage du filtre est vide</li>
+    <li><a href="http://projects.debux.org/issues/220">Bug #220</a>: Problème d'ordonnancement des handlers de type Executor </li>
+    <li><a href="http://projects.debux.org/issues/247">Bug #247</a>: Les patterns dans les paramètres ne fonctionne pas</li>
+    <li><a href="http://projects.debux.org/issues/248">Bug #248</a>: Impossible de mettre des accolades dans les patterns dans le mapping</li>
+    <li><a href="http://projects.debux.org/issues/255">Bug #255</a>: Le site web de WebMotion ne s'affiche pas correctement sous IE 9</li>
+    <li><a href="http://projects.debux.org/issues/114">Feature #114</a>: Supprimer (ou pouvoir le faire) l'auto-détection d'un type de ressource (statique, dynamique)</li>
+    <li><a href="http://projects.debux.org/issues/119">Feature #119</a>: Extension CRUD avec hibernate</li>
+    <li><a href="http://projects.debux.org/issues/120">Feature #120</a>: Extension de layout avec SiteMesh</li>
+    <li><a href="http://projects.debux.org/issues/128">Feature #128</a>: Extraire du showcase des tests d'intégration</li>
+    <li><a href="http://projects.debux.org/issues/179">Feature #179</a>: Changer la version de commons-lang</li>
+    <li><a href="http://projects.debux.org/issues/185">Feature #185</a>: Session porté par le navigateur</li>
+    <li><a href="http://projects.debux.org/issues/186">Feature #186</a>: Simuler des requêtes de type PUT/DELETE avec un header</li>
+    <li><a href="http://projects.debux.org/issues/206">Feature #206</a>: Ajouter dans le mapping un mot clé pour le RenderForward</li>
+    <li><a href="http://projects.debux.org/issues/209">Feature #209</a>: Ajouter des méthodes pour la gestion des cookies</li>
+    <li><a href="http://projects.debux.org/issues/211">Feature #211</a>: Fusion les extensions Spring, JPA et SiteMesh</li>
+    <li><a href="http://projects.debux.org/issues/214">Feature #214</a>: Documentation sur la partie extras</li>
+    <li><a href="http://projects.debux.org/issues/215">Feature #215</a>: Améliorer l'archetype pour inclure la partie extras</li>
+    <li><a href="http://projects.debux.org/issues/216">Feature #216</a>: Changement du nom du fichier de mapping chargé</li>
+    <li><a href="http://projects.debux.org/issues/218">Feature #218</a>: Simplification de la configuration des convertisseurs et des injecteurs</li>
+    <li><a href="http://projects.debux.org/issues/219">Feature #219</a>: Création de contrôleur disponible dans l'ensemble de mapping</li>
+    <li><a href="http://projects.debux.org/issues/221">Feature #221</a>: Pouvoir mettre des attributs sur le RenderForward</li>
+    <li><a href="http://projects.debux.org/issues/236">Feature #236</a>: RenderError juste avec le code d'erreur</li>
+    <li><a href="http://projects.debux.org/issues/237">Feature #237</a>: Ajouter une section pour la configuration des applications</li>
+    <li><a href="http://projects.debux.org/issues/238">Feature #238</a>: Ajouter un render success ou failure</li>
+    <li><a href="http://projects.debux.org/issues/251">Feature #251</a>: Remplacer le parser ANTLR par Parboiled</li>
 </ul>
 
 <p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-2.2/">Site &raquo;</a></p>
