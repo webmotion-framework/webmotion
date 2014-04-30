@@ -17,6 +17,11 @@ Install
 
 $ mvn install
 
+Run
+---
+
+$ mvn jetty:run
+
 More
 ----
 
