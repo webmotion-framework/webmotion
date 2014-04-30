@@ -156,7 +156,7 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
 
         // Manage enums
         if (type.isEnum()) {
-            Object name = ((Object[]) value)[0];
+            Object name = value == null ? null : ((Object[]) value)[0];
             if (name != null) {
                 result = Enum.valueOf((Class<? extends Enum>) type, name.toString());
             }
