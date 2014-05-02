@@ -27,7 +27,7 @@ package org.debux.webmotion.server.handler;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.beanutils.expression.Resolver;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
@@ -40,6 +40,7 @@ import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.lang.reflect.*;
 import java.util.*;
@@ -139,18 +140,18 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
             }
         }
     }
-    
+
     protected Object convert(Call.ParameterTree parameterTree , Class<?> type, Type genericType) throws Exception {
         Object result = null;
 
         if (parameterTree == null) {
             return null;
         }
-        
+
         if (genericType == null) {
             genericType = type.getGenericSuperclass();
         }
-        
+
         Map<String, ParameterTree> tree = parameterTree.getTree();
         Object value = parameterTree.getValue();
 
@@ -241,11 +242,11 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
         // Manage simple object
         } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
-            
+
             if (tree != null) {
                 Object[] tabConverted = (Object[]) Array.newInstance(componentType, tree.size());
                 result = tabConverted;
-                
+
                 int index = 0;
                 for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
                     ParameterTree object = entry.getValue();
@@ -253,12 +254,12 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
                     tabConverted[index] = objectConverted;
                     index ++;
                 }
-                
+
             } else {
                 Object[] tab = (Object[]) value;
                 Object[] tabConverted = (Object[]) Array.newInstance(componentType, tab.length);
                 result = tabConverted;
-                
+
                 for (int index = 0; index < tab.length; index++) {
                     Object object = tab[index];
                     Object objectConverted = converter.convert(object, componentType);
@@ -273,41 +274,121 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
             } else {
                 result = value;
             }
-            
-        // Manage simple object
-        } else if (converter.lookup(type) == null) {
-            Object instance = type.newInstance();
-            boolean one = false;
-            
-            for (Map.Entry<String, ParameterTree> attribut : tree.entrySet()) {
-                String attributName = attribut.getKey();
-                ParameterTree attributeValue = attribut.getValue();
-                
-                boolean writeable = propertyUtils.isWriteable(instance, attributName);
-                if (writeable) {
-                    one = true;
-                    
-                    Field field = FieldUtils.getField(type, attributName, true);
-                    Class<?> attributeType = field.getType();
 
-                    genericType = field.getGenericType();
-                    Object attributeConverted = convert(attributeValue, attributeType, genericType);
-                    beanUtil.setProperty(instance, attributName, attributeConverted);
-                }
+        // Manage simple object
+        } else {
+
+            Object instance;
+            if (converter.lookup(type) == null) {
+                instance = type.newInstance();
+            } else {
+                instance = converter.convert(value, type);
             }
-            
-            if (one) {
+
+            if (tree == null) {
+
                 result = instance;
             } else {
-                result = null;
+                boolean one = false;
+
+                for (Map.Entry<String, ParameterTree> attribut : tree.entrySet()) {
+                    String attributName = attribut.getKey();
+                    ParameterTree attributeValue = attribut.getValue();
+
+                    boolean writeable = propertyUtils.isWriteable(instance, attributName);
+                    if (writeable) {
+                        one = true;
+
+                        Resolver resolver = propertyUtils.getResolver();
+                        if (resolver.isIndexed(attributName)) {
+
+                            // get the indexed property, before all
+                            String containerPropertyName = resolver.getProperty(attributName);
+
+                            PropertyDescriptor containerPropertyDescriptor = propertyUtils.getPropertyDescriptor(instance, containerPropertyName);
+
+                            Class<?> containerPropertyType = containerPropertyDescriptor.getPropertyType();
+
+                            ParameterizedType parameterizedType = (ParameterizedType) containerPropertyDescriptor.getWriteMethod().getGenericParameterTypes()[0];
+                            Class<?> attributeType = (Class) parameterizedType.getActualTypeArguments()[0];
+
+                            // get container property
+                            Object containerPropertyConverted =  propertyUtils.getProperty(instance, containerPropertyName);
+                            if (containerPropertyConverted == null) {
+
+                                // create container property
+
+                                genericType = containerPropertyDescriptor.getWriteMethod().getGenericParameterTypes()[0];
+                                ParameterTree parameterTree1 = new ParameterTree();
+                                parameterTree1.setTree(new HashMap<String, ParameterTree>());
+                                containerPropertyConverted = convert(parameterTree1, containerPropertyType, genericType);
+                                propertyUtils.setProperty(instance, containerPropertyName, containerPropertyConverted);
+                            }
+
+                            // position of object to insert in the container
+                            int index = resolver.getIndex(attributName);
+
+                            Object filledContainerPropertyConverted = fillContainerWithMinimumSize(containerPropertyConverted, attributeType, index);
+                            if (filledContainerPropertyConverted!=containerPropertyConverted) {
+
+                                // if an array instance is no more the same
+                                containerPropertyConverted = filledContainerPropertyConverted;
+
+                                // set it again
+                                propertyUtils.setProperty(instance, containerPropertyName, containerPropertyConverted);
+                            }
+
+                            Object attributeConverted = convert(attributeValue, attributeType, null);
+
+                            //FIXME tchemit-2014-05-02, will only works with Array or List
+                            propertyUtils.setIndexedProperty(instance, containerPropertyName, index, attributeConverted);
+                        } else {
+
+                            PropertyDescriptor propertyDescriptor = propertyUtils.getPropertyDescriptor(instance, attributName);
+
+                            Class<?> attributeType = propertyDescriptor.getPropertyType();
+
+                            genericType = propertyDescriptor.getWriteMethod().getGenericParameterTypes()[0];
+                            Object attributeConverted = convert(attributeValue, attributeType, genericType);
+                            propertyUtils.setProperty(instance, attributName, attributeConverted);
+                        }
+                    }
+                }
+
+                if (one) {
+                    result = instance;
+
+                } else {
+                    result = null;
+                }
             }
-            
-        // Other simple convertion (string, string[], int, int[], ...)
-        } else {
-            result = converter.convert(value, type);
         }
-        
+
         return result;
     }
-    
+
+    protected Object fillContainerWithMinimumSize(Object source, Class<?> type, int minimumSize) {
+        Object result = source;
+
+        if (source.getClass().isArray()) {
+            int length = Array.getLength(source);
+            if (length < minimumSize) {
+
+                result = Array.newInstance(type, minimumSize);
+                for (int i = 0; i < length; i++) {
+
+                    Object o = Array.get(source, i);
+                    Array.set(result, i, o);
+                }
+            }
+        }
+        if (source instanceof Collection) {
+            Collection<?> collection = (Collection<?>) source;
+            while (collection.size() < minimumSize + 1) {
+                collection.add(null);
+            }
+        }
+        return result;
+    }
+
 }
