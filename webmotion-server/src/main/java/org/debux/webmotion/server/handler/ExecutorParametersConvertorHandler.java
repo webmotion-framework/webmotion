@@ -26,6 +26,7 @@ package org.debux.webmotion.server.handler;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.debux.webmotion.server.WebMotionException;
@@ -153,6 +154,14 @@ public class ExecutorParametersConvertorHandler extends AbstractHandler implemen
         
         Map<String, ParameterTree> tree = parameterTree.getTree();
         Object value = parameterTree.getValue();
+
+        Converter lookup = converter.lookup(type);
+        if (lookup != null) {
+
+            // converter found, use it
+            result = lookup.convert(type, value);
+            return result;
+        }
 
         // Manage enums
         if (type.isEnum()) {
