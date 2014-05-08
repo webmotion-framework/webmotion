@@ -25,11 +25,12 @@ package org.debux.webmotion.unittest;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.catalina.Globals;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.loader.WebappLoader;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.scan.StandardJarScanner;
-import static org.debux.webmotion.unittest.WebMotionJUnit.isStarted;
 
 /**
  * Abstract class uses to start/stop Tomcat server.
@@ -48,11 +49,14 @@ public abstract class WebMotionTest {
      * @throws Exception 
      */
     protected void startServer() throws Exception {
-        
+
+        // set catalina base directory
+        System.setProperty(Globals.CATALINA_BASE_PROP, new File(getServerBaseDirectory()).getAbsolutePath());
+
         // create server
         server = new Tomcat();
         server.setPort(getPort());
-        
+
         // Create webapp loader with jar in classpath as repository
         WebappLoader loader = new WebappLoader(this.getClass().getClassLoader());
         String classpaths = System.getProperty("java.class.path");
@@ -131,6 +135,13 @@ public abstract class WebMotionTest {
     protected String getWebappLocation() {
         return "src/main/webapp";
     }
+
+    /**
+     * @return the server base directory
+     */
+    protected String getServerBaseDirectory() {
+        return "target";
+    }
     
     /**
      * Create a request for fluent API from httpcomponent.
@@ -151,7 +162,7 @@ public abstract class WebMotionTest {
             path = getContextPath() + "/" + url;
         }
         
-        RequestBuilder builder = (RequestBuilder) new RequestBuilder()
+        RequestBuilder builder = new RequestBuilder()
                 .setScheme("http")
                 .setHost("localhost")
                 .setPort(getPort())
