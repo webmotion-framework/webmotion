@@ -68,12 +68,6 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
                 HttpServletResponse response = context.getResponse();
                 response.addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_METHODS, acceptedMethods);
 
-                String requestHeaders = context.getHeader(HttpContext.HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
-
-                if (StringUtils.isNotBlank(requestHeaders)) {
-                    response.addHeader(HttpContext.HEADER_ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders);
-                }
-
                 RenderStatus renderStatus = new RenderStatus(HttpServletResponse.SC_OK);
                 call.setRender(renderStatus);
             }
