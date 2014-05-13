@@ -31,6 +31,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.debux.webmotion.server.*;
+import org.debux.webmotion.server.convention.ConventionMappingScanner;
 import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.*;
@@ -149,11 +150,23 @@ public class ServerContext {
                 break;
             }
         }
-        if (mapping == null) {
+        
+        // Scan the mapping to get the convention
+        ConventionMappingScanner conventionMappingScanner = new ConventionMappingScanner();
+        List<Mapping> conventionMappings = conventionMappingScanner.scan();
+        
+        if (mapping == null && conventionMappings.isEmpty()) {
             throw new WebMotionException("No mapping found for " + Arrays.toString(mappingFileNames) 
                     + " in " + Arrays.toString(mappingParsers));
         }
+
+        if (mapping == null) {
+            mapping = new Mapping();
+        }
         
+        // Add convention like an extension
+        mapping.setExtensionsRules(conventionMappings);
+                
         // Fire onStart
         listeners = new ArrayList<WebMotionServerListener>();
         onStartServerListener(mapping);
