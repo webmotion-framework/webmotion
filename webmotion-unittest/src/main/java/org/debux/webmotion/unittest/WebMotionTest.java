@@ -23,6 +23,7 @@
  */
 package org.debux.webmotion.unittest;
 
+import org.debux.webmotion.server.tools.RequestBuilder;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 

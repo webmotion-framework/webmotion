@@ -28,8 +28,8 @@ import java.io.IOException;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.debux.webmotion.unittest.RequestBuilder;
-import org.debux.webmotion.unittest.StringResponseHandler;
+import org.debux.webmotion.server.tools.RequestBuilder;
+import org.debux.webmotion.server.tools.StringResponseHandler;
 
 /**
  * Define the basic information to create et execute a request for all tests.
@@ -39,7 +39,7 @@ import org.debux.webmotion.unittest.StringResponseHandler;
 public class AbstractIT {
     
     public RequestBuilder createRequest(String url) {
-        RequestBuilder builder = (RequestBuilder) new RequestBuilder()
+        RequestBuilder builder = new RequestBuilder()
                 .setScheme("http")
                 .setHost("localhost")
                 .setPort(8090)

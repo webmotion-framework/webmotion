@@ -51,30 +51,6 @@
         
         <dependency>
             <groupId>@project.groupId@</groupId>
-            <artifactId>webmotion-unittest</artifactId>
-            <version>@project.version@</version>
-            <scope>test</scope>
-            
-            <!-- Exclude Jetty dependencies to fix error with Tomcat server 
-                 which don't use the good dependencies -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-server</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-webapp</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-jsp</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>@project.groupId@</groupId>
             <artifactId>webmotion-test</artifactId>
             <version>@project.version@</version>
             <type>war</type>

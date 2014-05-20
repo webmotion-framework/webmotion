@@ -24,7 +24,7 @@
  */
 package org.debux.webmotion.test;
 
-import org.debux.webmotion.unittest.RequestBuilder;
+import org.debux.webmotion.server.tools.RequestBuilder;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketTextListener;

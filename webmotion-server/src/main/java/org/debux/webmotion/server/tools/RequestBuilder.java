@@ -1,4 +1,4 @@
-package org.debux.webmotion.unittest;
+package org.debux.webmotion.server.tools;
 
 /*
  * #%L
