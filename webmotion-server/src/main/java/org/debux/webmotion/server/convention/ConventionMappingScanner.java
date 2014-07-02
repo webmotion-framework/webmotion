@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.HttpContext;
@@ -85,6 +86,7 @@ public class ConventionMappingScanner {
             Mapping mapping = mappings.get(packageName);
             if (mapping == null) {
                 mapping = new Mapping();
+                mapping.setName("Convention");
                 mapping.setExtensionPath("/");
                 
                 Config config = mapping.getConfig();
@@ -95,7 +97,7 @@ public class ConventionMappingScanner {
             
             // Base url based on class name
             String simpleName = klass.getSimpleName();
-            List<FragmentUrl>  fragmentUrlsByClassName = createFragmentUrlList(simpleName);
+            List<FragmentUrl> fragmentUrlsByClassName = createFragmentUrlList(simpleName);
             
             // Look the methods
             Method[] methods = klass.getDeclaredMethods();
@@ -103,11 +105,11 @@ public class ConventionMappingScanner {
                 
                 ActionRule actionRule = new ActionRule();
                 String methodName = method.getName();
-                List<FragmentUrl>  fragmentUrlsByMethodName = createFragmentUrlList(methodName);
+                List<FragmentUrl> fragmentUrlsByMethodName = createFragmentUrlList(methodName);
                 
                 // Link method
                 Action action = new Action();
-                action.setFullName(className + "." + methodName);
+                action.setFullName(simpleName + "." + methodName);
                 action.setType(Action.Type.ACTION);
                 actionRule.setAction(action);
                 
@@ -124,7 +126,7 @@ public class ConventionMappingScanner {
                     actionRule.setMethods(Arrays.asList(HttpContext.METHOD_POST));
                 } else {
                     removedFirst = false;
-                    actionRule.setMethods(Arrays.asList(HttpContext.METHOD_POST));
+                    actionRule.setMethods(Arrays.asList(HttpContext.METHOD_GET));
                 }
                 
                 // Create URL
@@ -136,6 +138,8 @@ public class ConventionMappingScanner {
                 fragmentUrls.addAll(fragmentUrlsByClassName);
                 fragmentUrls.addAll(fragmentUrlsByMethodName);
                 actionRule.setRuleUrl(fragmentUrls);
+                actionRule.setMapping(mapping);
+                actionRule.setLine(-1);
                 
                 List<ActionRule> actionRules = mapping.getActionRules();
                 actionRules.add(actionRule);
@@ -150,8 +154,23 @@ public class ConventionMappingScanner {
         List<FragmentUrl>  fragmentUrls = new ArrayList<FragmentUrl>(values.length);
         
         for (String value : values) {
+            // Add slash before each value
+            FragmentUrl fragmentSlash = new FragmentUrl();
+            fragmentSlash.setValue("/");
+                    
+            Pattern patternSlash = Pattern.compile("^/$");
+            fragmentSlash.setPattern(patternSlash);
+                    
+            fragmentUrls.add(fragmentSlash);
+            
+            // Add value
+            String valueLowerCase = value.toLowerCase();
             FragmentUrl fragmentUrl = new FragmentUrl();
-            fragmentUrl.setValue(value.toLowerCase());
+            fragmentUrl.setValue(valueLowerCase);
+            
+            Pattern pattern = Pattern.compile("^" + valueLowerCase + "$");
+            fragmentUrl.setPattern(pattern);
+                    
             fragmentUrls.add(fragmentUrl);
         }
                     
