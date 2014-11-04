@@ -117,6 +117,8 @@ public class WebMotionServletContextListener implements ServletContextListener {
             log.warn("The websockets are not supported", ex);
         } catch (ClassNotFoundException ex) {
             log.warn("The websockets are not supported", ex);
+        } catch (NoClassDefFoundError ex) {
+            log.warn("The websockets are not supported", ex);
         }
     }
     

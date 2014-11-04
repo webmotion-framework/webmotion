@@ -24,7 +24,6 @@
  */
 package org.debux.webmotion.test;
 
-import org.debux.webmotion.server.tools.StringResponseHandler;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;

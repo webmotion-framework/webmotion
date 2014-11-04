@@ -24,17 +24,10 @@
  */
 package org.debux.webmotion.server.convention;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import java.util.List;
+import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.render.Render;
-import org.reflections.Reflections;
-import org.reflections.Store;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
+import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
@@ -45,24 +38,16 @@ import org.testng.annotations.Test;
  * 
  * @author julien
  */
-public class ConventionMappingParserTest {
+public class ConventionTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ConventionMappingParserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ConventionTest.class);
     
     @Test
-    public void testSuperClass() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-            .setUrls(ClasspathHelper.forPackage(""))
-            .setScanners(new SuperClassScanner()));
-        
-        Store store = reflections.getStore();
-        Multimap<String, String> mmap = store.get(SuperClassScanner.class);
-        
-        String classConvention = WebMotionConventionController.class.getName();
-        Multimap<String, String> classes = Multimaps.filterValues(mmap, Predicates.equalTo(classConvention));
-        AssertJUnit.assertEquals(1, classes.size());
+    public void testSearchClassByName() {
+        Collection<String> classes = ReflectionUtils.getClasses("UserService");
+        AssertJUnit.assertFalse(classes.isEmpty());
     }
-    
+        
     @Test
     public void testSplitCamelCase() {
         String name = "UserServiceTest";
@@ -70,13 +55,6 @@ public class ConventionMappingParserTest {
         AssertJUnit.assertEquals(3, result.length);
     }
         
-    @Test
-    public void testScan() {
-        ConventionMappingScanner scanner = new ConventionMappingScanner();
-        List<Mapping> mappings = scanner.scan();
-        AssertJUnit.assertEquals(1, mappings.size());
-    }
-    
     public class UserService extends WebMotionConventionController {
         
         // GET       /user/service                UserService.get

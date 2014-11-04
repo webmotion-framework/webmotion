@@ -207,7 +207,7 @@ public class ReflectionUtils {
         // By default
         return userHome + File.separator + ".config";
     }
-    
+
     /**
      * @return all ressource with pattern
      */
@@ -220,6 +220,39 @@ public class ReflectionUtils {
         Multimap<String, String> mmap = store.get(ResourcesScanner.class);
         
         final Pattern pattern = Pattern.compile(regex);
+        Predicate predicate = new Predicate<String>() {
+            @Override
+            public boolean apply(String input) {
+                return pattern.matcher(input).matches();
+            }
+        };
+        Collection<String> resources = Collections2.filter(mmap.values(), predicate);
+        return resources;
+    }
+    
+    
+    /**
+     * Scanner use to get classes as ressources
+     */
+    public static class ClassesScanner extends ResourcesScanner {
+        @Override
+        public boolean acceptsInput(String file) {
+            return file.endsWith(".class"); //is a class file
+        }
+    }
+    
+    /**
+     * @return all classes with pattern
+     */
+    public static Collection<String> getClasses(String regex) {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage(""))
+                .setScanners(new ClassesScanner()));
+        
+        Store store = reflections.getStore();
+        Multimap<String, String> mmap = store.get(ClassesScanner.class);
+        
+        final Pattern pattern = Pattern.compile(".*" + regex + "\\.class$");
         Predicate predicate = new Predicate<String>() {
             @Override
             public boolean apply(String input) {

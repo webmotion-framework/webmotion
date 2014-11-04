@@ -27,7 +27,7 @@ package org.debux.webmotion.server.tools;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Collection;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
@@ -88,13 +88,12 @@ public class ReflectionUtilsTest {
         String result = ReflectionUtils.unCapitalizeClass("org.webmotion.Myclass");
         AssertJUnit.assertEquals("org.webmotion.myclass", result);
     }
-    
+        
     @Test
     public void testGetResourcesDirectory() throws IOException, URISyntaxException {
         Collection<String> resources = ReflectionUtils.getResources("mapping/.*");
         AssertJUnit.assertFalse(resources.isEmpty());
     }
-
     
     @Test
     public void testIsPrimitive() {
