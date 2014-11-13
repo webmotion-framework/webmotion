@@ -130,6 +130,10 @@
         
     </dependencies>
 
+    <properties>
+        <tomcat.version>8.0.14</tomcat.version>
+    </properties>
+  
     <build>
         <finalName>webmotion-test</finalName>
         
@@ -153,8 +157,8 @@
 
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.0-beta-1</version>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>2.3-SNAPSHOT</version>
                 
                 <configuration>
                     <path>/${project.build.finalName}</path>
@@ -289,8 +293,37 @@
                         <artifactId>tomcat-embed-logging-log4j</artifactId>
                         <version>${tomcat.version}</version>
                     </dependency>
+                    
                 </dependencies>
             </plugin>
         </plugins>
     </build>
+    
+    <repositories>
+        <repository>
+            <id>apache.snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots</name>
+            <url>https://repository.apache.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+  
 </project>
