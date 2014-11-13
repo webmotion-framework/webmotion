@@ -204,13 +204,13 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy todir="target/it/glassfish/src/test">
+                                <copy todir="target/it/glassfish3/src/test">
                                     <fileset dir="src/test" />
                                 </copy>
-                                <copy todir="target/it/jetty/src/test">
+                                <copy todir="target/it/jetty8/src/test">
                                     <fileset dir="src/test" />
                                 </copy>
-                                <copy todir="target/it/tomcat/src/test">
+                                <copy todir="target/it/tomcat7/src/test">
                                     <fileset dir="src/test" />
                                 </copy>
                             </target>

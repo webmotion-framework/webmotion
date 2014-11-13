@@ -31,16 +31,19 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.CachingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Pattern;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.EnumerationUtils;
+import org.apache.commons.collections.functors.NotNullPredicate;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.reflections.Reflections;
 import org.reflections.Store;
 import org.reflections.scanners.ResourcesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 /**
  * Util class.
@@ -212,12 +215,10 @@ public class ReflectionUtils {
      * @return all ressource with pattern
      */
     public static Collection<String> getResources(String regex) {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage(""))
-                .setScanners(new ResourcesScanner()));
+        Reflections reflections = new Reflections("", new ResourcesScanner(), new WrapClassLoader());
         
         Store store = reflections.getStore();
-        Multimap<String, String> mmap = store.get(ResourcesScanner.class);
+        Multimap<String, String> mmap = store.get(ResourcesScanner.class.getSimpleName());
         
         final Pattern pattern = Pattern.compile(regex);
         Predicate predicate = new Predicate<String>() {
@@ -245,12 +246,10 @@ public class ReflectionUtils {
      * @return all classes with pattern
      */
     public static Collection<String> getClasses(String regex) {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage(""))
-                .setScanners(new ClassesScanner()));
+        Reflections reflections = new Reflections("", new ClassesScanner(), new WrapClassLoader());
         
         Store store = reflections.getStore();
-        Multimap<String, String> mmap = store.get(ClassesScanner.class);
+        Multimap<String, String> mmap = store.get(ClassesScanner.class.getSimpleName());
         
         final Pattern pattern = Pattern.compile(".*" + regex + "\\.class$");
         Predicate predicate = new Predicate<String>() {
@@ -261,6 +260,28 @@ public class ReflectionUtils {
         };
         Collection<String> resources = Collections2.filter(mmap.values(), predicate);
         return resources;
+    }
+    
+    /**
+     * Wrap the current class loader to avoid null in resources for Tomcat8.
+     */
+    public static class WrapClassLoader extends ClassLoader {
+        
+        public ClassLoader classLoader;
+        
+        public WrapClassLoader() {
+            this.classLoader = WrapClassLoader.class.getClassLoader();
+        }
+
+        @Override
+        public Enumeration<URL> getResources(String name) throws IOException {
+            Enumeration<URL> resources = this.classLoader.getResources(name);
+            List list = EnumerationUtils.toList(resources);
+            CollectionUtils.filter(list, NotNullPredicate.getInstance());
+            
+            return Collections.enumeration(list);
+        }
+        
     }
 
 }
