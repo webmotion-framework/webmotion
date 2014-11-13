@@ -213,6 +213,10 @@
                                 <copy todir="target/it/tomcat7/src/test">
                                     <fileset dir="src/test" />
                                 </copy>
+                                <!-- Disabled for the moment the plugin not support Tomcat8 -->
+<!--                                <copy todir="target/it/tomcat8/src/test">
+                                    <fileset dir="src/test" />
+                                </copy>-->
                             </target>
                         </configuration>
                     </execution>
