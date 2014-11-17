@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="version" scope="page" value="2.4"/>
 
 <!DOCTYPE html>
 <!--
@@ -29,7 +28,7 @@
   #L%
 -->
 
-<html lang="${language}">
+<html lang="${sessionScope.language}">
     <head>
         <meta charset="utf-8">
         
@@ -39,10 +38,10 @@
         <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
         <meta http-equiv="pragma" content="no-cache" />
 
-        <c:if test="${language == 'fr'}">
+        <c:if test="${sessionScope.language == 'fr'}">
             <meta name="description" content="WebMotion est un framework web Java fondé sur le standard Java EE 6. La principal fonctionnalité est d’assurer la couche de présentation par le biais de pages ou de templates. Mais il propose également la création d’API REST pour les appels AJAX. Le framework est basé sur un fichier de mapping permettant de définir des actions suivant des événements, comme par exemple lancer une action Java selon une URL.">
         </c:if>
-        <c:if test="${language == 'en'}">
+        <c:if test="${sessionScope.language == 'en'}">
             <meta name="description" content="WebMotion is a Java web framework based on the Java EE6 standard. The main functionality consists in assuring the presentation layer with pages or templates. But it also offers the creation of REST APIs for the AJAX calls. The framework is based on a mapping file which enables to define actions based on events, such as launching a Java action according to a URL.">
         </c:if>
             
@@ -112,10 +111,10 @@
                     <a class="brand" href="<c:url value="/"/>">WebMotion</a>
 
                     <div class="nav-collapse">
-                        <c:if test="${language == 'fr'}">
+                        <c:if test="${sessionScope.language == 'fr'}">
                             <%@include file="menu_fr.jsp"%>
                         </c:if>
-                        <c:if test="${language == 'en'}">
+                        <c:if test="${sessionScope.language == 'en'}">
                             <%@include file="menu_en.jsp"%>
                         </c:if>
                         
@@ -144,7 +143,7 @@
             
         <hr/>
         <footer style="text-align: center">
-            <p>Powered by WikiMotion and WebMotion - version ${version} - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a></p>
+            <p>Powered by WebMotion - version 2.5 - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a> - © 2014</p>
         </footer>
 
         <!-- Piwik -->

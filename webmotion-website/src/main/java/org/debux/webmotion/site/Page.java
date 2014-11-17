@@ -29,7 +29,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
-import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionFilter;
 import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.render.Render;
 
@@ -37,9 +37,9 @@ import org.debux.webmotion.server.render.Render;
  *
  * @author julien
  */
-public class Page extends WebMotionController {
+public class Page extends WebMotionFilter {
 
-    public Render display(String lang, String folder, String name) {
+    public Render setLang(String lang, String folder, String name) {
         HttpContext context = getContext();
         HttpServletRequest request = context.getRequest();
         HttpSession session = context.getSession();
@@ -47,7 +47,8 @@ public class Page extends WebMotionController {
         String language = (String) Config.get(session, Config.FMT_LOCALE);
         if (lang != null) {
             Config.set(session, Config.FMT_LOCALE, lang);
-            return renderLastPage("language", lang);
+            session.setAttribute("language", lang);
+            return renderLastPage();
             
         } else if (language == null) {
             Locale locale = request.getLocale();
@@ -56,14 +57,36 @@ public class Page extends WebMotionController {
                 reqLang = "en";
             }
             Config.set(session, Config.FMT_LOCALE, reqLang);
-            language = reqLang;
+            session.setAttribute("language", reqLang);
+            
+        } else {
+            session.setAttribute("language", language);
         }
         
-        String file = name +"_" + language + ".html";
+        doProcess();
+        return null;
+    }
+    
+    public Render display(String lang, String folder, String name) {
+        HttpContext context = getContext();
+        HttpSession session = context.getSession();
+        
+        String file = name;
+        if (name.contains("_")) {
+            String language = name.split("_")[1];
+            Config.set(session, Config.FMT_LOCALE, language);
+            session.setAttribute("language", language);
+            
+        } else {
+            String language = (String) session.getAttribute("language");
+            file += "_" + language;
+        }
+        file += ".html";
+
         if (folder != null) {
             file = folder + File.separator + file;
         }
-        return renderView(file, "language", language);
+        return renderView(file);
     }
     
 }
