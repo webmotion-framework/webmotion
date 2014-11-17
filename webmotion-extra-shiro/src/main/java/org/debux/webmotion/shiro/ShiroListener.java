@@ -158,12 +158,14 @@ public class ShiroListener implements WebMotionServerListener {
          // Add filter into webapp
         ServletContext servletContext = context.getServletContext();
         FilterRegistration registration = servletContext.addFilter("shiro", filter);
-        registration.addMappingForUrlPatterns(
-                EnumSet.of(DispatcherType.FORWARD,
-                DispatcherType.INCLUDE,
-                DispatcherType.REQUEST,
-                DispatcherType.ERROR),
-                true, "/*");
+        if (registration != null) {
+            registration.addMappingForUrlPatterns(
+                    EnumSet.of(DispatcherType.FORWARD,
+                    DispatcherType.INCLUDE,
+                    DispatcherType.REQUEST,
+                    DispatcherType.ERROR),
+                    true, "/*");
+        }
     
         context.addGlobalController(Shiro.class);
         
