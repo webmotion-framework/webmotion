@@ -1,0 +1,432 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Advanced</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="servlet">Servlet architecture</h2>
+<p>
+    The framework is managed by a filter. The filter analyzes all the incoming requests
+    and redirects them to a static resource (html, jsp, css, ...)
+    or to an action which has been defined in the mapping file.
+</p>
+
+<p>
+    The filter redirects the requests as follows: if the path of the URL matches
+    a file in the directory of the web app, then the URL is considered as a static resource.
+    Otherwise, the URL is considered as an action. If no resource or action is finally found,
+    then an HTTP <code>404 Not found</code> error is returned to the client.
+</p>
+
+<p>
+    You can explicitly specify if an URL is a static resource or an action.
+    You just need to explicitly call in the URL the path <code>/static</code> (static resource)
+    or <code>/deploy</code> (dynamic action).
+</p>
+
+<!--
+TODO Write a better sample with a mapping file, a frontend snippet code
+<p>
+    <span class="label label-info">Exemple</span> Retourne sur /readme la resource statique :
+</p>
+<pre>
+[actions]
+*           /readme                                     url:/static/README
+</pre>-->
+
+<p>
+    There is a <code>/servlet</code> path which enables you not to execute the treatment
+    of the WebMotion filter. The advantage is to be able to use other servlets
+    which are not part of WebMotion.
+</p>
+<p>
+    <span class="label label-info">Example</span> Declaration of a servlet in <code>web.xml</code>:
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;MyServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.debux.webmotion.MyServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;MyServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/servlet/my/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    You can specify to WebMotion to ignore certain paths in addition to the <code>/servlet</code> path.
+    The <code>wm.exclude.paths</code> parameter is to be defined in the web.xml.
+    The values are separated by commas.
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.exclude.paths&lt;/param-name&gt;
+    &lt;param-value&gt;/path&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<h2 class="page-header" id="params">System pamameters</h2>
+<p>
+    You can modify the name of the loaded mapping file by setting the
+    <code>wm.mapping.file.name</code> parameter in the web.xml file loke this:
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.file.name&lt;/param-name&gt;
+    &lt;param-value&gt;/mapping&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    You can specify multiple mapping file names separated with commas. Only the 
+    first existing file in the list is used.
+</p>
+
+<p>
+    The file parser is configurable from the web.xml with the parameter <code>wm.mapping.parsers</code>.
+    You can specify multiple parser implementation separated with commas. If one 
+    parser cannot process the file, it have to return <code>null</code> as value 
+    of the mapping in order to follow the process to the next parser.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Add a parser :
+</p>
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.parsers&lt;/param-name&gt;
+    &lt;param-value&gt;org.debux.webmotion.test.SkipMappingParser,org.debux.webmotion.server.parser.DefaultMappingParser&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Parser implementation :
+</p>
+<pre class="prettyprint">
+public class SkipMappingParser extends MappingParser {
+    @Override
+    protected Mapping parse(URL url) {
+        return null;
+    }
+}
+</pre>
+
+<h2 class="page-header" id="handler">How does WebMotion work?</h2>
+<p>
+    The treatment of the request goes through different handlers to achieve the request of the web client.
+    The <code>MainHandler</code>, which is the main handler, is the scheduler of the other handlers.
+    You can redefine it in the mapping file in the config section as follows:
+</p>
+<pre>
+[config]
+server.main.handler.class=org.debux.webmotion.sample.MainHandlerSample
+</pre>
+
+<p>
+    By default, WebMotion offers a set of handlers:
+</p>
+<p>
+    A main handler:
+</p>
+<ul>
+    <li><strong>WebMotionMainHandler</strong>, enables the scheduling of the other handlers
+        and the extension management.</li>
+</ul>
+
+<p>
+    Action management handlers:
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, enables the file management in multi-part.</li>
+    <li><strong>FilterFinderHandler</strong>, finds the filter to apply.</li>
+    <li><strong>ActionFinderHandler</strong>, finds the action to apply.</li>
+    <li><strong>ParametersExtractorHandler</strong>, extracts the parameters and rename them if needed.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
+    <li><strong>FilterMethodFinderHandler</strong>, finds the methods to execute for filters.</li>
+    <li><strong>ActionMethodFinderHandler</strong>, finds the method to execute for the action.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
+</ul>
+
+<p>
+    Error management handlers:
+</p>
+<ul>
+    <li><strong>ParametersMultipartHandler</strong>, enables the file management in multi-part.</li>
+    <li><strong>ErrorFinderHandler</strong>, finds the action to apply for an error.</li>
+    <li><strong>ActionExecuteRenderHandler</strong>, creates the rendering if the action is directly a view or a URL.</li>
+    <li><strong>ErrorMethodFinderHandler</strong>, retrieves the method to execute for the action.</li>
+    <li><strong>ExecutorMethodInvokerHandler</strong>, calls the methods for the filters and the action, and returns the rendering.</li>
+</ul>
+
+<p>
+    During the <code>ExecutorMethodInvokerHandler</code> handler, this 
+    supplementary handlers are run for each action and filter :
+</p>
+<ul>
+    <li><strong>ExecutorInstanceCreatorHandler</strong>, instantiates the filter or the action if necessary.</li>
+    <li><strong>ExecutorParametersConvertorHandler</strong>, converts the parameters according to the type of the method to call.</li>
+    <li><strong>ExecutorParametersInjectorHandler</strong>, injects additional parameters according to the type.</li>
+    <li><strong>ExecutorParametersValidatorHandler</strong>, validates the parameters.</li>
+</ul>
+
+<p>
+    Each handler must implement two methods: 
+    <code>init</code> called at the initialization of the servlet
+    and <code>handle</code> .
+</p>
+<p>
+    Each handler must implement four methods : 
+</p>
+<ul>
+    <li><code>handlerCreated</code> called at the creation of the handler</li>
+    <li><code>handlerInitialized</code> called at the initialization of each MainHandler</li>
+    <li><code>handlerDestroyed</code> called at the destruction of the handler</li>
+    <li><code>handle</code> called for the treatment of the request</li>
+</ul>
+
+<pre class="prettyprint">
+public class MyHandler implements WebMotionHandler {
+
+    @Override
+    public void handlerCreated(Mapping mapping, ServerContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handlerInitialized(Mapping mapping, ServerContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handlerDestroyed(Mapping mapping, ServerContext context) {
+        // Do process
+    }
+
+    @Override
+    public void handle(Mapping mapping, Call call) {
+        // Do process
+    }
+}
+</pre>
+
+<h2 class="page-header" id="config">Converter, injector &amp; global controller</h2>
+<p>
+    Some handlers are configurable by means of methods in the ServerContext.
+    In the following cases, it is not necessary to write a new handler:
+</p>
+<ul>
+    <li>parameter converter</li>
+    <li>parmaeter injection according to a given type</li>
+    <li>definition of a controller in several mapping files.</li>
+</ul>
+
+<h3 id="converter">Converter</h3>
+<p>
+    The request parameters are converted by the <code>ExecutorParametersConvertorHandler</code> handler.
+    It relies on Apache's BeanUtils API, you can record your own converters via the <code>ServerContext</code>.
+    For more details, please refer to the <a href="http://commons.apache.org/beanutils/">Apache's API</a>.
+</p>
+
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(Mapping mapping, ServerContext context) {
+        context.addConverter(new Converter() {
+            @Override
+            public Object convert(Class type, Object value) {
+                ...
+            }
+        }, AClass.class);
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+
+<h3 id="injector">Injector</h3>
+<p>
+    Some method parameters are directly injected according to their type or the parameter name,
+    the <code>ExecutorParametersInjectorHandler</code> handleris in charge of this task.
+    You can add your own parameter injection. To do so, you need to implement
+    the <code>ExecutorParametersInjectorHandler.Injector</code> interface.
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(Mapping mapping, ServerContext context) {
+        context.addInjector(new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, String name, Class&lt;?&gt; type, Type generic) {
+                if (AClass.class.isAssignableFrom(type)) {
+                    return new AClass();
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+<p>
+    You can directly retrieve the value in the method parameters:
+</p>
+<pre class="prettyprint">
+public class AController extends WebMotionController {
+
+    public Render action(AClass aClass) {
+        ...
+    }
+
+}
+</pre>
+
+<h3 id="gloabal">Global controller</h3>
+<p>
+    A global controller has the advantage of being accessible in all the mapping files
+    without taking the current package of the mapping file into account.
+    This functionality is available in the
+    <code>FilterMethodFinderHandler</code>, <code>ActionMethodFinderHandler</code>
+    and <code>ErrorMethodFinderHandler</code> handlers.
+    For example, you can implement a filter for the management of a transaction
+    and define it as global, what enables you to use it in all your mapping files.
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(Mapping mapping, ServerContext context) {
+        context.addGlobalController(org.debux.jpa.Transaction.class);
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+
+<p>
+    You can use it in a mapping file like this:
+</p>
+<pre>
+[config]
+package.base=org.debux.app
+
+[filter]
+*        /*           Transaction.begin
+</pre>
+
+<h2 class="page-header" id="paranamer">Paranamer</h2>
+<p>
+    WebMotion is based on a library to find the paramater names of the method.
+    This library is <a href="http://paranamer.codehaus.org/">Paranamer</a>.
+    By default, WebMotion with Paranamer uses the Java compilation in debug mode.
+</p>
+<p>
+    If you wish to compile without the debug mode, you will need to configure the mapping and paranamer as follows:
+</p>
+
+<p>
+    For the mapping :
+</p>
+<pre>
+[config]
+javac.debug=false
+</pre>
+
+<p>
+    For paranamer with Maven :
+</p>
+<pre class="prettyprint">
+&lt;plugin&gt;
+   &lt;groupId&gt;com.thoughtworks.paranamer&lt;/groupId&gt;
+   &lt;artifactId&gt;paranamer-maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;2.3.1&lt;/version&gt;
+   &lt;executions&gt;
+       &lt;execution&gt;
+           &lt;id&gt;run&lt;/id&gt;
+           &lt;configuration&gt;
+               &lt;sourceDirectory&gt;${project.build.sourceDirectory}&lt;/sourceDirectory&gt;
+               &lt;outputDirectory&gt;${project.build.outputDirectory}&lt;/outputDirectory&gt;
+           &lt;/configuration&gt;
+           &lt;goals&gt;
+               &lt;goal&gt;generate&lt;/goal&gt;
+           &lt;/goals&gt;
+       &lt;/execution&gt;
+   &lt;/executions&gt;
+&lt;/plugin&gt;
+</pre>
+
+<h2 class="page-header" id="jmx">JMX</h2>
+<p>
+    Using JMX enables to get information about the execution of WebMotion, namely:
+</p>
+<ul>
+    <li>the general statistics about the treatment of a request</li>
+    <li>handler statistics about the treatment of a request</li>
+</ul>
+
+<p>
+    You can also find some operations as:
+</p>
+<ul>
+    <li>the mapping reloading</li>
+    <li>the error page configuration</li>
+    <li>the statistics resetting</li>
+</ul>
+
+<p>
+    <span class="label label-info">Note</span> You can access WebMotion MBeans by using <code>jconsole</code>.
+</p>
+
+<div style="text-align: center; margin: 0px 0px 20px 20px;">
+    <a class="thumbnail" style="width: 700px; display:inline-block;">
+        <img src="../img/jconsole.png" alt="Jconsole" title="Jconsole" />
+    </a>
+</div>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="showcase/hello">Demo »</a>
+</div>
+
+</div>

@@ -23,8 +23,12 @@
 # #L%
 ###
 [config]
-package.actions=org.debux.webmotion.showcase
-package.views=WEB-INF/org.debux.webmotion.showcase
+package.base=org.debux.webmotion.site
+package.views=WEB-INF/org.debux.webmotion.site
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
+
+[filters]
+*                      /*                                         SiteMesh.decorate       layout=layout.jsp
 
 [actions]
 *           /                                           url:/hello

@@ -79,8 +79,10 @@ public class SiteMeshListener implements WebMotionServerListener {
         // Add filter into webapp
         ServletContext servletContext = context.getServletContext();
         FilterRegistration registration = servletContext.addFilter("sitemesh", filter);
-        registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE), true, "/*");
-            
+        if (registration != null) {
+            registration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.FORWARD, DispatcherType.INCLUDE), true, "/*");
+        }
+
         context.addGlobalController(SiteMesh.class);
     }
 

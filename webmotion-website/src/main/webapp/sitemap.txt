@@ -20,3 +20,4 @@ http://www.webmotion-framework.org/extras_en
 http://www.webmotion-framework.org/wikimotion_en
 http://www.webmotion-framework.org/advanced_en
 http://www.webmotion-framework.org/changelog_en
+http://www.webmotion-framework.org/tutorial

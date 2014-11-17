@@ -1,0 +1,324 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Changelog</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="principe">Changelog</h2>
+<p>
+    This part gathers all changes between the different WebMotion versions.
+</p>
+<p>
+    For each version you can find:
+</p>
+<ul>
+    <li>the major changes</li>
+    <li>all the redmine achieved tickets</li>
+    <li>the previous version of the website with the documentation</li>
+</ul>
+
+<h2 class="page-header" id="2_4">Version 2.4</h2>
+<p>
+    <strong>Major changes:</strong>
+</p>
+<ul>
+    <li>Move sources to  Gitorious</li>
+    <li>Tutorials</li>
+    <li>Unit tests</li>
+    <li>Defaut render</li>
+    <li>Improving the parameterization of WebMotion</li>
+    <li>Enumeration convertion</li>
+</ul>
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul>
+    <li><a href="http://projects.debux.org/issues/313">Bug #313</a>: Mapping not found with tomcat maven plugin</li>
+    <li><a href="http://projects.debux.org/issues/314">Bug #314</a>: The file passed in parameter is null when the size is less than 10KB</li>
+    <li><a href="http://projects.debux.org/issues/320">Bug #320</a>: Change jsessionid management regex to handle upper case and non word id</li>
+    <li><a href="http://projects.debux.org/issues/327">Bug #327</a>: Error when trying to set a property of the superclass during conversion</li>
+    <li><a href="http://projects.debux.org/issues/229">Feature #229</a>: Sample exemple</li>
+    <li><a href="http://projects.debux.org/issues/284">Feature #284</a>: Partial modification MainHandler</li>
+    <li><a href="http://projects.debux.org/issues/286">Feature #286</a>: Add new languages to write the mapping file</li>
+    <li><a href="http://projects.debux.org/issues/288">Feature #288</a>: Review handler phase</li>
+    <li><a href="http://projects.debux.org/issues/290">Feature #290</a>: Add doProcess with mapping and call as paramater in Filter</li>
+    <li><a href="http://projects.debux.org/issues/292">Feature #292</a>: Test Class</li>
+    <li><a href="http://projects.debux.org/issues/300">Feature #300</a>: Add multiple file names in wm.mapping.file.name parameters</li>
+    <li><a href="http://projects.debux.org/issues/301">Feature #301</a>: Add warning if the secret key size is too short</li>
+    <li><a href="http://projects.debux.org/issues/317">Feature #317</a>: JPA configuration in mapping file</li>
+    <li><a href="http://projects.debux.org/issues/318">Feature #318</a>: DoChain in FilterController</li>
+    <li><a href="http://projects.debux.org/issues/319">Feature #319</a>: Default render</li>
+    <li><a href="http://projects.debux.org/issues/321">Feature #321</a>: Move source on Gitorious</li>
+    <li><a href="http://projects.debux.org/issues/326">Feature #326</a>: Improve Injector API (get the parameter name)</li>
+    <li><a href="http://projects.debux.org/issues/328">Feature #328</a>: Handle the OPTIONS HTTP method</li>
+    <li><a href="http://projects.debux.org/issues/329">Feature #329</a>: Add converter for the enums</li>
+</ul>
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/">Site &raquo;</a></p>
+
+<h2 class="page-header" id="2_3_3">Version 2.3.3</h2>
+<p>
+    <strong>Major changes:</strong>
+</p>
+<ul>
+    <li>Synchronization with maven central repo</li>
+    <li>Static resource is detected if the file exists</li>
+    <li>Simplify extras configuration</li>
+    <li>Rename CookieManger to CookieManager</li>
+    <li>WebSockets support</li>
+    <li>Apache Shiro extra</li>
+    <li>GSP, Sacalate, ZK, ... support</li>
+    <li>Plugin for NetBeans</li>
+    <li>Modify the methods in ServerListener class</li>
+</ul>
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul>
+    <li><a href="http://projects.debux.org//issues/258">Bug #258</a>: The method &quot;Context.getParameter&quot; in request multipart is empty</li>
+    <li><a href="http://projects.debux.org//issues/259">Bug #259</a>: persistence.xml missing in the showcase</li>
+    <li><a href="http://projects.debux.org//issues/262">Bug #262</a>: Mistake in cookie manager name</li>
+    <li><a href="http://projects.debux.org//issues/265">Bug #265</a>: Disabling static resources autodetection brokes view rendering</li>
+    <li><a href="http://projects.debux.org//issues/268">Bug #268</a>: Project webmotion-test doesn't build in a Windows environment</li>
+    <li><a href="http://projects.debux.org//issues/280">Bug #280</a>: ExecutorParametersInjectorHandler contains several times the same injector</li>
+    <li><a href="http://projects.debux.org//issues/293">Bug #293</a>: An error 404 is thrown when the ;jsessionid is in url</li>
+    <li><a href="http://projects.debux.org//issues/294">Bug #294</a>: Error in WebMotionWebSocketJson when pass a string with space</li>
+    <li><a href="http://projects.debux.org//issues/295">Bug #295</a>: NullPointerException in WebMotionWebSocketJson when params is null</li>
+    <li><a href="http://projects.debux.org//issues/296">Bug #296</a>: Only not null String is convertable in WebMotionWebSocketJson</li>
+    <li><a href="http://projects.debux.org//issues/121">Feature #121</a>: Create an extras with Apache Shiro to manage security</li>
+    <li><a href="http://projects.debux.org//issues/124">Feature #124</a>: Plugin for NetBeans</li>
+    <li><a href="http://projects.debux.org//issues/235">Feature #235</a>: Websockets support</li>
+    <li><a href="http://projects.debux.org//issues/252">Feature #252</a>: Review log</li>
+    <li><a href="http://projects.debux.org//issues/253">Feature #253</a>: Multi server listeners</li>
+    <li><a href="http://projects.debux.org//issues/261">Feature #261</a>: Verify the java actions</li>
+    <li><a href="http://projects.debux.org//issues/266">Feature #266</a>: [mapping] A dynamic parameter can only be placed between braces</li>
+    <li><a href="http://projects.debux.org//issues/267">Feature #267</a>: Improve the entry point to set up easily others views</li>
+    <li><a href="http://projects.debux.org//issues/274">Feature #274</a>: Simplify pattern on extension file</li>
+    <li><a href="http://projects.debux.org//issues/277">Feature #277</a>: Improve conversion on object</li>
+    <li><a href="http://projects.debux.org//issues/279">Feature #279</a>: Protected injected parameters</li>
+    <li><a href="http://projects.debux.org//issues/281">Feature #281</a>: Create a module for each extra</li>
+    <li><a href="http://projects.debux.org//issues/283">Feature #283</a>: Improve server listenner to add mapping in parameter</li>
+    <li><a href="http://projects.debux.org//issues/297">Feature #297</a>: Sync WebMotion artifacts on maven central</li>
+</ul>
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-2.3/">Site &raquo;</a></p>
+
+<h2 class="page-header" id="2_2">Version 2.2</h2>
+<p>
+    <strong>Major changes:</strong>
+</p>
+<ul>
+    <li>Replacement of the ANTLR parser by Parboiled</li>
+    <li>Modification of the package of the Spring extension</li>
+    <li>Creation of extras</li>
+    <li>Add of a section about the application configuration</li>
+    <li>Setup of the integration tests on Tomcat, Jetty & Glassfish</li>
+    <li>Remplacement of renderActionUrl by renderForward</li>
+</ul>
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul>
+    <li><a href="http://projects.debux.org//issues/217">Bug #217</a>: The name of the class is invalid when the package of the filter is empty</li>
+    <li><a href="http://projects.debux.org//issues/220">Bug #220</a>: Problem of sequencing of the Executor type handlers</li>
+    <li><a href="http://projects.debux.org//issues/247">Bug #247</a>: The patterns in the parameters do not work</li>
+    <li><a href="http://projects.debux.org//issues/248">Bug #248</a>: Impossible to use curly brackets in the mapping patterns</li>
+    <li><a href="http://projects.debux.org//issues/255">Bug #255</a>: WebMotion website is not displaying correctly in IE9</li>
+    <li><a href="http://projects.debux.org//issues/114">Feature #114</a>: Delete (or make it possible) the autodetection of a resource type (static, dynamic)</li>
+    <li><a href="http://projects.debux.org//issues/119">Feature #119</a>: CRUD extension with hibernate</li>
+    <li><a href="http://projects.debux.org//issues/120">Feature #120</a>: Layout extension with SiteMesh</li>
+    <li><a href="http://projects.debux.org//issues/128">Feature #128</a>: Extract integration tests from the showcase</li>
+    <li><a href="http://projects.debux.org//issues/179">Feature #179</a>: Change the version of commons-lang</li>
+    <li><a href="http://projects.debux.org//issues/185">Feature #185</a>: Session hold by the browser</li>
+    <li><a href="http://projects.debux.org//issues/186">Feature #186</a>: Simulate PUT/DELETE type requests with a header</li>
+    <li><a href="http://projects.debux.org//issues/206">Feature #206</a>: Add a keyword in the mapping for the RenderForward</li>
+    <li><a href="http://projects.debux.org//issues/209">Feature #209</a>: Add methods to manage the cookies</li>
+    <li><a href="http://projects.debux.org//issues/211">Feature #211</a>: Merge the Spring, JPA and Sitemesh extensions</li>
+    <li><a href="http://projects.debux.org//issues/214">Feature #214</a>: Documentation for the part about the extras</li>
+    <li><a href="http://projects.debux.org//issues/215">Feature #215</a>: Improve the archetype to include the part about the extras</li>
+    <li><a href="http://projects.debux.org//issues/216">Feature #216</a>: Change of the name of the loaded mapping file</li>
+    <li><a href="http://projects.debux.org//issues/218">Feature #218</a>: Simplification of the configuration of the converters and injectors</li>
+    <li><a href="http://projects.debux.org//issues/219">Feature #219</a>: Creation of a controller available in the whole mapping</li>
+    <li><a href="http://projects.debux.org//issues/221">Feature #221</a>: Enable the attributes on the RenderForward</li>
+    <li><a href="http://projects.debux.org//issues/236">Feature #236</a>: RenderError only with the error code</li>
+    <li><a href="http://projects.debux.org//issues/237">Feature #237</a>: Add a section about the configuration of the applications</li>
+    <li><a href="http://projects.debux.org//issues/238">Feature #238</a>: Add a success or failure render</li>
+    <li><a href="http://projects.debux.org//issues/251">Feature #251</a>: Replace the ANTLR parser by Parboiled</li>
+</ul>
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-2.2/">Site &raquo;</a></p>
+
+<h2 class="page-header" id="2_1">Version 2.1</h2>
+<p>
+    <strong>Major changes:</strong>
+</p>
+<ul>
+    <li>Replacement of the request.encoding config by server.encoding</li>
+    <li>Replacement of the handlers.factory.class config by server.main.handler.class</li>
+    <li>Replacement of HandlerFactory by MainHandler</li>
+    <li>Replacement of the reloadPage render by the renderLastPage render</li>
+</ul>
+
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul> 
+    <li><a href="http://projects.debux.org/issues/122">Bug #122</a>: Encoding issue in Jetty responses</li>
+    <li><a href="http://projects.debux.org/issues/123">Bug #123</a>: Sometimes, the framework does not returns the rendering in the proper mime type</li>
+    <li><a href="http://projects.debux.org/issues/127">Bug #127</a>: The default value of a parameter is priority on the request parameter</li>
+    <li><a href="http://projects.debux.org/issues/187">Bug #187</a>: RenderUrl with null value in model return the string &quot;null&quot;</li>
+    <li><a href="http://projects.debux.org/issues/188">Bug #188</a>: Impossible to pass an unique element in render JSON/JSONP/XML</li>
+    <li><a href="http://projects.debux.org/issues/194">Bug #194</a>: If the url with a path parameter calls an action with an array parameter, an error is thrown</li>
+    <li><a href="http://projects.debux.org/issues/200">Bug #200</a>: Impossible to get image on /static</li>
+    <li><a href="http://projects.debux.org/issues/201">Bug #201</a>: Validation on glassfish</li>
+    <li><a href="http://projects.debux.org/issues/204">Bug #204</a>: Problem during search the extension</li>
+    <li><a href="http://projects.debux.org/issues/93">Feature #93</a>: Manage the asynchronious requests</li>
+    <li><a href="http://projects.debux.org/issues/94">Feature #94</a>: Create MBeans for the JMX monitoring</li>
+    <li><a href="http://projects.debux.org/issues/95">Feature #95</a>: Load test</li>
+    <li><a href="http://projects.debux.org/issues/96">Feature #96</a>: Create a more explicite exception page</li>
+    <li><a href="http://projects.debux.org/issues/98">Feature #98</a>: Auto scan of the available extensions</li>
+    <li><a href="http://projects.debux.org/issues/101">Feature #101</a>: Statefull mode improvement</li>
+    <li><a href="http://projects.debux.org/issues/111">Feature #111</a>: English translation of the website</li>
+    <li><a href="http://projects.debux.org/issues/112">Feature #112</a>: Enable extension redefinition</li>
+    <li><a href="http://projects.debux.org/issues/113">Feature #113</a>: Package the project with the dependencies</li>
+    <li><a href="http://projects.debux.org/issues/115">Feature #115</a>: Update the documentation</li>
+    <li><a href="http://projects.debux.org/issues/116">Feature #116</a>: New render on StringTemplate</li>
+    <li><a href="http://projects.debux.org/issues/117">Feature #117</a>: Provide a mechanism to launch actions at the application start/stop</li>
+    <li><a href="http://projects.debux.org/issues/118">Feature #118</a>: Rename HandlerFactory into MainHandler</li>
+    <li><a href="http://projects.debux.org/issues/125">Feature #125</a>: Change the Twitter bootstrap version</li>
+    <li><a href="http://projects.debux.org/issues/126">Feature #126</a>: Create a maven archetype</li>
+    <li><a href="http://projects.debux.org/issues/129">Feature #129</a>: New render to download a file</li>
+    <li><a href="http://projects.debux.org/issues/130">Feature #130</a>: New render to forward to a URL</li>
+    <li><a href="http://projects.debux.org/issues/131">Feature #131</a>: Rename the reloadPage render into renderLastPage</li>
+    <li><a href="http://projects.debux.org/issues/176">Feature #176</a>: Enable the default parameter addition to filters</li>
+    <li><a href="http://projects.debux.org/issues/202">Feature #202</a>: Improve jsp:include in extension</li>
+    <li><a href="http://projects.debux.org/issues/205">Feature #205</a>: Use the absolute urls in the extensions</li>
+</ul>
+
+<h2 class="page-header" id="2_0">Version 2.0</h2>
+<p>
+    <strong>Major changes:</strong>
+</p>
+<ul>
+    <li>View syntax change</li>
+    <li>Renaming of WebMotionAction into WebMotionController</li>
+</ul>
+
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul> 
+    <li><a href="http://projects.debux.org/issues/29">Bug #29</a>: Force to put the views in a subdirectory</li>
+    <li><a href="http://projects.debux.org/issues/66">Bug #66</a>: Rename complex parameters in the mapping</li>
+    <li><a href="http://projects.debux.org/issues/87">Bug #87</a>: Controller not found without config</li>
+    <li><a href="http://projects.debux.org/issues/103">Bug #103</a>: The slf4j-simple dependency should not be present</li>
+    <li><a href="http://projects.debux.org/issues/104">Bug #104</a>: In jetty, the views without package.views are not found</li>
+    <li><a href="http://projects.debux.org/issues/105">Bug #105</a>: In jetty, the default error page is not used</li>
+    <li><a href="http://projects.debux.org/issues/106">Bug #106</a>: The inheritance between controllers does not work</li>
+    <li><a href="http://projects.debux.org/issues/108">Bug #108</a>: RenderStream does not close the stream</li>
+    <li><a href="http://projects.debux.org/issues/13">Feature #13</a>: Use a parser to read the mapping file</li>
+    <li><a href="http://projects.debux.org/issues/14">Feature #14</a>: Manage the modules</li>
+    <li><a href="http://projects.debux.org/issues/15">Feature #15</a>: Provide a mechanism to validate the parameters</li>
+    <li><a href="http://projects.debux.org/issues/16">Feature #16</a>: Enable to extend the parameter conversion handler</li>
+    <li><a href="http://projects.debux.org/issues/17">Feature #17</a>: Factory with the handlers</li>
+    <li><a href="http://projects.debux.org/issues/19">Feature #19</a>: Site index management improvement</li>
+    <li><a href="http://projects.debux.org/issues/56">Feature #56</a>: Showcase</li> 
+    <li><a href="http://projects.debux.org/issues/63">Feature #63</a>: Dynamic view/url action in the mapping file</li>
+    <li><a href="http://projects.debux.org/issues/64">Feature #64</a>: Map several HTTP methods on a single line</li>
+    <li><a href="http://projects.debux.org/issues/65">Feature #65</a>: Enable to use patterns in the mapping URLs</li>
+    <li><a href="http://projects.debux.org/issues/82">Feature #82</a>: Not impose the package name of a view</li>
+    <li><a href="http://projects.debux.org/issues/83">Feature #83</a>: Change the syntax of a view mapping</li>
+    <li><a href="http://projects.debux.org/issues/84">Feature #84</a>: Create a renderStatus</li>
+    <li><a href="http://projects.debux.org/issues/85">Feature #85</a>: Retrieve information about the uploaded file</li>
+    <li><a href="http://projects.debux.org/issues/88">Feature #88</a>: Exception cause retrieving improvement</li>
+    <li><a href="http://projects.debux.org/issues/89">Feature #89</a>: RenderAction improvement</li>
+    <li><a href="http://projects.debux.org/issues/90">Feature #90</a>: Use package.actions as default config for package.filters or package.errors</li>
+    <li><a href="http://projects.debux.org/issues/91">Feature #91</a>: Map all the errors</li>
+    <li><a href="http://projects.debux.org/issues/97">Feature #97</a>: WebSite</li> 
+    <li><a href="http://projects.debux.org/issues/99">Feature #99</a>: Put the context in the action parameters</li>
+    <li><a href="http://projects.debux.org/issues/102">Feature #102</a>: Enable the creation of new renders</li>
+    <li><a href="http://projects.debux.org/issues/107">Feature #107</a>: Add Spring support</li>
+    <li><a href="http://projects.debux.org/issues/109">Feature #109</a>: Cutting into modules</li>
+</ul>
+
+<h2 class="page-header" id="1_4">Version 1.4</h2>
+<p>
+    <strong>First version of WebMotion.</strong>
+</p>
+
+<p>
+    <strong>Tickets:</strong>
+</p>
+<ul> 
+    <li><a href="http://projects.debux.org/issues/1">Bug #1</a>: Warm boot issue with the paranamer plugin</li>
+    <li><a href="http://projects.debux.org/issues/3">Bug #3</a>: Remove the parameter array first element retrieving</li>
+    <li><a href="http://projects.debux.org/issues/20">Bug #20</a>: Consider the static parameters in the mapping file</li>
+    <li><a href="http://projects.debux.org/issues/21">Bug #21</a>: Debug the URL like /test/{var}/save/ and /test/{var}/save/?test={test}</li>
+    <li><a href="http://projects.debux.org/issues/22">Bug #22</a>: Filter the URLs containing *</li>
+    <li><a href="http://projects.debux.org/issues/24">Bug #24</a>: Mapping file parsing error</li>
+    <li><a href="http://projects.debux.org/issues/26">Bug #26</a>: Dynamic action class instantiation not launched</li>
+    <li><a href="http://projects.debux.org/issues/31">Bug #31</a>: Issue with the filters which ends with /*</li>
+    <li><a href="http://projects.debux.org/issues/32">Bug #32</a>: Issue with the includes and forwards in a JSP</li>
+    <li><a href="http://projects.debux.org/issues/33">Bug #33</a>: Manage the exceptions in a JSP during an include</li>
+    <li><a href="http://projects.debux.org/issues/34">Bug #34</a>: Infinite loop if there is no mapping for an exception</li>
+    <li><a href="http://projects.debux.org/issues/36">Bug #36</a>: Issue with the servlet call if the include of a JSP throws an error</li>
+    <li><a href="http://projects.debux.org/issues/37">Bug #37</a>: The parameters (key and value) of the mapped URLs can be only alphanumeric</li>
+    <li><a href="http://projects.debux.org/issues/38">Bug #38</a>: Loss of the flash message on a sendRedirect</li>
+    <li><a href="http://projects.debux.org/issues/39">Bug #39</a>: NPE if the configurations are not provided</li>
+    <li><a href="http://projects.debux.org/issues/55">Bug #55</a>: NPE in the converters if the parameter is not passed</li>
+    <li><a href="http://projects.debux.org/issues/57">Bug #57</a>: If no mapping matches the incoming URL, return a 404 error instead of a 500 error</li>
+    <li><a href="http://projects.debux.org/issues/59">Bug #59</a>: Loss of the flash message on a </li>
+    <li><a href="http://projects.debux.org/issues/60">Bug #60</a>: Issue with the filter with url: or view: in the mapping</li>
+    <li><a href="http://projects.debux.org/issues/61">Bug #61</a>: The model is not passed as a parameter during a renderUrl</li>
+    <li><a href="http://projects.debux.org/issues/2">Feature #2</a>: Flash memory management</li>
+    <li><a href="http://projects.debux.org/issues/4">Feature #4</a>: Stay on the same page</li>
+    <li><a href="http://projects.debux.org/issues/5">Feature #5</a>: Template management</li>
+    <li><a href="http://projects.debux.org/issues/6">Feature #6</a>: Statefull management</li>
+    <li><a href="http://projects.debux.org/issues/7">Feature #7</a>: Subpackage management</li>
+    <li><a href="http://projects.debux.org/issues/8">Feature #8</a>: Mapping directly in a view</li>
+    <li><a href="http://projects.debux.org/issues/9">Feature #9</a>: Defautl value for the methods in the mapping</li>
+    <li><a href="http://projects.debux.org/issues/10">Feature #10</a>: Manage the framework exceptions</li>
+    <li><a href="http://projects.debux.org/issues/11">Feature #11</a>: Manage the complex types in the parameters</li>
+    <li><a href="http://projects.debux.org/issues/18">Feature #18</a>: package.views with WEB-INF</li>
+    <li><a href="http://projects.debux.org/issues/23">Feature #23</a>: Add the support of static valueless parameters</li>
+    <li><a href="http://projects.debux.org/issues/25">Feature #25</a>: Add the possibility to precise the redirections in a mapping file</li>
+    <li><a href="http://projects.debux.org/issues/27">Feature #27</a>: Manage the possibility to have dynamic action subpackage names</li>
+    <li><a href="http://projects.debux.org/issues/35">Feature #35</a>: Render error</li> 
+    <li><a href="http://projects.debux.org/issues/40">Feature #40</a>: Render stream</li> 
+    <li><a href="http://projects.debux.org/issues/62">Feature #62</a>: The mapping does not initialize if we want to define an action corresponding to an URI containing a dash</li>
+</ul> 
+
+<p style="text-align: right"><a class="btn btn-primary" href="http://www.webmotion-framework.org/version-1.4/">Site &raquo;</a></p>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="showcase/hello">Demo »</a>
+</div>
+
+</div>

@@ -1,0 +1,327 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!--<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
+
+        <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+        <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js" type="text/javascript"></script>
+
+    </head>
+    <body onload="prettyPrint()">-->
+
+<div id="article">
+
+<h1>File upload</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="begin">Présentation</h2>
+<p>
+    This tutorial you present how the file upload works with WebMotion and JQuery.
+    You can use the old school method in the demonstration part fo the site.
+    Here we use the new feature in HTML5 on the XHR.
+</p>
+<p>
+    For show this feature, we create a form to send a file on the server and display the file to the user.
+</p>
+
+<p>
+    Reminder, WebMotion is a Java web framework. It uses a mapping file to 
+    describe the link between the server and the client. It is based on the JEE 
+    API with Servlet 3.
+</p>
+
+<p>
+    JQuery is a javascript library. It can to manipulate easily the elements in DOM with many API. 
+</p>
+
+<p>
+    For more details, you can visit the websites <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+    and <a href="http://jquery.com/">http://jquery.com/</a>.
+</p>
+
+<p>
+    A demo of the form is available here :
+    <a href="http://www.webmotion-framework.org/uploadmotion/">http://www.webmotion-framework.org/uploadmotion/</a>.
+    and the source code is available to the follow address :
+    <a href="https://gitorious.org/webmotion/webmotion-examples/trees/master/uploadmotion">https://gitorious.org/webmotion/webmotion-examples/trees/master/uploadmotion</a>.
+</p>
+
+<h2 class="page-header" id="create">Create the project</h2>
+
+<p>
+    Maven is used as buid manager for the example. WebMotion offers an archetype 
+    to initial the project. To use it, you just have to enter the following command :
+</p>
+<pre class="prettyprint">
+$ mvn archetype:generate \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.4 \
+    -DgroupId=org.debux.webmotion \
+    -DartifactId=uploadmotion \
+    -Dpackage=org.debux.webmotion.uploadmotion \
+    -Dversion=1.0-SNAPSHOT \
+    -DusesExtras=N
+</pre>
+
+<p>
+    For Jquery side, you just have to include the script in your pages. The example 
+    is composed with one page.
+</p>
+
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 class="page-header" id="controller">Controller part</h2>
+<p>
+    The controller part is simple. It is composed by two services, one for the file download
+    and the other one to get the file.
+</p>
+
+<p>
+    To create a service with WebMotion, you have to begin by create a controller as :
+</p>
+
+<pre class="prettyprint">
+public class MainController extends WebMotionController {
+    // Add services here
+}
+</pre>
+
+<p>
+    The next step is to create the methods for the services. The upload service
+    takes as parameter directly the file with File type. You have nothing else to get
+    a file with WebMotion.
+</p>
+<pre class="prettyprint">
+public Render upload(Properties conf, File file) throws IOException {
+    String folderName = conf.getString("folder");
+
+    String token = UUID.randomUUID().toString();
+    String fileName = folderName + File.separator + token;
+
+    FileInputStream inputStream = new FileInputStream(file);
+    FileOutputStream outputStream = new FileOutputStream(fileName);
+
+    IOUtils.copy(inputStream, outputStream);
+
+    inputStream.close();
+    outputStream.close();
+
+    return renderJSON("token", token);
+}
+</pre>
+
+<p>
+    For the download service, the file name is passed as a token returned by 
+    the upload service.
+</p>
+<pre class="prettyprint">
+public Render download(Properties conf, String token) throws IOException {
+    String folderName = conf.getString("folder");
+    String fileName = folderName + File.separator + token;
+    FileInputStream inputStream = new FileInputStream(fileName);
+
+    MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+    String mimeType = mimeTypesMap.getContentType(fileName);
+    return renderStream(inputStream, mimeType);
+}
+</pre>
+
+<p>
+    You can see that the services also get a Properties object parameter which 
+    represent the configuration of the application. Their properties can be 
+    defined directly in the mapping file. The mapping file is the configuration file
+    of WebMotion where you can connect your url and your java method.
+</p>
+
+<p>
+    In the mapping file you find the folder where the file is downloaded as key/value. :
+</p>
+<pre>
+[properties]
+folder=/tmp
+</pre>
+
+<p>
+    Endly the controller part, it stay to connect the services with an url.
+    An action in the mapping file is composed with HTTP method, the path and the action to attain.
+    In the follow rule, the action consits to call a java method.
+</p>
+<pre>
+[actions]
+POST         /upload                MainController.upload
+GET          /download              MainController.download
+</pre>
+
+<h2 class="page-header" id="view">View part</h2>
+<p>
+    The application consists with a single HTML page. We use the bootstrap twitter style:
+</p>
+<pre class="prettyprint">
+&lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"&gt;
+</pre>
+
+<p>
+    The page displays a fom with a <code>file</code> input to send the file on the server.
+</p>
+<pre class="prettyprint">
+&lt;form&gt;
+    &lt;input id="file" type="file" name="file"&gt;&lt;input id="send" value="Upload" type="button"/&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    A zone is defined to follow the progression of the file download. To change the progression
+    simply change its size.
+</p>
+<pre class="prettyprint">
+&lt;div class="progress"&gt;
+    &lt;div id="progress" class="bar" style="width: 0%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>
+    With the following elements, you can see the content file and share its as a link.
+</p>
+<pre class="prettyprint">
+&lt;p style="text-align: center"&gt;
+    &lt;a href="#" class="thumbnail" style="display:inline-block;"&gt;
+        &lt;img id="preview" style="max-height: 500px" src="" alt=""&gt;
+    &lt;/a&gt;
+&lt;/p&gt;
+
+&lt;div class="well well-small"&gt;
+    &lt;label class="" style="line-height: 30px; vertical-align: middle;"&gt;Share :
+        &lt;input id="share" type="text" class="pull-right span11" value="" /&gt;
+    &lt;/label>
+&lt;/div>
+</pre>
+
+<p>
+    In JQuery side, you have to create the XHR request with a upload listener.
+    With Jquery you cannot use it directly, you have to pass by a request provider.
+</p>
+<pre class="prettyprint">
+$(function() {
+    $("#send").click(function () {
+        var xhr = jQuery.ajaxSettings.xhr();
+        if (xhr.upload) {
+            xhr.upload.addEventListener('progress', function (e) {
+                $("#progress").css("width", (e.loaded / e.total * 100) + "%");
+                console.log((e.loaded / e.total * 100));
+            }, false);
+        }   
+        var provider = function () {
+            return xhr;
+        };  
+
+        var form = new FormData();
+        form.append('file', $("#file")[0].files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/UploadMotion/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: provider,
+            data: form,
+
+            success: function (data) {
+                console.log("success: " + data.token);
+                $("#progress").css("width", "100%");
+                $("#progress").addClass("bar-success");
+
+                $("#preview").attr("src", "http://localhost:8080/UploadMotion/download?token=" + data.token);
+                $("#share").val("http://localhost:8080/UploadMotion?token=" + data.token);
+            },
+
+            error: function () {
+                console.log("error:");
+                $("#progress").css("width", "100%");
+                $("#progress").addClass("bar-danger");
+            }
+        }); 
+    });
+});
+</pre>
+
+<p>
+    When the file changes, you can reinitialize the progress bar and the preview.
+</p>
+<pre class="prettyprint">
+$(function() {
+    $("#file").change(function() {
+        $("#progress").css("width", "0%");
+        $("#progress").removeClass("bar-success");
+        $("#progress").removeClass("bar-danger");
+
+        $("#preview").attr("src", "");
+        $("#share").val("");
+    });
+});
+</pre>
+
+<p>
+    Finally, the url to access to the page is added in "action" section for WebMotion.
+    In the following rule, the action consits to return the index.html page for the user.
+</p>
+<pre class="prettyprint">
+[actions]
+GET       /                           view:index.html
+</pre>
+
+<h2 class="page-header" id="run">Run the application</h2>
+
+<p>
+    You can now run the application with Jetty entering the following command
+    line :
+</p>
+<pre class="prettyprint">
+$ mvn jetty:run
+</pre>
+<p>
+    It is possible to deploy the application in dedicated server Jetty, Tomcat or Glassfish.
+</p>
+<p>
+   You can visualize the result in your navigator with the following 
+   address <a href="http://localhost:8080/uploadmotion/">http://localhost:8080/uploadmotion/</a>.
+</p>
+
+</div>
+    
+<!--    </body>
+</html>-->
+

@@ -1,0 +1,1163 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Extras</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="controller">Extras</h2>
+<p>
+    Les extras de WebMotion sont un ensemble de fonctionnalités supplémentaires pour
+    aider à la réalisation d'applications web. Ils regroupent :
+</p>
+<ul>
+    <li>un moteur d'IOC avec Spring</li>
+    <li>un système de layoutage avec SiteMesh</li>
+    <li>un helper pour la gestion d'une base de données avec Hibernate</li>
+    <li>une gestion de la sécurité avec Apache Shiro</li>
+</ul>
+<p>
+    Pour utiliser les extras, il est nécessaire de rajouter la dépendance Maven suivante :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-all&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+    &lt;type&gt;pom&lt;/type&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Pour utiliser l'ensemble des extras, il vous suffit de définir les listeners suivant 
+    dans votre fichier de mapping :
+</p>
+<pre>
+[config]
+server.listener.class=org.debux.webmotion.jpa.JpaListener,org.debux.webmotion.sitemesh.SiteMeshListener,org.debux.webmotion.spring.SpringListener,org.debux.webmotion.spring.ShiroListener
+</pre>
+
+<p>
+    Vous pouvez utiliser l'archetype maven pour créer votre projet avec les 
+    extras en précisant le paramètre <code>usesExtras</code> à <code>Y</code> :
+</p>
+<pre>
+$ mvn archetype:generate \
+    -DarchetypeGroupId=org.debux.webmotion \
+    -DarchetypeArtifactId=webmotion-archetype \
+    -DarchetypeVersion=2.4 \
+    -DgroupId=org.example \
+    -DartifactId=myapp \
+    -Dpackage=org.example.myapp \
+    -Dversion=1.0-SNAPSHOT \
+    <b>-DusesExtras=Y</b>
+</pre>
+
+<p>
+    Un extra est comparable à un système de plugin. Vous pouvez réaliser vos propres 
+    extra. Généralement un extra regroupe dans un listener :
+</p>
+<ul>
+    <li>les contrôleurs globaux</li>
+    <li>les convertisseurs</li>
+    <li>les modifications du fichier mapping (par exemple le remplacement du MainHandler)</li>
+</ul>
+
+<p>
+    Comme pour WebMotion, la partie extras peut reposer sur un fragment web, qui inclue 
+    l'ensemble des éléments web, c'est-à-dire :
+</p>
+<ul>
+    <li>les filtres</li>
+    <li>les listeners</li>
+    <li>les servlets</li>
+</ul>
+
+<p>
+    Pour plus de renseignements, veuillez vous reporter 
+    à la section <a href="advanced">Avancé</a>.
+</p>
+
+<h2 class="page-header" id="spring">Spring</h2>
+<p>
+    WebMotion propose l'injection de dépendances basée sur <a href="http://www.springsource.org/">Spring</a>. Elle vous 
+    permet de gérer les contrôleurs WebMotionController dans Spring. Ainsi vous 
+    disposez de l'ensemble des fonctionnalités de Spring comme la gestion des scopes 
+    (request/session/singleton/prototype) pour vos objets ou la gestion des transactions.
+</p>
+
+<p>
+    Si vous souhaitez uniquement utiliser Spring dans votre projet, vous pouvez modifier la section <code>[config]</code> 
+    de votre fichier de mapping, comme suit :
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.spring.SpringListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-spring&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    L'extras vous propose une configuration de Spring par défaut, les fichiers
+    de configuration <code>xml</code> sont automatiquement chargés depuis le répertoire 
+    <code>WEB-INF</code> et leur nom doit commencer par <code>applicationContext</code>.
+</p>
+
+<p>
+    Vous pouvez toutefois préciser vous propre fichier en indiquant dans votre 
+    fichier <code>web.xml</code>, la configuration suivante :
+</p>
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt;/WEB-INF/applicationContext*.xml,/WEB-INF/spring.xml&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    Exemple de fichier <code>applicationContext.xml</code> :
+</p>
+<pre class="prettyprint">
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			   http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd"&gt;
+
+    &lt;context:annotation-config/&gt;
+
+    &lt;bean id="myBean" class="org.debux.webmotion.test.Bean"/&gt;
+    
+    &lt;bean ... /&gt;
+
+&lt;/beans&gt;
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    Vous devez utiliser l'injection de dépendance pour récupérer votre bean :
+</p>
+<pre class="prettyprint">
+public class SpringController extends WebMotionController {
+
+    @Inject
+    protected Bean myBean;
+
+    public Render run() {
+        ...
+    }
+
+}
+</pre>
+
+<p>
+    Vous pouvez même récupérer les contrôleurs par injection au lieu d'utiliser le RenderAction :
+</p>
+<pre class="prettyprint">
+public class SpringController extends WebMotionController {
+
+    @Inject
+    protected Action action;
+
+    public Render run() {
+        return action.exec();
+    }
+
+}
+</pre>
+
+<h2 class="page-header" id="sitemesh">SiteMesh</h2>
+<p>
+    La partie <a href="http://www.sitemesh.org">SiteMesh</a> vous permet de décorer vos pages avec un layout. Une intégration 
+    de SiteMesh a été réalisée pour pouvoir l'utiliser directement dans votre mapping sans 
+    les fichiers de configuration de SiteMesh. Cependant, il sera toujours possible 
+    de l'utiliser selon la documentation de SiteMesh.
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement SiteMesh dans votre projet vous pouvez modifier la section <code>[config]</code>  
+    de votre fichier de mapping comme suit :
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-sitemesh&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    Un filtre global <code>SiteMesh</code> permet de décorer une page selon un 
+    chemin donné. Il vous est par exemple possible de préciser un décorateur pour la partie
+    admin différent du site principal :
+</p>
+
+<pre>
+[filters]
+*           /*                                 SiteMesh.decorate       layout=decorator.html
+*           /admin/*                           SiteMesh.decorate       layout=decorator_admin.html
+
+[actions]
+*           /content                           view:content.html
+*           /admin/content                     view:content_admin.html
+</pre>
+
+<p>
+    Avec comme exemple de page de layout :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;SiteMesh example: &lt;sitemesh:write property='title'/&gt;&lt;/title&gt;
+        &lt;style type='text/css'&gt;
+            /* Some CSS */
+        &lt;/style&gt;
+        &lt;sitemesh:write property='head'/&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div class='header'&gt;My header&lt;/div&gt;
+        
+        &lt;h1 class='title'&gt;&lt;sitemesh:write property='title'/&gt;&lt;/h1&gt;
+
+        &lt;div class='mainBody'&gt;
+            &lt;sitemesh:write property='body'/&gt;
+        &lt;/div&gt;
+
+        &lt;div class='footer'&gt;My footer&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+    Il est possible de préciser un layout vide, ce qui indique à SiteMesh de ne pas 
+    décorer la page :
+</p>
+<pre>
+[filters]
+*           /path/*                                 SiteMesh.decorate       layout=
+</pre>
+
+<p>
+    Le paramètre <code>layout</code> peut aussi être défini au niveau de l'action pour 
+    gérer une exception sur le filtre :
+</p>
+<pre>
+[filters]
+*           /*                                      SiteMesh.decorate       layout=decorator.html
+
+[actions]
+*           /content                                view:content.html       layout=decorator_content.html
+</pre>
+
+<h2 class="page-header" id="hibernate">Hibernate</h2>
+<p>
+    L'intégration d'<a href="http://www.hibernate.org/">Hibernate</a> vous donne accès à des actions pour réaliser un CRUD sur
+    vos entités et permet la gestion de la transaction. Il repose sur JPA. 
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement JPA dans votre projet vous pouvez modifier la section <code>[config]</code>  
+    de votre fichier de mapping et le principal handler applicatif, comme suit :
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.jpa.JpaListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-jpa&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<h3>Pre-requis</h3>
+<p>
+    Pour pouvoir utiliser correctement la partie JPA, il existe deux prérequis :
+</p>
+<ul>
+    <li>
+        Il faut définir la configuration de la base de données dans le fichier <code>persitence.xml</code>.
+    </li>
+    <li>
+        L'ensemble des entités doit hériter de la classe <code>IdentifiableEntity</code> 
+        ce qui permet d'avoir un identifiant unique (basé sur une génération de <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>.
+    </li>
+</ul>
+
+<p>
+    Exemple basique d'une entité :
+</p>
+<pre class="prettyprint">
+@Entity
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    @ElementCollection
+    protected List&lt;String&gt; tags;
+
+    /* setters &amp; getters */
+}
+</pre>
+
+<h3>Utilisation</h3>
+
+<p>
+    L'utilisation se fait par le biais d'un filtre pour la gestion de la transaction
+    et par le biais d'un contrôleur pour gérer les entités. Plusieurs paramètres 
+    de configuration peuvent être positionnés au niveau du filtre, au niveau du 
+    contrôleur ou au niveau de l'URL :
+</p>
+<ul>
+    <li>
+        <strong>persistenceUnitName :</strong> permet de définir le nom du 
+        <code>persitence-unit</code> dans le fichier <code>persistence.xml</code>. 
+        Par défaut la valeur est positionnée à <code>webmotion</code>.
+    </li>
+    <li>
+        <strong>entityName :</strong> permet de connaître le nom de l'entité sur 
+        laquelle le CRUD est effectué. Il doit contenir le nom du paquetage si 
+        le paramètre <code>packageEntityName</code> n'est pas précisé.
+    </li>
+    <li>
+        <strong>packageEntityName :</strong> permet de préciser le nom de paquetage 
+        où sont disponible les entités.
+    </li>
+</ul>
+<p>
+    Seul le paramètre <code>entityName</code> est obligatoire pour faire fonctionner le 
+    contrôleur pour la gestion du CRUD.
+</p>
+
+<h4>Filtre</h4>
+<p>
+    Le filtre s'occupe de la gestion de la transaction pour fournir les éléments 
+    nécessaires au contrôleur. Si une exception est levée durant l'exécution du 
+    contrôleur, la transaction est annulée (rollback). Si le traitement du contrôleur 
+    s'effectue avec succès, alors la transaction sera validée (commit).
+</p>
+<p>
+     Permet de créer un transaction par défaut :
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx
+</pre>
+
+<p>
+     Permet de changer le persistence unit :
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx                  persistenceUnitName=webmotion
+</pre>
+
+<p>
+    Permet de préciser sur quelle entité le CRUD est effectué :
+</p>
+<pre>
+[filters]
+*         /book/*                     Jpa.tx                  entityName=org.debux.webmotion.entity.Book
+</pre>
+
+<p>
+    Permet de préciser sur quel paquetage se trouvent les entités : 
+</p>
+<pre>
+[filters]
+*         /*                          Jpa.tx                  packageEntityName=org.debux.webmotion.entity
+</pre>
+<p>
+    Les exemples ci-dessus peuvent être combinés.
+</p>
+
+<h4>Contrôleur</h4>
+<p>
+    Le contrôleur s'occupe de la gestion des entités. Il existe plusieurs actions 
+    disponibles :
+</p>
+<ul>
+    <li>
+        <strong>create :</strong> pour la creation d'une entité. L'action prend 
+        en paramètre les attributs en nom/valeur
+    </li>
+    <li>
+        <strong>find :</strong> pour la récupération d'une entité sur son identifiant. 
+        L'action prend en paramètre l'identifiant de l'entité (id).
+    </li>
+    <li>
+        <strong>update :</strong> pour la modification partiel d'une entité.
+        L'action prend en paramètre l'identifiant (id) de l'entité et les attributs 
+        en nom/valeur.
+    </li>
+    <li>
+        <strong>delete :</strong> pour la suppression d'une entité. L'action 
+        prend en paramètre l'identifant de l'entité (id).
+    </li>
+    <li>
+        <strong>query :</strong> pour l'exécution d'une requête en lecture. L'action prend en 
+        paramètre le nom de la requête (name) et les paramètres de la requête.
+    </li>
+    <li>
+        <strong>exec :</strong> pour l'exécution d'une requête en écriture (delete ou update).
+        L'action prend en paramètre le nom de la requête (name) et les paramètres de la requête.
+    </li>
+    <li>
+        <strong>all :</strong> permet de faire l'ensemble des actions en la 
+        précisant en paramètre. L'action prend les paramètres en fonction de 
+        l'action (action) apellée.
+    </li>
+</ul>
+
+<p>
+    À savoir pour les actions <code>create</code> et <code>update</code>, il est possible 
+    de passer en paramètre des associations vers des entités en passant l'identifiant.
+</p>
+
+<strong>Action create</strong>
+<p>
+    Exemple d'utilisation de l'action <code>create</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/create     Jpa.create
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>create</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/book/create?title=WebMotion</code>.
+</p>
+
+<strong>Action find</strong>
+<p>
+    Exemple d'utilisation de l'action <code>find</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/{id}       Jpa.find
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>find</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/book/ff8081813697774901369777ed3d0002</code>.
+</p>
+
+<strong>Action update</strong>
+<p>
+    Exemple d'utilisation de l'action <code>update</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*                Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/update?id={}     Jpa.update
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>update</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/book/update?id=ff8081813697774901369777ed3d0002&amp;title=WebMotion%20book</code>.
+</p>
+
+<strong>Action delete</strong>
+<p>
+    Exemple d'utilisation de l'action <code>delete</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*                Jpa.tx        persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/delete?id={}     Jpa.delete
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>delete</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/book/delete?id=ff8081813697774901369777ed3d0002</code>.
+</p>
+
+<strong>Action query</strong>
+<p>
+    Exemple d'utilisation de l'action <code>query</code> :
+</p>
+<p>
+    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+</p>
+<pre class="prettyprint">
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "findByTitle",
+        query = "SELECT b FROM Book b WHERE b.title=:title")
+})
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    ... setters/getters
+}
+</pre>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*          Jpa.tx                     persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/title/{title}             Jpa.query    name=findByTitle
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>query</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/book/title/WebMotion</code>.
+</p>
+
+<strong>Action exec</strong>
+<p>
+    Exemple d'utilisation de l'action <code>exec</code> :
+</p>
+<p>
+    Pour utiliser cette action, il vous faut définir des requêtes sur votre entité.
+</p>
+<pre class="prettyprint">
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "updateNote",
+        query = "UPDATE Book b SET note = :note WHERE b.id=:id")
+})
+public class Book extends IdentifiableEntity {
+    @Basic
+    protected String title;
+
+    @Basic
+    protected int note;
+
+    /* setters &amp; getters */
+}
+</pre>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /book/*                        Jpa.tx      persistenceUnitName=books,entityName=org.debux.webmotion.entity.Book
+
+[actions]
+GET              /book/{id}?note={}             Jpa.exec    name=updateNote
+</pre>
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>exec</code> sur l'URL suivante
+    <code>http://serverName:port/contextPath/book/ff8081813697774901369777ed3d0002?note=17</code>.
+</p>
+
+<strong>Action all</strong>
+<p>
+    Exemple d'utilisation de l'action <code>all</code> :
+</p>
+
+<p>
+    Contenu du mapping :
+</p>
+<pre>
+[filters]
+*                /*                             Jpa.tx        persistenceUnitName=books,packageEntityName=org.debux.webmotion.entity
+
+[actions]
+GET              /{entityName}?action={}        Jpa.all
+</pre>
+
+
+<p>
+    Ainsi vous pouvez utiliser l'action <code>all</code> sur l'URL suivante 
+    <code>http://serverName:port/contextPath/Book/action=delete&amp;id=ff8081813697774901369777ed3d0002</code>.
+</p>
+
+<p>
+    Une autre façon de faire des régles de mapping génériques, est de définir pour chaque méthode HTTP une action :
+</p>
+<pre>
+[actions]
+PUT         /{entityName}                  Jpa.create
+GET         /{entityName}?query={name}     Jpa.query
+GET         /{entityName}?exec={name}      Jpa.exec
+GET         /{entityName}/{id}             Jpa.find
+POST        /{entityName}/{id}             Jpa.update
+DELETE      /{entityName}/{id}             Jpa.delete
+</pre>
+
+<h4>Avancé</h4>
+
+<strong>Callback</strong>
+<p>
+    L'ensemble des actions retourne un render de type JSON. Il vous est possible
+    de préciser une url de callback en paramètre (de l'action ou du filtre),
+    ce qui permet d'exécuter une régle du fichier de mapping après une action
+    du CRUD. Si vous précisez un callback, le résultat est récupérable comme 
+    attribut de la requête :
+</p>
+<ul>
+    <li>pour l'action create, update et find, un objet <code>entity</code> avec comme valeur l'entité</li>
+    <li>pour l'action delete, un objet <code>deleted</code> précisant si la suppression a bien été effectué ou non</li>
+    <li>pour l'action query, un objet <code>queryResult</code> avec le résultat de la requête</li>
+    <li>pour l'action exec, un objet <code>queryResult</code> avec le nombre d'entités impactés.</li>
+</ul>
+<p>
+    Par exemple, l'affichage du find dans la page <code>book.jsp</code>:
+</p>
+<pre>
+[actions]
+GET            /book             Jpa.find    callback=/book/view
+GET            /book/view        view:book.jsp
+</pre>
+
+<p>
+    Avec comme page <code>book.jsp</code> :
+</p>
+<pre class="prettyprint">
+Title : ${entity.title}
+</pre>
+
+<strong>Injection</strong>
+<p>
+    Il est possible d'utiliser indépendament la gestion de transaction sans 
+    la partie CRUD. Vous pouvez aussi créer vos propres actions en vous reposant 
+    sur le DAO générique. Il est automatiquement injecté si une classe d'entité 
+    est précisée.
+</p>
+<pre class="prettyprint">
+public Render findAll(GenericDAO dao, String title) {
+    Parameters parameters = Parameters.create()
+            .add("title", title);
+    List result = dao.query("findByTitle", parameters);
+    return renderJSON(result);
+}
+</pre>
+
+<p>
+    Comme pour le DAO générique, vous pouvez récupérer la transaction et l'entity manager :
+</p>
+<pre class="prettyprint">
+public Render action(EntityTransaction transaction, EntityManager manager) {
+    ...
+}
+</pre>
+
+<strong>Configuration dans le mapping</strong>
+<p>
+    Vous pouvez mettre dans le fichier mapping l'ensemble des propriétées du 
+    fichier <code>persitence.xml</code>. Pour cela, il vous faut céer une section 
+    <code>[properties]</code> avec comme clé le nom du persitence-unit plus le 
+    nom de la propriété séparé par un point.
+</p>
+
+<p>
+    Exemple de fichier de persitence.xml :
+</p>
+<pre class="prettyprint">
+&lt;persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+    version="1.0"&gt;
+    &lt;persistence-unit name="dataBaseName" transaction-type="RESOURCE_LOCAL"&gt;
+        &lt;provider&gt;org.hibernate.ejb.HibernatePersistence&lt;/provider&gt;
+    &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
+</pre>
+
+<p>
+    Avec comme fichier de mapping associé :
+</p>
+<pre>
+[properties]
+dataBaseName.hibernate.dialect=org.hibernate.dialect.H2Dialect
+dataBaseName.hibernate.hbm2ddl.auto=update
+dataBaseName.hibernate.connection.driver_class=org.h2.Driver
+dataBaseName.hibernate.connection.url=jdbc:h2:mem:dataBaseName;DB_CLOSE_DELAY=-1
+dataBaseName.hibernate.show_sql=false
+dataBaseName.current_session_context_class=thread
+</pre>
+
+<h2 class="page-header" id="shiro">Apache Shiro</h2>
+<p>
+    WebMotion propose par le biais de <a href="http://shiro.apache.org/">Apache Shiro</a>,
+    la sécurisation de votre site internet. Apache Shiro vous permet de gérer les 
+    authentications et les autorisations de vos utilisateurs. L'intégration vous 
+    permet de rajouter simplement dans votre fichier de mapping les filtres 
+    pour mettre en place la sécurisation de vos urls.
+</p>
+
+<p>
+    Pour pouvoir utiliser seulement Shiro dans votre projet vous pouvez modifier la section <code>[config]</code>  
+    de votre fichier de mapping comme suit :
+</p>
+<pre>[config]
+server.listener.class=org.debux.webmotion.shiro.ShiroListener
+</pre>
+
+<p>
+    Avec la dépendance maven suivante :
+</p>
+
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion-extra-shiro&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Par défaut, l'extra vous propose une configuration simple à partir d'un fichier de propriétés. 
+    Il doit se trouver dans le classpath de votre projet et se nommer <code>shiro.properties</code>.
+</p>
+
+<pre class="prettyprint">
+user.root = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, administrator
+role.administrator = "adminPermission"
+</pre>
+
+<p>
+    Les lignes commençant par <code>user.</code> définissent les utilisateurs dont le nom d'utilisateur est situé après le point.
+    Après le signe égal se trouve le mot de passe hashé en sha256 suivi des rôles de l'utilisateur.
+    Les lignes commençant par <code>role.</code> définissent les rôles dont la clé définissant le rôle est située après le point.
+    Après le signe égale se trouve l'ensemble des permissions attribuées à ce rôle.
+    Vous pouvez vous reporter à la 
+    <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/text/PropertiesRealm.html">javadoc</a> 
+    de Apache Shiro pour plus de renseignements.
+</p>
+
+<p>
+    Pour générer les mots de passe en sha256, vous pouvez utiliser le code java suivant :
+</p>
+<pre class="prettyprint">
+String hashedPassword = new Sha256Hash("password").toHex();
+System.out.println(hashedPassword);
+</pre>
+
+<h3>Utilisation</h3>
+
+<h4>Authentification</h4>
+
+<h5>Login</h5>
+<p>
+    Pour détecter si l'utilisateur n'est pas connecté il faut utiliser le filtre <code>Shiro.isAuthenticated</code>,
+    qui produit une erreur <code>401</code> si l'utilisateur n'est pas authentifié et le redirige vers la page de connexion.
+</p>
+<pre>
+[filters]
+*           /auth/*                            Shiro.isAuthenticated
+
+[errors]
+code:401                                       view:login.jsp
+</pre>
+
+<p>
+    Voici un exemple de formulaire pour l'authentification :
+</p>
+<pre class="prettyprint">
+&lt;form&gt;
+    &lt;div&gt;
+        Username : &lt;input type="text" name="username"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Password : &lt;input type="password" name="password"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        Remember me : &lt;input type="checkbox" name="rememberMe" value="true"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;input type="submit" value="login"/&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+
+<p>
+    Il est possible de définir une action de redirection après une authentification réussie:
+</p>
+<pre>
+[actions]
+GET        /login                               Shiro.login     redirect=/menu
+</pre>
+
+<p>
+    Si aucune redirection post-authentification n'est précisée, l'utilisateur sera automatiquement redirigé vers la dernière page affichée.
+</p>
+
+<p>
+    Le paramètre <code>rememberMe</code> est utilisé pour retenir automatiquement 
+    le dernier utilisateur connecté.
+</p>
+
+<p>
+    Une exception <code>AuthenticationException</code> est levée si une erreur survient lors de l'authentification.
+    Ainsi vous pouvez rafficher la page de login en précisant un message d'erreur.
+</p>
+<pre>
+[errors]
+org.apache.shiro.authc.AuthenticationException      view:login.jsp?error=true
+</pre>
+
+<h5>Déconnexion</h5>
+<p>
+    Pour gérer la déconnexion, il faut rajouter une action dans votre fichier de mapping
+    en précisant la redirection après la déconnection :
+</p>
+<pre>
+[actions]
+GET        /logout                             Shiro.logout                redirect=/menu
+</pre>
+
+<h5>AJAX</h5>
+<p>
+    Vous pouvez utiliser les actions de <code>login</code> et <code>logout</code>, 
+    sans redirection pour un usage en <code>AJAX</code>.
+</p>
+
+<pre>
+[actions]
+GET        /login                              Shiro.login
+GET        /logout                             Shiro.logout
+</pre>
+
+<h4>Autorisation</h4>
+
+<h5>Rôles</h5>
+<p>
+    Pour vérifier un rôle d'utilisateur il suffit de rajouter le filtre <code>Shiro.hasRole</code> :
+</p>
+<pre>
+*           /user/*                      Shiro.hasRole           role=user
+</pre>
+
+<p>
+    Il est possible de vérifier plusieurs rôles ainsi :
+</p>
+<pre>
+*           /tester/*                      Shiro.hasRole          role=user,role=tester
+</pre>
+
+<h5>Permissions</h5>
+<p>
+    Pour vérifier une permission il suffit de rajouter le filtre <code>Shiro.isPermitted</code> :
+</p>
+<pre>
+*           /guest/*                      Shiro.isPermitted       permission=access
+</pre>
+
+<p>
+    Il est possible de vérifier plusieurs permissions ainsi :
+</p>
+<pre>
+*           /tester/*                      Shiro.isPermitted      permission=access,permission=tester
+</pre>
+
+<h5>Accès interdit</h5>
+<p>
+    Si l'utilisateur n'est pas autorisé à accéder à une URL, une erreur HTTP avec le code <code>403</code> 
+    est retournée au client. Pour gérer le cas dans votre application, vous pouvez rajouter une règle de mapping 
+    ainsi :
+</p>
+<pre>
+[errors]
+code:403                                            view:forbidden.jsp
+</pre>
+
+<h4>Avancé</h4>
+<h5>TagLib</h5>
+<p>
+    Shiro propose un ensemble de taglib avec lesquels WebMotion est compatible. Vous pouvez vous reporter à la
+    <a href="http://shiro.apache.org/web.html#Web-taglibrary">documentation</a> 
+    Apache Shiro pour plus de renseignements.
+</p>
+<pre class="prettyprint">
+&lt;%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %&gt;
+&lt;shiro:user&gt;
+    &lt;a href="logout"&gt;Logout&lt;/a&gt;
+&lt;/shiro:user&gt;
+</pre>
+
+<h5>Configuration</h5>
+<p>
+    Vous pouvez personaliser l'ensemble du SecurityManager en redéfinisssant le listener. 
+    Vous avez accès :
+</p>
+<ul>
+    <li>au realm, qui permet de définir le stockage des utilistateurs et des permissions</li>
+    <li>au matcher, qui permet de définir comment sont stockés les mots de passe</li>
+    <li>à la session, qui permet de définir le stockage de la session</li>
+</ul>
+
+<pre class="prettyprint">
+public class MyShiroListener extends ShiroListener {
+
+    @Override
+    protected Realm getRealm() {
+        // ...
+    }
+
+    @Override
+    protected CredentialsMatcher getMatcher() {
+        // ...
+    }
+
+    @Override
+    protected SessionManager getSessionManager() {
+        // ...
+    }
+}
+</pre>
+<p>
+    Avec comme fichier de mapping :
+</p>
+<pre>
+[config]
+server.listener.class=org.debux.webmotion.exemple.MyShiroListener
+</pre>
+
+<h2 class="page-header" id="templates">Intégration de templates de page</h2>
+<p>
+    WebMotion intégre directement comme template de page les JSP. Pour pouvoir 
+    supporter d'autres vues il vous faut configurer votre fichier <code>web.xml</code>, 
+    et déclarer une servlet pour faire réaliser le rendu. Pour la plus part des templates 
+    de pages, il en existe une fournie par la libairie. Vous pouvez retrouver un exemple des
+    configurations sur Gitourious à l'adresse suivante 
+    <a href="https://gitorious.org/webmotion/webmotion-examples/trees/master/webmotion-pages">https://gitorious.org/webmotion/webmotion-examples/trees/master/webmotion-pages</a>.
+</p>
+
+<h3>Configuration pour Groovy</h3>
+
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en Groovy dans WebMotion.
+    Pour plus de renseignement consulter le site de <a href="http://groovy.codehaus.org/">Groovy</a>.
+</p>
+<p>
+    Ajouter la dépendance vers groovy-servlet :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+    &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.TemplateServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;TemplateServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.gsp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;groovy.servlet.GroovyServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;GroovyServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.groovy&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Exemple de page en Groovy :
+</p>
+<pre class="prettyprint">
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;% 3.times { %&gt;
+            Hello World!
+        &lt;% } %&gt;
+        &lt;br&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h3>Configuration pour Scalate</h3>
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en Scala dans WebMotion.
+    Pour plus de renseignements consulter le site de <a href="http://scalate.fusesource.org/">Scalate</a>.
+</p>
+<p>
+    Ajouter la dépendance vers scalate-core :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId>org.fusesource.scalate&lt;/groupId&gt;
+    &lt;artifactId>scalate-core&lt;/artifactId&gt;
+    &lt;version>1.5.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.fusesource.scalate.servlet.TemplateEngineServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;TemplateEngineServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.ssp&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+
+<p>
+    Exemple de page en Scala :
+</p>
+<pre class="prettyprint">
+&lt;%
+  var foo = "hello"
+  foo += " there"
+  foo += " you!"
+%&gt;
+&lt;p>${foo}&lt;/p&gt;
+</pre>
+
+<h3>Configuration pour ZK</h3>
+<p>
+    Voici la configuration nécessaire pour l'utilisation de page en ZK dans WebMotion.
+    Pour plus de renseignements consulter le site de <a href="http://www.zkoss.org/">ZK</a>.
+</p>
+<p>
+    Ajouter les dépendances nécessaires :
+</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkbind&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zul&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zkplus&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.zkoss.zk&lt;/groupId&gt;
+    &lt;artifactId&gt;zhtml&lt;/artifactId&gt;
+    &lt;version&gt;6.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<p>
+    Ajouter les lignes suivantes dans le fichier <code>web.xml</code> de votre application :
+</p>
+<pre class="prettyprint">
+&lt;web-app&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;wm.exclude.paths&lt;/param-name&gt;
+        &lt;param-value&gt;/zkau&lt;/param-value&gt;
+    &lt;/context-param&gt;
+&lt;/web-app&gt;
+</pre>
+<p>
+    Exemple de page en zul :
+</p>
+<pre class="prettyprint">
+&lt;zk&gt;
+    &lt;window title="New page title" border="normal"&gt;
+        New content here !
+    &lt;/window&gt;
+&lt;/zk&gt;
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Haut de page</a>
+    <a class="btn primary large" style="float:right;" href="wikimotion">WikiMotion »</a>
+</div>
+
+</div>

@@ -1,0 +1,1237 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Configuration of the mapping file</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header">Principle</h2>
+<p>
+    The principle of WebMotion is to execute an action relative to a URL or an event (an exception for instance).
+    This management is possible thanks to a mapping file which lists the different links between URLs and action to perform.
+    A mapping file is used to do the connection.
+</p>
+<p>
+    The mapping file, named <code>mapping</code>, must be in the application classpath.
+    It will be automatically detected and loaded at launch.
+    You can have several mapping files if you are using additional WebMotion modules (called extensions).
+    The mapping file contains a set of sections, all of them optional, which wille be described hereafter.
+    In general, if a URL or an event matches several rules described in the mapping file, the first rule will be treated.
+    The following rules will be ignored, except for the filters whose executions are linked.
+</p>
+<p>
+   As we evoked <a href="begin#mapping">previously</a>, the mapping file contains several sections:
+</p>
+<ul>
+    <li><code>[config]</code>&nbsp;<a href="#config">The WebMotion configuration</a></li>
+    <li><code>[properties]</code>&nbsp;<a href="#properties">The web application configuration</a></li>
+    <li><code>[errors]</code>&nbsp;<a href="#errors">The actions linked to the errors (technical and/or applicative)</a></li>
+    <li><code>[filters]</code>&nbsp;<a href="#filters">The application filters</a></li>
+    <li><code>[actions]</code>&nbsp;<a href="#actions">The actions linked to the application URLs</a></li>
+    <li><code>[extensions]</code>&nbsp;<a href="#extensions">The extensions used by the application</a></li>
+</ul>
+
+<h2 id="comment" class="page-header">Comments</h2>
+<p>
+    You can add comments in the mapping file by prefixing your lines with <code>#</code>.
+</p>
+<p>
+    <span class="label label-info">Example</span> Multi-line comment:
+</p>
+<pre>
+# Begin comment
+# End comment
+</pre>
+
+<h2 id="config" class="page-header">[config] The web application configuration</h2>
+<p>
+    This section enables to define some operation elements and defautl value for WebMotion.
+    For example, this is the section where to specify the directory containing the application pages
+    and the Java packages corresponding to the application controllers.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The different configuration properties can be found after the <code>[config]</code> keyword.
+</p>
+<pre>
+[config]
+</pre>
+
+<p>
+    The properties are defined in a <code>key=value</code> model. The allowed keys are the following:
+</p>
+<ul>
+    <li>package.views</li>
+    <li>package.base</li>
+    <li>package.actions</li>
+    <li>package.filters</li>
+    <li>package.errors</li>
+    <li>javac.debug</li>
+    <li>render.default</li>
+    <li>server.async</li>
+    <li>server.encoding</li>
+    <li>server.error.page</li>
+    <li>server.controller.scope</li>
+    <li>server.listener.class</li>
+    <li>server.main.handler.class</li>
+    <li>server.secret</li>
+</ul>
+
+<p>
+    The following properties <code>server.encoding</code> and <code>server.error.page</code>
+    are considered only from the main mapping file.
+</p>
+
+<h3>package.views</h3>
+<p>
+    The <strong>package.views</strong> property enables to define the path of all the JSP, HTML, etc. pages.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of package.views is empty.
+</p>
+<p>
+    <span class="label label-info">Example</span> The pages will be searched in the <code>pages</code> directory:
+</p>
+<pre>package.views=pages</pre>
+<p>
+    <span class="label label-info">Example</span> The pages will be searched in the <code>WEB-INF/pages</code> directory,
+    a simple reflex to make the JSP pages unreachable for direct accesses:
+</p>
+<pre>package.views=WEB-INF/pages</pre>
+
+<h3>package.base</h3>
+<p>
+    The <strong>package.base</strong> property enables to define the default Java package of all the application Java classes (controllers, filters, etc.).
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of package.base is empty.
+</p>
+<p>
+    <span class="label label-info">Example</span> The Java classes will be searched in the <code>org.debux.webmotion.sample</code> package:
+</p>
+<pre>package.base=org.debux.webmotion.sample</pre>
+
+<h3>package.actions</h3>
+<p>
+    The <strong>package.actions</strong> property enables to define the default package of classes of the application controllers.
+    If a value is defined for the <code>package.base</code> key, this value will prefix the value of the <code>package.actions</code> key
+    like this: <code>package.base + "." + package.actions</code>.
+</p>
+
+<p>
+    <span class="label">Default</span> By default, the value of package.actions is empty.
+</p>
+<p>
+    <span class="label label-info">Example</span> The Java action classes will be searched in the <code>org.debux.webmotion.sample.actions</code> package:
+</p>
+<pre>
+package.actions=org.debux.webmotion.sample.actions
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> The Java action classes will be searched in the <code>org.debux.webmotion.sample.actions</code> package
+    by using <code>package.base</code>:
+</p>
+<pre>
+package.base=org.debux.webmotion.sample
+package.actions=actions
+</pre>
+
+<h3>package.filters</h3>
+<p>
+    The <strong>package.filters</strong> property enables to define the default package of the classes of the application filters.
+    As for the actions, the value defined for the <code>package.filters</code> key will be concatenated to the value of <code>package.base</code>
+    if it is defined.
+</p>
+<p>
+    <span class="label">Default</span> By default the value of package.filters is empty.
+</p>
+<p>
+    <span class="label label-info">Example</span> The filter classes will searched in the <code>org.debux.webmotion.sample.filters</code> package:
+</p>
+<pre>package.filters=org.debux.webmotion.sample.filters</pre>
+<p>
+    <span class="label label-info">Example</span> The filter classes will searched in the <code>org.debux.webmotion.sample.filters</code> package
+    by using <code>package.base</code> :
+</p>
+<pre>
+package.base=org.debux.webmotion.sample
+package.action=filters
+</pre>
+
+<h3>package.errors</h3>
+<p>
+    The property <strong>package.errors</strong> enables to define the default package of the classes for the Java errors.
+    As for the actions, the value defined for the <code>package.errors</code> key will be concatenated to the value of <code>package.base</code>
+    if it is defined.
+</p>
+<p>
+    <span class="label">Default</span> By default the value of package.errors is empty.
+</p>
+<p>
+    <span class="label label-info">Example</span> The error classes will searched in the <code>org.debux.webmotion.sample.errors</code> package :
+</p>
+<pre>package.errors=org.debux.webmotion.sample.errors</pre>
+<p>
+    <span class="label label-info">Example</span> The error classes will searched in the <code>org.debux.webmotion.sample.errors</code> package
+    by using <code>package.base</code> :
+</p>
+<pre>
+package.base=org.debux.webmotion.sample
+package.errors=errors
+</pre>
+
+<h3>javac.debug</h3>
+<p>
+    The <strong>javac.debug</strong> property enables to define if the application must be compiled in debug mode.
+    The available values are <code>true</code> or <code>false</code>.
+    For more information, please refer to the <a href="advanced#paranamer">Advanced - Paranamer</a> section.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of javac.debug is <code>true</code>.
+</p>
+
+<h3>render.default</h3>
+<p>
+    The <strong>render.default</strong> property enables to define the render if the return
+    type of an action isn't a Render type. The available values are the full qualified class name.
+    For more information, please refer to the <a href="action#render">Action - Render</a> section.
+</p>
+<p>
+    <span class="label">Default</span> By default, no value specified.
+</p>
+<p>
+    <span class="label label-info">Example</span> WebMotion gives you a default render to return the object to JSON :
+</p>
+<pre class="prettyprint">
+default.render=org.debux.webmotion.server.render.DefaultRender
+</pre>
+
+<h3>server.async</h3>
+<p>
+    The <strong>server.async</strong> property enables to set all the actions in the asynchronous mode.
+    The available values are <code>true</code> or <code>false</code>.
+    You can specify that an action is asynchronous or vice versa in the action section.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of server.async is <code>false</code>.
+</p>
+
+<h3>server.encoding</h3>
+<p>
+    The <strong>server.encoding</strong> property enables to force the encoding used to read the parameters of the HTTP request
+    and to write the HTTP response.
+    For more information, please refer to the javadoc on
+    <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#setCharacterEncoding(java.lang.String)">
+        ServletRequest.setCharacterEncoding(encoding)</a> and
+    <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletResponse.html#setCharacterEncoding(java.lang.String)">
+        ServletResponse.setCharacterEncoding(encoding)</a>.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of server.encoding is <code>UTF-8</code>.
+</p>
+<p>
+    <span class="label label-info">Note</span> For Tomcat, it is necessary to add the <code>URIEncoding="UTF-8"</code> attribute
+    to the connector in the server.xml file:
+</p>
+<pre class="prettyprint">
+&lt;Connector port="8080" protocol="HTTP/1.1"
+           connectionTimeout="20000"
+           redirectPort="8443"
+           URIEncoding="UTF-8" /&gt;
+</pre>
+
+<h3>server.error.page</h3>
+<p>
+    The <strong>server.error.page</strong> property enables to specify if the error page provided by WebMotion is available.
+    The available values are:
+</p>
+<ul>
+    <li><code>enabled</code> to display the detailed error page if the error is not managed in the mapping</li>
+    <li><code>disabled</code> to display a short message if the error is not managed in the mapping</li>
+    <li><code>forced</code> to display the detailed error page even if the error is managed in the mapping</li>
+</ul>
+<p>
+    <span class="label">Default</span> By default, the value of server.error.page is <code>enabled</code>.
+</p>
+<p>
+    <span class="label label-info">Note</span> You can modify this property at any time with the JMX console.
+    For more information, please refer to the <a href="advanced#jmx">Advanced - JMX</a> section.
+</p>
+<p>
+    <span class="label label-info">Note</span> We advise you to set the property to <code>disabled</code> when the server is deployed in production.
+</p>
+
+<h3>server.controller.scope</h3>
+<p>
+    The <strong>server.controller.scope</strong> property enables to specify if the application is in stateful or stateless mode.
+    By default, the stateless mode is activated, ie all the Java classes are the same for all the requests.
+    Consequently, you cannot keep attributes in the class. The available values are:
+</p>
+<ul>
+    <li><code>singleton</code> a single instance of the action is used for all the requests</li>
+    <li><code>request</code> an instance of the action is valid throughout a request</li>
+    <li><code>session</code> the same instance of the action is used for all the requests of a user</li>
+</ul>
+<p>
+    <span class="label">Default</span> By default, the value of server.controller.scope is <code>singleton</code>.
+</p>
+
+<h3>server.listener.class</h3>
+<p>
+    The <strong>server.listener.class</strong> property enables to define the listeners on the start and stop of the server.
+    The value must be the fully qualified name of the class. The different values are separated by comma.
+</p>
+<p>
+    <span class="label">Default</span> There is no default value.
+</p>
+<p>
+    <span class="label label-info">Example</span> Implementation of a listener:
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(Mapping mapping, ServerContext context) {
+        // do action
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        // do action
+    }
+    
+}
+</pre>
+
+<h3>server.main.handler.class</h3>
+<p>
+    The <strong>server.main.handler.class</strong> enables to define the class responsible for the action linking inside WebMotion.
+    This property is only useful to extend the framework.
+    For more information, please refer to the <a href="advanced#handler">Advanced - How does WebMotion work?</a> section.
+</p>
+<p>
+    <span class="label">Default</span> By default, the value of server.main.handler.class is <code>org.debux.webmotion.server.WebMotionMainHandler</code>
+</p>
+
+<h3>server.secret</h3>
+<p>
+    The <strong>server.secret</strong> enables you to define the secret key which
+    enables the securisation of the data (cookies, ...). It is to be defined if you use
+    WebMotion on different servers for a same application. It must contain at least 31 characters.
+    If no key is defined in the mapping file, then a key will be automatically created in memory.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Definition of a key:
+</p>
+<pre>server.secret=012345678901234567890123456789_</pre>
+
+<h2 id="properties" class="page-header">[properties] Configuration of the application</h2>
+<p>
+    This section enables to define a configuration for your application from key/value pairs.
+    The syntax is comparable to a classic property file.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The different properties are listed after the <code>[&lt;name&gt;.properties]</code> keyword.
+    The name of the section is the name of the file which enables to redefine the properties
+    in a file in:
+</p>
+<ul>
+    <li>the system path (<code>/etc</code>, <code>C:\Windows\System32\etc</code>)</li>
+    <li>the user path (<code>$(user.home)/.config</code>, <code>C:\Documents and Settings\USER\Application Data\</code>, <code>$(user.home)/Library/Application Support</code>)</li>
+    <li>the classpath of the application</li>
+</ul>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of a section 
+    with the filename <code>config.properties</code>:
+</p>
+<pre>
+[config.properties]
+</pre>
+
+<p>
+    The definition of a property is a key/value definition: 
+</p>
+
+<pre>
+&lt;key&gt;=&lt;value&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of a property:
+</p>
+<pre class="prettyprint">
+site.name=WebMotion
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Inclusion of another property file,
+    it will be searched in the system path, in the user path then in the classpath
+    of the application:
+</p>
+<pre class="prettyprint">
+include=other-config.properties
+</pre>
+
+<h2 id="actions" class="page-header">[actions] Action configuration</h2>
+<p>
+    This section enables to define an action to perform for a HTTP method and a given URL, like a view display, a HTTP redirection or a controller execution (Java method).
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The different actions are listed after the <code>[actions]</code> keyword.
+</p>
+<pre>
+[actions]
+</pre>
+<p>
+    The definition of an action is done on a single line divided into 3 or 4 sections, depending on the case:
+</p>
+<ol>
+    <li>The HTTP method(s) accepted for the specified URL</li>
+    <li>The URL whose treatment to perform is specified</li>
+    <li>The treatment to perform for the specified URL</li>
+    <li>The definition of the default values of some parameters</li>
+</ol>
+
+<p>
+    Here is the syntax to map a URL with a view:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>view:</b>&lt;page_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+<p>
+    Here is the syntax to map a redirection on an URL:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    (<b>url:</b>|<b>redirect:</b>)&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map a forward on an URL:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>forward:</b>&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map a URL with a Java action (controller method):
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>action:</b>[&lt;package_name&gt].&lt;class_name&gt.&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+<p>
+    <span class="label label-info">Note</span> The <code>action:</code> prefix is optional for the actions.
+    So you can write:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    &lt;method_name&gt;    [...]
+</pre>
+<p>
+    Here the syntax to map a URL with an <strong>asynchronous</strong> action (controller method).
+    Override the behaviour defined by the <code>server.async</code> property in the <code>[config]</code> section.
+    An asynchronous request enables to differ the treatment of an action which needs an important treatment time
+    (database access, access to a webservice, ...) without blocking the application server:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>async:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+<p>
+    Here is the syntax to map a URL with a <strong>synchronous</strong> action (controller method).
+    Override the behaviour defined by the <code>server.async</code> property in the <code>[config]</code> section:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;url&gt;    <b>sync:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+
+<h3 id="http-methods">HTTP methods</h3>
+<p>
+    The different HTTP methods supproted by WebMotion are: GET, POST, HEAD, PUT and DELETE.
+</p>
+<p>
+    Only the GET and POST methods are supported in the web form (<code>&lt;form&gt;</code> tag).
+    To be able to use the other methods, you will need to make AJAX requests or use header 
+    X-HTTP-Method, X-HTTP-Method-Override or X-METHOD-OVERRIDE on a POST request.
+</p>
+<p>
+    <span class="label label-info">Example</span> Definition of an action for d'une action for a single HTTP method:
+</p>
+<pre>
+GET         &lt;URL&gt;        &lt;action&gt;
+POST        &lt;URL&gt;        &lt;action&gt;
+PUT         &lt;URL&gt;        &lt;action&gt;
+DELETE      &lt;URL&gt;        &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> To specify that the action is to perform whatever the HTTP method, you can use the asterisk:
+</p>
+<pre>
+*           &lt;URL&gt;        &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> To apply an action on a subset of HTTP methods, you just need to separate them with commas:
+</p>
+<pre>
+GET,POST    &lt;URL&gt;        &lt;action&gt;
+</pre>
+
+<h3>Configuration of the URL which will be treated</h3>
+
+<p>
+    The specified URLs are always relative to your application context and must always start with a slash.
+</p>
+<p>
+    <span class="label label-info">Example</span> To treat the URL <code>http://localhost:8080/webmotion-sample/index</code>, you must write:
+</p>
+<pre>
+*           /index             &lt;action&gt;
+</pre>
+<p>
+    <span class="label label-info">Example</span> To treat the URL of the root of your application, you must write:
+</p>
+<pre>
+*           /                  &lt;action&gt;
+</pre>
+
+<p>
+    The full URL is decisive for the choice of which action to perform.
+    You can manage in several ways the request parameters.
+</p>
+
+<h4>Treatment according to predefined values of the request parameters</h4>
+<p>
+    <span class="label label-info">Example</span> You can differentiate the treatment to perform
+    according to the only difference of the value of a request parameter:
+</p>
+<pre>
+*           /user?action=save                  &lt;action1&gt;
+*           /user?action=display               &lt;action2&gt;
+</pre>
+
+<h4>Retrieving of the value of a parameter to treat this value</h4>
+<p>
+    <span class="label label-info">Example</span> Declaration of dynamic parameter:
+</p>
+<pre>
+*           /user?action={}                    &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of dynamic parameter
+    with renaming of the action parameter into value:
+</p>
+<pre>
+*           /user?action={value}               &lt;action&gt;
+</pre>
+<p>
+    <span class="label label-info">Example</span> Declaration of dynamic parameter
+    with renaming for a parameter whose value contaisn only "a"s (regular expression constraint):
+</p>
+<pre>
+*           /user?action={value:a*}            &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Note</span> The URLs containing parameters with regular expression constraint
+    are more restrictive than URLs without constraints.
+    So be careful about the order of the URLs in the mapping file:
+</p>
+<pre>
+*           /user?action={value}            &lt;action1&gt;
+*           /user?action={value:a*}         &lt;action2&gt; // Will never be treated, the previous line is more generic
+</pre>
+
+<p>
+    To write regular expressions with brackets, for example <code>a{2,3}</code>, you will have to de-specialize thus <code>a\{2,3\}</code>.
+</p>
+
+<h4>Pieces of dynamic URLs</h4>
+<p>
+    You have the same parameter functionalities but directly in the URL path,
+    ie the retrieving of a URL fragment as a parameter of your action
+    with the possibility of a Java pattern type expression.
+</p>
+<p>
+    <span class="label label-info">Example</span> Declaration of dynamic parameter in the path,
+    the <code>id</code> parameter can then be used in the URL treatment (action, view, etc.).
+</p>
+<pre>
+*           /user/{id}                     &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Declaration of dynamic parameter in the path with a pattern.
+    The following rule will treat all the URLs starting with <code>/user-</code>
+    and the value will be stored in the <code>id</code> parameter.
+</p>
+<pre>
+*           /{id:user-*}            &lt;action&gt;
+</pre>
+
+<h3>View display treatment</h3>
+<p>
+    This kind of treatment enables to return directly a page according to the URL.
+    It can be any kind of page / rendering: HTML, JSP, text file, etc.
+    To specify this kind of treatment, you just need to prefix the treatment (the action) by <code>view:</code>
+</p>
+<p>
+    <span class="label label-info">Example</span> Returns the index page:
+</p>
+<pre>
+GET         /index                              <b>view:</b>index.html
+</pre>
+<p>
+    <span class="label label-info">Example</span> Returns the index page from the doc directory:
+</p>
+<pre>
+GET         /doc/index                          <b>view:</b>doc/index.html
+</pre>
+
+<p>
+    Pieces of URL (pieces of path, parameters) can be reused to determinethe view to display.
+</p>
+<p>
+    <span class="label label-info">Example</span> Returns the text file requested in the parameters:
+</p>
+<pre>
+*           /text?file={}                       <b>view:</b>{file}.txt
+</pre>
+
+<h3>HTTP redirections</h3>
+<p>
+    You can define HTTP redirections to absolute URLs (generally to another domain) or relative to the application.
+    To define a redirection, you just need to prefix the treatment by <code>url:</code> or <code>redirect:</code> 
+    and for a forward to prefix by <code>forward:</code>.
+</p>
+<p>
+    <span class="label label-info">Example</span> Redirection to another website:
+</p>
+<pre>
+GET         /google                              <b>url:</b>http://www.google.com
+</pre>
+<p>
+    <span class="label label-info">Example</span> Redirection to a URL of the application:
+</p>
+<pre>
+GET         /foo                                 <b>redirect:</b>/do?param=3
+</pre>
+
+<p>
+    Once again, the treatment can be configurable according to the treated URL.
+</p>
+<p>
+    <span class="label label-info">Example</span> Wikipedia URL forwarding in our website:
+</p>
+<pre>
+GET         /wikipedia/{page}                    <b>forward:</b>http://www.wikipedia.org/wiki/{page}
+</pre>
+
+<h3>Java treatment</h3>
+<p>
+    This kind of treatment is the most common. It is to execute a Java method (business code)
+    which will finish its treatment by returning a rendering (JSON or XML stream, a JSP page, etc.).
+    The Java class must imperatively extend the <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a> class.
+    Inside the controller, you can access elements such as the request, the response, the web context, the session, etc.
+    For more information, please refer to the <a href="action#context">Java actions - Web context</a> section.
+    This kind of treatment is defined by the presence of the <code>action:</code> prefix, which is however optional.
+</p>
+<p>
+    <span class="label label-info">Example</span> Execute the find method of the User class:
+</p>
+<pre>
+GET         /user/{id}                                  User.find
+POST        /user/{id}                           <b>action:</b>User.edit
+</pre>
+<p>
+    <span class="label label-info">Example</span> Execute the find method of the User class in the user package:
+</p>
+<pre>
+GET         /user/{id}                            user.User.find
+</pre>
+
+<p>
+    The parameters can be used to determine the redirection to perform.
+</p>
+<p>
+    <span class="label label-info">Example</span> Execute the method of the class specified in the parameters:
+</p>
+<pre>
+*           /{class}/{method}                     {class}.{method}
+</pre>
+<p>
+    In the example above, a call to the <code>/User/list</code> URL will launch
+    the execution of the <code>list</code> method of the <code>User</code> controller.
+</p>
+
+<h4>Examples of controllers</h4>
+<pre class="prettyprint">
+public class User extends WebMotionController {
+    public Render find(String id) {
+        ...
+        return ...
+    }
+    ...
+}
+</pre>
+
+<h4>Parameters treatment</h4>
+<p>
+    All the parameters are available, even if they are not defined in the URL in the mapping file.
+</p>
+<p>
+    Webmotion makes it possible to do parameter autoconversion based on <a href="http://commons.apache.org/beanutils/">Apache Commons BeanUtils</a>,
+    which enables to have the following conversions:
+</p>
+<ul> 
+    <li>java.lang.BigDecimal (no default value)</li> 
+    <li>java.lang.BigInteger (no default value)</li> 
+    <li>boolean &amp; java.lang.Boolean (default to false)</li> 
+    <li>byte &amp; java.lang.Byte (default to zero)</li> 
+    <li>char &amp; java.lang.Character (default to a space)</li> 
+    <li>java.lang.Class (no default value)</li> 
+    <li>double &amp; java.lang.Double (default to zero)</li> 
+    <li>float &amp; java.lang.Float (default to zero)</li> 
+    <li>int &amp; java.lang.Integer (default to zero)</li> 
+    <li>long &amp; java.lang.Long (default to zero)</li> 
+    <li>short &amp; java.lang.Short (default to zero)</li> 
+    <li>java.lang.String (default to null)</li> 
+    <li>java.io.File (no default value)</li> 
+    <li>java.net.URL (no default value)</li> 
+    <li>java.sql.Date (no default value) (string format [yyyy-MM-dd])</li> 
+    <li>java.sql.Time (no default value) (string format [HH:mm:ss])</li> 
+    <li>java.sql.Timestamp (no default value) (string format [yyyy-MM-dd HH:mm:ss.fffffffff])</li> 
+    <li>POJO (no default value)</li> 
+    <li>java.util.Map (no default value)</li> 
+    <li>java.util.Set (no default value)</li> 
+    <li>java.util.List (no default value)</li> 
+    <li>Arrays (no default value)</li> 
+</ul>
+<p>
+    If a parameter cannot be converted in the type requested by the Java method, the default value will be used.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value</strong></code> URL,
+     you will have the method:
+</p>
+<pre class="prettyprint">
+public Render action(Type param) {
+    return ...
+}
+</pre>
+
+<p>
+    To get a list or array of values, you just need to pass several times the same parameter in the URL.
+</p>
+<p>
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> URL,
+    you will have the following method:
+</p>
+<pre class="prettyprint">
+public Render action(Type[] param) {
+    return ...
+}
+</pre>
+
+<p>
+    To get a Map, you need to use the pointed notation which respects the following syntax: <br />
+    <code>&lt;name of the parameter corresponding to the map&gt;.&lt;key of the map&gt;=&lt;value corresponding to the key&gt;</code>
+</p>
+<p>
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param.key1=value1&amp;param.key2=value2</strong></code> URL,
+    you will have the following method:
+</p>
+<pre class="prettyprint">
+public Render action(Map param) {
+    // param contient les entrées suivantes :
+    // key1 = value1
+    // key2 = value2
+    return ...
+}
+</pre>
+
+<p>
+    To get a simple object, you also need to use the pointed notation: <br />
+    <code>&lt;name of the parameter corresponding to the object&gt;.&lt;name of the attribute&gt;=&lt;value of the attribute&gt;</code>
+</p>
+<p>
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>book.isbn=007&amp;book.title=James%20Bond</strong></code> URL,
+    you will have the following method:
+</p>
+<pre class="prettyprint">
+public Render action(Book book) {
+    return ...
+}
+</pre>
+
+<p>With the following Book class:</p>
+<pre class="prettyprint">
+public class Book {
+    protected String isbn;
+    protected String title;
+
+    // Getters &amp; setters
+}
+</pre>
+
+<p>
+    <span class="label label-info">Note</span>
+    You can combine the types, ie have lists of objects or objects associated to other objects.
+    For the <code>http://localhost/webmotion-sample/action?<strong>users.user1.name=titi&amp;users.user1.age=10
+    &amp;users.user1.address.country=ici&amp;users.user2.name=toto&amp;users.user2.age=12&amp;users.user2.address.country=la</strong></code> URL,
+    you will have the following method:
+</p>
+<pre class="prettyprint">
+public Render action(List&lt;User&gt; users) {
+    return ...
+}
+</pre>
+<p>With the following User class:</p>
+<pre class="prettyprint">
+public class User {
+    protected String name;
+    protected int age;
+    protected Address address;
+
+    // Getters &amp; setters
+}
+
+public class Address {
+    protected String country;
+
+    // Getters &amp; setters
+}
+</pre>
+
+<h4>Default values of the parameters</h4>
+<p>
+    You can pass parameters to Java methods or to views without the parameters are specified in the URL.
+    You can use the pointed notation to pass objects.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Execute the <code>exec</code> method with default parameters:
+</p>
+<pre>
+GET         /action           Action.exec    value=default,number=44
+</pre>
+<p>With the following Action class:</p>
+<pre class="prettyprint">
+public class Action extends WebMotionController {
+    public Render exec(String value, int number) {
+        // value = "default"
+        // number = 44
+        return ...
+    }
+    ...
+}
+</pre>
+
+<h2 id="filters" class="page-header">[filters] Configuration of the filters of the application</h2>
+<p>
+    The section for the filters enables to perform treatment before and/or after the main action.
+    The classical example of use of filters are authentication, logging, geolocation, etc.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The configuration is after the <code>[filters]</code> keywordin the mapping file.
+</p>
+<pre>
+[filters]
+</pre>
+
+<p>
+    Here is the syntax to filter URLs on a Java action:
+</p>
+<pre>
+&lt;http_method&gt;    &lt;URL_filter&gt;    <b>action:</b>&lt;method_name&gt;    &lt;parameter_name&gt;=&lt;value&gt;[,&lt;parameter_name&gt;=&lt;value&gt;]*
+</pre>
+<p>
+    <span class="label label-info">Note</span> As for the <code>[actions]</code> section,
+    the <code>action:</code> prefix is optional for the Java actions.
+</p>
+
+<h3>HTTP method</h3>
+<p>
+    The syntax of the HTTP methods supported for the filters in WebMotion are described in <a href="#http-methods">the [actions] section</a> .
+</p>
+
+<h3>URL</h3>
+<p>
+    The URLs treated by the filters have a syntax similar to the URL patterns of the <code>FilterServlet</code> in the <code>web.xml</code>.
+    It starts with a slash and can contain asterisks as wildcards.
+</p>
+<p>
+    <span class="label label-warning">Warning</span>
+    For now, you cannot filter according to the parameters of the request or to a pattern more complex than the asterisk.
+</p>
+<p>
+    <span class="label label-info">Example</span> Filter all the URLs:
+</p>
+<pre>
+*           /*                      &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Filter all the URLs for the user management:
+</p>
+<pre>
+*           /user/*                 &lt;action&gt;
+</pre>
+
+<h3>Action</h3>
+<p>
+    The treatment performed on a filtered URL is mandatorily a Java treatment 
+    (execution of a method of a class inheriting the
+    <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionFilter.html">WebMotionFilter</a> class).
+    The treament of the filter can be executed before and/or after the main action.
+    This is defined by the choice of a rule in the <code>[actions]</code> section.
+    Inside the executed function, the call to the <code>doProcess()</code> method enables to move on with the execution of the main action.
+</p>
+<p>
+    In the same way as in a controller, you can access the parameters of the request,
+    as well as various elements of the web context (request, response, session, etc.).
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Filter all the URLs for authentication:
+</p>
+<pre>
+*           /admin/*                Filters.auth
+</pre>
+<p>With the following Filter class:</p>
+<pre class="prettyprint">
+public class Filters extends WebMotionFilter {
+    public void auth(String token) {
+        // Before filter
+        doProcess();
+        // After filter
+    }
+}
+</pre>
+
+<p>
+    In a filter, you can return a rendering (e.g. a page) instead of calling the <code>doProcess</code> method.
+    If a rendering is returned by the filter, the execution stops and the treatment of the main action will not be launched.
+    The call to the <code>doProcess</code> method is not mandatory, but this will imply that no rendering will be returned for the current URL.
+</p>
+<p>
+    <span class="label label-info">Example</span> Returns to a page if the user is not authenticated:
+</p>
+<pre>
+*           /admin/*                Filters.auth
+</pre>
+<p>With the following Filter class:</p>
+<pre class="prettyprint">
+public class Filters extends WebMotionFilter {
+    public Render auth(String token) {
+        if(token != null) {
+            doProcess();
+        } else {
+            return renderView("index.html");
+        }
+        return null;
+    }
+}
+</pre>
+
+<p>
+    You can chain the execution of filters. For that, you have to use the <code>doChain</code> method. 
+    It takes as parameters the class name et the method name separated by a point.
+</p>
+<p>
+    <span class="label label-info">Example</span> Chain a filter on another one:
+</p>
+<pre class="prettyprint">
+public class Filters extends WebMotionFilter {
+    public Render pass() {
+        // Before filter
+        doChain("Filters.chain");
+        // After filter
+    }
+
+    public Render chain() {
+        // Before filter
+        doProcess();
+        // After filter
+    }
+}
+</pre>
+
+<h3>Default values of the parameters</h3>
+<p>
+    You can pass parameters to the Java methods without these parameters exist in the URL.
+    You can use the ponted notation to pass these objects.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Execute the <code>decorate</code> filter with the default parameters:
+</p>
+<pre>
+GET         /*           Decorator.decorate    value=default
+</pre>
+<p>With the following Decorator filter:</p>
+<pre class="prettyprint">
+public class Decorator extends WebMotionFilter {
+    public void decorate(String value) {
+        // value = "default"
+        ...
+        doProcess();
+        ...
+    }
+    ...
+}
+</pre>
+<p>
+    <span class="label label-warning">Warning</span>
+    If the default parameters have the same names between the filter and the action,
+    the contained values for these parameters are the ones defined at the action level,
+    and will override the values defined at the filter level.
+</p>
+
+<h2 id="errors" class="page-header">[errors] Error management (exceptions, HTTP errors)</h2>
+<p>
+    The <code>[errors]</code> section enables to perform a particular treatment
+    if a Java exception is thrown or if a HTTP error is returned.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The configuration is after the <code>[errors]</code> keyword in the mapping file.
+</p>
+<pre>
+[errors]
+</pre>
+
+<p>
+    Here is the syntax to map an error on a view:
+</p>
+<pre>
+&lt;error&gt;    view:&lt;page_name&gt;
+</pre>
+<p>
+    Here is the syntax to map an error on a redirection to an URL:
+</p>
+<pre>
+&lt;error&gt;    (url:|redirect:)&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map an error on a forward to an URL:
+</p>
+<pre>
+&lt;error&gt;    forward:&lt;path&gt;
+</pre>
+<p>
+    Here is the syntax to map an error on a Java action:
+</p>
+<pre>
+&lt;error&gt;    [action:]&lt;method_name&gt;
+</pre>
+
+<h3>Errors</h3>
+<p>
+    <span class="label label-info">Example</span> Manage the HTTP status code 404:
+</p>
+<pre>
+<b>code:</b>404                &lt;action&gt;
+</pre>
+
+<p>
+    Here is the list of the managed HTTP codes:
+</p>
+<ul>
+    <li><strong>400</strong> The syntax of the request is wrong</li>
+    <li><strong>401</strong> Authentication is needed to access the resource</li>
+    <li><strong>403</strong> Authentication failed</li>
+    <li><strong>404</strong> Document not found</li>
+    <li><strong>408</strong> Server response timeout</li>
+    <li><strong>500</strong> Internal error of the server</li>
+</ul>
+
+<p>
+    <span class="label label-info">Example</span> Manage all the exceptions of the application:
+</p>
+<pre>
+java.lang.Exception           &lt;action&gt;
+</pre>
+
+<p>
+    <span class="label label-info">Example</span> Manage all the errors (exceptions, HTTP code):
+</p>
+<pre>
+*                       &lt;action&gt;
+</pre>
+
+<h3>Action</h3>
+<p>
+    The actions for the errors can be a view, a URL or a Java method.
+    As for the <code>[actions]</code> section, the error management Java class must extend
+    the <a href="http://projects.debux.org/project-site/webmotion/apidocs/org/debux/webmotion/server/WebMotionController.html">WebMotionController</a>
+    class. However, in this context, you can access the information about the thrown error.
+</p>
+<pre class="prettyprint">
+public class Error extends WebMotionController {
+    
+    public Render display(ErrorData errorData) {
+        // do
+    }
+
+}
+</pre>
+
+<p>
+    You can also get directly the exception in the parameters of the action:
+</p>
+<pre class="prettyprint">
+public class Error extends WebMotionController {
+    
+    public Render display(Exception exception) {
+        // do
+    }
+
+}
+</pre>
+<p>
+    With the following definition in the mapping file:
+</p>
+<pre>[errors]
+java.lang.Exception           Error.display
+</pre>
+
+<h2 id="extensions" class="page-header">[extensions] Management of the extensions of the application</h2>
+<p>
+    You can create applicative pieces, with dedicated mapping files, and apply them to an applicative subcontext
+    (a specified path, relative to the current application). These applicative pieces are called <strong>extensions</strong>.
+    In an application, you can use one or several extensions within the same project.
+</p>
+<p>
+    The benefits of the use of extensions in your project are significant
+</p>
+<ul>
+    <li>Reuse : you can pool business components between different projects.</li>
+    <li>Structuring : the extensions enable to cut out a project in functional or technical..</li>
+    <li>Modularity : during deployment, the extensions can be determined dynamically.</li>
+</ul>
+
+<p>
+    Moreover the extensions proposed of base with WebMotion, there are an extension repository available at <a href="https://gitorious.org/webmotion/webmotion-extras">https://gitorious.org/webmotion/webmotion-extras</a>.
+</p>
+
+<h3>Syntax</h3>
+<p>
+    The configuration is after the <code>[extensions]</code> keyword in the mapping file.
+</p>
+<pre>
+[extensions]
+</pre>
+
+<p>
+    Here is the syntax to mount an extension:
+</p>
+<pre>
+&lt;URL&gt;    &lt;name of the mapping file of the extension&gt;
+</pre>
+
+<h3>URL</h3>
+<p>
+    An extension is applied to a given path.
+    If an extension returns no rendering (page, JSON stream, etc.),
+    the treatment goes on to the following extension.
+    The extensions can be mounted on the same URL;
+    the first extension which returns a rendering will be taken into account.
+    You can use several times the same extension for several URLs.
+</p>
+<p>
+    <span class="label label-info">Example</span> Use of the wikimotion extension:
+</p>
+<pre>
+/wiki                  &lt;wikimotion&gt;
+</pre>
+
+<h3>Mapping file</h3>
+<p>
+    The mapping file of each extension must be in the classpath of the application.
+</p>
+<p>
+    <span class="label label-info">Example</span> Use of the mapping file of wikimotion:
+</p>
+<pre>
+/wiki                  wikimotion
+</pre>
+<p>
+    In the case above, the <code>wikimotion</code> file, which must be in the classpath of the application,
+    contains all the mapping rules of the extension, which will be applied relatively to the <code>/wiki</code> path.
+</p>
+
+<p>
+    The URL of the extension can be a pattern on files, which enables to load mappings dynamically.
+</p>
+<p>
+    <span class="label label-info">Example</span> Loading extensions of the files
+    in the <code>META-INF</code> directory with the <code>wm</code> extension:
+</p>
+<pre>
+/                      META-INF/.*\.wm
+</pre>
+
+<p>
+    The extension filters are accumulative. This means that the treatment of a request can pass
+    through one or several filters before being launched by the action defined in the applicative mapping.
+</p>
+<p>
+    <span class="label label-info">Example</span> An audience measurement module (statistics)
+    could be used by an application which would contain the following piece of configuration:
+</p>
+<pre>[extensions]
+/                  statistics
+</pre>
+
+<p>
+    With the following mapping file of the module, named statistics:
+</p>
+<pre>
+[config]
+package.base=org.debux.webmotion.stats
+
+[filters]
+*          /*                  Stats.count
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="documentation">« Documentation</a>
+    <a class="btn large" style="margin: 0 auto;" href="#">Top</a>
+    <a class="btn primary large" style="float:right;" href="action">Java action »</a>
+</div>
+
+</div>

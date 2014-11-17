@@ -1,0 +1,411 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<!--<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
+
+        <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+        <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js" type="text/javascript"></script>
+
+    </head>
+    <body onload="prettyPrint()">-->
+
+<div id="article">
+
+<h1>Pollmotion</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 class="page-header" id="begin">Présentation</h2>
+<p>
+    This titorial, you present the creation of basic application with data base.
+    We are focused on the differents technical point, in order to present the good
+    pattern for your futur applications.
+</p>
+<p>
+    For show this fonctionnalities, we are create a poll system, witch the user can
+    create a question with choices and share the url of the vote to somebody.
+</p>
+
+<p>
+    Reminder, WebMotion is a Java web framework. It uses a mapping file to 
+    describe the link between the server and the client. It is based on the JEE 
+    API with Servlet 3.
+</p>
+
+<p>
+    JQuery is a javascript library. It can to manipulate easily the elements in DOM with many API. 
+</p>
+
+<p>
+    For more details, you can visit the websites <a href="http://www.webmotion-framework.org">http://www.webmotion-framework.org</a>
+    and <a href="http://jquery.com/">http://jquery.com/</a>.
+</p>
+
+<p>
+    A demo of the form is available here :
+    <a href="http://www.webmotion-framework.org/pollmotion/">http://www.webmotion-framework.org/pollmotion/</a>.
+    and the source code is available to the follow address :
+    <a href="https://gitorious.org/webmotion/webmotion-examples/trees/master/pollmotion">https://gitorious.org/webmotion/webmotion-examples/trees/master/pollmotion</a>.
+</p>
+
+<h2 class="page-header" id="layout">Layout</h2>
+<p>
+    The layout for website is the part witch find on each page in site, this can be 
+    graphical elements like menu but this can also be the inclusion of javascript or
+    CSS files. WebMotion with the Sitemash extra you propose to handle the layouts. 
+    In this case, we will need only one layout.
+</p>
+
+<p>
+    This element show how you enabled SiteMesh extra :
+</p>
+<pre class="prettyprint">
+[config]
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
+
+[filters]
+GET          /*                            SiteMesh.decorate       layout=layout.jsp
+</pre>
+
+<h2 class="page-header" id="database">Database</h2>
+<p>
+    To manage database, we will use the JPA extra proposed by WebMotion. For simplify 
+    its use and have a approach REST, we will separe the urls to two domains : 
+    one for the poll (/poll) and one for the votes (/vote).
+</p>
+<pre class="prettyprint">
+[config]
+server.listener.class=org.debux.webmotion.jpa.JpaListener
+
+[filters]
+*            /poll                         Jpa.tx                  persistenceUnitName=pollmotionDB,entityName=org.debux.webmotion.pollmotion.entity.Poll
+*            /poll/*                       Jpa.tx                  persistenceUnitName=pollmotionDB,entityName=org.debux.webmotion.pollmotion.entity.Poll
+*            /vote                         Jpa.tx                  persistenceUnitName=pollmotionDB,entityName=org.debux.webmotion.pollmotion.entity.Vote
+*            /vote/*                       Jpa.tx                  persistenceUnitName=pollmotionDB,entityName=org.debux.webmotion.pollmotion.entity.Vote
+</pre>
+
+<p>
+    The database configuration is a sensitive element to configure, it is delicate
+    to keep the password in persitence.xml file. WebMotion proposes to write
+    the configuration properties in the [properties] section witch we can to 
+    externalize the file n your system.
+</p>
+
+<pre class="prettyprint">
+[pollmotion.properties]
+pollmotionDB.hibernate.dialect=org.hibernate.dialect.H2Dialect
+pollmotionDB.hibernate.hbm2ddl.auto=update
+pollmotionDB.hibernate.connection.driver_class=org.h2.Driver
+pollmotionDB.hibernate.connection.url=jdbc:h2:mem:pollmotion;DB_CLOSE_DELAY=-1
+pollmotionDB.hibernate.show_sql=false
+pollmotionDB.current_session_context_class=thread
+</pre>
+
+<p>
+    The management of the trasaction is done by a filter with the injection of dao
+    in the services.
+</p>
+
+<h2 class="page-header" id="services">Services</h2>
+<p>
+    You have multiple possibilities to create a services:
+</p>
+<ul>
+    <li>Part web with services</li>
+    <li>Inject the service part</li>
+    <li>Create a REST API</li>
+</ul>
+
+<p>
+    We will details the differents approach in the next sections.
+</p>
+
+<h3>Part web with the services</h3>
+<p>
+    In this case the controller is used like a service and expose it. With, you can
+    develop quickly an application without build a complex architecture. This solution
+    is usefull to make a prototype for example. Pollmotion is developed on this way.
+</p>
+
+<p>
+    Example of service:
+</p>
+
+<pre class="prettyprint">
+    public Render getVotes(EntityManager em,
+            String pollId) {
+        
+        GenericDAO daoPoll = new GenericDAO(em, Poll.class);
+        Poll poll = (Poll) daoPoll.find(pollId);
+        
+        GenericDAO daoVote = new GenericDAO(em, Vote.class);
+        List&lt;Vote&gt; votes = daoVote.query("findByPollId", 
+                                         Parameters.create().add("poll_id", pollId));
+        
+        int [] results = new int[poll.getChoices().size()];
+        for (Vote vote : votes) {
+            
+            List&lt;Boolean&gt; values = vote.getVotes();
+            int index = 0;
+            for (Boolean value : values) {
+                if (value) {
+                    results[index]++;
+                }
+                index ++;
+            }
+        }
+        
+        return renderView("poll_vote.jsp",
+                "poll", poll,
+                "votes", votes,
+                "results", results);
+    }
+</pre>
+<p>
+    We can constat that the service comport many steps:
+</p>
+<ol>
+    <li>The recuperation of votes</li>
+    <li>The result formatting</li>
+    <li>The return to the page</li>
+</ol>
+<p>
+    The first step can be consederate as a functionnal service witch can be reuse 
+    in your application.
+</p>
+
+<h3>Inject the service part</h3>
+
+<p>
+    The idea is to centralize the functionnal in external classes, in oder to 
+    reused in the controller. One of the solutions is to used the WebMotion injector 
+    to get a functionnal service instance as parameter or attribute in the classe.
+</p>
+
+<p>
+    Creation of functionnal service:
+</p>
+<pre class="prettyprint">
+public class ServiceVote {
+    
+    protected EntityManager em;
+
+    public ServiceVote(EntityManager em) {
+        this.em = em;
+    }
+
+    public List&lt;Vote&gt; getVotes(String pollId) {
+        
+        GenericDAO daoPoll = new GenericDAO(em, Poll.class);
+        Poll poll = (Poll) daoPoll.find(pollId);
+        
+        GenericDAO daoVote = new GenericDAO(em, Vote.class);
+        List&lt;Vote&gt; votes = daoVote.query("findByPollId", 
+                                         Parameters.create().add("poll_id", pollId));
+
+        return votes;
+    }
+}
+</pre>
+
+<p>
+    Creation of injector:
+</p>
+<pre class="prettyprint">
+public class Listener implements WebMotionServerListener {
+
+    @Override
+    public void onStart(Mapping mapping, ServerContext context) {
+        context.addInjector(new Injector() {
+            @Override
+            public Object getValue(Mapping mapping, Call call, String name, Class&lt;?&gt; type, Type generic) {
+                EntityManager em = // TODO ...
+                if (ServiceVote.class.isAssignableFrom(type)) {
+                    return new ServiceVote(em);
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onStop(ServerContext context) {
+        ...
+    }
+}
+</pre>
+<p>
+    Using the service in the controller:
+</p>
+<pre class="prettyprint">
+    public Render getVotes(ServiceVote service,
+            String pollId) {
+        
+        List&lt;Vote&gt; votes = service.getVotes(pollId);
+        
+        int [] results = new int[poll.getChoices().size()];
+        for (Vote vote : votes) {
+            
+            List&lt;Boolean&gt; values = vote.getVotes();
+            int index = 0;
+            for (Boolean value : values) {
+                if (value) {
+                    results[index]++;
+                }
+                index ++;
+            }
+        }
+        
+        return renderView("poll_vote.jsp",
+                "poll", poll,
+                "votes", votes,
+                "results", results);
+    }
+</pre>
+
+<p>
+    By using a injector, we separate the needs and you could reused the functionnal
+    code.
+</p>
+
+<h3>Create REST API</h3>
+<p>
+    An other possiblity is to used a REST approach in your controller. It requires
+    to create an "single pag" application with javascript. It is strongly advice 
+    to use JS framework provided fot this case like AngularJS. To hide the render 
+    used, we will use a default render.
+</p>
+
+<p>
+    Used the default render to generate JSON:
+</p>
+<pre>
+[config]
+default.render=org.debux.webmotion.server.render.DefaultRender
+</pre>
+
+<p>
+    Action example:
+</p>
+<pre class="prettyprint">
+    public Render getVotes(ServiceVote service,
+            String pollId) {
+        
+        List&lt;Vote&gt; votes = service.getVotes(pollId);
+        
+        int [] results = new int[poll.getChoices().size()];
+        for (Vote vote : votes) {
+            
+            List&lt;Boolean&gt; values = vote.getVotes();
+            int index = 0;
+            for (Boolean value : values) {
+                if (value) {
+                    results[index]++;
+                }
+                index ++;
+            }
+        }
+        
+        Map&lt;String, Object&gt; values = new HasMap&lt;String, Object&gt;();
+        values.put("poll", poll);
+        values.put("votes", votes);
+        values.put("results", results);
+        return values;
+    }
+</pre>
+
+<h2 class="page-header" id="postandget">POST and GET</h2>
+<p>
+    The known pattern for website is "POST and GET" patternn. The principe is when 
+    after a modification action is done, it have to redirect the user to display page to
+    avoid the user to redone the modification action when it refresh the navigator.
+</p>
+
+<p>
+    Example of modification service with a redirection:
+</p>
+<pre class="prettyprint">
+    public Render createVote(GenericDAO dao,
+            String pollId,
+            String email,
+            String[] votes) {
+            
+        // Create vote
+        // ...
+
+        return renderRedirect("/vote/" + pollId);
+    }
+</pre>
+
+<h2 class="page-header" id="tu">Tests</h2>
+<p>
+    One of difficulty is test easily your application. It exists some solutions in maven
+    with integration tests. WebMotion you propose to achieve directly your tests
+    as unit tests.
+</p>
+
+<p>
+    Example of test:
+</p>
+
+<pre class="prettyprint">
+public class TestMainController extends WebMotionTestNG {
+        
+    @Test
+    public void test() throws Exception {
+        String result = createRequest("/").Get()
+                .execute().returnContent().asString();
+        // Test the result page : System.out.println(result);
+        // ...
+    }
+    
+}
+</pre>
+
+<h2 class="page-header" id="run">Run the application</h2>
+
+<p>
+    You can now run the application with Jetty entering the following command
+    line :
+</p>
+<pre class="prettyprint">
+$ mvn jetty:run
+</pre>
+<p>
+    It is possible to deploy the application in dedicated server Jetty, Tomcat or Glassfish.
+</p>
+<p>
+   You can visualize the result in your navigator with the following 
+   address <a href="http://localhost:8080/pollmotion/">http://localhost:8080/pollmotion/</a>.
+</p>
+
+</div>
+    
+<!--    </body>
+</html>-->
+

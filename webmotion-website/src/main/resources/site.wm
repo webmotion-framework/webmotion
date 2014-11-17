@@ -1,11 +1,10 @@
 ###
 # #%L
 # WebMotion website
-# 
-# $Id$
-# $HeadURL$
+# $Id:$
+# $HeadURL:$
 # %%
-# Copyright (C) 2011 - 2012 Debux
+# Copyright (C) 2011 - 2014 Debux
 # %%
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as 
@@ -23,9 +22,14 @@
 # #L%
 ###
 [config]
-#server.error.page=disabled
+package.base=org.debux.webmotion.site
+package.views=WEB-INF/org.debux.webmotion.site
+server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 
-[extensions]
-/test                                                            test.wm
-/showcase                                                        showcase-display.wm
-/                                                                site.wm
+[filters]
+*                      /*                                         SiteMesh.decorate       layout=layout.jsp
+
+[actions]
+GET                   /                                          url:/main
+GET                   /{name}                                    Page.display
+GET                   /{folder}/{name}                           Page.display

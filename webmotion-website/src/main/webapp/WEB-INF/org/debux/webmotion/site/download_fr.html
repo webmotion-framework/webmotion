@@ -1,0 +1,141 @@
+<!--
+  #%L
+  Webmotion website
+  
+  $Id$
+  $HeadURL$
+  %%
+  Copyright (C) 2011 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Archive.png') no-repeat;">Téléchargement <small>Récupérer WebMotion</small></h1>
+</div>
+<table class="table table-striped table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Télécharger</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>WebMotion</td>
+            <td>Contient l'ensemble des fichiers pour WebMotion</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/58/webmotion-2.4-full.zip">webmotion-2.4-full.zip</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/59/webmotion-2.4-javadoc.jar">webmotion-2.4-javadoc.jar</a></p>
+                <p><a href="http://projects.debux.org/attachments/download/60/webmotion-2.4-sources.jar">webmotion-2.4-sources.jar</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>WebMotion extras</td>
+            <td>Contient l'ensemble des fichiers pour WebMotion avec l'ensemble des extras (Hibernate, Spring, ...)</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/61/webmotion-extras-2.4-full.zip">webmotion-extras-2.4-full.zip</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>WebMotion test</td>
+            <td>Contient l'ensemble des tests du showcase</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/62/webmotion-test-2.4.war">webmotion-test-2.4.war</a></p>
+            </td>
+        </tr>
+        <tr>
+            <td>WikiMotion</td>
+            <td>Wiki basé sur WebMotion</td>
+            <td>
+                <p><a href="http://projects.debux.org/attachments/download/63/webmotion-test-2.4.war">webmotion-test-2.4.war</a></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Folder_Web.png') no-repeat;">Maven <small>Utiliser maven pour récupérer WebMotion</small></h1>
+</div>
+<p>WebMotion est disponible par maven en ajoutant les lignes suivantes dans votre pom.xml de votre projet :</p>
+<pre class="prettyprint">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.debux.webmotion&lt;/groupId&gt;
+    &lt;artifactId&gt;webmotion&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/netbeans.png') no-repeat;">Plugin Netbeans <small>Simplifier l'utilisation de WebMotion</small></h1>
+</div>
+<p>
+    Le plugin est disponible sur le site de <a href="http://plugins.netbeans.org/plugin/43113">Netbeans</a>. Il comporte les fonctionnalités suivantes :
+</p>
+<ul>
+    <li>colorisation</li>
+    <li>vérification syntaxique</li>
+    <li>folding</li>
+    <li>aide à la complétion</li>
+    <li>lien vers les fichiers</li>
+    <li>hints</li>
+    <li>refactoring</li>
+    <li>templates</li>
+    <li>comment/uncomment</li>
+</ul>
+
+<p>
+    Le code source du plugin est disponible sur <a href="https://gitorious.org/webmotion/webmotion-netbeans">gitorious</a>.
+</p>
+
+<h2>Aperçu du plugin</h2>
+<ul class="thumbnails">
+    <li class="span4">
+        <a href="img/netbeans/mapping.png" class="thumbnail">
+            <img src="img/netbeans/mapping.png" alt="">
+        </a>
+    </li>
+    <li class="span4">
+        <a href="img/netbeans/completion.png" class="thumbnail">
+            <img src="img/netbeans/completion.png" alt="">
+        </a>
+    </li>
+    <li class="span4">
+        <a href="img/netbeans/error.png" class="thumbnail">
+            <img src="img/netbeans/error.png" alt="">
+        </a>
+    </li>
+</ul>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/TextDocument.png') no-repeat;">Sources <small>Récupérer les sources</small></h1>
+</div>
+<p>Les sources sont disponibles sur <a href="https://gitorious.org/webmotion">gitorious</a>, vous pouvez les récupérer en accès anonyme en exécutant la commande suivante :</p>
+<div class="well">
+    $ git clone <strong>git://gitorious.org/webmotion/webmotion.git</strong> webmotion.git
+</div>
+<p>ou</p>
+<div class="well">
+    $ git clone <strong>https://git.gitorious.org/webmotion/webmotion.git</strong> webmotion.git
+</div>
+
+<div class="page-header page-header-icon">
+    <h1 style="background: url('./img/Workgroup.png') no-repeat;">Redmine <small>Venez participer sur la forge</small></h1>
+</div>
+<p>Redmine est utilisé pour permettre à tous de particper sur le projet en nous faisant part des bugs et de vos demande de fonctionnalités. Sinon n'hésitez pas à nous contacter.</p>
+<div class="well">
+    <strong><a href="http://projects.debux.org/projects/webmotion">http://projects.debux.org/projects/webmotion</a></strong>
+</div>
