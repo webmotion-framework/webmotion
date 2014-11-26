@@ -27,6 +27,7 @@ package org.debux.webmotion.site;
 import java.io.File;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 import org.debux.webmotion.server.WebMotionFilter;
@@ -42,7 +43,10 @@ public class Page extends WebMotionFilter {
     public Render setLang(String lang, String folder, String name) {
         HttpContext context = getContext();
         HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
         HttpSession session = context.getSession();
+        
+        response.setHeader(HttpContext.HEADER_CACHE_CONTROL, "no-store, no-cache, must-revalidate");
         
         String language = (String) Config.get(session, Config.FMT_LOCALE);
         if (lang != null) {
