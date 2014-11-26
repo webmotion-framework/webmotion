@@ -213,10 +213,9 @@
                                 <copy todir="target/it/tomcat7/src/test">
                                     <fileset dir="src/test" />
                                 </copy>
-                                <!-- Disabled for the moment the plugin not support Tomcat8 -->
-<!--                                <copy todir="target/it/tomcat8/src/test">
+                                <copy todir="target/it/tomcat8/src/test">
                                     <fileset dir="src/test" />
-                                </copy>-->
+                                </copy>
                             </target>
                         </configuration>
                     </execution>
@@ -229,6 +228,10 @@
                 <configuration>
                     <projectsDirectory>src/it</projectsDirectory>
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <pomExcludes>
+                        <!-- Disabled for the moment the plugin not support Tomcat8 -->
+                        <pomExclude>tomcat8/pom.xml</pomExclude>
+                    </pomExcludes>
                     <goals>
                         <goal>verify</goal>
                     </goals>
