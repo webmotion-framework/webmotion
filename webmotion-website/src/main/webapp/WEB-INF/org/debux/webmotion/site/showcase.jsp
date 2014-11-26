@@ -76,7 +76,7 @@
             <div class="page-header page-header-icon" style="border: none;">
                 <h1 style="background: url('<c:url value="/img/My_Computer.png"/>') no-repeat;"><span id="title"></span> <small><span id="subtitle"></span></small></h1>
             </div>
-
+            <!--<span class="label label-info">New</span>-->
             <div class="row-fluid">
                 <div class="span2 well" style="padding: 5px; margin-bottom: 10px; min-width: 200px;">
                     <ul class="nav nav-pills" style="margin: 0px; border-bottom: 1px solid #DEE6ED;">
@@ -117,7 +117,7 @@
                                 <li><strong>Filter</strong>
                                     <ul>
                                         <li><a id="filter" href="./filter">Do process</a></li>
-                                        <li><a id="chain" href="./chain">Do chain</a> <span class="label label-info">New</span></li>
+                                        <li><a id="chain" href="./chain">Do chain</a></li>
                                         <li><a id="condition" href="./condition">Render</a></li>
                                         <li><a id="decorator" href="./decorator">Default parameters</a></li>
                                     </ul>
@@ -162,7 +162,7 @@
                                 </li>
                                 <li><strong>Data</strong>
                                     <ul>
-                                        <li><a id="api" href="./api">Default render</a> <span class="label label-info">New</span></li>
+                                        <li><a id="api" href="./api">Default render</a></li>
                                         <li><a id="xml" href="./xml">XML</a></li>
                                         <li><a id="json" href="./json">JSON</a></li>
                                         <li><a id="jsonp" href="./jsonp">JSONP</a></li>

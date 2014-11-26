@@ -23,7 +23,7 @@
 # #L%
 ###
 [config]
-#server.error.page=disabled
+server.error.page=disabled
 
 [extensions]
 /test                                                            test.wm
