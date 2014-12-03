@@ -56,15 +56,15 @@ public class ActionExecuteRenderHandler extends AbstractHandler implements WebMo
         if (rule != null) {
             
             Action action = rule.getAction();
-            ParameterTree parameterTree = call.getParameterTree();
+            Map<String, Object> rawParameters = call.getRawParameters();
             
             if (action.isView()) {
                 String pageName = action.getFullName();
-                pageName = HttpUtils.replaceDynamicName(pageName, parameterTree);
+                pageName = HttpUtils.replaceDynamicName(pageName, rawParameters);
 
                 Map<String, Object> model = null;
-                if (!parameterTree.isEmpty()) {
-                    model = convert(parameterTree, "");
+                if (!rawParameters.isEmpty()) {
+                    model = convert(rawParameters);
                 }
                         
                 Render render = new RenderView(pageName, model);
@@ -72,18 +72,18 @@ public class ActionExecuteRenderHandler extends AbstractHandler implements WebMo
 
             } else if (action.isRedirect()) {
                 String url = action.getFullName();
-                url = HttpUtils.replaceDynamicName(url, parameterTree);
+                url = HttpUtils.replaceDynamicName(url, rawParameters);
 
                 Render render = new RenderRedirect(url, null);
                 call.setRender(render);
                 
             } else if (action.isForward()) {
                 String url = action.getFullName();
-                url = HttpUtils.replaceDynamicName(url, parameterTree);
+                url = HttpUtils.replaceDynamicName(url, rawParameters);
 
                 Map<String, Object> model = null;
-                if (!parameterTree.isEmpty()) {
-                    model = convert(parameterTree, "");
+                if (!rawParameters.isEmpty()) {
+                    model = convert(rawParameters);
                 }
 
                 Render render = new RenderForward(url, model, null);
@@ -95,29 +95,21 @@ public class ActionExecuteRenderHandler extends AbstractHandler implements WebMo
     /**
      * Replace all array contains only one element to the first value.
      */
-    protected Map<String, Object> convert(ParameterTree parameterTree, String prefix) {
-        Map<String, ParameterTree> tree = parameterTree.getTree();
-        Map<String, Object> converted = new HashMap<String, Object>(tree.size());
+    protected Map<String, Object> convert(Map<String, Object> rawParameters) {
+        Map<String, Object> converted = new HashMap<String, Object>(rawParameters.size());
         
-        for (Map.Entry<String, ParameterTree> entry : tree.entrySet()) {
-            String name = prefix + entry.getKey();
-            ParameterTree nextTree = entry.getValue();
-            Object value = nextTree.getValue();
+        for (Map.Entry<String, Object> entry : rawParameters.entrySet()) {
+            String name = entry.getKey();
+            Object value = entry.getValue();
 
-            if (value != null) {
-                Class clazz = value.getClass();
-                if (clazz.isArray()) {
-                    Object[] array = (Object[]) value;
-                    if (array.length == 1) {
-                        value = array[0];
-                    }
+            Class clazz = value.getClass();
+            if (clazz.isArray()) {
+                Object[] array = (Object[]) value;
+                if (array.length == 1) {
+                    value = array[0];
                 }
-                converted.put(name, value);
-                
-            } else {
-                Map<String, Object> map = convert(nextTree, name + ".");
-                converted.putAll(map);
             }
+            converted.put(name, value);
         }
         
         return converted;

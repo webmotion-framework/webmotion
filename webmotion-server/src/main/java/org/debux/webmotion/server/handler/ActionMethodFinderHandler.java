@@ -69,11 +69,11 @@ public class ActionMethodFinderHandler extends AbstractHandler implements WebMot
         // Test if it directly mapped on view or urlor not action found in extension
         if (render == null && rule != null) {
             
-            Call.ParameterTree parameterTree = call.getParameterTree();
+            Map<String, Object> rawParameters = call.getRawParameters();
             Action action = rule.getAction();
 
             String className = action.getClassName();
-            className = HttpUtils.replaceDynamicName(className, parameterTree);
+            className = HttpUtils.replaceDynamicName(className, rawParameters);
             className = ReflectionUtils.capitalizeClass(className);
 
             Config config = mapping.getConfig();
@@ -93,7 +93,7 @@ public class ActionMethodFinderHandler extends AbstractHandler implements WebMot
                 }
 
                 String methodName = action.getMethodName();
-                methodName = HttpUtils.replaceDynamicName(methodName, parameterTree);
+                methodName = HttpUtils.replaceDynamicName(methodName, rawParameters);
                 Method method = ReflectionUtils.getMethod(clazz, methodName);
                 if (method == null) {
                     throw new WebMotionException("Method not found with name " + methodName + " on class " + fullQualifiedName, rule);

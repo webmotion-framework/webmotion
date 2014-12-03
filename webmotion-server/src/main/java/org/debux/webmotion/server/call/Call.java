@@ -26,6 +26,7 @@ package org.debux.webmotion.server.call;
 
 import org.debux.webmotion.server.render.Render;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +54,9 @@ public class Call {
     /** The parameters contained in request URL (POST, GET) and in multi-part request. */
     protected Map<String, Object> extractParameters;
     
+    /** All raw parameters contained in request, URL, default, aliases. */
+    protected Map<String, Object> rawParameters;
+
     /** All parameters contained in request, URL, default, aliases. */
     protected ParameterTree parameterTree;
 
@@ -86,16 +90,24 @@ public class Call {
      */
     public static class ParameterTree {
         
-        protected Map<String, ParameterTree> tree;
-        
+        protected Map<String, ParameterTree> object;
+        protected Map<String, List<ParameterTree>> array;
         protected Object value;
 
-        public Map<String, ParameterTree> getTree() {
-            return tree;
+        public Map<String, ParameterTree> getObject() {
+            return object;
         }
 
-        public void setTree(Map<String, ParameterTree> tree) {
-            this.tree = tree;
+        public void setObject(Map<String, ParameterTree> object) {
+            this.object = object;
+        }
+
+        public Map<String, List<ParameterTree>> getArray() {
+            return array;
+        }
+
+        public void setArray(Map<String, List<ParameterTree>> array) {
+            this.array = array;
         }
 
         public Object getValue() {
@@ -106,9 +118,6 @@ public class Call {
             this.value = value;
         }
         
-        public boolean isEmpty() {
-            return tree == null || tree.isEmpty();
-        }
     }
     
     /**
@@ -116,11 +125,12 @@ public class Call {
      */
     public Call() {
         this.extractParameters = new LinkedHashMap<String, Object>();
+        this.rawParameters = new LinkedHashMap<String, Object>();
         this.filterRules = new LinkedList<FilterRule>();
         this.filters = new LinkedList<Executor>();
         
         this.parameterTree = new ParameterTree();
-        this.parameterTree.setTree(new LinkedHashMap<String, ParameterTree>());
+//        this.parameterTree.setTree(new LinkedHashMap<String, ParameterTree>());
     }
     
     /**
@@ -242,6 +252,14 @@ public class Call {
 
     public void setExecutorHandlers(List<WebMotionHandler> executorHandlers) {
         this.executorHandlers = executorHandlers;
+    }
+
+    public Map<String, Object> getRawParameters() {
+        return rawParameters;
+    }
+
+    public void setRawParameters(Map<String, Object> rawParameters) {
+        this.rawParameters = rawParameters;
     }
     
 }

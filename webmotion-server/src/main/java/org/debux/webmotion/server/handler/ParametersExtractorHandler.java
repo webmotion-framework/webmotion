@@ -24,14 +24,17 @@
  */
 package org.debux.webmotion.server.handler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.FilterRule;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.debux.webmotion.server.WebMotionHandler;
@@ -51,6 +54,8 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
 
     private static final Logger log = LoggerFactory.getLogger(ParametersExtractorHandler.class);
 
+    protected static Pattern pattern = Pattern.compile("(\\w+)(\\[(\\d+)\\])?");
+    
     @Override
     public void handle(Mapping mapping, Call call) {
         
@@ -61,22 +66,21 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
         }
         
         // Contains all parameters
-        Map<String, Object> tmp = new LinkedHashMap<String, Object>();
-        ParameterTree parameterTree = call.getParameterTree();
+        Map<String, Object> rawParameters = call.getRawParameters();
         
         // Add default parameters
         List<FilterRule> filterRules = call.getFilterRules();
         for (FilterRule filterRule : filterRules) {
             Map<String, String[]> defaultParameters = filterRule.getDefaultParameters();
-            tmp.putAll(defaultParameters);
+            rawParameters.putAll(defaultParameters);
         }
         
         Map<String, String[]> defaultParameters = actionRule.getDefaultParameters();
-        tmp.putAll(defaultParameters);
+        rawParameters.putAll(defaultParameters);
         
         // Add extract parameters
         Map<String, Object> extractParameters = call.getExtractParameters();
-        tmp.putAll(extractParameters);
+        rawParameters.putAll(extractParameters);
         
         // Retrieve the good name for parameters give in mapping
         HttpContext context = call.getContext();
@@ -91,11 +95,11 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
             if (!StringUtils.isEmpty(name)) {
                 String value = path.get(position);
                 
-                String[] currentValues = (String[]) tmp.get(name);
+                String[] currentValues = (String[]) rawParameters.get(name);
                 if (currentValues == null) {
-                    tmp.put(name, new String[]{value});
+                    rawParameters.put(name, new String[]{value});
                 } else {
-                    tmp.put(name, ArrayUtils.add(currentValues, value));
+                    rawParameters.put(name, ArrayUtils.add(currentValues, value));
                 }
             }
             position ++;
@@ -110,48 +114,103 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
                 String[] values = (String[]) extractParameters.get(param);
                 if (values != null) {
                     
-                    String[] currentValues = (String[]) tmp.get(name);
+                    String[] currentValues = (String[]) rawParameters.get(name);
                     if (currentValues == null) {
-                        tmp.put(name, values);
+                        rawParameters.put(name, values);
                     } else {
-                        tmp.put(name, ArrayUtils.addAll(currentValues, values));
+                        rawParameters.put(name, ArrayUtils.addAll(currentValues, values));
                     }
-                    tmp.put(name + "." + param, values);
+                    rawParameters.put(name + "." + param, values);
                 }
             }
         }
         
-        // Transform dot by map
-        Map<String, ParameterTree> tree = parameterTree.getTree();
-        for (Map.Entry<String, Object> entry : tmp.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
+        // Transform
+        ParameterTree parameterTree = toTree(rawParameters);
+        call.setParameterTree(parameterTree);
+    }
+    
+    protected static ParameterTree toTree(Map<String, Object> parameters) {
+        ParameterTree tree = new ParameterTree();
+        
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            String paramName = entry.getKey();
+            Object paramValue = entry.getValue();
             
-            // Manage object.property=value
-            Map<String, ParameterTree> map = tree;
-            
-            String[] split = key.split("\\.");
-            
-            for (position = 0; position < split.length; position++) {
+            ParameterTree current = tree;
 
-                String name = split[position];
-                ParameterTree next = map.get(name);
-                if (next == null) {
-                    next = new ParameterTree();
-                    map.put(name, next);
-                }
-                    
-                if (position == split.length - 1) {
-                    next.setValue(value);
-                    
-                } else {
-                    map = next.getTree();
-                    if (map == null) {
-                        map = new LinkedHashMap<String, ParameterTree>();
-                        next.setTree(map);
+            Matcher matcher = pattern.matcher(paramName);
+            while (matcher.find()) {
+                String name = matcher.group(1);
+                String index = matcher.group(3);
+                
+                ParameterTree next;
+                        
+                if (index == null) {
+                    Map<String, ParameterTree> object = current.getObject();
+                    if (object == null) {
+                        object = new HashMap<String, ParameterTree>();
+                        current.setObject(object);
                     }
+                    
+                    next = object.get(name);
+                    if (next == null) {
+                        next = new ParameterTree();
+                        object.put(name, next);
+                    }
+
+                } else {
+                    Map<String, List<ParameterTree>> array = current.getArray();
+                    if (array == null) {
+                        array = new HashMap<String, List<ParameterTree>>();
+                        current.setArray(array);
+                    }
+                    
+                    List<ParameterTree> list = array.get(name);
+                    if (list == null) {
+                        list = new ArrayList<ParameterTree>();
+                        array.put(name, list);
+                    
+                    }
+                    
+                    int position = new Integer(index);
+                    
+                    if (position >= 0 && position <= list.size()) {
+                        
+                        next = list.get(position);
+                        if (next == null) {
+                            next = new ParameterTree();
+                            list.set(position, next);
+                        }
+
+                    } else {
+                        int fill = position - list.size();
+                        for (int i = 0; i < fill; i++) {
+                            list.add(null);
+                        }
+                        next = new ParameterTree();
+                        list.add(next);
+                    }
+                }
+                current = next;
+            }
+
+            
+            if (paramValue != null) {
+                if (paramValue.getClass().isArray()) {
+                    Object[] currentValues = (Object[]) current.getValue();
+                    
+                    if (currentValues == null) {
+                        current.setValue(ArrayUtils.clone((Object[]) paramValue));
+                    } else {
+                        current.setValue(ArrayUtils.addAll(currentValues, (Object[]) paramValue));
+                    }
+                } else {
+                    current.setValue(paramValue);
                 }
             }
         }
+        
+        return tree;
     }
 }

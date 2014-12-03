@@ -63,16 +63,12 @@ public class HttpUtilsTest {
     
     @Test
     public void testreplaceDynamicName() {
-        Map<String, Call.ParameterTree> tree = new LinkedHashMap<String, Call.ParameterTree>();
+        Map<String, Object> raw = new LinkedHashMap<String, Object>();
         
-        Call.ParameterTree value = new Call.ParameterTree();
-        tree.put("test", value);
-        value.setValue("value");
+        Object value = new String[]{"value"};
+        raw.put("test", value);
         
-        Call.ParameterTree parameterTree = new Call.ParameterTree();
-        parameterTree.setTree(tree);
-        
-        String result = HttpUtils.replaceDynamicName("{test}", parameterTree);
+        String result = HttpUtils.replaceDynamicName("{test}", raw);
         AssertJUnit.assertEquals("value", result);
     }
 

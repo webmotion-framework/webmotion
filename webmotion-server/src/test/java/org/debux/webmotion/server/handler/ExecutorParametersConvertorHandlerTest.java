@@ -65,41 +65,17 @@ public class ExecutorParametersConvertorHandlerTest {
      * @param values
      * @return 
      */
-    public static Call.ParameterTree toParameterTreeMap(String ... values) {
-        Call.ParameterTree parameterTree = new Call.ParameterTree();
-        Map<String, Call.ParameterTree> tree = new LinkedHashMap<String, Call.ParameterTree>();
-        parameterTree.setTree(tree);
+    public Call.ParameterTree toParameterTreeMap(String ... parametersWithValue) {
+        Map<String, Object> parameters = new HashMap<String, Object>();
         
-        for (String item : values) {
+        for (int index = 0; index < parametersWithValue.length - 1; index += 2) {
+            String key = parametersWithValue[index];
+            String value = parametersWithValue[index + 1];
             
-            Map<String, Call.ParameterTree> map = tree;
-            String[] split = item.split("\\.|=");
-
-            for (int position = 0; position < split.length - 1; position++) {
-
-                if (position == split.length - 2) {
-                    Call.ParameterTree next = new Call.ParameterTree();
-                    next.setValue(split[position + 1]);
-                    
-                    map.put(split[position], next);
-
-                } else {
-                    String name = split[position];
-
-                    Call.ParameterTree next = map.get(name);
-                    if (next == null) {
-                        next = new Call.ParameterTree();
-                        map.put(name, next);
-                        
-                        next.setTree(new LinkedHashMap<String, Call.ParameterTree>());
-                    }
-                    
-                    map = next.getTree();
-                }
-            }
+            parameters.put(key, new Object[]{value});
         }
         
-        return parameterTree;
+        return ParametersExtractorHandler.toTree(parameters);
     }
 
     @Test
@@ -135,7 +111,7 @@ public class ExecutorParametersConvertorHandlerTest {
     @Test
     public void testConvertMap() throws Exception {
         Object convert = handler.convert(
-                toParameterTreeMap("key1=value", "key2=value"),
+                toParameterTreeMap("key1", "value", "key2", "value"),
                 Map.class, String.class);
         
         AssertJUnit.assertEquals(HashMap.class, convert.getClass());
@@ -158,7 +134,7 @@ public class ExecutorParametersConvertorHandlerTest {
     @Test
     public void testConvertObject() throws Exception {
         Object convert = handler.convert(
-                toParameterTreeMap("attribute1=value", "attribute2=value"),
+                toParameterTreeMap("attribute1", "value", "attribute2", "value"),
                 ClassExemple.class, null);
         
         AssertJUnit.assertEquals(ClassExemple.class, convert.getClass());
@@ -169,7 +145,7 @@ public class ExecutorParametersConvertorHandlerTest {
     @Test
     public void testConvertNullObject() throws Exception {
         Object convert = handler.convert(
-                toParameterTreeMap("attribute=value"),
+                toParameterTreeMap("attribute", "value"),
                 ClassExemple.class, null);
         
         AssertJUnit.assertNull(convert);
@@ -186,8 +162,8 @@ public class ExecutorParametersConvertorHandlerTest {
                 
         Object convert = handler.convert(
                 toParameterTreeArray(
-                    toParameterTreeMap("attribute1=value", "attribute2=value"),
-                    toParameterTreeMap("attribute1=value", "attribute2=value")
+                    toParameterTreeMap("attribute1", "value", "attribute2", "value"),
+                    toParameterTreeMap("attribute1", "value", "attribute2", "value")
                 ),
                 type, genericType);
 
@@ -206,12 +182,34 @@ public class ExecutorParametersConvertorHandlerTest {
     @Test
     public void testConvertComplexObject() throws Exception {
         Object convert = handler.convert(
-                toParameterTreeMap("example.attribute1=value", "example.attribute2=value"),
+                toParameterTreeMap("example.attribute1", "value", "example.attribute2", "value"),
                 ComplexClassExemple.class, null);
         
         AssertJUnit.assertEquals(ComplexClassExemple.class, convert.getClass());
         AssertJUnit.assertEquals("value", ((ComplexClassExemple) convert).example.attribute1);
         AssertJUnit.assertEquals("value", ((ComplexClassExemple) convert).example.attribute2);
+    }
+
+    public static class ComplexClassExemples {
+        public ClassExemple[] examples;
+
+        public void setExamples(ClassExemple[] examples) {
+            this.examples = examples;
+        }
+    }
+        
+    @Test
+    public void testConvertArrayIndexed() throws Exception {
+        Object convert = handler.convert(
+                toParameterTreeMap("examples[0].attribute1", "value0", "examples[1].attribute1", "value1",
+                        "examples[0].attribute2", "value0", "examples[1].attribute2", "value1"),
+                ComplexClassExemples.class, null);
+        
+        AssertJUnit.assertEquals(ComplexClassExemples.class, convert.getClass());
+        AssertJUnit.assertEquals("value0", ((ComplexClassExemples) convert).examples[0].attribute1);
+        AssertJUnit.assertEquals("value0", ((ComplexClassExemples) convert).examples[0].attribute2);
+        AssertJUnit.assertEquals("value1", ((ComplexClassExemples) convert).examples[1].attribute1);
+        AssertJUnit.assertEquals("value1", ((ComplexClassExemples) convert).examples[1].attribute2);
     }
     
 }

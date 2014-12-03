@@ -67,14 +67,12 @@ public class HttpUtils {
      * @param parameters request parameters
      * @return name with parameter values
      */
-    public static String replaceDynamicName(String name, Call.ParameterTree parameterTree) {
+    public static String replaceDynamicName(String name, Map<String, Object> rawParameters) {
         Matcher matcher = dynamicNamePattern.matcher(name);
         while (matcher.find()) {
             String paramName = matcher.group(1);
             
-            Map<String, ParameterTree> tree = parameterTree.getTree();
-            ParameterTree treeValue = tree.get(paramName);
-            Object values = treeValue.getValue();
+            Object values = rawParameters.get(paramName);
             
             if (values.getClass().isArray()) {
                 values = ((Object[]) values)[0];
