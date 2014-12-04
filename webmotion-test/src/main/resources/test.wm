@@ -158,3 +158,4 @@ GET         /ping/ws                                    Ping.createSocket
 *           /chain/log                                  Log.info
 GET         /api                                        Api.get
 GET         /hellos                                     Hellos.says
+GET         /helloNames                                 HelloNames.says

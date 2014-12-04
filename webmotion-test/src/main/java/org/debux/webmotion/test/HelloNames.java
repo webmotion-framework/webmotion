@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion in test
+ * Webmotion website
  * 
  * $Id$
  * $HeadURL$
@@ -24,23 +24,22 @@
  */
 package org.debux.webmotion.test;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.render.Render;
 
 /**
- * A Name
+ * Convert object with a list
  * 
- * @author jruchaud
+ * @author julien
  */
-public class Names {
+public class HelloNames extends WebMotionController {
     
-    protected List<String> values;
-
-    public List<String> getValues() {
-        return values;
+    public Render says(Names names) {
+        Object[] toArray = names.getValues().toArray();
+        
+        return renderView("helloParameters.jsp",
+                "who", StringUtils.join(toArray, "&"));
     }
-
-    public void setValues(List<String> values) {
-        this.values = values;
-    }
-
+    
 }

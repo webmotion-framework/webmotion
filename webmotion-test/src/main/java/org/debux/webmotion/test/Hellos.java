@@ -29,15 +29,15 @@ import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.render.Render;
 
 /**
- * Pass the parameters to jsp page
+ * Multiple values
  * 
  * @author julien
  */
 public class Hellos extends WebMotionController {
     
-    public Render says(Names names) {
+    public Render says(String[] names) {
         return renderView("helloParameters.jsp",
-                "who", StringUtils.join(names.getValues()));
+                "who", StringUtils.join(names, "&"));
     }
     
 }

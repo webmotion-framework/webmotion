@@ -385,4 +385,22 @@ public class ActionMappingIT extends AbstractIT {
         AssertJUnit.assertFalse(result, result.isEmpty());
     }
     
+    @Test
+    public void hellos() throws IOException, URISyntaxException {
+        Request request = createRequest("/hellos?names[0]=me&names[1]=you")
+                .Get();
+                
+        String result = executeRequest(request);
+        AssertJUnit.assertFalse(result, result.contains("Hello me&you !"));
+    }
+    
+    @Test
+    public void helloNames() throws IOException, URISyntaxException {
+        Request request = createRequest("/helloNames?names.values[0]=me&names.values[1]=you")
+                .Get();
+                
+        String result = executeRequest(request);
+        AssertJUnit.assertFalse(result, result.contains("Hello me&you !"));
+    }
+    
 }
