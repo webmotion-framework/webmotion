@@ -98,3 +98,5 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 *           /ws_json                                    Showcase.wsJSON
 *           /chain                                      Showcase.chain
 *           /api                                        Showcase.api
+*           /hellos                                     Showcase.hellos
+*           /helloNames                                 Showcase.helloNames

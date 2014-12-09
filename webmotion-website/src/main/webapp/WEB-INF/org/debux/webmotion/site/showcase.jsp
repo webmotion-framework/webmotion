@@ -100,6 +100,8 @@
                                         <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                         <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
                                         <li><a id="login" href="./login">Object parameters</a></li>
+                                        <li><a id="hellos" href="./hellos">Indexed parameters</a></li>
+                                        <li><a id="helloNames" href="./helloNames">Object indexed parameters</a></li>
                                         <li class="space"><a id="select" href="./select">Parameters static</a></li>
 
                                         <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>

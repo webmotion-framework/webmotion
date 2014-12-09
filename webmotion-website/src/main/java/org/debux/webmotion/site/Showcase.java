@@ -1145,4 +1145,35 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
+    
+    public Render hellos() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/hellos?names=me&names=you",
+                    "/hellos?names[0]=we&names[1]=other"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false) 
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 99, 1)),
+                    getJavaContent("Hellos.java"),
+                    getPageContent("helloParameters.jsp")
+                )
+        );
+    }
+    
+    public Render helloNames() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/helloNames?names.values[0]=me&names.values[1]=you"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(true, true, false, false) 
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 100, 1)),
+                    getJavaContent("HelloNames.java"),
+                    getPageContent("helloParameters.jsp")
+                )
+        );
+    }
 }

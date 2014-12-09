@@ -751,10 +751,11 @@ public Render action(Type param) {
 </pre>
 
 <p>
-    To get a list or array of values, you just need to pass several times the same parameter in the URL.
+    To get a list or array of values, you just need to pass several times the same parameter or the index of the parameter in the URL.
 </p>
 <p>
-    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> URL,
+    <span class="label label-info">Example</span> For the <code>http://localhost/webmotion-sample/action?<strong>param=value1&amp;param=value2</strong></code> or 
+    <code>http://localhost/webmotion-sample/action?<strong>param[0]=value1&amp;param[1]=value2</strong></code> URL,
     you will have the following method:
 </p>
 <pre class="prettyprint">
@@ -807,8 +808,7 @@ public class Book {
 <p>
     <span class="label label-info">Note</span>
     You can combine the types, ie have lists of objects or objects associated to other objects.
-    For the <code>http://localhost/webmotion-sample/action?<strong>users.user1.name=titi&amp;users.user1.age=10
-    &amp;users.user1.address.country=ici&amp;users.user2.name=toto&amp;users.user2.age=12&amp;users.user2.address.country=la</strong></code> URL,
+    For the <code>http://localhost/webmotion-sample/action?<strong>users[0].name=titi&amp;users[0].age=10&amp;users[0].address.country=ici&amp;users[1].name=toto&amp;users[1].age=12&amp;users[1].address.country=la</strong></code> URL,
     you will have the following method:
 </p>
 <pre class="prettyprint">
