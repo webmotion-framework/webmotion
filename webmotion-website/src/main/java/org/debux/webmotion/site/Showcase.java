@@ -1176,4 +1176,19 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
+    
+    public Render feed() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/news/rss",
+                    "/news/atom"
+                ),
+                
+                "files", Arrays.asList(
+                    getConfig(false, true, false, false) 
+                        .addContent(getMapping(SECTION_ACTIONS, INDEX_ACTIONS + 101, 2)),
+                    getJavaContent("News.java")
+                )
+        );
+    }
 }

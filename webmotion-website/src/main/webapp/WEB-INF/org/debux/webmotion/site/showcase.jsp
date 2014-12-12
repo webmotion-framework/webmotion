@@ -169,6 +169,7 @@
                                         <li><a id="json" href="./json">JSON</a></li>
                                         <li><a id="jsonp" href="./jsonp">JSONP</a></li>
                                         <li><a id="template" href="./template">StringTemplate</a></li>
+                                        <li><a id="feed" href="./feed">RSS/ATOM</a></li>
                                     </ul>
                                 </li>
                                 <li><strong>Websocket</strong>

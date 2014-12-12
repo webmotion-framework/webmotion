@@ -159,3 +159,5 @@ GET         /ping/ws                                    Ping.createSocket
 GET         /api                                        Api.get
 GET         /hellos                                     Hellos.says
 GET         /helloNames                                 HelloNames.says
+GET         /news/rss                                   News.rss
+GET         /news/atom                                  News.atom

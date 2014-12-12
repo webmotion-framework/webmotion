@@ -79,4 +79,22 @@ public class DataRenderIT extends AbstractIT {
         AssertJUnit.assertTrue(result, result.contains("bla bla bla ..."));
     }
     
+    @Test
+    public void rss() throws IOException, URISyntaxException {
+        Request request = createRequest("/news/rss")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertTrue(result, result.contains("<rss"));
+    }
+    
+    @Test
+    public void atom() throws IOException, URISyntaxException {
+        Request request = createRequest("/news/atom")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertTrue(result, result.contains("<feed"));
+    }
+    
 }

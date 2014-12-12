@@ -24,6 +24,7 @@
  */
 package org.debux.webmotion.server;
 
+import com.rometools.rome.feed.synd.SyndFeed;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,6 +46,7 @@ import org.debux.webmotion.server.render.RenderTemplate;
 import org.debux.webmotion.server.render.RenderRedirect;
 import org.debux.webmotion.server.render.RenderView;
 import org.debux.webmotion.server.render.RenderXml;
+import org.debux.webmotion.server.render.RenderFeed;
 
 /**
  * The classes represents an action to execute following a user request. The action 
@@ -343,9 +345,34 @@ public class WebMotionController {
      * Based on StringTemplate, the render return the content of template. 
      * Your template must contains a group like <pre>render(model) ::= << ... >></pre>
      * The delimiters is '$'.
+     * 
+     * @param fileName template file name
+     * @param mimeType mime type return to client
+     * @param model model used in template
+     * @return render represents the template with the model
      */
     public Render renderStringTemplate(String fileName, String mimeType, Object ... model) {
         return new RenderStringTemplate(fileName, mimeType, toMap(model));
+    }
+    
+    /**
+     * Send the feed as RSS. See ROME http://rometools.github.io/rome/ for more
+     * information.
+     * @param feed feed model from ROME
+     * @return render represents the RSS
+     */
+    public Render renderRss(SyndFeed feed) {
+        return new RenderFeed(feed, RenderFeed.RSS_2);
+    }
+    
+    /**
+     * Send the feed as ATOM. See ROME http://rometools.github.io/rome/ for more
+     * information.
+     * @param feed feed model from ROME
+     * @return render represents the ATOM
+     */
+    public Render renderAtom(SyndFeed feed) {
+        return new RenderFeed(feed, RenderFeed.ATOM_1);
     }
     
     /**

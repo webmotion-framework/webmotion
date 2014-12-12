@@ -100,3 +100,4 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 *           /api                                        Showcase.api
 *           /hellos                                     Showcase.hellos
 *           /helloNames                                 Showcase.helloNames
+*           /feed                                       Showcase.feed

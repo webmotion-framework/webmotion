@@ -130,6 +130,11 @@
              <artifactId>async-http-client</artifactId>
          </dependency>
 
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
+        </dependency>
+        
          <!-- Servlet -->
         <dependency>
             <groupId>javax</groupId>
