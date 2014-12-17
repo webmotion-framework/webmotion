@@ -51,6 +51,9 @@ public class WebMotionServletContextListener implements ServletContextListener {
     /** Filter parameter to configure parsers for mapping file name by default is only @DefaultMappingParser */
     protected final static String PARAM_MAPPING_PARSERS = "wm.mapping.parsers";
             
+    /** Filter parameter to configure convention scans to create mapping file by default is only @DefaultConventionScan */
+    protected final static String PARAM_MAPPING_BY_CONVENTION = "wm.mapping.conventions";
+            
     /** Filter parameter to configure excludes path for WebMotion. The value is separated by comma */
     protected final static String PARAM_EXCLUDE_PATHS = "wm.exclude.paths";
             
@@ -66,16 +69,22 @@ public class WebMotionServletContextListener implements ServletContextListener {
             serverContext.setMappingFileNames(mappingFileNameParam.split(","));
         }
         
-        // Get file name mapping in context param
-        String parsersNameParam = servletContext.getInitParameter(PARAM_MAPPING_PARSERS);
-        if (parsersNameParam != null && !parsersNameParam.isEmpty()) {
-            serverContext.setMappingParsers(parsersNameParam.split(","));
+        // Get file name for parsers in context param
+        String parsersParam = servletContext.getInitParameter(PARAM_MAPPING_PARSERS);
+        if (parsersParam != null && !parsersParam.isEmpty()) {
+            serverContext.setMappingParsers(parsersParam.split(","));
         }
         
         // Get exclude path in context param
         String excludePathsParam = servletContext.getInitParameter(PARAM_EXCLUDE_PATHS);
         if (excludePathsParam != null && !excludePathsParam.isEmpty()) {
             serverContext.setExcludePaths(excludePathsParam.split(","));
+        }
+        
+        // Get file name for convention scans in context param
+        String conventionsParam = servletContext.getInitParameter(PARAM_MAPPING_BY_CONVENTION);
+        if (conventionsParam != null && !conventionsParam.isEmpty()) {
+            serverContext.setMappingConventions(conventionsParam.split(","));
         }
         
         createWebSockets(servletContext);

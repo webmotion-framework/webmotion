@@ -1,11 +1,12 @@
+package org.debux.webmotion.test.sub;
+
 /*
  * #%L
- * Webmotion server
- * 
- * $Id$
- * $HeadURL$
+ * WebMotion test
+ * $Id:$
+ * $HeadURL:$
  * %%
- * Copyright (C) 2011 Debux
+ * Copyright (C) 2011 - 2014 Debux
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -23,8 +24,18 @@
  * #L%
  */
 
+import org.debux.webmotion.server.convention.WebMotionConventionController;
+import org.debux.webmotion.server.render.Render;
+
 /**
- * All elements for convention. Somes classes are used to determine if the 
- * controller or filter are used the convention.
+ * Hello by convention
+ * 
+ * @author julien
  */
-package org.debux.webmotion.server.convention;
+public class HelloConvention extends WebMotionConventionController {
+    
+    public Render says() {
+        return renderContent("Hello sub by convention !", "text/plain");
+    }
+    
+}

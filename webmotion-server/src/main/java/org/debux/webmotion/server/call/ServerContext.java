@@ -31,6 +31,8 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.debux.webmotion.server.*;
+import org.debux.webmotion.server.convention.ConventionScan;
+import org.debux.webmotion.server.convention.DefaultConventionScan;
 import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
 import org.debux.webmotion.server.mapping.*;
@@ -105,6 +107,9 @@ public class ServerContext {
     /** Parsers for mapping file */
     protected String[] mappingParsers = {DefaultMappingParser.class.getName()};
     
+    /** Parsers for mapping file */
+    protected String[] mappingConventions = {DefaultConventionScan.class.getName()};
+    
     /** Absolute path on webapp */
     protected String webappPath;
     
@@ -149,6 +154,22 @@ public class ServerContext {
                 break;
             }
         }
+        
+        // Scan to generate mapping by convention
+        ConventionScan[] conventions = getMappingConventions();
+        for (ConventionScan conventionScan : conventions) {
+            Mapping convention = conventionScan.scan();
+            
+            if (!convention.getActionRules().isEmpty() || !convention.getFilterRules().isEmpty()) {
+                
+                if (mapping == null) {
+                    mapping = convention;
+                } else {
+                    mapping.getExtensionsRules().add(convention);
+                }
+            }
+        }
+        
         if (mapping == null) {
             throw new WebMotionException("No mapping found for " + Arrays.toString(mappingFileNames) 
                     + " in " + Arrays.toString(mappingParsers));
@@ -276,6 +297,30 @@ public class ServerContext {
             }
         }
         return parsers;
+    }
+    
+    /**
+     * @return the instance of convention scans
+     */
+    protected ConventionScan[] getMappingConventions() {
+        ConventionScan[] scans = new ConventionScan[mappingConventions.length];
+        
+        int index = 0;
+        for (String className : mappingConventions) {
+            try {
+                Class<ConventionScan> parserClasse = (Class<ConventionScan>) Class.forName(className);
+                ConventionScan parser = parserClasse.newInstance();
+                scans[index ++] = parser;
+
+            } catch (IllegalAccessException iae) {
+                throw new WebMotionException("Error during create server listener " + className, iae);
+            } catch (InstantiationException ie) {
+                throw new WebMotionException("Error during create server listener " + className, ie);
+            } catch (ClassNotFoundException cnfe) {
+                throw new WebMotionException("Error during create server listener " + className, cnfe);
+            }
+        }
+        return scans;
     }
 
     /**
@@ -486,7 +531,7 @@ public class ServerContext {
     }
 
     /**
-     * @return the mapping file name use to read the mapping/
+     * @return the mapping file name use to read the mapping.
      */
     public String[] getMappingFileNames() {
         return mappingFileNames;
@@ -523,4 +568,15 @@ public class ServerContext {
         this.excludePaths = excludePaths;
     }
 
+    /**
+     * Set the convention scan file names use to generate the mapping.
+     * 
+     * @param mappingConventions 
+     */
+    public void setMappingConventions(String[] mappingConventions) {
+        this.mappingConventions = mappingConventions;
+    }
+
+    
+    
 }

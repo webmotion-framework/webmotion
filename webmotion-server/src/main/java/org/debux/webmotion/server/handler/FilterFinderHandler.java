@@ -56,7 +56,7 @@ public class FilterFinderHandler extends AbstractHandler implements WebMotionHan
             String method = context.getMethod();
             for (FilterRule filterRule : filterRules) {
 
-                if(checkMethod(filterRule, method) &&
+                if (checkMethod(filterRule, method) &&
                         checkUrl(filterRule, url)) {
                     selection.add(filterRule);
                 }

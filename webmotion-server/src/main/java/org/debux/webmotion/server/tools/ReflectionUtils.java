@@ -231,7 +231,6 @@ public class ReflectionUtils {
         return resources;
     }
     
-    
     /**
      * Scanner use to get classes as ressources
      */
@@ -260,6 +259,43 @@ public class ReflectionUtils {
         };
         Collection<String> resources = Collections2.filter(mmap.values(), predicate);
         return resources;
+    }
+    
+    /**
+     * @return all classes with extend the super class
+     */
+    public static Collection<Class<?>> getClassesBySuperClass(final Class<?> superClass) {
+        Reflections reflections = new Reflections("", new ClassesScanner(), new WrapClassLoader());
+        
+        Store store = reflections.getStore();
+        Multimap<String, String> mmap = store.get(ClassesScanner.class.getSimpleName());
+        
+        final Pattern pattern = Pattern.compile(".*\\.class$");
+        Predicate predicate = new Predicate<String>() {
+            @Override
+            public boolean apply(String input) {
+                return pattern.matcher(input).matches();
+            }
+        };
+        
+        Collection<String> resources = Collections2.filter(mmap.values(), predicate);
+        Collection<Class<?>> classes = new ArrayList<Class<?>>();
+        
+        ClassLoader classLoader = ReflectionUtils.class.getClassLoader();
+        for (String resource : resources) {
+            String fullName = resource.replaceAll("/", ".").replaceAll("\\.class$", "");
+            
+            try {
+                Class<?> klass = classLoader.loadClass(fullName);
+                if (superClass.isAssignableFrom(klass) && !klass.equals(superClass)) {
+                    classes.add(klass);
+                }
+            } catch (ClassNotFoundException ex) {
+                
+            }
+        }
+        
+        return classes;
     }
     
     /**

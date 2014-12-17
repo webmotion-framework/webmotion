@@ -22,9 +22,20 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+package org.debux.webmotion.server.convention;
+
+import org.debux.webmotion.server.mapping.Mapping;
 
 /**
- * All elements for convention. Somes classes are used to determine if the 
- * controller or filter are used the convention.
+ * Create a mapping by convention.
+ * 
+ * @author julien
  */
-package org.debux.webmotion.server.convention;
+public abstract class ConventionScan {
+    
+    /**
+     * @return the mapping by convention as extension
+     */
+    public abstract Mapping scan();
+    
+}

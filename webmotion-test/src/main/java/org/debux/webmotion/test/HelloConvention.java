@@ -28,13 +28,14 @@ import org.debux.webmotion.server.convention.WebMotionConventionController;
 import org.debux.webmotion.server.render.Render;
 
 /**
- *
+ * Hello by convention
+ * 
  * @author julien
  */
 public class HelloConvention extends WebMotionConventionController {
     
     public Render says() {
-        return renderContent("Hello by convention !", "text/plain");
+        return renderContent("Hello test by convention !", "text/plain");
     }
     
 }

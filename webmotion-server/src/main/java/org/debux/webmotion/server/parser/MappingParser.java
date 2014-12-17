@@ -24,11 +24,7 @@
  */
 package org.debux.webmotion.server.parser;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.mapping.Mapping;
 

@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion in action
+ * Webmotion website
  * 
  * $Id$
  * $HeadURL$
@@ -22,33 +22,36 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.test;
+package org.debux.webmotion.test.sub;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import org.apache.http.client.fluent.Request;
-import org.debux.webmotion.server.tools.RequestBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.AssertJUnit;
-import org.testng.annotations.Test;
+import java.io.PrintWriter;
+import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.call.HttpContext;
+import org.debux.webmotion.server.convention.WebMotionConventionPackageFilter;
+import org.debux.webmotion.server.render.Render;
 
 /**
- * Test convention action.
+ * Convention filter in package
  * 
  * @author julien
  */
-public class ConventionIT extends AbstractIT {
-
-    private static final Logger log = LoggerFactory.getLogger(ConventionIT.class);
+public class Security extends WebMotionConventionPackageFilter {
     
-    @Test
-    public void hello() throws IOException, URISyntaxException {
-        Request request = createRequest("/hello/convention/says")
-                .Get();
-        
-        String result = executeRequest(request);
-        AssertJUnit.assertTrue(result, result.contains("Hello by convention !"));
+    @Override
+    public Render filter() {
+        try {
+            
+            HttpContext context = getContext();
+            PrintWriter out = context.getOut();
+            out.println("Security filter sub");
+            
+            doProcess();
+            return null;
+            
+        } catch (IOException ex) {
+            throw new WebMotionException("Filter convention", ex);
+        }
     }
-
+    
 }

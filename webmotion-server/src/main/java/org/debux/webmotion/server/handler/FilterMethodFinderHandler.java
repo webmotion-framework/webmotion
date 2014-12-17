@@ -33,7 +33,6 @@ import org.debux.webmotion.server.mapping.Action;
 import java.lang.reflect.Method;
 import java.util.Map;
 import org.debux.webmotion.server.WebMotionController;
-import org.debux.webmotion.server.tools.HttpUtils;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.ServerContext;

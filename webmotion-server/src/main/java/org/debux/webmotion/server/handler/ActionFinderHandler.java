@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.debux.webmotion.server.convention.ConventionScanner;
 
 /**
  * Search in mapping the action matched at the url. In mapping file, the first 
@@ -56,17 +55,10 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
 
     private static final Logger log = LoggerFactory.getLogger(ActionFinderHandler.class);
 
-    protected ConventionScanner scanner = new ConventionScanner();
-    
     @Override
     public void handle(Mapping mapping, Call call) {
         ActionRule actionRule = getActionRule(mapping, call);
         
-        String extensionPath = mapping.getExtensionPath();
-        if (extensionPath == null && actionRule == null) {
-            actionRule = scanner.scan(call);
-        }
-
         if (actionRule != null) {
             // if the request is an options request, then return 200 with the accepted methods for the url
             HttpContext context = call.getContext();
@@ -83,10 +75,13 @@ public class ActionFinderHandler extends AbstractHandler implements WebMotionHan
             // even for the options, set the rule to go through the filters
             call.setRule(actionRule);
 
-        } else if (extensionPath == null) {
-            RenderError render = new RenderError(HttpServletResponse.SC_NOT_FOUND,
-                                        "Not mapping found for url " + call.getContext().getUrl());
-            call.setRender(render);
+        } else {
+            String extensionPath = mapping.getExtensionPath();
+            if (extensionPath == null) {
+                RenderError render = new RenderError(HttpServletResponse.SC_NOT_FOUND,
+                                            "Not mapping found for url " + call.getContext().getUrl());
+                call.setRender(render);
+            }
         }
     }
     

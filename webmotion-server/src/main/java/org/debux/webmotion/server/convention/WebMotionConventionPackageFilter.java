@@ -22,9 +22,27 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+package org.debux.webmotion.server.convention;
+
+import org.debux.webmotion.server.WebMotionFilter;
+import org.debux.webmotion.server.render.Render;
 
 /**
- * All elements for convention. Somes classes are used to determine if the 
- * controller or filter are used the convention.
+ * This class is used to indentify the filters which are handle by convention.
+ * The filter match all url path inside the current package. You have to 
+ * implement an filter method.
+ * 
+ * @author julien
  */
-package org.debux.webmotion.server.convention;
+public class WebMotionConventionPackageFilter extends WebMotionFilter {
+    
+    /**
+     * Redefine this method or create a new method with your parameters.
+     * @return render returns by the filter otherwise null to return the render from
+     * the action.
+     */
+    public Render filter() {
+        return null;
+    }
+    
+}
