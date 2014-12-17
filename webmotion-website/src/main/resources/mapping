@@ -22,9 +22,6 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
-[config]
-server.error.page=disabled
-
 [extensions]
 /test                                                            test.wm
 /showcase                                                        showcase-display.wm

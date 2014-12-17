@@ -93,4 +93,13 @@ public class Page extends WebMotionFilter {
         return renderView(file);
     }
     
+    public Render unavailable(String lang) {
+        HttpContext context = getContext();
+        HttpSession session = context.getSession();
+        
+        String language = (String) session.getAttribute("language");
+        String file = "unavailable_" + language + ".jsp";
+        return renderView(file);
+    }
+    
 }

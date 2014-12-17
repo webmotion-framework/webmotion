@@ -30,7 +30,11 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 *                      /*                                         Page.setLang
 *                      /*                                         SiteMesh.decorate       layout=layout.jsp
 
+[errors]
+*                                                                 url:/unavailable
+
 [actions]
 GET                   /                                          url:/main
+GET                   /unavailable                               Page.unavailable
 GET                   /{name}                                    Page.display
 GET                   /{folder}/{name}                           Page.display
