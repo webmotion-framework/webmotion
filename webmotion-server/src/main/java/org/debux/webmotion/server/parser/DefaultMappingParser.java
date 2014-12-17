@@ -259,7 +259,7 @@ public class DefaultMappingParser extends MappingParser {
                 }
             });
 
-            rules.put("/sectionErrors/errorRule/errorRedirect/errorRedirectValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorRedirect/errorUrlValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
@@ -271,7 +271,7 @@ public class DefaultMappingParser extends MappingParser {
                 }
             });
 
-            rules.put("/sectionErrors/errorRule/errorForward/errorForwardValue", new Visit() {
+            rules.put("/sectionErrors/errorRule/errorForward/errorUrlValue", new Visit() {
                 @Override
                 public void acceptBefore(String value) {
                     Action action = new Action();
