@@ -361,15 +361,15 @@ public class WebMotionController {
      * @param feed feed model from ROME
      * @return render represents the RSS
      */
-    public Render renderRss(SyndFeed feed) {
+    public Render renderRSS(SyndFeed feed) {
         return new RenderFeed(feed, RenderFeed.RSS_2);
     }
     
     /**
-     * Send the feed as ATOM. See ROME http://rometools.github.io/rome/ for more
+     * Send the feed as Atom. See ROME http://rometools.github.io/rome/ for more
      * information.
      * @param feed feed model from ROME
-     * @return render represents the ATOM
+     * @return render represents the Atom
      */
     public Render renderAtom(SyndFeed feed) {
         return new RenderFeed(feed, RenderFeed.ATOM_1);

@@ -44,7 +44,7 @@ public class Security extends WebMotionConventionPackageFilter {
             
             HttpContext context = getContext();
             PrintWriter out = context.getOut();
-            out.println("Security filter sub");
+            out.println("Package security filter");
             
             doProcess();
             return null;

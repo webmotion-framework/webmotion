@@ -80,7 +80,7 @@ public class News extends WebMotionController {
     
     public Render rss() {
         SyndFeed feed = getFeed();
-        return renderRss(feed);
+        return renderRSS(feed);
     }
     
     public Render atom() {

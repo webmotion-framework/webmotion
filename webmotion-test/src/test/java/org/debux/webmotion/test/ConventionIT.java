@@ -34,7 +34,7 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 /**
- * Test convention action.
+ * Test convention action and filter.
  * 
  * @author julien
  */
@@ -42,13 +42,49 @@ public class ConventionIT extends AbstractIT {
 
     private static final Logger log = LoggerFactory.getLogger(ConventionIT.class);
     
+    @Override
+    public RequestBuilder createRequest(String url) {
+        RequestBuilder builder = super.createRequest(url);
+        builder.setPath("/webmotion-test" + url);
+        return builder;
+    }
+    
     @Test
     public void hello() throws IOException, URISyntaxException {
-        Request request = createRequest("/hello/convention/says")
+        Request request = createRequest("/test/hello/convention/says")
                 .Get();
         
         String result = executeRequest(request);
-        AssertJUnit.assertTrue(result, result.contains("Hello by convention !"));
+        AssertJUnit.assertTrue(result, result.contains("Hello test by convention !"));
+    }
+    
+    @Test
+    public void packageHello() throws IOException, URISyntaxException {
+        Request request = createRequest("/sub/hello/convention/says")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertTrue(result, result.contains("Hello sub by convention !"));
+    }
+    
+    @Test
+    public void filter() throws IOException, URISyntaxException {
+        Request request = createRequest("/test/hello/convention/says")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertFalse(result, result.contains("Package security filter"));
+        AssertJUnit.assertTrue(result, result.contains("Security filter"));
+    }
+    
+    @Test
+    public void packageFilter() throws IOException, URISyntaxException {
+        Request request = createRequest("/sub/hello/convention/says")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertTrue(result, result.contains("Package security filter"));
+        AssertJUnit.assertTrue(result, result.contains("Security filter"));
     }
 
 }

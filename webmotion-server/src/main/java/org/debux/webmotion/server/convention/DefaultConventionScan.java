@@ -42,7 +42,9 @@ import org.debux.webmotion.server.tools.ReflectionUtils;
 import org.slf4j.LoggerFactory;
 
 /**
- * Create a mapping by convention.
+ * Create a mapping by convention. You have to extends WebMotionConventionController,
+ * WebMotionConventionAllFilter or WebMotionConventionPackageFilter to handle the class
+ * by convention.
  * 
  * @author julien
  */
@@ -63,6 +65,9 @@ public class DefaultConventionScan extends ConventionScan {
         return mapping;
     }
     
+    /**
+     * Scan the controllers by convention.
+     */
     public List<ActionRule> scanControllers(Mapping mapping) {
         Collection<Class<?>> controllers = ReflectionUtils.getClassesBySuperClass(WebMotionConventionController.class);
         List<ActionRule> rules = new ArrayList<ActionRule>(controllers.size());
@@ -131,6 +136,9 @@ public class DefaultConventionScan extends ConventionScan {
         return rules;
     }
     
+    /**
+     * Scan the filters by convention.
+     */
     public List<FilterRule> scanFilters(Mapping mapping) {
         Pattern allPattern = Pattern.compile("/*");
         
@@ -182,6 +190,9 @@ public class DefaultConventionScan extends ConventionScan {
         return rules;
     }
     
+    /**
+     * Create fragment url list from string, which split based on the camel case.
+     */
     protected List<FragmentUrl> createFragmentUrlList(String name) {
         String[] values = StringUtils.splitByCharacterTypeCamelCase(name);
         List<FragmentUrl>  fragmentUrls = new ArrayList<FragmentUrl>(values.length);

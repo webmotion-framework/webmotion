@@ -204,6 +204,13 @@
                                         <li><a id="global" href="./global">Global controller</a></li>
                                     </ul>
                                 </li>
+                                <li><strong>Convention</strong>
+                                    <ul>
+                                        <li><a id="convention_controller" href="./convention_controller">Controller</a></li>
+                                        <li><a id="convention_allFilter" href="./convention_allFilter">All filter</a></li>
+                                        <li><a id="convention_packageFilter" href="./convention_packageFilter">Package filter</a></li>
+                                    </ul>
+                                </li>
                                 <li><strong>Extras</strong>
                                     <ul>
                                         <li><a id="spring" href="./spring">Spring</a></li>
@@ -230,10 +237,10 @@
                         <div class="tab-pane active fade in" id="demo">
                             <c:forEach var="path" items="${path_demo}">
                                 <div class="alert alert-info" style="margin-bottom: 5px;">
-                                    <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" href="<c:url value="/test${path}"/>" target="_blank">Try it »</a>
+                                    <a class="btn btn-primary" style="float: right; position: relative;top: -5px;right: -21px;" href="<c:url value="${path}"/>" target="_blank">Try it »</a>
                                     http://serverName:port/contextPath<strong>${path}</strong>
                                 </div>
-                                <iframe src="<c:url value="/test${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
+                                <iframe src="<c:url value="${path}"/>" style="margin-bottom: 20px; width: 100%; height: auto;background-color: #F4F7FB;border: 1px solid #DEE6ED;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
                                 </iframe>
                             </c:forEach>
                         </div>

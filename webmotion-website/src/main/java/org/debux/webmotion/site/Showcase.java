@@ -136,7 +136,7 @@ public class Showcase extends WebMotionController {
         return renderView("showcase.jsp",  
                 "language", "fr",
                 "path_demo", Arrays.asList(
-                    "/hello"
+                    "/test/hello"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/pom.xml", getFile("showcase-pom.xml")),
@@ -152,7 +152,7 @@ public class Showcase extends WebMotionController {
     public Render helloModel() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                        "/helloModel"
+                        "/test/helloModel"
                 ),
                 
                 "files", Arrays.asList(
@@ -167,8 +167,8 @@ public class Showcase extends WebMotionController {
     public Render helloParameters() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/helloParameters?who=you",
-                    "/helloParameters?who=me"
+                    "/test/helloParameters?who=you",
+                    "/test/helloParameters?who=me"
                 ),
                 
                 "files", Arrays.asList(
@@ -183,7 +183,7 @@ public class Showcase extends WebMotionController {
     public Render view() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/view"
+                    "/test/view"
                 ),
                 
                 "files", Arrays.asList(
@@ -197,7 +197,7 @@ public class Showcase extends WebMotionController {
     public Render url() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/url"
+                    "/test/url"
                 ),
                 
                 "files", Arrays.asList(
@@ -210,7 +210,7 @@ public class Showcase extends WebMotionController {
     public Render act() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/act"
+                    "/test/act"
                 ),
                 
                 "files", Arrays.asList(
@@ -224,8 +224,8 @@ public class Showcase extends WebMotionController {
     public Render dynamic() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/dynamic/get",
-                    "/dynamic/set"
+                    "/test/dynamic/get",
+                    "/test/dynamic/set"
                 ),
                 
                 "files", Arrays.asList(
@@ -239,8 +239,8 @@ public class Showcase extends WebMotionController {
     public Render helloDefaultParameters() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/helloDefaultParameters",
-                    "/helloDefaultParameters?who=other"
+                    "/test/helloDefaultParameters",
+                    "/test/helloDefaultParameters?who=other"
                 ),
                 
                 "files", Arrays.asList(
@@ -255,7 +255,7 @@ public class Showcase extends WebMotionController {
     public Render filter() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/path/log?value=42"
+                    "/test/path/log?value=42"
                 ),
                 
                 "files", Arrays.asList(
@@ -271,8 +271,8 @@ public class Showcase extends WebMotionController {
     public Render condition() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/other/repeat?number=6",
-                    "/other/repeat?number=3"
+                    "/test/other/repeat?number=6",
+                    "/test/other/repeat?number=3"
                 ),
                 
                 "files", Arrays.asList(
@@ -288,7 +288,7 @@ public class Showcase extends WebMotionController {
     public Render code() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/parse"
+                    "/test/parse"
                 ),
                 
                 "files", Arrays.asList(
@@ -305,7 +305,7 @@ public class Showcase extends WebMotionController {
     public Render exception() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/service"
+                    "/test/service"
                 ),
                 
                 "files", Arrays.asList(
@@ -323,7 +323,7 @@ public class Showcase extends WebMotionController {
     public Render npe() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/npe"
+                    "/test/npe"
                 ),
                 
                 "files", Arrays.asList(
@@ -339,7 +339,7 @@ public class Showcase extends WebMotionController {
     public Render content() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/content"
+                    "/test/content"
                 ),
                 
                 "files", Arrays.asList(
@@ -355,7 +355,7 @@ public class Showcase extends WebMotionController {
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/stream"
+                    "/test/stream"
                 ),
                 
                 "files", Arrays.asList(
@@ -370,7 +370,7 @@ public class Showcase extends WebMotionController {
     public Render xml() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/xml"
+                    "/test/xml"
                 ),
                 
                 "files", Arrays.asList(
@@ -385,7 +385,7 @@ public class Showcase extends WebMotionController {
     public Render json() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/json"
+                    "/test/json"
                 ),
                 
                 "files", Arrays.asList(
@@ -400,7 +400,7 @@ public class Showcase extends WebMotionController {
     public Render jsonp() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/script"
+                    "/test/script"
                 ),
                 
                 "files", Arrays.asList(
@@ -416,7 +416,7 @@ public class Showcase extends WebMotionController {
     public Render first() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/first"
+                    "/test/first"
                 ),
                 
                 "files", Arrays.asList(
@@ -430,7 +430,7 @@ public class Showcase extends WebMotionController {
     public Render index() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/index"
+                    "/test/index"
                 ),
                 
                 "files", Arrays.asList(
@@ -445,7 +445,7 @@ public class Showcase extends WebMotionController {
     public Render save() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/save"
+                    "/test/save"
                 ),
                 
                 "files", Arrays.asList(
@@ -459,7 +459,7 @@ public class Showcase extends WebMotionController {
     public Render nocontent() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/nocontent"
+                    "/test/nocontent"
                 ),
                 
                 "files", Arrays.asList(
@@ -473,7 +473,7 @@ public class Showcase extends WebMotionController {
     public Render forbidden() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/forbidden"
+                    "/test/forbidden"
                 ),
                 
                 "files", Arrays.asList(
@@ -490,7 +490,7 @@ public class Showcase extends WebMotionController {
     public Render load() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/load"
+                    "/test/load"
                 ),
                 
                 "files", Arrays.asList(
@@ -505,7 +505,7 @@ public class Showcase extends WebMotionController {
     public Render message() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/message"
+                    "/test/message"
                 ),
                 
                 "files", Arrays.asList(
@@ -520,7 +520,7 @@ public class Showcase extends WebMotionController {
     public Render calc() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/calc"
+                    "/test/calc"
                 ),
                 
                 "files", Arrays.asList(
@@ -539,8 +539,8 @@ public class Showcase extends WebMotionController {
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/readme",
-                    "/img"
+                    "/test/readme",
+                    "/test/img"
                 ),
                 
                 "files", Arrays.asList(
@@ -556,7 +556,7 @@ public class Showcase extends WebMotionController {
     public Render form() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/form"
+                    "/test/form"
                 ),
                 
                 "files", Arrays.asList(
@@ -571,8 +571,8 @@ public class Showcase extends WebMotionController {
     public Render pattern() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/pattern/aaaa?value=aaaa",
-                    "/pattern/baaa?value=baaaa"
+                    "/test/pattern/aaaa?value=aaaa",
+                    "/test/pattern/baaa?value=baaaa"
                 ),
                 
                 "files", Arrays.asList(
@@ -586,7 +586,7 @@ public class Showcase extends WebMotionController {
     public Render page() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/page"
+                    "/test/page"
                 ),
                 
                 "files", Arrays.asList(
@@ -603,7 +603,7 @@ public class Showcase extends WebMotionController {
     public Render upload() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/upload"
+                    "/test/upload"
                 ),
                 
                 "files", Arrays.asList(
@@ -618,7 +618,7 @@ public class Showcase extends WebMotionController {
     public Render file() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/file"
+                    "/test/file"
                 ),
                 
                 "files", Arrays.asList(
@@ -633,13 +633,13 @@ public class Showcase extends WebMotionController {
     public Render shop() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/create?book.isbn=007&book.title=James%20Bond",
-                    "/create?book.isbn=007&book.title=James",
-                    "/comment?book.isbn=007&book.comment=cool",
-                    "/comment?book.isbn=007",
-                    "/search?query=007",
-                    "/search",
-                    "/info?book.isbn=007"
+                    "/test/create?book.isbn=007&book.title=James%20Bond",
+                    "/test/create?book.isbn=007&book.title=James",
+                    "/test/comment?book.isbn=007&book.comment=cool",
+                    "/test/comment?book.isbn=007",
+                    "/test/search?query=007",
+                    "/test/search",
+                    "/test/info?book.isbn=007"
                 ),
                 
                 "files", Arrays.asList(
@@ -657,7 +657,7 @@ public class Showcase extends WebMotionController {
     public Render blog() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/blog/index"
+                    "/test/blog/index"
                 ),
                 
                 "files", Arrays.asList(
@@ -672,8 +672,8 @@ public class Showcase extends WebMotionController {
     public Render wikipedia() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/wikipedia/tutu",
-                    "/wikipedia/tata"
+                    "/test/wikipedia/tutu",
+                    "/test/wikipedia/tata"
                 ),
                 
                 "files", Arrays.asList(
@@ -686,8 +686,8 @@ public class Showcase extends WebMotionController {
     public Render text() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/text?file=readme",
-                    "/text?file=changelog"
+                    "/test/text?file=readme",
+                    "/test/text?file=changelog"
                 ),
                 
                 "files", Arrays.asList(
@@ -702,7 +702,7 @@ public class Showcase extends WebMotionController {
     public Render notfound() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/notfound"
+                    "/test/notfound"
                 ),
                 
                 "files", Arrays.asList(
@@ -719,7 +719,7 @@ public class Showcase extends WebMotionController {
     public Render media() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/media"
+                    "/test/media"
                 ),
                 
                 "files", Arrays.asList(
@@ -734,10 +734,10 @@ public class Showcase extends WebMotionController {
     public Render login() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/login?name=john&passwd=azerty",
-                    "/login?user.name=john&user.passwd=azerty",
-                    "/login?username=john&userpasswd=azerty",
-                    "/auth?name=john&passwd=azerty"
+                    "/test/login?name=john&passwd=azerty",
+                    "/test/login?user.name=john&user.passwd=azerty",
+                    "/test/login?username=john&userpasswd=azerty",
+                    "/test/auth?name=john&passwd=azerty"
                 ),
                 
                 "files", Arrays.asList(
@@ -753,8 +753,8 @@ public class Showcase extends WebMotionController {
     public Render helloView() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/helloView?name=John",
-                    "/helloView?name=Jack"
+                    "/test/helloView?name=John",
+                    "/test/helloView?name=Jack"
                 ),
                 
                 "files", Arrays.asList(
@@ -768,7 +768,7 @@ public class Showcase extends WebMotionController {
     public Render spring() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/spring"
+                    "/test/spring"
                 ),
                 
                 "files", Arrays.asList(
@@ -783,8 +783,8 @@ public class Showcase extends WebMotionController {
     public Render select() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/select?param=value",
-                    "/select"
+                    "/test/select?param=value",
+                    "/test/select"
                 ),
                 
                 "files", Arrays.asList(
@@ -799,7 +799,7 @@ public class Showcase extends WebMotionController {
     public Render async() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/async"
+                    "/test/async"
                 ),
                 "files", Arrays.asList(
                     getConfig(true, true, false, false) 
@@ -813,7 +813,7 @@ public class Showcase extends WebMotionController {
     public Render template() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/template"
+                    "/test/template"
                 ),
                 "files", Arrays.asList(
                     getConfig(false, true, false, false) 
@@ -831,7 +831,7 @@ public class Showcase extends WebMotionController {
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/context"
+                    "/test/context"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", section + "\n")
@@ -845,7 +845,7 @@ public class Showcase extends WebMotionController {
     public Render stats() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/stats"
+                    "/test/stats"
                 ),
                 
                 "files", Arrays.asList(
@@ -860,7 +860,7 @@ public class Showcase extends WebMotionController {
     public Render application() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/application"
+                    "/test/application"
                 ),
                 
                 "files", Arrays.asList(
@@ -875,7 +875,7 @@ public class Showcase extends WebMotionController {
     public Render internal() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/internal"
+                    "/test/internal"
                 ),
                 
                 "files", Arrays.asList(
@@ -889,8 +889,8 @@ public class Showcase extends WebMotionController {
     public Render decorator() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/contact/view",
-                    "/company/view"
+                    "/test/contact/view",
+                    "/test/company/view"
                 ),
                 
                 "files", Arrays.asList(
@@ -907,8 +907,8 @@ public class Showcase extends WebMotionController {
     public Render cookie() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/cookie/create?secured=false",
-                    "/cookie/create?secured=true"
+                    "/test/cookie/create?secured=false",
+                    "/test/cookie/create?secured=true"
                 ),
                 
                 "files", Arrays.asList(
@@ -922,7 +922,7 @@ public class Showcase extends WebMotionController {
     public Render cookieObject() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/cookie/object"
+                    "/test/cookie/object"
                 ),
                 
                 "files", Arrays.asList(
@@ -938,7 +938,7 @@ public class Showcase extends WebMotionController {
     public Render sitemesh() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/sitemesh/content"
+                    "/test/sitemesh/content"
                 ),
                 
                 "files", Arrays.asList(
@@ -952,7 +952,7 @@ public class Showcase extends WebMotionController {
     public Render global() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/global/hello"
+                    "/test/global/hello"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("/global.wm")),
@@ -966,7 +966,7 @@ public class Showcase extends WebMotionController {
     public Render injector() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/config"
+                    "/test/config"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("/injector.wm")),
@@ -980,7 +980,7 @@ public class Showcase extends WebMotionController {
     public Render converter() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/jsonelement?element=%7Btest=%22value%22%7D"
+                    "/test/jsonelement?element=%7Btest=%22value%22%7D"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", getFile("/converter.wm")),
@@ -993,7 +993,7 @@ public class Showcase extends WebMotionController {
     public Render jpa() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/note"
+                    "/test/note"
                 ),
                 
                 "files", Arrays.asList(
@@ -1008,7 +1008,7 @@ public class Showcase extends WebMotionController {
     public Render clientSession() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/session/store?value=info"
+                    "/test/session/store?value=info"
                 ),
                 
                 "files", Arrays.asList(
@@ -1022,7 +1022,7 @@ public class Showcase extends WebMotionController {
     public Render properties() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/echo"
+                    "/test/echo"
                 ),
                 
                 "files", Arrays.asList(
@@ -1037,7 +1037,7 @@ public class Showcase extends WebMotionController {
     public Render forward() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/forward"
+                    "/test/forward"
                 ),
                 
                 "files", Arrays.asList(
@@ -1053,8 +1053,8 @@ public class Showcase extends WebMotionController {
     public Render dynamicForward() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/forward/dynamic/get",
-                    "/forward/dynamic/set"
+                    "/test/forward/dynamic/get",
+                    "/test/forward/dynamic/set"
                 ),
                 
                 "files", Arrays.asList(
@@ -1068,7 +1068,7 @@ public class Showcase extends WebMotionController {
     public Render shiro() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/menu"
+                    "/test/menu"
                 ),
                 
                 "files", Arrays.asList(
@@ -1086,7 +1086,7 @@ public class Showcase extends WebMotionController {
     public Render wsText() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/echoChat/index"
+                    "/test/echoChat/index"
                 ),
                 
                 "files", Arrays.asList(
@@ -1101,7 +1101,7 @@ public class Showcase extends WebMotionController {
     public Render wsJSON() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/ping/index"
+                    "/test/ping/index"
                 ),
                 
                 "files", Arrays.asList(
@@ -1116,7 +1116,7 @@ public class Showcase extends WebMotionController {
     public Render chain() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/chain/log?value=42"
+                    "/test/chain/log?value=42"
                 ),
                 
                 "files", Arrays.asList(
@@ -1136,7 +1136,7 @@ public class Showcase extends WebMotionController {
         
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/api"
+                    "/test/api"
                 ),
                 "files", Arrays.asList(
                     new FileContent("/src/main/resources/mapping", section + "\n")
@@ -1149,8 +1149,8 @@ public class Showcase extends WebMotionController {
     public Render hellos() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/hellos?names=me&names=you",
-                    "/hellos?names[0]=we&names[1]=other"
+                    "/test/hellos?names=me&names=you",
+                    "/test/hellos?names[0]=we&names[1]=other"
                 ),
                 
                 "files", Arrays.asList(
@@ -1165,7 +1165,7 @@ public class Showcase extends WebMotionController {
     public Render helloNames() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/helloNames?names.values[0]=me&names.values[1]=you"
+                    "/test/helloNames?names.values[0]=me&names.values[1]=you"
                 ),
                 
                 "files", Arrays.asList(
@@ -1180,8 +1180,8 @@ public class Showcase extends WebMotionController {
     public Render feed() throws IOException {
         return renderView("showcase.jsp",  
                 "path_demo", Arrays.asList(
-                    "/news/rss",
-                    "/news/atom"
+                    "/test/news/rss",
+                    "/test/news/atom"
                 ),
                 
                 "files", Arrays.asList(
@@ -1191,4 +1191,44 @@ public class Showcase extends WebMotionController {
                 )
         );
     }
+    
+    public Render conventionController() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/test/hello/convention/says"
+                ),
+                
+                "files", Arrays.asList(
+                    getJavaContent("HelloConvention.java")
+                )
+        );
+    }
+    
+    public Render conventionAllFilter() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/test/hello/convention/says"
+                ),
+                
+                "files", Arrays.asList(
+                    getJavaContent("HelloConvention.java"),
+                    getJavaContent("Security.java")
+                )
+        );
+    }
+    
+    public Render conventionPackageFilter() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/sub/hello/convention/says"
+                ),
+                
+                "files", Arrays.asList(
+                    getJavaContent("sub/HelloConvention.java"),
+                    getJavaContent("sub/Security.java"),
+                    getJavaContent("Security.java")
+                )
+        );
+    }
+    
 }

@@ -101,3 +101,6 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 *           /hellos                                     Showcase.hellos
 *           /helloNames                                 Showcase.helloNames
 *           /feed                                       Showcase.feed
+*           /convention_controller                      Showcase.conventionController
+*           /convention_allFilter                       Showcase.conventionAllFilter
+*           /convention_packageFilter                   Showcase.conventionPackageFilter

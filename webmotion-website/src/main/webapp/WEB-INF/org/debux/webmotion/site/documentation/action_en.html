@@ -460,6 +460,42 @@ render(model) ::= &lt;&lt;
 strong(value) ::= "&lt;strong&gt;$value$&lt;/strong&gt;"
 </pre>
 
+<h3>RSS rendering: renderRSS</h3>
+<p>
+    The <code>renderRSS</code> method enables to return to the client
+    a RSS feed from a model which comes from ROME library.
+    For more details, you can see the document on 
+    <a href="http://rometools.github.io/rome/">ROME</a> library. The same model
+    is used for Atom feed.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Return RSS feed:
+</p>
+<pre class="prettyprint">
+SyndFeed feed = new SyndFeedImpl();
+// ...
+return renderRSS(feed);
+</pre>
+
+<h3>Atom rendering : renderAtom</h3>
+<p>
+    The <code>renderAtom</code> method enables to return to the client
+    a Atom feed from a model which comes from ROME library.
+    For more details, you can see the document on 
+    <a href="http://rometools.github.io/rome/">ROME</a> library. The same model
+    is used for RSS feed.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Return Atom feed:
+</p>
+<pre class="prettyprint">
+SyndFeed feed = new SyndFeedImpl();
+// ...
+return renderAtom(feed);
+</pre>
+
 <h3>Create your own renderer</h3>
 <p>
     To create a new renderer, you need to create a class inheriting the Render class

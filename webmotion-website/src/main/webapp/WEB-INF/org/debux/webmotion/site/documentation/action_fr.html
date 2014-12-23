@@ -465,6 +465,41 @@ render(model) ::= &lt;&lt;
 strong(value) ::= "&lt;strong&gt;$value$&lt;/strong&gt;"
 </pre>
 
+<h3>Rendu de type RSS : renderRSS</h3>
+<p>
+    La méthode <code>renderRSS</code> permet de retourner
+    au client un flux de type RSS à partir d'un modèle de la bibliothèque ROME.
+    Pour plus de détails, veuillez consulter la documenatation sur la bibliothèque 
+    <a href="http://rometools.github.io/rome/">ROME</a>. Le même modèle est utilisé 
+    pour le render pour un flux Atom.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Retourne un flux RSS :
+</p>
+<pre class="prettyprint">
+SyndFeed feed = new SyndFeedImpl();
+// ...
+return renderRSS(feed);
+</pre>
+
+<h3>Rendu de type Atom : renderAtom</h3>
+<p>
+    La méthode <code>renderAtom</code> permet de retourner
+    au client un flux de type Atom à partir d'un modèle de la bibliothèque ROME.
+    Pour plus de détails, veuillez consulter la documenatation sur la bibliothèque 
+    <a href="http://rometools.github.io/rome/">ROME</a>. Le même modèle est utilisé 
+    pour le render pour un flux RSS.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Retourne un flux Atom :
+</p>
+<pre class="prettyprint">
+SyndFeed feed = new SyndFeedImpl();
+// ...
+return renderAtom(feed);
+</pre>
 
 <h3>Créer son propre moteur de rendu</h3>
 <p>
