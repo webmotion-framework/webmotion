@@ -93,7 +93,7 @@ public class DefaultConventionScan extends ConventionScan {
                     rule.setAction(action);
                     
                     // Search http method
-                    String httpMethod = HttpContext.METHOD_GET;
+                    String httpMethod = "*";
                     if (methodName.startsWith("create")) {
                         httpMethod = HttpContext.METHOD_PUT;
                         methodName = methodName.replaceFirst("create", "");
