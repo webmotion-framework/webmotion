@@ -32,7 +32,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
   
     <packaging>pom</packaging>
@@ -100,9 +100,6 @@
         <contributor>
             <name>Corentin Guy</name>
             <email>corentin.guy@debox.fr</email>
-            <url>http://www.debox.fr</url>
-            <organization>debox</organization>
-            <organizationUrl>http://www.debox.fr</organizationUrl>
             <roles>
                 <role>user</role>
                 <role>reporter</role>
@@ -113,6 +110,14 @@
             <name>Kevin Morin</name>
             <email>dev@kevinmorin.net</email>
             <url>http://www.kevinmorin.net</url>
+            <roles>
+                <role>translator</role>
+            </roles>
+            <timezone>Europe/Paris</timezone>
+        </contributor>
+        <contributor>
+            <name>Samuel Maisonneuve</name>
+            <email>maisonneuve at codelutin dot com</email>
             <roles>
                 <role>translator</role>
             </roles>

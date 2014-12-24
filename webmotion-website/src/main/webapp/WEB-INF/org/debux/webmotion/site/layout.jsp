@@ -137,7 +137,7 @@
             
         <hr/>
         <footer style="text-align: center">
-            <p>Powered by WebMotion - version 2.5 - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a> - © 2014</p>
+            <p>Powered by WebMotion - version 2.5 - <a href="http://www.gnu.org/licenses/lgpl-3.0.html">License LGPL</a> - © 2015</p>
         </footer>
 
         <!-- Piwik -->

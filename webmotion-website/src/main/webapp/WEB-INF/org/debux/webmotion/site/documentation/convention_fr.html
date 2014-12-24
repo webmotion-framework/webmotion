@@ -1,0 +1,258 @@
+<!--
+  #%L
+  WebMotion website
+  $Id:$
+  $HeadURL:$
+  %%
+  Copyright (C) 2011 - 2014 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Convention</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 id="presentation" class="page-header">Présentation</h2>
+
+<p>
+    La partie convention de WebMotion vous permet de vous passer de fichier de mapping.
+    L'objectif est de réaliser et prototyper des applications rapidement.
+</p>
+
+<p>
+    WebMotion vous propose de créer par convention :
+</p>
+<ul>
+    <li>des contrôlleurs</li>
+    <li>des filtres</li>
+</ul>
+
+<p>
+    Vous ne pouvez pas utiliser l'ensemble des fonctionnalités pas convention, par contre
+    il est possible de méler avec la convention un fichier de mapping. En interne
+    la convention génère un fichier de mapping, utilisé sous forme d'extension.
+</p>
+
+<p>
+    Le chargement des classes par convention se fait au démarrage de l'application, 
+    le démarrage de l'application peut être ralenti, dû à la recherche des classes
+    pour la convention. Vous pouvez dans ce cas là, si vous n'utilisez pas la convention
+    désactiver le parcours ainsi :
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.conventions&lt;/param-name&gt;
+    &lt;param-value&gt;&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    Vous pouvez aussi écrire votre propre convention, pour cela il suffit d'hériter
+    de la classe <code>ConventionScanner</code> et le déclarer comme convention au niveau du 
+    fichier <code>web.xml</code> :
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.conventions&lt;/param-name&gt;
+    &lt;param-value&gt;MyConventionScanner&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    Avec comme classe :
+</p>
+
+<pre class="prettyprint">
+public class MyConventionScanner extends ConventionScan {
+    @Override
+    public Mapping scan() {
+        Mapping mapping = new Mapping();
+        // ...
+        return mapping;
+    }
+}
+</pre>
+
+<h2 id="controller" class="page-header">Contrôlleur par convention</h2>
+<p>
+    Pour déclarer un contrôller par convention il suffit d'hériter de la classe
+    <code>ConventionController</code>.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Création d'un contôlleur :
+</p>
+
+<pre class="prettyprint">
+package test;
+
+public class UserService extends ConventionController {
+    public Render search(String query) {
+        // ...
+    }
+}
+</pre>
+
+<p>
+    L'url pour accéder à cette action est la suivante <code>/test/user/service/search?query=wm</code>.
+</p>
+
+<p>
+    En détails, vous avez :
+</p>
+<ul>
+    <li>le sous paquetage (<code>test</code>)</li>
+    <li>le nom de la classe coupé par ses majuscules (<code>user/service</code>)</li>
+    <li>le nom de la méthode sans le préfixe de méthode HTTP (<code>search</code>)</li>
+</ul>
+
+<h3>Méthode HTTP</h3>
+<p>
+    Vous pouvez utiliser les différentes méthodes HTTP (GET, POST, DELETE et PUT) 
+    par convention. C'est le début de votre nom de méthode qui va donner cette
+    information.
+</p>
+<p>
+    Voici toutes les correspondances des suffixes disponibles, les suffixes suit
+    les principes REST :
+</p>
+<ul>
+    <li>GET a comme suffix get</li>
+    <li>POST a comme suffix update</li>
+    <li>DELETE a comme suffix delete</li>
+    <li>PUT a comme suffix create</li>
+</ul>
+
+<p>
+    <span class="label label-info">Exemple</span>
+    Une méthode <code>createUser</code> sera appeler avec un 
+    <code>PUT</code> sur une url <code>/user</code>. 
+</p>
+
+<h3>Render view</h3>
+<p>
+    Le render de type view est redéfini pour les contrôlleurs par convention pour
+    aller chercher la vue dans le nom complet du paquetage où se trouve le contrôlleur.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Utilisation du <code>renderView</code> :
+</p>
+<pre class="prettyprint">
+package test;
+
+public class UserService extends ConventionController {
+    public Render search() {
+        return renderView("search.html");
+    }
+}
+</pre>
+
+<p>
+    Le fichier <code>search.html</code> sera dans le répertoire <code>WEB-INF/test/search.html</code>
+</p>
+
+<h3>Gestion des erreurs</h3>
+<p>
+    Actuellement il n'est pas possible de définir une gestion des erreurs par convention.
+    Par contre il est toujours possible de les gérer en Java dans votre contrôlleur.
+</p>
+
+<p>
+    <span class="label label-info">Exemple</span> Retour sur une page en cas d'erreur :
+</p>
+<pre class="prettyprint">
+public class UserService extends ConventionController {
+    public Render search() {
+        try {
+            // ...
+        } catch (ServiceException e) {
+            return renderView("error.html");
+        }
+    }
+}
+</pre>
+
+<h2 id="filter" class="page-header">Filtre par convention</h2>
+<p>
+    Pour déclarer un filtre par convention il suffit d'hériter de la classe
+    <code>ConventionAllFilter</code> ou de la classe <code>ConventionPackageFilter</code>.
+    Après il vous faut implanter une méthode avec le nom <code>filter</code>.
+</p>
+
+<p>
+    La classe <code>ConventionAllFilter</code> vous permet de filtrer l'ensemble des 
+    actions de votre application et la classe <code>ConventionPackageFilter</code> vous permet
+    de filter que les actions se trouvant dans le paquetage du filtre.
+</p>
+
+<h3>Filtre sur toutes les actions</h3>
+<p>
+    Vous permet de filtrer l'ensemble des actions de l'application.
+</p>
+<p>
+    <span class="label label-info">Exemple</span> Création d'un filtre :
+</p>
+<pre class="prettyprint">
+package test;
+
+public class Security extends ConventionAllFilter {
+    
+    public Render filter(String token) {
+        // ...
+        doProcess();
+        // ...
+        return null;
+    }
+    
+}
+</pre>
+
+<h3>Filtre sur un paquetage</h3>
+<p>
+    Vous permet de filtrer l'ensemble des actions d'un paquetage.
+</p>
+<p>
+    <span class="label label-info">Exemple</span>
+    Création d'un filtre seulement sur les actions dans le paquetage <code>admin</code> :
+</p>
+
+<pre class="prettyprint">
+package test.admin;
+
+public class Security extends ConventionPackageFilter {
+    
+    public Render filter(String token) {
+        // ...
+        doProcess();
+        // ...
+        return null;
+    }
+    
+}
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="#">« Haut de page</a>
+    <a class="btn large" style="float:right;" href="../documentation">Documentation »</a>
+</div>
+
+</div>
