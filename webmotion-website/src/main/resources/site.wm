@@ -29,6 +29,7 @@ server.listener.class=org.debux.webmotion.sitemesh.SiteMeshListener
 [filters]
 *                      /*                                         Page.setLang
 *                      /*                                         SiteMesh.decorate       layout=layout.jsp
+*                      /test/*                                    SiteMesh.decorate       layout=
 
 [errors]
 *                                                                 url:/unavailable

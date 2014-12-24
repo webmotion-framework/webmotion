@@ -69,7 +69,7 @@ public class DefaultConventionScan extends ConventionScan {
      * Scan the controllers by convention.
      */
     public List<ActionRule> scanControllers(Mapping mapping) {
-        Collection<Class<?>> controllers = ReflectionUtils.getClassesBySuperClass(WebMotionConventionController.class);
+        Collection<Class<?>> controllers = ReflectionUtils.getClassesBySuperClass(ConventionController.class);
         List<ActionRule> rules = new ArrayList<ActionRule>(controllers.size());
         
         for (Class<?> controller : controllers) {
@@ -110,6 +110,10 @@ public class DefaultConventionScan extends ConventionScan {
                         httpMethod = HttpContext.METHOD_POST;
                         methodName = methodName.replaceFirst("update", "");
                     }
+                    if (methodName.length() == 0) {
+                        methodName = 
+                    }
+                    
                     rule.setMethods(Arrays.asList(httpMethod));
                     
                     // Create path
@@ -142,7 +146,7 @@ public class DefaultConventionScan extends ConventionScan {
     public List<FilterRule> scanFilters(Mapping mapping) {
         Pattern allPattern = Pattern.compile("/*");
         
-        Collection<Class<?>> filters = ReflectionUtils.getClassesBySuperClass(WebMotionConventionAllFilter.class);
+        Collection<Class<?>> filters = ReflectionUtils.getClassesBySuperClass(ConventionAllFilter.class);
         List<FilterRule> rules = new ArrayList<FilterRule>(filters.size());
         
         for (Class<?> filter : filters) {
@@ -160,7 +164,7 @@ public class DefaultConventionScan extends ConventionScan {
             rule.setAction(action);
         }
         
-        filters = ReflectionUtils.getClassesBySuperClass(WebMotionConventionPackageFilter.class);
+        filters = ReflectionUtils.getClassesBySuperClass(ConventionPackageFilter.class);
         for (Class<?> filter : filters) {
             FilterRule rule = new FilterRule();
             rule.setMapping(mapping);

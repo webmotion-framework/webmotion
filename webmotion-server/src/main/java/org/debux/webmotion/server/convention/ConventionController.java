@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion website
+ * Webmotion server
  * 
  * $Id$
  * $HeadURL$
@@ -22,36 +22,22 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.test.sub;
+package org.debux.webmotion.server.convention;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import org.debux.webmotion.server.WebMotionException;
-import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.convention.ConventionPackageFilter;
+import org.debux.webmotion.server.WebMotionController;
 import org.debux.webmotion.server.render.Render;
 
 /**
- * Convention filter in package
+ * This class is used to indentify the controller which are handle by convention.
+ * Each method represents an url.
  * 
  * @author julien
  */
-public class Security extends ConventionPackageFilter {
+public class ConventionController extends WebMotionController {
     
     @Override
-    public Render filter() {
-        try {
-            
-            HttpContext context = getContext();
-            PrintWriter out = context.getOut();
-            out.println("Package security filter");
-            
-            doProcess();
-            return null;
-            
-        } catch (IOException ex) {
-            throw new WebMotionException("Filter convention", ex);
-        }
+    public Render renderView(String page, Object ... model) {
+        return new ConventionRenderView(page, toMap(model));
     }
     
 }

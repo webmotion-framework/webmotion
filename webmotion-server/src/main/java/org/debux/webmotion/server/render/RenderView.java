@@ -63,7 +63,7 @@ public class RenderView extends Render {
         HttpServletResponse response = context.getResponse();
         HttpServletRequest request = context.getRequest();
         
-        String path = getViewPath(mapping, view);
+        String path = getViewPath(mapping, call, view);
         addModel(call, model);
         
         DispatcherType dispatcherType = request.getDispatcherType();

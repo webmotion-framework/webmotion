@@ -87,4 +87,14 @@ public class ConventionIT extends AbstractIT {
         AssertJUnit.assertTrue(result, result.contains("Security filter"));
     }
 
+    @Test
+    public void view() throws IOException, URISyntaxException {
+        Request request = createRequest("/test/hello/convention/parameters/says")
+                .addParameter("who", "convention")
+                .Get();
+        
+        String result = executeRequest(request);
+        AssertJUnit.assertTrue(result, result.contains("Hello convention !"));
+    }
+    
 }

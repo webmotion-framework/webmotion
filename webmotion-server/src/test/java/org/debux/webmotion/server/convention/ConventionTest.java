@@ -55,7 +55,7 @@ public class ConventionTest {
         AssertJUnit.assertEquals(3, result.length);
     }
         
-    public class UserService extends WebMotionConventionController {
+    public class UserService extends ConventionController {
         
         // GET       /user/service                UserService.get
         public Render get() {

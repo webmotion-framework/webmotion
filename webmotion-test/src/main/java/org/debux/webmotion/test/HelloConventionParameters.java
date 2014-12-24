@@ -1,6 +1,6 @@
 /*
  * #%L
- * Webmotion server
+ * Webmotion website
  * 
  * $Id$
  * $HeadURL$
@@ -22,16 +22,21 @@
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-package org.debux.webmotion.server.convention;
+package org.debux.webmotion.test;
 
-import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.convention.ConventionController;
+import org.debux.webmotion.server.render.Render;
 
 /**
- * This class is used to indentify the controller which are handle by convention.
- * Each method represents an url.
+ * Pass a parameter to jsp page
  * 
  * @author julien
  */
-public class WebMotionConventionController extends WebMotionController {
+public class HelloConventionParameters extends ConventionController {
+    
+    public Render says(String who) {
+        return renderView("helloParameters.jsp",
+                "who", who); // key = value
+    }
     
 }

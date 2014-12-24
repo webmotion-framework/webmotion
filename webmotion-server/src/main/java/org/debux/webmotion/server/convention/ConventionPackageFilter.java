@@ -29,11 +29,12 @@ import org.debux.webmotion.server.render.Render;
 
 /**
  * This class is used to indentify the filters which are handle by convention.
- * The filter match all url path. You have to implement an filter method.
+ * The filter match all url path inside the current package. You have to 
+ * implement an filter method.
  * 
  * @author julien
  */
-public class WebMotionConventionAllFilter extends WebMotionFilter {
+public class ConventionPackageFilter extends WebMotionFilter {
     
     /**
      * Redefine this method or create a new method with your parameters.

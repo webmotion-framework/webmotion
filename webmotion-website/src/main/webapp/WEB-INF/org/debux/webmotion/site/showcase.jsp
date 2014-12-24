@@ -207,6 +207,7 @@
                                 <li><strong>Convention</strong>
                                     <ul>
                                         <li><a id="convention_controller" href="./convention_controller">Controller</a></li>
+                                        <li><a id="convention_view" href="./convention_view">Render view</a></li>
                                         <li><a id="convention_allFilter" href="./convention_allFilter">All filter</a></li>
                                         <li><a id="convention_packageFilter" href="./convention_packageFilter">Package filter</a></li>
                                     </ul>

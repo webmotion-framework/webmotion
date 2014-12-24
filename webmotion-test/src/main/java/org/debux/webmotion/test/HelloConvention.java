@@ -24,7 +24,7 @@ package org.debux.webmotion.test;
  * #L%
  */
 
-import org.debux.webmotion.server.convention.WebMotionConventionController;
+import org.debux.webmotion.server.convention.ConventionController;
 import org.debux.webmotion.server.render.Render;
 
 /**
@@ -32,7 +32,7 @@ import org.debux.webmotion.server.render.Render;
  * 
  * @author julien
  */
-public class HelloConvention extends WebMotionConventionController {
+public class HelloConvention extends ConventionController {
     
     public Render says() {
         return renderContent("Hello test by convention !", "text/plain");

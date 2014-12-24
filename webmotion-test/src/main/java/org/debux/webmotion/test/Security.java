@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.convention.WebMotionConventionAllFilter;
+import org.debux.webmotion.server.convention.ConventionAllFilter;
 import org.debux.webmotion.server.render.Render;
 
 /**
@@ -36,7 +36,7 @@ import org.debux.webmotion.server.render.Render;
  * 
  * @author julien
  */
-public class Security extends WebMotionConventionAllFilter {
+public class Security extends ConventionAllFilter {
     
     @Override
     public Render filter() {

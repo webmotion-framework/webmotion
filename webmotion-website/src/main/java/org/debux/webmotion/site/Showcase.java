@@ -1231,4 +1231,16 @@ public class Showcase extends WebMotionController {
         );
     }
     
+    public Render conventionView() throws IOException {
+        return renderView("showcase.jsp",  
+                "path_demo", Arrays.asList(
+                    "/test/hello/convention/parameters/says?who=convention"
+                ),
+                
+                "files", Arrays.asList(
+                    getJavaContent("HelloConventionParameters.java")
+                )
+        );
+    }
+    
 }

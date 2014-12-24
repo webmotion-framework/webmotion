@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import org.debux.webmotion.server.convention.WebMotionConventionController;
+import org.debux.webmotion.server.convention.ConventionController;
 import org.debux.webmotion.server.mapping.Config;
 import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
@@ -106,19 +106,19 @@ public class ReflectionUtilsTest {
     public void testIsAssignableFrom() {
         AssertJUnit.assertTrue(Object.class.isAssignableFrom(getClass()));
         AssertJUnit.assertFalse(getClass().isAssignableFrom(Object.class));
-        AssertJUnit.assertTrue(WebMotionConventionController.class.isAssignableFrom(MyController.class));
+        AssertJUnit.assertTrue(ConventionController.class.isAssignableFrom(MyController.class));
     }
     
     @Test
     public void testGetClassesBySuperClass() {
-        Collection<Class<?>> classes = ReflectionUtils.getClassesBySuperClass(WebMotionConventionController.class);
+        Collection<Class<?>> classes = ReflectionUtils.getClassesBySuperClass(ConventionController.class);
         AssertJUnit.assertFalse(classes.isEmpty());
         
         classes = ReflectionUtils.getClassesBySuperClass(ReflectionUtilsTest.class);
         AssertJUnit.assertTrue(classes.isEmpty());
     }
     
-    public static class MyController extends WebMotionConventionController {
+    public static class MyController extends ConventionController {
     }
     
 }
