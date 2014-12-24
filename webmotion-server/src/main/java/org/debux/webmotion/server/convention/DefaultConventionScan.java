@@ -110,9 +110,6 @@ public class DefaultConventionScan extends ConventionScan {
                         httpMethod = HttpContext.METHOD_POST;
                         methodName = methodName.replaceFirst("update", "");
                     }
-                    if (methodName.length() == 0) {
-                        methodName = 
-                    }
                     
                     rule.setMethods(Arrays.asList(httpMethod));
                     
@@ -131,7 +128,9 @@ public class DefaultConventionScan extends ConventionScan {
                         }
                     }
                     url.addAll(createFragmentUrlList(simpleClassName));
-                    url.addAll(createFragmentUrlList(methodName));
+                    if (methodName.length() != 0) {
+                        url.addAll(createFragmentUrlList(methodName));
+                    }
                     rule.setRuleUrl(url);
                 }
             }
