@@ -76,7 +76,7 @@
             <div class="page-header page-header-icon" style="border: none;">
                 <h1 style="background: url('<c:url value="/img/My_Computer.png"/>') no-repeat;"><span id="title"></span> <small><span id="subtitle"></span></small></h1>
             </div>
-            <!--<span class="label label-info">New</span>-->
+            
             <div class="row-fluid">
                 <div class="span2 well" style="padding: 5px; margin-bottom: 10px; min-width: 200px;">
                     <ul class="nav nav-pills" style="margin: 0px; border-bottom: 1px solid #DEE6ED;">
@@ -100,8 +100,8 @@
                                         <li><a id="helloDefaultParameters" href="./helloDefaultParameters">Default parameters</a></li>
                                         <li><a id="pattern" href="./pattern">Pattern parameters</a></li>
                                         <li><a id="login" href="./login">Object parameters</a></li>
-                                        <li><a id="hellos" href="./hellos">Indexed parameters</a></li>
-                                        <li><a id="helloNames" href="./helloNames">Object indexed parameters</a></li>
+                                        <li><a id="hellos" href="./hellos">Indexed parameters</a> <span class="label label-info">New</span></li>
+                                        <li><a id="helloNames" href="./helloNames">Object indexed parameters</a> <span class="label label-info">New</span></li>
                                         <li class="space"><a id="select" href="./select">Parameters static</a></li>
 
                                         <li><a id="dynamic" href="./dynamic">Dynamic action</a></li>
@@ -169,7 +169,7 @@
                                         <li><a id="json" href="./json">JSON</a></li>
                                         <li><a id="jsonp" href="./jsonp">JSONP</a></li>
                                         <li><a id="template" href="./template">StringTemplate</a></li>
-                                        <li><a id="feed" href="./feed">RSS/ATOM</a></li>
+                                        <li><a id="feed" href="./feed">RSS/ATOM</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                                 <li><strong>Websocket</strong>
@@ -206,10 +206,10 @@
                                 </li>
                                 <li><strong>Convention</strong>
                                     <ul>
-                                        <li><a id="convention_controller" href="./convention_controller">Controller</a></li>
-                                        <li><a id="convention_view" href="./convention_view">Render view</a></li>
-                                        <li><a id="convention_allFilter" href="./convention_allFilter">All filter</a></li>
-                                        <li><a id="convention_packageFilter" href="./convention_packageFilter">Package filter</a></li>
+                                        <li><a id="convention_controller" href="./convention_controller">Controller</a> <span class="label label-info">New</span></li>
+                                        <li><a id="convention_view" href="./convention_view">Render view</a> <span class="label label-info">New</span></li>
+                                        <li><a id="convention_allFilter" href="./convention_allFilter">All filter</a> <span class="label label-info">New</span></li>
+                                        <li><a id="convention_packageFilter" href="./convention_packageFilter">Package filter</a> <span class="label label-info">New</span></li>
                                     </ul>
                                 </li>
                                 <li><strong>Extras</strong>
