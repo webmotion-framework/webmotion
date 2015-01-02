@@ -1,0 +1,260 @@
+<!--
+  #%L
+  WebMotion website
+  $Id:$
+  $HeadURL:$
+  %%
+  Copyright (C) 2011 - 2014 Debux
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of the 
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public 
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<div id="article">
+
+<h1>Convention</h1>
+
+<script type="text/javascript" src="../lib/generated_toc.js"></script>
+<div id="generated-toc" class="generate_from_h2 generate_for_article"></div>
+
+<h2 id="presentation" class="page-header">Presentation</h2>
+
+<p>
+    WebMotion embeds a convention system that can help you to get rid of mapping files.
+    The purpose is to allow you to build an application very quickly.
+</p>
+
+<p>
+    Using the convention, WebMotion offers you to create :
+</p>
+<ul>
+    <li>controllers</li>
+    <li>filters</li>
+</ul>
+
+<p>
+    The convention system don't allow you to use the whole range of WebMotions features. However, you can extend
+    the convention usages with a mapping file if you really need to use some advanced features.
+    Internally, the convention system generate a mapping file that is used as an extension.
+</p>
+
+<p>
+    The convention system classes are loaded at boot time. Because of the convention classes searching process, your application can be       somewhat slow down at boot time. If you don't want to use the convention system, you can desactivate it :
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.conventions&lt;/param-name&gt;
+    &lt;param-value&gt;&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    You can also write your own convention. To do so, you just need to extend the <code>ConventionScanner</code> class. Then, you also need to declare your class as a convention class in the <code>web.xml</code> file :
+</p>
+
+<pre class="prettyprint">
+&lt;context-param&gt;
+    &lt;param-name&gt;wm.mapping.conventions&lt;/param-name&gt;
+    &lt;param-value&gt;MyConventionScanner&lt;/param-value&gt;
+&lt;/context-param&gt;
+</pre>
+
+<p>
+    MyConventionScanner class looks like :
+</p>
+
+<pre class="prettyprint">
+public class MyConventionScanner extends ConventionScan {
+    @Override
+    public Mapping scan() {
+        Mapping mapping = new Mapping();
+        // ...
+        return mapping;
+    }
+}
+</pre>
+
+<h2 id="controller" class="page-header">Controllers with the convention</h2>
+<p>
+    To declare a controller using the convention, you need to extend the
+    <code>ConventionController</code> class.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Controller creation :
+</p>
+
+<pre class="prettyprint">
+package test;
+
+public class UserService extends ConventionController {
+    public Render search(String query) {
+        // ...
+    }
+}
+</pre>
+
+<p>
+    the following url give you access to the previous action : <code>/test/user/service/search?query=wm</code>.
+</p>
+
+<p>
+    Here are a few details :
+</p>
+<ul>
+    <li>the package (<code>test</code>)</li>
+    <li>the classname splited on capitals (<code>user/service</code>)</li>
+    <li>the method name (<code>search</code>), without the HTTP method prefix if there is one (see HTTP Method paragraph) </li>
+</ul>
+
+<h3>HTTP Method</h3>
+<p>
+    The convention systems can rely on the differents HTTP methods (GET, POST, DELETE et PUT) 
+    The beginning of the methodNames in your conventionControllers will allow you to map these HTTP methods.
+</p>
+<p>
+    The convention follows REST principles. The mapping between HTTP methods and the prefixes to use in your actions is describe hereunder :
+</p>
+<ul>
+    <li>GET will look for a method prefixed with the keyword "get"</li>
+    <li>POST will look for a method prefixed with the keyword "update"</li>
+    <li>DELETE will look for a method prefixed with the keyword "delete"</li>
+    <li>PUT will look for a method prefixed with the keyword "create"</li>
+</ul>
+
+<p>
+    <span class="label label-info">Example</span>
+    The method <code>createUser</code> will be called with 
+    <code>PUT</code> on the url <code>/user</code>. 
+</p>
+
+<p>
+    <span class="label label-warning">Note</span>
+    If the method doesn't contain a known prefix: the url has to contain the word key at the beginning
+    and the method is callable on all HTTP methods (GET, POST, DELETE, PUT).
+</p>
+<p>
+<span class="label label-info">Example</span>
+The method <code>saveUser</code> doesn't contain a known prefix. The call is 
+possible on all HTTP methods (GET, POST, DELETE, PUT) with <code>/save/user</code> as url.
+</p>
+
+<h3>Render view</h3>
+<p>
+    The convention system redefine the view type render for all controllers in order to handle the view resolution with the package name in which you put the controller.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> <code>renderView</code> usage :
+</p>
+<pre class="prettyprint">
+package test;
+
+public class UserService extends ConventionController {
+    public Render search() {
+        return renderView("search.html");
+    }
+}
+</pre>
+
+<p>
+    The <code>search.html</code> file is expected to be found here : <code>WEB-INF/test/search.html</code>
+</p>
+
+<h3>Error Handlers</h3>
+<p>
+    Currently, the convention system doesn't allow you to define errors handlers.
+    However, it's still possible to manage them with JAVA directly in your controller.
+</p>
+
+<p>
+    <span class="label label-info">Example</span> Get back to an error page if the application encounters an error :
+</p>
+<pre class="prettyprint">
+public class UserService extends ConventionController {
+    public Render search() {
+        try {
+            // ...
+        } catch (ServiceException e) {
+            return renderView("error.html");
+        }
+    }
+}
+</pre>
+
+<h2 id="filter" class="page-header">Filtre par convention</h2>
+<p>
+    To declare a filter with the convention, you just need to inherit from the
+    <code>ConventionAllFilter</code> class or from the <code>ConventionPackageFilter</code> class.
+    Thereafter, you will need to implement a method with the name <code>filter</code>.
+</p>
+
+<p>
+    The <code>ConventionAllFilter</code> class allows you to filter the whole range of actions of your application.
+    The <code>ConventionPackageFilter</code> class allows you to filter only actions within the package where you placed your filter.
+</p>
+
+<h3>Filter on every action</h3>
+<p>
+    It will allow you to filter all the actions of your application.
+</p>
+<p>
+    <span class="label label-info">Example</span> Filter creation :
+</p>
+<pre class="prettyprint">
+package test;
+
+public class Security extends ConventionAllFilter {
+    
+    public Render filter(String token) {
+        // ...
+        doProcess();
+        // ...
+        return null;
+    }
+    
+}
+</pre>
+
+<h3>Package Filter</h3>
+<p>
+    It will allow you to filter all the actions of a package.
+</p>
+<p>
+    <span class="label label-info">Example</span>
+    Filter creation only on the actions within the <code>admin</code> package :
+</p>
+
+<pre class="prettyprint">
+package test.admin;
+
+public class Security extends ConventionPackageFilter {
+    
+    public Render filter(String token) {
+        // ...
+        doProcess();
+        // ...
+        return null;
+    }
+    
+}
+</pre>
+
+<div class="well" style="text-align: center;">
+    <a class="btn large" style="float:left;" href="#">« Top of the page</a>
+    <a class="btn large" style="float:right;" href="../documentation">Documentation »</a>
+</div>
+
+</div>

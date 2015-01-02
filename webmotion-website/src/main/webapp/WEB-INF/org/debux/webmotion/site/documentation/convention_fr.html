@@ -39,13 +39,13 @@
     WebMotion vous propose de créer par convention :
 </p>
 <ul>
-    <li>des contrôlleurs</li>
+    <li>des contrôleurs</li>
     <li>des filtres</li>
 </ul>
 
 <p>
-    Vous ne pouvez pas utiliser l'ensemble des fonctionnalités pas convention, par contre
-    il est possible de méler avec la convention un fichier de mapping. En interne
+    Vous ne pouvez pas utiliser l'ensemble des fonctionnalités par convention, par contre
+    il est possible de mêler avec la convention un fichier de mapping. En interne
     la convention génère un fichier de mapping, utilisé sous forme d'extension.
 </p>
 
@@ -91,9 +91,9 @@ public class MyConventionScanner extends ConventionScan {
 }
 </pre>
 
-<h2 id="controller" class="page-header">Contrôlleur par convention</h2>
+<h2 id="controller" class="page-header">Contrôleur par convention</h2>
 <p>
-    Pour déclarer un contrôller par convention il suffit d'hériter de la classe
+    Pour déclarer un contrôleur par convention il suffit d'hériter de la classe
     <code>ConventionController</code>.
 </p>
 
@@ -121,7 +121,7 @@ public class UserService extends ConventionController {
 <ul>
     <li>le sous paquetage (<code>test</code>)</li>
     <li>le nom de la classe coupé par ses majuscules (<code>user/service</code>)</li>
-    <li>le nom de la méthode sans le préfixe de méthode HTTP (<code>search</code>)</li>
+    <li>le nom de la méthode (<code>search</code>), sans le préfixe de méthode HTTP s'il y en a un (cf paragraphe ci-dessous Méthode HTTP) </li>
 </ul>
 
 <h3>Méthode HTTP</h3>
@@ -131,26 +131,36 @@ public class UserService extends ConventionController {
     information.
 </p>
 <p>
-    Voici toutes les correspondances des suffixes disponibles, les suffixes suit
-    les principes REST :
+    La convention adoptée suit les principes REST. Ci dessous, vous trouverez la correspondance entre la méthode HTTP utilisée sur une url donnée et le nom de la méthode associée dans le contrôleur :
 </p>
 <ul>
-    <li>GET a comme suffix get</li>
-    <li>POST a comme suffix update</li>
-    <li>DELETE a comme suffix delete</li>
-    <li>PUT a comme suffix create</li>
+    <li>GET recherchera une méthode préfixée par get</li>
+    <li>POST recherchera une méthode préfixée par update</li>
+    <li>DELETE recherchera une méthode préfixée par delete</li>
+    <li>PUT recherchera une méthode préfixée par create</li>
 </ul>
 
 <p>
     <span class="label label-info">Exemple</span>
-    Une méthode <code>createUser</code> sera appeler avec un 
+    Une méthode <code>createUser</code> sera appelée avec un 
     <code>PUT</code> sur une url <code>/user</code>. 
+</p>
+<p>
+    <span class="label label-warning">Note</span>
+    Si la méthode ne contient pas de préfixe connu : le début de l'url doit 
+    contenir le mot clé et la méthode est appelable sur l'ensemble des méthodes 
+    HTTP (GET, POST, DELETE, PUT).
+</p>
+<p>
+<span class="label label-info">Exemple</span>
+La méthode <code>saveUser</code> ne contient pas de préfixe connu. L'appel est 
+possible sur l'ensemble des méthodes HTTP (GET, POST, DELETE, PUT) avec l'url <code>/save/user</code>.
 </p>
 
 <h3>Render view</h3>
 <p>
-    Le render de type view est redéfini pour les contrôlleurs par convention pour
-    aller chercher la vue dans le nom complet du paquetage où se trouve le contrôlleur.
+    Le render de type view est redéfini pour les contrôleurs par convention pour
+    aller chercher la vue dans le nom complet du paquetage où se trouve le contrôleur.
 </p>
 
 <p>
@@ -173,7 +183,7 @@ public class UserService extends ConventionController {
 <h3>Gestion des erreurs</h3>
 <p>
     Actuellement il n'est pas possible de définir une gestion des erreurs par convention.
-    Par contre il est toujours possible de les gérer en Java dans votre contrôlleur.
+    Par contre il est toujours possible de les gérer en Java dans votre contrôleur.
 </p>
 
 <p>
@@ -193,7 +203,7 @@ public class UserService extends ConventionController {
 
 <h2 id="filter" class="page-header">Filtre par convention</h2>
 <p>
-    Pour déclarer un filtre par convention il suffit d'hériter de la classe
+    Pour déclarer un filtre par convention, il suffit d'hériter de la classe
     <code>ConventionAllFilter</code> ou de la classe <code>ConventionPackageFilter</code>.
     Après il vous faut implanter une méthode avec le nom <code>filter</code>.
 </p>
@@ -201,7 +211,7 @@ public class UserService extends ConventionController {
 <p>
     La classe <code>ConventionAllFilter</code> vous permet de filtrer l'ensemble des 
     actions de votre application et la classe <code>ConventionPackageFilter</code> vous permet
-    de filter que les actions se trouvant dans le paquetage du filtre.
+    de ne filtrer que les actions se trouvant dans le paquetage du filtre.
 </p>
 
 <h3>Filtre sur toutes les actions</h3>
