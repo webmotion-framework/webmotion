@@ -37,7 +37,7 @@
     <parent>
         <groupId>org.debux.webmotion</groupId>
         <artifactId>webmotion-project</artifactId>
-        <version>2.5-SNAPSHOT</version>
+        <version>2.5</version>
     </parent>
     
     <build>
