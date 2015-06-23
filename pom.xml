@@ -124,11 +124,11 @@
             <timezone>Europe/Paris</timezone>
         </contributor>
     </contributors>
-    
+
     <scm>
-        <connection>scm:git:git@gitorious.org:webmotion/webmotion.git</connection>
-        <developerConnection>scm:git:git@gitorious.org:webmotion/webmotion.git</developerConnection>
-        <url>git@gitorious.org:webmotion/webmotion.git</url>
+        <connection>scm:git:git@github.com:/webmotion-framework/webmotion.git</connection>
+        <developerConnection>scm:git:git@github.com:/webmotion-framework/webmotion.git</developerConnection>
+        <url>https://github.com//webmotion-framework/webmotion</url>
     </scm>
     
     <issueManagement>
