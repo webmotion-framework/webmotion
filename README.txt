@@ -26,3 +26,5 @@ More
 ----
 
 See website : http://webmotion-framework.org
+
+Join the chat at https://gitter.im/webmotion-framework/webmotion
