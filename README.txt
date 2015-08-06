@@ -25,6 +25,5 @@ $ mvn jetty:run
 More
 ----
 
-See website : http://webmotion-framework.org
-
-Join the chat at https://gitter.im/webmotion-framework/webmotion
+- See website : http://webmotion-framework.org
+- Join the chat at https://gitter.im/webmotion-framework/webmotion
