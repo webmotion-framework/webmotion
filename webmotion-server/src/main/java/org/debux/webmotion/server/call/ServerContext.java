@@ -24,26 +24,35 @@
  */
 package org.debux.webmotion.server.call;
 
-import org.debux.webmotion.server.tools.HttpUtils;
-import java.util.*;
-import javax.servlet.ServletContext;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
-import org.debux.webmotion.server.*;
+import org.debux.webmotion.server.WebMotionController;
+import org.debux.webmotion.server.WebMotionException;
+import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.WebMotionServerListener;
 import org.debux.webmotion.server.convention.ConventionScan;
 import org.debux.webmotion.server.convention.DefaultConventionScan;
-import org.debux.webmotion.server.tools.SingletonFactory;
 import org.debux.webmotion.server.handler.ExecutorParametersInjectorHandler.Injector;
-import org.debux.webmotion.server.mapping.*;
+import org.debux.webmotion.server.mapping.Config;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mbean.HandlerStats;
 import org.debux.webmotion.server.mbean.ServerContextManager;
 import org.debux.webmotion.server.mbean.ServerStats;
-import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.DefaultMappingParser;
+import org.debux.webmotion.server.parser.MappingChecker;
 import org.debux.webmotion.server.parser.MappingParser;
+import org.debux.webmotion.server.tools.HttpUtils;
+import org.debux.webmotion.server.tools.SingletonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * WebMotionServerContext contains all global informations like factories, mbeans, ...
@@ -154,18 +163,22 @@ public class ServerContext {
                 break;
             }
         }
-        
-        // Scan to generate mapping by convention
-        ConventionScan[] conventions = getMappingConventions();
-        for (ConventionScan conventionScan : conventions) {
-            Mapping convention = conventionScan.scan();
-            
-            if (!convention.getActionRules().isEmpty() || !convention.getFilterRules().isEmpty()) {
-                
-                if (mapping == null) {
-                    mapping = convention;
-                } else {
-                    mapping.getExtensionsRules().add(convention);
+
+        String skipConvensionScan = servletContext.getInitParameter("wm.skip.conventionScan");
+        if (!"true".equals(skipConvensionScan)) {
+
+            // Scan to generate mapping by convention
+            ConventionScan[] conventions = getMappingConventions();
+            for (ConventionScan conventionScan : conventions) {
+                Mapping convention = conventionScan.scan();
+
+                if (!convention.getActionRules().isEmpty() || !convention.getFilterRules().isEmpty()) {
+
+                    if (mapping == null) {
+                        mapping = convention;
+                    } else {
+                        mapping.getExtensionsRules().add(convention);
+                    }
                 }
             }
         }
