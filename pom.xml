@@ -36,7 +36,7 @@
     </parent>
   
     <packaging>pom</packaging>
-    <version>2.5.1</version>
+    <version>2.6-SNAPSHOT</version>
     <name>WebMotion project</name>
     <description>WebMotion is Java web framework based on the Java EE6 standard</description>
     <url>www.webmotion-framework.org</url>
