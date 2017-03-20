@@ -24,26 +24,28 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.ArrayUtils;
-import org.debux.webmotion.server.call.Call;
-import org.debux.webmotion.server.call.HttpContext;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.WebMotionException;
 import org.debux.webmotion.server.WebMotionHandler;
+import org.debux.webmotion.server.call.Call;
 import org.debux.webmotion.server.call.FileProgressListener;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.call.UploadFile;
+import org.debux.webmotion.server.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Extract parameter in request, when it is a multipart request. Use apache 
@@ -84,7 +86,12 @@ public class ParametersMultipartHandler extends AbstractHandler implements WebMo
                     String fieldName = item.getFieldName();
 
                     if (item.isFormField()) {
-                        String fieldValue = item.getString();
+                        String fieldValue;
+                        try {
+                            fieldValue = item.getString("UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            fieldValue = item.getString();
+                        }
 
                         String[] values = (String[]) extractParameters.get(fieldName);
                         if(values == null) {
