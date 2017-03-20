@@ -24,25 +24,26 @@
  */
 package org.debux.webmotion.server.handler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.debux.webmotion.server.WebMotionHandler;
 import org.debux.webmotion.server.call.Call;
+import org.debux.webmotion.server.call.Call.ParameterTree;
+import org.debux.webmotion.server.call.HttpContext;
 import org.debux.webmotion.server.mapping.ActionRule;
 import org.debux.webmotion.server.mapping.FilterRule;
-import org.debux.webmotion.server.mapping.Mapping;
 import org.debux.webmotion.server.mapping.FragmentUrl;
+import org.debux.webmotion.server.mapping.Mapping;
+import org.debux.webmotion.server.tools.HttpUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.debux.webmotion.server.WebMotionHandler;
-import org.debux.webmotion.server.tools.HttpUtils;
-import org.debux.webmotion.server.call.Call.ParameterTree;
-import org.debux.webmotion.server.call.HttpContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Extract parameter in request, to map name on request and name on define in 
@@ -175,7 +176,7 @@ public class ParametersExtractorHandler extends AbstractHandler implements WebMo
                     
                     int position = new Integer(index);
                     
-                    if (position >= 0 && position <= list.size()) {
+                    if (position >= 0 && position < list.size()) {
                         
                         next = list.get(position);
                         if (next == null) {
